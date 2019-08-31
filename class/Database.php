@@ -4,7 +4,7 @@ class Database{
  
     // Specify database credentials
     private $host = "localhost";
-    private $dbName = "scapi";
+    private $dbName = "core";
     private $username = "root";
     private $password = "";
     public $conn;

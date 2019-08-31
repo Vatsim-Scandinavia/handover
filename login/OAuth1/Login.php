@@ -23,13 +23,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>SCAPI GDPR</title>
+	<title>VATSCA Handover</title>
 </head>
 <body>
 
 	<h1>Please confirm you want us to save this data</h1>
 	<?php print_r($_GET); 
-	print_r($AuthHandler->getUserDetails());
+	print_r(json_encode($AuthHandler->getUserDetails()));
 
 	print('<br><hr><a href="http://localhost/service/index.php?return&oauth_token='.$_GET["oauth_token"].'&oauth_verifier='.$_GET["oauth_verifier"].'">Yes</a>');
 
