@@ -1,10 +1,13 @@
 <?php
 
+	$config = include("../../config/settings.php");
 	require( "vatsim-sso/Authentication.php" );
+	require( "../../class/Database.php" );
+
 	if ( session_status() === PHP_SESSION_NONE ){ session_start(); }
 
-	$http = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']) ? 'https://' : 'http://';
-	$AuthHandler = new Authentication( $http.$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'] );
+	$env = $config["environment"];
+	$AuthHandler = new Authentication( $config["auth"][$env]["base"], $config["auth"][$env]["key"], $config["auth"][$env]["secret"], $config["auth"][$env]["method"], $config["auth"][$env]["cert"] );
 
 	if( $AuthHandler->shouldCheckLogin() ){
 
@@ -13,10 +16,45 @@
 	}
 	if( !$AuthHandler->isLoggedIn() ){
 
-		$_SESSION["AuthHandler"] = serialize( $AuthHandler );
-		$AuthHandler->Login();
+		die("You shouldn't be here, try go back and do it again?");
 
 	}
+
+	// Check for return url
+	if(empty($_GET["return"])){
+		die("Whoops. You don't seem to have a url, please go back and try again?");
+	}
+
+	
+	$pdo = new Database($config["database"]["host"], $config["database"]["db"], $config["database"]["username"], $config["database"]["password"]);
+	$pdo->getConnection();
+
+	$vatdata = $AuthHandler->getUserDetails();
+
+	$query = $pdo->conn->prepare("SELECT * FROM core_members WHERE id = ?");
+	$query->execute([$vatdata->id]);
+
+	$result = $query->fetchAll(PDO::FETCH_ASSOC);
+	
+	// Update if found, insert otherwise
+	if($result){
+		$query = $pdo->conn->prepare("UPDATE `core_members` SET `email` = ?, `firstName` = ?, `lastName` = ?, `rating` = ?, `ratingShort` = ?, `ratingLong` = ?,
+			`ratingGRP` = ?, `pilotRating` = ?, `country` = ?, `region` = ?, `division` = ?, `subdivision` = ?, lastLogin = CURRENT_TIMESTAMP WHERE id = ?");
+		$query->execute([
+			$vatdata->email, $vatdata->name_first, $vatdata->name_last, $vatdata->rating->id, 
+			$vatdata->rating->short, $vatdata->rating->long, $vatdata->rating->GRP,
+			$vatdata->pilot_rating->rating, $vatdata->country->code, $vatdata->region->code, $vatdata->division->code, $vatdata->subdivision->code, $vatdata->id
+		]);
+	} else {
+		$query = $pdo->conn->prepare("INSERT INTO `core_members` (`id`, `email`, `firstName`, `lastName`, `rating`, `ratingShort`, `ratingLong`, `ratingGRP`, `pilotRating`, `regDate`, `country`, `region`, `division`, `subdivision`, `active`, `acceptedPrivacy`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+		$query->execute([
+			$vatdata->id, $vatdata->email, $vatdata->name_first, $vatdata->name_last, $vatdata->rating->id, 
+			$vatdata->rating->short, $vatdata->rating->long, $vatdata->rating->GRP,
+			$vatdata->pilot_rating->rating, $vatdata->reg_date, $vatdata->country->code, $vatdata->region->code, $vatdata->division->code, $vatdata->subdivision->code,
+			false, false
+		]);
+	}
+	$query = null;
 
 ?>
 
@@ -28,10 +66,12 @@
 <body>
 
 	<h1>Please confirm you want us to save this data</h1>
-	<?php print_r($_GET); 
-	print_r(json_encode($AuthHandler->getUserDetails()));
+	<p>Bla bla, you accept GDPR. Last updated: 31.08.2019</p>
+	<?php
 
-	print('<br><hr><a href="http://localhost/service/index.php?return&oauth_token='.$_GET["oauth_token"].'&oauth_verifier='.$_GET["oauth_verifier"].'">Yes</a>');
+	print_r($AuthHandler->getUserDetails());
+
+	print('<br><hr><a href="'.$_GET["return"].'?return&oauth_token='.$_GET["oauth_token"].'&oauth_verifier='.$_GET["oauth_verifier"].'">Yes, i accept that you can sell my soul</a>');
 
 	?>
 	
