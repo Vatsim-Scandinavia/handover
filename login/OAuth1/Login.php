@@ -51,7 +51,7 @@
 			$vatdata->id, $vatdata->email, $vatdata->name_first, $vatdata->name_last, $vatdata->rating->id, 
 			$vatdata->rating->short, $vatdata->rating->long, $vatdata->rating->GRP,
 			$vatdata->pilot_rating->rating, $vatdata->reg_date, $vatdata->country->code, $vatdata->region->code, $vatdata->division->code, $vatdata->subdivision->code,
-			false, false
+			0, 0
 		]);
 	}
 	$query = null;
