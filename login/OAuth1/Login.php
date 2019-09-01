@@ -1,15 +1,15 @@
 <?php
 
 	$config = include("../../config/settings.php");
-	require( "vatsim-sso/Authentication.php" );
-	require( "../../class/Database.php" );
+	include( "vatsim-sso/Authentication.php" );
+	include( "../../class/Database.php" );
 
 	if ( session_status() === PHP_SESSION_NONE ){ session_name("Handover"); session_start(); }
 
+	$env = $config["environment"];
 	$pdo = new Database($config["database"][$env]["host"], $config["database"][$env]["db"], $config["database"][$env]["username"], $config["database"][$env]["password"]);
 	$pdo->getConnection();
-
-	$env = $config["environment"];
+	
 	$AuthHandler = new Authentication( $config["auth"][$env]["base"], $config["auth"][$env]["key"], $config["auth"][$env]["secret"], $config["auth"][$env]["method"], $config["auth"][$env]["cert"] );
 
 	if( $AuthHandler->shouldCheckLogin() ){
