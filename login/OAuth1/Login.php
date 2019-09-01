@@ -19,7 +19,7 @@
 	}
 	if( !$AuthHandler->isLoggedIn() ){
 
-		die("You shouldn't be here, try go back and do it again?");
+		die("VATSIM login failed. Please go back where you started and try again.");
 
 	}
 
