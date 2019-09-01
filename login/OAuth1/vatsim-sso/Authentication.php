@@ -10,7 +10,7 @@ class Authentication{
   private $User;
   private $returnURL;
   
-  function __construct( $base, $key, $secret, $method, $cert ){
+  function __construct( $base, $key, $secret, $method, $cert, $returnURL="/login"){
     
     $this->Base = $base;
     $this->Key = $key;
@@ -18,7 +18,7 @@ class Authentication{
     $this->Method = $method;
     $this->Cert = $cert;
     
-    $this->returnURL = $this->returnURL . "?return";
+    $this->returnURL = $returnURL . "?return";
     $this->loggedIn = false;
     $this->User = array();
     

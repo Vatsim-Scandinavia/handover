@@ -26,7 +26,7 @@
 	}
 
 	
-	$pdo = new Database($config["database"]["host"], $config["database"]["db"], $config["database"]["username"], $config["database"]["password"]);
+	$pdo = new Database($config["database"][$env]["host"], $config["database"][$env]["db"], $config["database"][$env]["username"], $config["database"][$env]["password"]);
 	$pdo->getConnection();
 
 	$vatdata = $AuthHandler->getUserDetails();
