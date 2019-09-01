@@ -69,8 +69,6 @@
 	<p>Bla bla, you accept GDPR. Last updated: 31.08.2019</p>
 	<?php
 
-	print_r($AuthHandler->getUserDetails());
-
 	print('<br><hr><a href="'.$_GET["return"].'?return&oauth_token='.$_GET["oauth_token"].'&oauth_verifier='.$_GET["oauth_verifier"].'">Yes, i accept that you can sell my soul</a>');
 
 	?>
