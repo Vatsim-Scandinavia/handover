@@ -6,6 +6,9 @@
 
 	if ( session_status() === PHP_SESSION_NONE ){ session_name("Handover"); session_start(); }
 
+	$pdo = new Database($config["database"][$env]["host"], $config["database"][$env]["db"], $config["database"][$env]["username"], $config["database"][$env]["password"]);
+	$pdo->getConnection();
+
 	$env = $config["environment"];
 	$AuthHandler = new Authentication( $config["auth"][$env]["base"], $config["auth"][$env]["key"], $config["auth"][$env]["secret"], $config["auth"][$env]["method"], $config["auth"][$env]["cert"] );
 
@@ -24,10 +27,6 @@
 	if(empty($_GET["return"])){
 		die("Whoops. You don't seem to have a url, please go back and try again?");
 	}
-
-	
-	$pdo = new Database($config["database"][$env]["host"], $config["database"][$env]["db"], $config["database"][$env]["username"], $config["database"][$env]["password"]);
-	$pdo->getConnection();
 
 	$vatdata = $AuthHandler->getUserDetails();
 
