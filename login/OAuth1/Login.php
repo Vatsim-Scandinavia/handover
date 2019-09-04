@@ -4,7 +4,10 @@
 	include( "vatsim-sso/Authentication.php" );
 	include( "../../class/Database.php" );
 
-	if ( session_status() === PHP_SESSION_NONE ){ session_name("Handover"); session_start(); }
+	if ( session_status() === PHP_SESSION_NONE ){ 
+		session_name("Handover"); 
+		session_start(); 
+	}
 
 	$env = $config["environment"];
 	$pdo = new Database($config["database"][$env]["host"], $config["database"][$env]["db"], $config["database"][$env]["username"], $config["database"][$env]["password"]);
