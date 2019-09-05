@@ -38,7 +38,7 @@
 	$query->execute([$vatdata->id]);
 
 	$result = $query->fetchAll(PDO::FETCH_ASSOC);
-	
+
 	// Update if found, insert otherwise
 	if($result){
 		$query = $pdo->conn->prepare("UPDATE `core_members` SET `email` = ?, `firstName` = ?, `lastName` = ?, `rating` = ?, `ratingShort` = ?, `ratingLong` = ?,
@@ -58,6 +58,8 @@
 		]);
 	}
 	$query = null;
+
+	header('Location: '.$_GET["return"].'?return&oauth_token='.$_GET["oauth_token"].'&oauth_verifier='.$_GET["oauth_verifier"]); // Direct redirect until we fix rest
 
 ?>
 
