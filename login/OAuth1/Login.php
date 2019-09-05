@@ -22,8 +22,8 @@
 	}
 	if( !$AuthHandler->isLoggedIn() ){
 
-		$error = $AuthHandler->SSO->error();
-		die("VATSIM login failed. Please go back where you started and try again.<br>".$error);
+		print_r($AuthHandler->SSO->error());
+		die("<br><br>VATSIM login failed. Please go back where you started and try again.");
 
 	}
 
