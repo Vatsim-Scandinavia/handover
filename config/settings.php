@@ -2,6 +2,9 @@
 
 return array(
     "environment" => "dev", // Change this between "prod" and "dev" to switch SSO certs and similar.
+    "logo" => "http://www.vatsim-scandinavia.org/wp-content/uploads/2013/01/copy-header-e1356114758797.png",
+    "privacyPolicy" => "http://vatsim-scandinavia.org/wp-content/uploads/2019/05/Data-Protection-Policy-VATSCA.pdf",
+    "dpo" => "dpo@vatsim-scandinavia.org",
     "database" => array(
         "prod" => array(
             "host" => "vps.vatsca.org",

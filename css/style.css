@@ -1,0 +1,30 @@
+body{
+	/*background-color: grey;*/
+}
+
+.container h5{
+	margin-bottom: 20px;
+}
+
+.logo{
+	background-color: #333;
+}
+
+.logo img{
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
+.pp-bullet{
+	font-weight: 200;
+	font-size: 16px;
+	margin-bottom: 10px;
+	color: #6c757d;
+}
+
+.pp-bullet i{
+	width: 15px;
+	margin-right: 5px;
+	color: #333;
+}
