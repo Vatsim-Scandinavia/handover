@@ -35,7 +35,7 @@
 
 	// Get the SSO data and ask if we already have this user in our CoreDB.
 	$vatdata = $AuthHandler->getUserDetails();
-	
+
 	$query = $pdo->conn->prepare("SELECT * FROM core_members WHERE id = ? LIMIT 1");
 	$query->execute([$vatdata->id]);
 	$result = $query->fetch(PDO::FETCH_ASSOC);
@@ -112,15 +112,15 @@
 	    </div>
 	    <div class="pp-bullet">
 	    	<i class="fas fa-cogs"></i>
-	    	We process your data in order to provide records of trainings, endorsements, member listsm and to contact our users and improve our services.
+	    	We process your data in order to provide records of trainings, endorsements, member lists and to contact our users and improve our services.
 	    </div>
 	    <div class="pp-bullet">
 	    	<i class="fas fa-handshake-alt"></i>
-	    	If you log into the following third-party services, we will share the data with following services: Discord, IPBoards Forum.
+	    	If you log into the following third-party services, we will share the data with following services: Discord.
 	    </div>
 	    <div class="pp-bullet">
 	    	<i class="fas fa-shield"></i>
-	    	We process the personal data of our members confidently, and we only share it with third-parties where it is aboslutely necessary.
+	    	We process the personal data of our members confidently, and we only share it with third-parties for authentication purposes.
 	    </div>
 	    <div class="pp-bullet">
 	    	<i class="fas fa-globe-europe"></i>
