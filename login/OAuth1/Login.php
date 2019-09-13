@@ -91,7 +91,7 @@
 		</div>
 	  <div class="container">
 	    <h1 class="mt-5">Privacy Policy</h1>
-	    <p class="lead">In order to log into our services, we require you to first accept our privacy policy and grant us permissions to process your data.</p>
+	    <p class="lead">In order to log into our services, we require you to first accept our privacy policy and grant us permission to process your data.</p>
 
 	    <?php
 
@@ -116,7 +116,7 @@
 	    </div>
 	    <div class="pp-bullet">
 	    	<i class="fas fa-handshake-alt"></i>
-	    	If you log into the following third-party services, we will share the data with following services: Discord.
+	    	If you log into the following third-party services, we will share the data with the following services: Discord.
 	    </div>
 	    <div class="pp-bullet">
 	    	<i class="fas fa-shield"></i>
@@ -124,7 +124,7 @@
 	    </div>
 	    <div class="pp-bullet">
 	    	<i class="fas fa-globe-europe"></i>
-	    	All first-party data is processed on our own servers within EU and european legislation.
+	    	All first-party data is processed on our own servers within the EU and European legislation.
 	    </div>
 	    <div class="pp-bullet">
 	    	<i class="fas fa-save"></i>
@@ -132,7 +132,7 @@
 	    </div>
 	    <div class="pp-bullet">
 	    	<i class="fas fa-eye"></i>
-	    	You have the right to inquire access, recitifaction and erasure of your data.
+	    	You have the right to inquire access, rectification and erasure of your data.
 	    </div>
 	    <div class="pp-bullet">
 	    	<i class="fas fa-undo"></i>
