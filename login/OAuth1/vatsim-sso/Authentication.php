@@ -26,9 +26,9 @@ class Authentication{
       session_start();
     }
     
-    if( isset( $_SESSION['AuthHandler'] ) ){
+    if( isset( $_SESSION['HandoverAuthHandler'] ) ){
     
-      $StoredHandler = unserialize( $_SESSION['AuthHandler'] );
+      $StoredHandler = unserialize( $_SESSION['HandoverAuthHandler'] );
       $this->User = $StoredHandler->getUserDetails();
       $this->loggedIn = $StoredHandler->isLoggedIn();
       
@@ -126,7 +126,7 @@ class Authentication{
     
     $this->User = Array();
     $this->loggedIn = false;
-    unset( $_SESSION["AuthHandler"] );
+    unset( $_SESSION["HandoverAuthHandler"] );
     
   }
   

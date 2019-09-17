@@ -16,6 +16,7 @@
 	
 	// Create the Auth class which we use to contact Vatsim SSO
 	$AuthHandler = new Authentication( $config["auth"][$env]["base"], $config["auth"][$env]["key"], $config["auth"][$env]["secret"], $config["auth"][$env]["method"], $config["auth"][$env]["cert"] );
+
 	if( $AuthHandler->shouldCheckLogin() ){
 		$AuthHandler->checkLogin();
 	}
@@ -62,11 +63,18 @@
 			]);
 		}
 
+		// Kill database connection
 		$query = null;
+
+		// Set the official AuthHandler for other services to our Handover one, this allows the login at our destination.
+		$_SESSION["AuthHandler"] = $_SESSION["HandoverAuthHandler"];
 
 		// Handover has done it's job, send user back to where they came from originally
 		header('Location: '.$_GET["return"].'?return&oauth_token='.$_GET["oauth_token"].'&oauth_verifier='.$_GET["oauth_verifier"]);
 	}
+
+	// Session variable to ensure the user stays logged in Handover, but doesn't leak the login to other services until everything is checked.
+	$_SESSION["HandoverAuthHandler"] = serialize( $AuthHandler );
 
 ?>
 
@@ -169,5 +177,3 @@
 	</main>
 </body>
 </html>
-
-<?php $_SESSION["AuthHandler"] = serialize( $AuthHandler ); ?>
