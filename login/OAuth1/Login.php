@@ -34,6 +34,9 @@
 		$error = "Whoops! Seems like your login didn't send us a return url, so we are unable to redirect you back. Please go back where you started and try again.";
 	}
 
+	// Session variable to ensure the user stays logged in Handover, but doesn't leak the login to other services until everything is checked.
+	$_SESSION["HandoverAuthHandler"] = serialize( $AuthHandler );
+
 	// Get the SSO data and ask if we already have this user in our CoreDB.
 	$vatdata = $AuthHandler->getUserDetails();
 
@@ -72,9 +75,6 @@
 		// Handover has done it's job, send user back to where they came from originally
 		header('Location: '.$_GET["return"].'?return&oauth_token='.$_GET["oauth_token"].'&oauth_verifier='.$_GET["oauth_verifier"]);
 	}
-
-	// Session variable to ensure the user stays logged in Handover, but doesn't leak the login to other services until everything is checked.
-	$_SESSION["HandoverAuthHandler"] = serialize( $AuthHandler );
 
 ?>
 
