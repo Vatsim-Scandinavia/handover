@@ -153,7 +153,7 @@
 
 	    <hr>
 
-		<p>Last update: 24. april 2019, <a target="_blank" href="<?php echo $config["privacyPolicy"] ?>">read the full privacy policy.</a></p>
+		<p>Last update: 17. september 2019, <a target="_blank" href="<?php echo $config["privacyPolicy"] ?>">read the full privacy policy.</a></p>
 
 		<form action="Login.php" method="GET">
 		<?php
