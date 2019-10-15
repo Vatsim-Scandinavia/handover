@@ -8,13 +8,13 @@ return array(
     "database" => array(
         "prod" => array(
             "host" => "vps.vatsca.org",
-            "db" => "core",
+            "db" => "prod_core",
             "username" => "vatsca",
             "password" => "gJiDC4pp9bXHda8K7Hzb"
         ),
         "dev" => array(
             "host" => "localhost",
-            "db" => "core",
+            "db" => "dev_core",
             "username" => "root",
             "password" => ""
         )
