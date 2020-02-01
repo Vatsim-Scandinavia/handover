@@ -14,6 +14,8 @@ Just clone this repository and you're almost ready. First make sure you've insta
 
 ## Credentials
 
+Method: `Authorization Code`
+
 Client ID: Usually a short id number
 Client Secret: String of hash you generated earlier
 
