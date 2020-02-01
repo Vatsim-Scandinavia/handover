@@ -16,4 +16,8 @@ class Controller extends BaseController
     {
         return Auth::check() ? view('spa') : view('splash');
     }
+
+    public function privacyAcceptance(){
+        return view('dpp');
+    }
 }

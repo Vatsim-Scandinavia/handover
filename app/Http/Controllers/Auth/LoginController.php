@@ -55,6 +55,7 @@ class LoginController extends Controller
             return redirect()->route('splash')->withErrors(['error' => $e->getMessage()]);
         }
     }
+
     /**
      * Validate the login and access protected resources, create the user if they don't exist, update them if they do, and log them in
      *

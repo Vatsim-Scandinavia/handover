@@ -17,4 +17,5 @@ Route::namespace('Auth')->group(function () {
     Route::get('/logout', 'LoginController@logout')->middleware('auth')->name('logout');
 });
 
+Route::get('/dpp', 'Controller@privacyAcceptance')->name('dpp');
 Route::get('/{any?}', 'Controller@index')->where('any', '.*')->name('splash');
