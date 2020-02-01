@@ -69,10 +69,33 @@ class LoginController extends Controller
             $this->sso->validate(session('key'), session('secret'), $get->input('oauth_verifier'), function ($sso_data, $request) {
                 session()->forget('key');
                 session()->forget('secret');
+
+                // Due to VATSIM not giving us true UTF-8 names, we need to search and fix the names which are not.
+                function Windows1252ToUTF8($str){
+                    if (preg_match('/Ã€|Ã|Ã‚|Ãƒ|Ã„|Ã…|Ã†|Ã‡|Ãˆ|Ã‰|ÃŠ|Ã‹|ÃŒ|Ã|ÃŽ|Ã|Ã|Ã‘|Ã’|Ã“|Ã”|Ã•|Ã–|Ã—|Ã˜|Ã™|Ãš|Ã›|Ãœ|Ã|Ãž|ÃŸ|Ã|Ã¡|Ã¢|Ã£|Ã¤|Ã¥|Ã¦|Ã§|Ã¨|Ã©|Ãª|Ã«|Ã¬|Ã|Ã®|Ã¯|Ã°|Ã±|Ã²|Ã³|Ã´|Ãµ|Ã¶|Ã·|Ã¸|Ã¹|Ãº|Ã»|Ã¼|Ã½|Ã¾|Ã¿/', $str)){
+                        return mb_convert_encoding($str, "Windows-1252", "UTF-8");
+                    }
+                    return $str;
+                }
+            
                 User::updateOrCreate([
                     'id' => $sso_data->id,
-                    'name' => utf8_decode($sso_data->name_first),
                     'email' => $sso_data->email,
+                    'name' => Windows1252ToUTF8($sso_data->name_first)." ".Windows1252ToUTF8($sso_data->name_last),
+                    'first_name' => Windows1252ToUTF8($sso_data->name_first),
+                    'last_name' => Windows1252ToUTF8($sso_data->name_last),
+                    'rating' => $sso_data->rating->id,
+                    'rating_short' => $sso_data->rating->short,
+                    'rating_long' => $sso_data->rating->long,
+                    'rating_grp' => $sso_data->rating->GRP,
+                    'pilot_rating' => $sso_data->pilot_rating->rating,
+                    'country' => $sso_data->country->code,
+                    'region' => $sso_data->region->code,
+                    'division' => $sso_data->division->code,
+                    'subdivision' => $sso_data->subdivision->code,
+                    'active' => 0,
+                    'accepted_privacy' => 1,
+                    'created_at' => \Carbon\Carbon::now(),
                 ]);
                 Auth::login(User::find($sso_data->id), true);
             });
