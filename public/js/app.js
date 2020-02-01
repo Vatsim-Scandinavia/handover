@@ -2000,7 +2000,7 @@ __webpack_require__.r(__webpack_exports__);
     getTokens: function getTokens() {
       var _this = this;
 
-      axios.get("https://localhost/handover/public" + '/oauth/tokens').then(function (response) {
+      axios.get("https://localhost/handover/public\"#Used to set Vue components base url" + '/oauth/tokens').then(function (response) {
         _this.tokens = response.data;
       });
     },
@@ -2011,7 +2011,7 @@ __webpack_require__.r(__webpack_exports__);
     revoke: function revoke(token) {
       var _this2 = this;
 
-      axios["delete"]('/oauth/tokens/' + token.id).then(function (response) {
+      axios["delete"]("https://localhost/handover/public\"#Used to set Vue components base url" + '/oauth/tokens/' + token.id).then(function (response) {
         _this2.getTokens();
       });
     }

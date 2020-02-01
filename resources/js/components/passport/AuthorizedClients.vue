@@ -100,7 +100,7 @@
              * Revoke the given token.
              */
             revoke(token) {
-                axios.delete('/oauth/tokens/' + token.id)
+                axios.delete(process.env.MIX_APP_URL + '/oauth/tokens/' + token.id)
                         .then(response => {
                             this.getTokens();
                         });
