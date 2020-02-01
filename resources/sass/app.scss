@@ -1,8 +1,13 @@
 // Variables
 @import 'variables';
 
-// Bootstrap
+// 3rd Party
 @import '~bootstrap/scss/bootstrap';
+@import '~@fortawesome/fontawesome-pro/scss/brands';
+@import '~@fortawesome/fontawesome-pro/scss/regular';
+@import '~@fortawesome/fontawesome-pro/scss/solid';
+@import '~@fortawesome/fontawesome-pro/scss/fontawesome';
+
 
 html,body {
     height: 100%;
