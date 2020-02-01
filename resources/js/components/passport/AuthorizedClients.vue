@@ -47,6 +47,9 @@
                 </div>
             </div>
         </div>
+        <div v-if="tokens.length == 0">
+            No authorisations recorded.
+        </div>
     </div>
 </template>
 
@@ -87,7 +90,7 @@
              * Get all of the authorized tokens for the user.
              */
             getTokens() {
-                axios.get('/oauth/tokens')
+                axios.get(process.env.MIX_APP_URL + '/oauth/tokens')
                         .then(response => {
                             this.tokens = response.data;
                         });

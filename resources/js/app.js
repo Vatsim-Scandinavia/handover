@@ -1,6 +1,6 @@
 require('./bootstrap');
 
-import Vue from 'vue';
+window.Vue = require('vue');
 
 Vue.component(
     'passport-clients',
@@ -16,3 +16,7 @@ Vue.component(
     'passport-personal-access-tokens',
     require('./components/passport/PersonalAccessTokens.vue').default
 );
+
+const app = new Vue({
+    el: '#app'
+});

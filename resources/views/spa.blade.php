@@ -5,17 +5,16 @@
     <p>Centralised Authentication Service</p>
     <hr>
     <div class="container py-4" id="app">
-        <app></app>
+        <passport-authorized-clients></passport-authorized-clients>
     </div>
-    <passport-authorized-clients></passport-authorized-clients>
+    
     <hr>
     <a href="{{route('logout')}}" class="btn btn btn-primary">Logout</a>
 @endsection
 
-@push('afterBody')
+@section('js')
     <script>
         var apiUri = "{{ url('/api') }}";
         var csrf = "{{ csrf_token() }}";
     </script>
-    <script src="{{ mix('js/app.js') }}"></script>
-@endpush
+@endsection
