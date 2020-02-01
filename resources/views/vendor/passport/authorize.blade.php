@@ -33,7 +33,7 @@
     <div class="passport-authorize">
         <h3>Handover Authorisation</h3>
         <!-- Introduction -->
-        <p><strong>{{ $client->name }}</strong> is requesting permission to access your VATSIM account.</p>
+        <p><strong>{{ $client->name }}</strong> is requesting permission to access your VATSIM data.</p>
 
         <!-- Scope List -->
         @if (count($scopes) > 0)
