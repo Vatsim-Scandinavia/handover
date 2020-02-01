@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,12 +11,10 @@ use App\Http\Controllers\PRatingsController;
 use App\Http\Controllers\DivisionsController;
 use App\Http\Controllers\TestController;
 use App\User;
-
 /**
  * Class AuthController
  * @package App\Http\Controllers\login
  */
-
 class LoginController extends Controller
 {
     use AuthenticatesUsers;
@@ -72,19 +69,18 @@ class LoginController extends Controller
             $this->sso->validate(session('key'), session('secret'), $get->input('oauth_verifier'), function ($sso_data, $request) {
                 session()->forget('key');
                 session()->forget('secret');
-                
-                $user = User::firstOrNew(['id' => $sso_data->id]);
-                $user->name = utf8_decode($sso_data->name_first);
-                $user->email = $sso_data->email;
-                $user->save();
-
+                User::updateOrCreate([
+                    'id' => $sso_data->id,
+                    'name' => utf8_decode($sso_data->name_first),
+                    'email' => $sso_data->email,
+                ]);
                 Auth::login(User::find($sso_data->id), true);
             });
         } catch (SSOException $e) {
             return redirect()->route('front')->withErrors(['error' => $e->getMessage()]);
         }
         
-        return redirect()->intended(route('dashboard'));
+        return redirect()->intended(route('front'));
     }
     /**
      * Log the user out
