@@ -6,49 +6,16 @@
 
 <template>
     <div>
-        <div v-if="tokens.length > 0">
-            <div class="card card-default">
-                <div class="card-header">Authorized Applications</div>
+        <h5>Your Authorized Applications</h5>
+        <div v-if="tokens.length == 0">
 
-                <div class="card-body">
-                    <!-- Authorized Tokens -->
-                    <table class="table table-borderless mb-0">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Scopes</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr v-for="token in tokens">
-                                <!-- Client Name -->
-                                <td style="vertical-align: middle;">
-                                    {{ token.client.name }}
-                                </td>
-
-                                <!-- Scopes -->
-                                <td style="vertical-align: middle;">
-                                    <span v-if="token.scopes.length > 0">
-                                        {{ token.scopes.join(', ') }}
-                                    </span>
-                                </td>
-
-                                <!-- Revoke Button -->
-                                <td style="vertical-align: middle;">
-                                    <a class="action-link text-danger" @click="revoke(token)">
-                                        Revoke
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div v-for="token in tokens">
+                <p><b>{{ token.client.name }}</b>&nbsp;<a class="action-link badge badge-danger text-white" style="font-weight: normal" @click="revoke(token)">Revoke</a></p>
             </div>
+
         </div>
         <div v-if="tokens.length == 0">
-            No authorisations recorded.
+            <p class="text-muted">No authorisations recorded.</p>
         </div>
     </div>
 </template>

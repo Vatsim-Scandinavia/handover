@@ -9,6 +9,11 @@
     </div>
     
     <hr>
+
+    <div class="alert alert-info text-sm" style="font-size: 12px" role="alert">
+        <i class="fas fa-info-circle"></i>&nbsp;Revoking access does not delete the data, but revokes the possiblity to pull updated data. To delete your data contact the <a href="mailto:">Data Protection Officer</a>
+    </div>
+
     <a href="{{route('logout')}}" class="btn btn btn-primary">Logout</a>
 @endsection
 

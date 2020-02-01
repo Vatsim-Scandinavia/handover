@@ -1930,39 +1930,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   /*
    * The component's data.
@@ -2000,7 +1967,7 @@ __webpack_require__.r(__webpack_exports__);
     getTokens: function getTokens() {
       var _this = this;
 
-      axios.get("https://localhost/handover/public\"#Used to set Vue components base url" + '/oauth/tokens').then(function (response) {
+      axios.get("http://localhost/handover/public" + '/oauth/tokens').then(function (response) {
         _this.tokens = response.data;
       });
     },
@@ -2011,7 +1978,7 @@ __webpack_require__.r(__webpack_exports__);
     revoke: function revoke(token) {
       var _this2 = this;
 
-      axios["delete"]("https://localhost/handover/public\"#Used to set Vue components base url" + '/oauth/tokens/' + token.id).then(function (response) {
+      axios["delete"]("http://localhost/handover/public" + '/oauth/tokens/' + token.id).then(function (response) {
         _this2.getTokens();
       });
     }
@@ -21038,102 +21005,46 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm.tokens.length > 0
-      ? _c("div", [
-          _c("div", { staticClass: "card card-default" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("Authorized Applications")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _c("table", { staticClass: "table table-borderless mb-0" }, [
-                _vm._m(0),
-                _vm._v(" "),
+    _c("h5", [_vm._v("Your Authorized Applications")]),
+    _vm._v(" "),
+    _vm.tokens.length == 0
+      ? _c(
+          "div",
+          _vm._l(_vm.tokens, function(token) {
+            return _c("div", [
+              _c("p", [
+                _c("b", [_vm._v(_vm._s(token.client.name))]),
+                _vm._v(" "),
                 _c(
-                  "tbody",
-                  _vm._l(_vm.tokens, function(token) {
-                    return _c("tr", [
-                      _c(
-                        "td",
-                        { staticStyle: { "vertical-align": "middle" } },
-                        [
-                          _vm._v(
-                            "\n                                " +
-                              _vm._s(token.client.name) +
-                              "\n                            "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "td",
-                        { staticStyle: { "vertical-align": "middle" } },
-                        [
-                          token.scopes.length > 0
-                            ? _c("span", [
-                                _vm._v(
-                                  "\n                                    " +
-                                    _vm._s(token.scopes.join(", ")) +
-                                    "\n                                "
-                                )
-                              ])
-                            : _vm._e()
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "td",
-                        { staticStyle: { "vertical-align": "middle" } },
-                        [
-                          _c(
-                            "a",
-                            {
-                              staticClass: "action-link text-danger",
-                              on: {
-                                click: function($event) {
-                                  return _vm.revoke(token)
-                                }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                                    Revoke\n                                "
-                              )
-                            ]
-                          )
-                        ]
-                      )
-                    ])
-                  }),
-                  0
+                  "a",
+                  {
+                    staticClass: "action-link badge badge-danger text-white",
+                    staticStyle: { "font-weight": "normal" },
+                    on: {
+                      click: function($event) {
+                        return _vm.revoke(token)
+                      }
+                    }
+                  },
+                  [_vm._v("Revoke")]
                 )
               ])
             ])
-          ])
-        ])
+          }),
+          0
+        )
       : _vm._e(),
     _vm._v(" "),
     _vm.tokens.length == 0
-      ? _c("div", [_vm._v("\n        No authorisations recorded.\n    ")])
+      ? _c("div", [
+          _c("p", { staticClass: "text-muted" }, [
+            _vm._v("No authorisations recorded.")
+          ])
+        ])
       : _vm._e()
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Name")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Scopes")]),
-        _vm._v(" "),
-        _c("th")
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
