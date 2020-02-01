@@ -21007,7 +21007,7 @@ var render = function() {
   return _c("div", [
     _c("h5", [_vm._v("Your Authorized Applications")]),
     _vm._v(" "),
-    _vm.tokens.length == 0
+    _vm.tokens.length > 0
       ? _c(
           "div",
           _vm._l(_vm.tokens, function(token) {

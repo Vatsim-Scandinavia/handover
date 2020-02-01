@@ -7,7 +7,7 @@
 <template>
     <div>
         <h5>Your Authorized Applications</h5>
-        <div v-if="tokens.length == 0">
+        <div v-if="tokens.length > 0">
 
             <div v-for="token in tokens">
                 <p><b>{{ token.client.name }}</b>&nbsp;<a class="action-link badge badge-danger text-white" style="font-weight: normal" @click="revoke(token)">Revoke</a></p>
