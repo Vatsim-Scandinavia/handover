@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'VATSIM UK Central Authentication Service') }}</title>
+    <title>{{ config('app.name', 'VATSCA Handover') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -30,7 +30,7 @@
         <div class="row justify-content-center" style="padding-top: 10%">
             <div class="col-md-6 text-center">
 
-                <img src="{{asset('img/vatsimuk_white.png')}}" alt="VATSIM UK" class="w-100 pb-4" style="max-width: 250px"/>
+                <img src="{{asset('img/vatsca-logo-negative.svg')}}" alt="VATSIM Scandinavia logo" class="w-100 pb-4" style="max-width: 300px"/>
 
 				@if(Session::has('error') OR isset($error))
 					<div class="alert alert-danger" role="alert">
