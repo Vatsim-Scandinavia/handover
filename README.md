@@ -11,3 +11,14 @@ Just clone this repository and you're almost ready. First make sure you've insta
 5. Initialize OAuth2 components `php artisan passport:install` and `php artisan passport:keys` (for production)
 6. Add your client auth token with `php artisan passport:client`, skip with ENTER the assign to specific user, name the client to which service will be connected to it e.g. "Forums" and add the callback URL.
 7. Run `php artisan serve` to host the page at `localhost:8000`. Note: OAuth often requires a HTTPS host.
+
+## Credentials
+
+Client ID: Usually a short id number
+Client Secret: String of hash you generated earlier
+
+Authorization Endpoint: `/oauth/authorize`
+Token Endpoint: `/oauth/token`
+User Information Endpoint: `/api/user`
+
+Data load in user information equals to all fields in users database table.
