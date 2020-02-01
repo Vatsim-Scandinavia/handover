@@ -21012,7 +21012,7 @@ var render = function() {
           "div",
           _vm._l(_vm.tokens, function(token) {
             return _c("div", [
-              _c("p", [
+              _c("p", { staticStyle: { "font-size": "14px" } }, [
                 _c("b", [_vm._v(_vm._s(token.client.name))]),
                 _vm._v(" | Created " + _vm._s(token.created_at) + "  "),
                 _c(
