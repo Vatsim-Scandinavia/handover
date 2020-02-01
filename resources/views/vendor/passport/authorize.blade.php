@@ -1,4 +1,4 @@
-@extends('layouts.box')
+@extends('layouts.app')
 
 @section('slickNav')
     <ul class="navbar-nav ml-auto">
