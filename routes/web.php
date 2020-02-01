@@ -12,9 +12,9 @@
 */
 
 Route::namespace('Auth')->group(function () {
-    Route::get('/login', 'Auth\LoginController@login')->middleware('guest')->name('login');
-    Route::get('/validate', 'Auth\LoginController@validateLogin')->middleware('guest');
-    Route::get('/logout', 'Auth\LoginController@logout')->middleware('auth')->name('logout');
+    Route::get('/login', 'LoginController@login')->middleware('guest')->name('login');
+    Route::get('/validate', 'LoginController@validateLogin')->middleware('guest');
+    Route::get('/logout', 'LoginController@logout')->middleware('auth')->name('logout');
 });
 
-Route::get('/{any?}', 'Controller@index')->where('any', '.*');
+Route::get('/{any?}', 'Controller@index')->where('any', '.*')->name('splash');

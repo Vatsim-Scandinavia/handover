@@ -52,7 +52,7 @@ class LoginController extends Controller
                 die();
             });
         } catch (SSOException $e) {
-            return redirect()->route('front')->withErrors(['error' => $e->getMessage()]);
+            return redirect()->route('splash')->withErrors(['error' => $e->getMessage()]);
         }
     }
     /**
@@ -77,10 +77,10 @@ class LoginController extends Controller
                 Auth::login(User::find($sso_data->id), true);
             });
         } catch (SSOException $e) {
-            return redirect()->route('front')->withErrors(['error' => $e->getMessage()]);
+            return redirect()->route('splash')->withErrors(['error' => $e->getMessage()]);
         }
         
-        return redirect()->intended(route('front'));
+        return redirect()->intended(route('splash'));
     }
     /**
      * Log the user out
