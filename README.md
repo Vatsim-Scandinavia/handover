@@ -9,4 +9,5 @@ Just clone this repository and you're almost ready. First make sure you've insta
 3. Create app key `php artisan key:generate`
 4. Migrate the database with `php artisan migrate`
 5. Initialize OAuth2 components `php artisan passport:install` and `php artisan passport:keys` (for production)
-5. Run `php artisan serve` to host the page at `localhost:8000`. Note: OAuth often requires a HTTPS host.
+6. Add your client auth token with `php artisan passport:client`, skip with ENTER the assign to specific user, name the client to which service will be connected to it e.g. "Forums" and add the callback URL.
+7. Run `php artisan serve` to host the page at `localhost:8000`. Note: OAuth often requires a HTTPS host.
