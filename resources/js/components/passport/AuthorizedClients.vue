@@ -59,6 +59,7 @@
             getTokens() {
                 axios.get(process.env.MIX_APP_URL + '/oauth/tokens')
                         .then(response => {
+                            console.log(response.data);
                             this.tokens = response.data;
                         });
             },

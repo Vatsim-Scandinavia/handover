@@ -1968,6 +1968,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("http://localhost/handover/public" + '/oauth/tokens').then(function (response) {
+        console.log(response.data);
         _this.tokens = response.data;
       });
     },
