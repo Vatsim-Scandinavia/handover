@@ -1968,7 +1968,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("http://localhost/handover/public" + '/oauth/tokens').then(function (response) {
-        console.log(response.data);
         _this.tokens = response.data;
       });
     },
@@ -21006,7 +21005,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h5", [_vm._v("Your Authorized Applications")]),
+    _c("h5", [_vm._v("Your Authorized Sessions")]),
     _vm._v(" "),
     _vm.tokens.length > 0
       ? _c(
@@ -21015,7 +21014,7 @@ var render = function() {
             return _c("div", [
               _c("p", [
                 _c("b", [_vm._v(_vm._s(token.client.name))]),
-                _vm._v(" "),
+                _vm._v(" | Created " + _vm._s(token.created_at) + "  "),
                 _c(
                   "a",
                   {
