@@ -1,4 +1,4 @@
-## SANTA
+## OAuth2 Handover
 Centralized Handover with OAuth2, created using `Laravel 6`.
 
 ## Setup and install
