@@ -14,13 +14,12 @@ Just clone this repository and you're almost ready. First make sure you've insta
 
 ## Credentials
 
-Method: `Authorization Code`
+* Method: `Authorization Code`
+* Client ID: Usually a short id number
+* Client Secret: String of hash you generated earlier
 
-Client ID: Usually a short id number
-Client Secret: String of hash you generated earlier
+* Authorization Endpoint: `/oauth/authorize`
+* Token Endpoint: `/oauth/token`
+* User Information Endpoint: `/api/user`
 
-Authorization Endpoint: `/oauth/authorize`
-Token Endpoint: `/oauth/token`
-User Information Endpoint: `/api/user`
-
-Data load in user information equals to all fields in users database table.
+* Data load in user information equals to all fields in users database table.
