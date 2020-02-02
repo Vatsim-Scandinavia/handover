@@ -71,20 +71,12 @@ class LoginController extends Controller
                 session()->forget('key');
                 session()->forget('secret');
 
-                // Due to VATSIM not giving us true UTF-8 names, we need to search and fix the names which are not.
-                function Windows1252ToUTF8($str){
-                    if (preg_match('/Ã€|Ã|Ã‚|Ãƒ|Ã„|Ã…|Ã†|Ã‡|Ãˆ|Ã‰|ÃŠ|Ã‹|ÃŒ|Ã|ÃŽ|Ã|Ã|Ã‘|Ã’|Ã“|Ã”|Ã•|Ã–|Ã—|Ã˜|Ã™|Ãš|Ã›|Ãœ|Ã|Ãž|ÃŸ|Ã|Ã¡|Ã¢|Ã£|Ã¤|Ã¥|Ã¦|Ã§|Ã¨|Ã©|Ãª|Ã«|Ã¬|Ã|Ã®|Ã¯|Ã°|Ã±|Ã²|Ã³|Ã´|Ãµ|Ã¶|Ã·|Ã¸|Ã¹|Ãº|Ã»|Ã¼|Ã½|Ã¾|Ã¿/', $str)){
-                        return mb_convert_encoding($str, "Windows-1252", "UTF-8");
-                    }
-                    return $str;
-                }
-            
                 User::updateOrCreate([
                     'id' => $sso_data->id,
                     'email' => $sso_data->email,
-                    'name' => Windows1252ToUTF8($sso_data->name_first)." ".Windows1252ToUTF8($sso_data->name_last),
-                    'first_name' => Windows1252ToUTF8($sso_data->name_first),
-                    'last_name' => Windows1252ToUTF8($sso_data->name_last),
+                    'name' => Controller::Windows1252ToUTF8($sso_data->name_first)." ".Controller::Windows1252ToUTF8($sso_data->name_last),
+                    'first_name' => Controller::Windows1252ToUTF8($sso_data->name_first),
+                    'last_name' => Controller::Windows1252ToUTF8($sso_data->name_last),
                     'rating' => $sso_data->rating->id,
                     'rating_short' => $sso_data->rating->short,
                     'rating_long' => $sso_data->rating->long,
