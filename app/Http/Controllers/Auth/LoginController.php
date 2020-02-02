@@ -72,14 +72,35 @@ class LoginController extends Controller
                 session()->forget('secret');
 
                 // Check if user exists and if accepted privacy policy
-                $user = User::find($sso_data->id);
+                /*$user = User::find($sso_data->id);
                 if($user && $user->accepted_privacy){
                     $this->loginHandover($sso_data);
                     return false;
                 } else {
                     session(['sso_data' => $sso_data]);
                     return true;
-                }
+                }*/
+
+                User::updateOrCreate(
+                    ['id' => $sso_data->id],
+                    ['email' => $sso_data->email,
+                    'full_name' => Controller::Windows1252ToUTF8($sso_data->name_first)." ".Controller::Windows1252ToUTF8($sso_data->name_last),
+                    'first_name' => Controller::Windows1252ToUTF8($sso_data->name_first),
+                    'last_name' => Controller::Windows1252ToUTF8($sso_data->name_last),
+                    'rating' => $sso_data->rating->id,
+                    'rating_short' => $sso_data->rating->short,
+                    'rating_long' => $sso_data->rating->long,
+                    'rating_grp' => $sso_data->rating->GRP,
+                    'pilot_rating' => $sso_data->pilot_rating->rating,
+                    'country' => $sso_data->country->code,
+                    'region' => $sso_data->region->code,
+                    'division' => $sso_data->division->code,
+                    'subdivision' => $sso_data->subdivision->code,
+                    'active' => 0,
+                    'accepted_privacy' => 1,
+                    'created_at' => \Carbon\Carbon::now(),]
+                );
+                Auth::login(User::find($sso_data->id), true);
 
             });
         } catch (SSOException $e) {
