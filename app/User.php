@@ -13,13 +13,20 @@ class User extends Authenticatable
     public $timestamps = false;
 
     /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'id';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
 
     protected $fillable = [
-        'id', 'name', 'first_name', 'last_name', 'email', 'rating', 'rating_short', 'rating_long', 'rating_grp', 'pilot_rating', 'country', 'region', 'division', 'subdivision', 'active', 'accepted_privacy', 'created_at'
+        'id', 'email', 'full_name', 'first_name', 'last_name', 'rating', 'rating_short', 'rating_long', 'rating_grp', 'pilot_rating', 'country', 'region', 'division', 'subdivision', 'active', 'accepted_privacy', 'created_at',
     ];
 
     /**

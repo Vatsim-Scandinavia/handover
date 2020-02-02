@@ -56,6 +56,6 @@
             </div>
         </div>
 
-        <a href="{{route('login')}}" class="btn btn btn-primary">Yes, I accept</a>
+        <a href="{{route('privacy')}}/accept" class="btn btn btn-primary">Yes, I accept</a>
 
 @endsection

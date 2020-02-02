@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->unsignedInteger('id')->primary();
             $table->string('email', 64);
 
-            $table->string('name'); // We have a full name table entry as some OAuth2 connectors want a single variable of the users name
+            $table->string('full_name'); // We have a full name table entry as some OAuth2 connectors want a single variable of the user's name
             $table->string('first_name');
             $table->string('last_name');
 
