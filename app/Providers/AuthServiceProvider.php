@@ -28,6 +28,8 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::tokensExpireIn(now()->addDays(14));
         Passport::refreshTokensExpireIn(now()->addDays(14));
+        
+        Passport::enableImplicitGrant();
 
         Passport::routes();
     }
