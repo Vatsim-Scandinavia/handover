@@ -23,7 +23,7 @@ Do not run any of the commands as root/sudo, unless explicitly listed!
 
 1. Make sure you've the correct permissions to run some of the commands as local user. The `fixwebperm` can be used to achive that `alias fixwebperm="sudo chgrp -R www-data /var/www/*; sudo chmod -R g+rw /var/www/*; find /var/www/* -type d -print0 | sudo xargs -0 chmod g+s"`
 2. Duplicate `.env.example` file into `.env` and make sure you're running correct mysql settings and app_url
-3. In the project folder, run `composer install --no-dev` to install PHP dependecies
+3. In the project folder, run `composer install --no-dev --optimize-autoloader` to install PHP dependecies
 4. Run `npm install --production` to install front-end dependecies
 5. Create app key `php artisan key:generate`
 6. Migrate the database with `php artisan migrate`
