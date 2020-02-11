@@ -166,9 +166,6 @@ return [
          * Package Service Providers...
          */
 
-        Laravel\Passport\PassportServiceProvider::class,
-        Vatsim\OAuthLaravel\OAuthServiceProvider::class,
-
         /*
          * Application Service Providers...
          */
@@ -178,7 +175,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        
+        Vatsim\OAuthLaravel\OAuthServiceProvider::class,
 
     ],
 

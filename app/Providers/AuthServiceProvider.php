@@ -24,14 +24,13 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Passport::routes(function ($router) {
-            $router->forAuthorization();
-            $router->forAccessTokens();
-            //$router->forTransientTokens(); // the tokens we issue are permanent
-            //$router->forClients(); // we don't want external applications using our oauth flows
-            //$router->forPersonalAccessTokens(); // we don't have a user-facing API yet
-        });
-
         $this->registerPolicies();
+
+        Passport::tokensExpireIn(now()->addDays(14));
+        Passport::refreshTokensExpireIn(now()->addDays(14));
+        
+        Passport::enableImplicitGrant();
+
+        Passport::routes();
     }
 }
