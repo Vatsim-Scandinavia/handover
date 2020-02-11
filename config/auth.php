@@ -36,14 +36,28 @@ return [
     */
 
     'guards' => [
-        'web' => [
+        // semi-authenticated end-users
+        'vatsim-sso' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'accounts',
         ],
 
+        // fully authenticated end-users
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'accounts',
+        ],
+
+        // requests authenticated for API access
         'api' => [
             'driver' => 'passport',
-            'provider' => 'users',
+            'provider' => 'accounts',
+        ],
+
+        // requests authenticated through HTTP auth
+        'basic' => [
+            'driver' => 'session',
+            'provider' => 'basic',
         ],
     ],
 
