@@ -13,9 +13,9 @@ class OAuthUserController
         $account = $request->user();
         $return = [];
         $return['id'] = $account->id;
-        $return['first_name'] = $account->name_first;
-        $return['last_name'] = $account->name_last;
-        $return['full_name'] = $account->name;
+        $return['first_name'] = $account->first_name;
+        $return['last_name'] = $account->last_name;
+        $return['full_name'] = $account->full_name;
         $return['email'] = $account->email;
 
         // Here we can serve more data if we need to do that sometime in future.
