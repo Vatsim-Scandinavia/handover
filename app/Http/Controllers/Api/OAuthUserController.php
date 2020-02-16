@@ -12,6 +12,7 @@ class OAuthUserController
     {
         $account = $request->user();
         $return = [];
+
         $return['id'] = $account->id;
         $return['first_name'] = $account->first_name;
         $return['last_name'] = $account->last_name;
@@ -20,6 +21,7 @@ class OAuthUserController
 
         // Here we can serve more data if we need to do that sometime in future.
 
-        return Response::json(['status' => 'success', 'data' => $return]);
+        return Response::json($return);
     }
 }
+
