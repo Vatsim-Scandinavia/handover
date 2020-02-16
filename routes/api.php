@@ -17,4 +17,4 @@ Route::group([
     'middleware' => 'auth:api'
 ], function () {
     Route::get('user')->uses('Api\OAuthUserController@view');
-}
+});
