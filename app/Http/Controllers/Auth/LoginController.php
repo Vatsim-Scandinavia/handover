@@ -68,7 +68,7 @@ class LoginController extends Controller
                 die();
             });
         } catch (SSOException $e) {
-            return redirect()->back()->withErrors(['error' => "We were unable to contact VATSIM's certification service. Please try again later. If this persists, please contact Web Services. " . $e->getMessage()]);
+            return redirect()->back()->withError("We were unable to contact VATSIM's certification service. Please try again later. If this persists, please contact Web Services. " . $e->getMessage());
         }
     }
 
