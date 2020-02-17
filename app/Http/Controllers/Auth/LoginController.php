@@ -36,15 +36,31 @@ class LoginController extends Controller
             config('sso.additionalConfig')
         );
     }
+
+    /**
+     * Handle a login request to the application.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     */
+    public function login(Request $request){
+
+        if (!Auth::check()) {
+            $this->loginSSO();
+        }
+
+        return redirect()->intended(route('landing'));
+    }
+
     /**
      * Redirect user to VATSIM SSO for login
      *
      * @throws \Vatsim\OAuth\SSOException
      */
-    public function login()
+    public function loginSSO()
     {
         try{
-            $this->sso->login(config('sso.return'), function ($key, $secret, $url) {
+            return $this->sso->login(config('sso.return'), function ($key, $secret, $url) {
                 session()->put('key', $key);
                 session()->put('secret', $secret);
                 session()->save();
@@ -52,83 +68,54 @@ class LoginController extends Controller
                 die();
             });
         } catch (SSOException $e) {
-            return redirect()->route('splash')->withErrors(['error' => $e->getMessage()]);
+            return redirect()->back()->withErrors(['error' => "We were unable to contact VATSIM's certification service. Please try again later. If this persists, please contact Web Services. " . $e->getMessage()]);
         }
     }
 
     /**
      * Validate the login and access protected resources, create the user if they don't exist, update them if they do, and log them in
      *
-     * @param Request $get
+     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      * @throws \Vatsim\OAuth\SSOException
      */
     public $newUser;
-    public function validateLogin(Request $get)
+    public function validateLogin(Request $request)
     {
         try{
-            $showPrivacy = $this->sso->validate(session('key'), session('secret'), $get->input('oauth_verifier'), function ($sso_data, $request) {
+            return $this->sso->validate(session('key'), session('secret'), $request->input('oauth_verifier'), function ($sso_data, $request) {
                 session()->forget('key');
                 session()->forget('secret');
 
-                // Check if user exists and if accepted privacy policy
-                /*$user = User::find($sso_data->id);
+                // Check if user exists and accepted privacy policy
+                $user = User::find($sso_data->id);
                 if($user && $user->accepted_privacy){
-                    $this->loginHandover($sso_data);
-                    return false;
+                    return $this->vatsimSsoValidationSuccess($sso_data);
                 } else {
                     session(['sso_data' => $sso_data]);
-                    return true;
-                }*/
-
-                User::updateOrCreate(
-                    ['id' => $sso_data->id],
-                    ['email' => $sso_data->email,
-                    'full_name' => Controller::Windows1252ToUTF8($sso_data->name_first)." ".Controller::Windows1252ToUTF8($sso_data->name_last),
-                    'first_name' => Controller::Windows1252ToUTF8($sso_data->name_first),
-                    'last_name' => Controller::Windows1252ToUTF8($sso_data->name_last),
-                    'rating' => $sso_data->rating->id,
-                    'rating_short' => $sso_data->rating->short,
-                    'rating_long' => $sso_data->rating->long,
-                    'rating_grp' => $sso_data->rating->GRP,
-                    'pilot_rating' => $sso_data->pilot_rating->rating,
-                    'country' => $sso_data->country->code,
-                    'region' => $sso_data->region->code,
-                    'division' => $sso_data->division->code,
-                    'subdivision' => $sso_data->subdivision->code,
-                    'active' => 0,
-                    'accepted_privacy' => 1,
-                    'created_at' => \Carbon\Carbon::now(),]
-                );
-                Auth::login(User::find($sso_data->id), true);
+                    return redirect()->route('dpp');
+                }
 
             });
         } catch (SSOException $e) {
-            return redirect()->route('splash')->withErrors(['error' => $e->getMessage()]);
+            return redirect()->route('landing')->withError('Could not authenticate: '.$error['message']);
         }
-        
-        // Redirect based on if the user needs to accept DPP or not
-        if($showPrivacy) {
-            return redirect()->intended(route('privacy'));
-        }
-        return redirect()->intended(route('splash'));
     }
 
     public function validatePrivacy(Request $get){
 
         $sso_data = session('sso_data');
+        session()->forget('sso_data');
 
         if(!$sso_data){
-            return redirect()->route('splash')->withErrors(['error' => "You need to authenticate yourself before accepting privacy policy"]);
+            return redirect()->route('landing')->withError("You need to authenticate yourself before accepting privacy policy");
         }
 
-        session()->forget('sso_data');
-        $this->loginHandover($sso_data);
-
-        return redirect()->intended(route('splash'));
+        return $this->vatsimSsoValidationSuccess($sso_data);
     }
 
-    public function loginHandover($sso_data){
+    public function vatsimSsoValidationSuccess($sso_data){
+
         User::updateOrCreate(
             ['id' => $sso_data->id],
             ['email' => $sso_data->email,
@@ -148,7 +135,10 @@ class LoginController extends Controller
             'accepted_privacy' => 1,
             'created_at' => \Carbon\Carbon::now(),]
         );
+
         Auth::login(User::find($sso_data->id), true);
+
+        return redirect()->route('landing');
     }
 
     /**

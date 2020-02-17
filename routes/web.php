@@ -12,11 +12,12 @@
 */
 
 Route::namespace('Auth')->group(function () {
-    Route::get('/login', 'LoginController@login')->middleware('guest')->name('login');
+    Route::post('/login', 'LoginController@login')->middleware('guest')->name('login');
     Route::get('/validate', 'LoginController@validateLogin')->middleware('guest');
     Route::get('/logout', 'LoginController@logout')->middleware('auth')->name('logout');
 });
 
-Route::get('/validate/dpp', 'Controller@privacy')->name('privacy');
-Route::get('/validate/dpp/accept', 'Auth\LoginController@validatePrivacy')->name('validate.privacy');
-Route::get('/{any?}', 'Controller@index')->where('any', '.*')->name('splash');
+Route::get('/validate/dpp', 'Controller@privacy')->name('dpp');
+Route::post('/validate/dpp', 'Auth\LoginController@validatePrivacy')->name('dpp.accept');
+
+Route::get('/{any?}', 'Controller@index')->where('any', '.*')->name('landing');
