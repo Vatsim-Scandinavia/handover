@@ -14,7 +14,7 @@ class Controller extends BaseController
 
     public function index()
     {
-        return Auth::check() ? view('spa') : view('splash');
+        return Auth::check() ? view('dashboard') : view('landing');
     }
 
     public function privacy(){

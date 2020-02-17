@@ -56,6 +56,9 @@
             </div>
         </div>
 
-        <a href="{{route('privacy')}}/accept" class="btn btn btn-primary">Yes, I accept</a>
+        <form class="form-horizontal" method="POST" action="{{ route('dpp.accept') }}">
+                @csrf
+                <button type="submit" class="btn btn btn-primary">Yes, I accept</button>
+        </form>
 
 @endsection
