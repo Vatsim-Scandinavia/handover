@@ -10,7 +10,7 @@
         <div v-if="tokens.length > 0">
 
             <div v-for="token in tokens">
-                <p style="font-size: 14px;"><b>{{ token.client.name }}</b> | Created {{ token.created_at }} &nbsp;<a class="action-link badge badge-danger text-white" style="font-weight: normal" @click="revoke(token)">Revoke</a></p>
+                <p style="font-size: 14px;"><b>{{ token.client.name }}</b><br>Created {{ token.created_at }}<br>Expires {{ token.expires_at }}<br><a class="action-link badge badge-danger text-white" style="font-weight: normal" @click="revoke(token)">Revoke</a></p>
             </div>
 
         </div>
