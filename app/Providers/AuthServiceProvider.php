@@ -26,7 +26,11 @@ class AuthServiceProvider extends ServiceProvider
     {
         Passport::routes(function ($router) {
             $router->forAuthorization();
+            Passport::tokensExpireIn(now()->addDays(365));
+
             $router->forAccessTokens();
+            Passport::refreshTokensExpireIn(now()->addDays(365));
+
             //$router->forTransientTokens(); // the tokens we issue are permanent
             //$router->forClients(); // we don't want external applications using our oauth flows
             //$router->forPersonalAccessTokens(); // we don't have a user-facing API yet
