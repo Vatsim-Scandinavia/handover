@@ -138,7 +138,7 @@ class LoginController extends Controller
             'created_at' => \Carbon\Carbon::now(),]
         );
 
-        Auth::login(User::find($sso_data->id), true);
+        Auth::login(User::find($sso_data->id), false);
 
         $intended = $intended = Session::pull('url.intended', route('landing'));
         return redirect($intended);
