@@ -11,6 +11,8 @@ use App\Http\Controllers\PRatingsController;
 use App\Http\Controllers\DivisionsController;
 use App\Http\Controllers\TestController;
 use App\User;
+use Session;
+
 /**
  * Class AuthController
  * @package App\Http\Controllers\login
@@ -138,7 +140,8 @@ class LoginController extends Controller
 
         Auth::login(User::find($sso_data->id), true);
 
-        return redirect()->route('landing');
+        $intended = $intended = Session::pull('url.intended', route('landing'));
+        return redirect($intended);
     }
 
     /**
