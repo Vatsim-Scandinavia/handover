@@ -2,10 +2,7 @@
 
 @section('content')
 
-        <h3>Handover</h3>
-        <p>Centralised Authentication Service</p>
-
-        <hr>
+        @include('layouts.header')
 
         <h5>Privacy Policy</h5>
         <p>In order to log into our services, we require you to first accept our privacy policy and grant us permission to process your data.</p>

@@ -1,9 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <h3>Handover</h3>
-    <p>Centralised Authentication Service</p>
-    <hr>
+    @include('layouts.header')
     <div class="container py-4" id="app">
         <passport-authorized-clients></passport-authorized-clients>
     </div>

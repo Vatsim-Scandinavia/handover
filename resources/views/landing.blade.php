@@ -2,10 +2,7 @@
 
 @section('content')
 
-        <h3>Handover</h3>
-        <p>Centralised Authentication Service</p>
-
-        <hr>
+        @include('layouts.header')
 
         @if(Session::has('error'))
                 <div class="alert-box alert"><i class="fa fa-lg fa-exclamation-circle"></i> {!! Session::get('error') !!}</div>
