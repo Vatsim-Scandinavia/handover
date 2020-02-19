@@ -135,7 +135,7 @@ class LoginController extends Controller
             'subdivision' => $sso_data->subdivision->code,
             'active' => 0,
             'accepted_privacy' => 1,
-            'created_at' => \Carbon\Carbon::now(),]
+            'last_login' => \Carbon\Carbon::now(),]
         );
 
         Auth::login(User::find($sso_data->id), false);

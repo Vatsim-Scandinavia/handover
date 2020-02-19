@@ -42,7 +42,6 @@ class CreateUsersTable extends Migration
 
             $table->rememberToken();
             $table->timestamp('last_login')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamps();
         });
     }
 
