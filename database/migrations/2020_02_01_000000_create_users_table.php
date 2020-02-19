@@ -41,6 +41,7 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('accepted_privacy');
 
             $table->rememberToken();
+            $table->timestamp('reg_date')->nullable();
             $table->timestamp('last_login')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
