@@ -6,11 +6,11 @@
 
 <template>
     <div>
-        <h5>Your Authorized Sessions</h5>
+        <h5 class="mb-4">Your Authorized Sessions</h5>
         <div v-if="tokens.length > 0">
 
             <div v-for="token in tokens">
-                <p style="font-size: 14px;"><b>{{ token.client.name }}</b><br>Created {{ token.created_at }}<br>Expires {{ token.expires_at }}<br><a class="action-link badge badge-danger text-white" style="font-weight: normal" @click="revoke(token)">Revoke</a></p>
+                <p style="font-size: 14px;"><b>{{ token.client.name }}</b> | <span :title="'Created: ' + formatTime(token.created_at) + ' | Expires: ' + formatTime(token.expires_at)">Expires in {{ calcDaysDiff(token.created_at, token.expires_at) }} days</span>&nbsp;<a class="action-link badge badge-danger text-white" style="font-weight: normal" @click="revoke(token)">Revoke</a></p>
             </div>
 
         </div>
@@ -71,6 +71,27 @@
                         .then(response => {
                             this.getTokens();
                         });
+            },
+
+            /**
+            * Format time
+            */
+            calcDaysDiff(createdDate, expireDate){
+                var cDate = new Date(createdDate);
+                var eDate = new Date(expireDate);
+
+                const diffTime = Math.abs(eDate - cDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+
+                return diffDays
+            },
+
+            /**
+            * Format time
+            */
+            formatTime(timestamp){
+                var date = new Date(timestamp);
+                return date.toLocaleDateString("no-NO") + " " + date.toLocaleTimeString("no-NO");
             }
         }
     }
