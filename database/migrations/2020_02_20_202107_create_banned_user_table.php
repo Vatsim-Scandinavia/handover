@@ -20,7 +20,7 @@ class CreateBannedUserTable extends Migration
 
             $table->unsignedInteger('user_id')->primary();
             $table->string('reason');
-            $table->string('internal_note');
+            $table->string('internal_note')->nullable();
 
             $table->timestamp('banned_at')->nullable();
         });
