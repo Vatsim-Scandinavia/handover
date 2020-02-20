@@ -26,7 +26,7 @@
             <div class="row justify-content-center" style="padding-top: 10%">
                 <div class="col-md-6 text-center">
 
-                    <a href="{{ env('APP_URL') }}"><img src="{{asset('img/vatsca-logo-negative.svg')}}" alt="VATSIM Scandinavia logo" class="w-100 pb-4" style="max-width: 300px"/></a>
+                    <a href="{{ env('APP_URL') }}"><img src="{{asset('img/vatsca-logo-negative.svg')}}" alt="{{env('APP_VACC')}} logo" class="w-100 pb-4" style="max-width: 300px"/></a>
 
                     @if(Session::has('error') OR isset($error))
                         <div class="alert alert-danger" role="alert">

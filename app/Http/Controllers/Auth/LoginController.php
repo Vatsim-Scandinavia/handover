@@ -92,7 +92,7 @@ class LoginController extends Controller
                 $user = User::find($sso_data->id);
                 // Check if user is banned
                 if($user->banned){
-                    return redirect()->route('landing')->withError('User '.$user->id.' has been banned in Vatsim Scandinavia for the following reason: <i>'.$user->banned->reason.'</i><br><br>For inquires contact director@vatsim-scandinavia.org');
+                    return redirect()->route('landing')->withError('User '.$user->id.' has been banned in '.env('APP_VACC').' for the following reason: <i>'.$user->banned->reason.'</i><br><br>For inquires contact '.env('APP_VACC_CONTACT').'');
                 }
 
                 // Check if user exists and accepted privacy policy
