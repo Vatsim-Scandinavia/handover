@@ -1,5 +1,5 @@
 ## OAuth2 Handover
-Centralized Handover with OAuth2, created using `Laravel 6`.
+Centralized Handover with OAuth2, created using `Laravel 6`. A extra special thanks to VATSIM UK's open source core system which helped us on the right track with this one.
 
 ## Setup and install
 Just clone this repository and you're almost ready. First make sure you've installed [Composer](https://getcomposer.org) and [Node.js](https://nodejs.org/en/) on your computer.
