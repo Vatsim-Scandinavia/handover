@@ -89,8 +89,14 @@ class LoginController extends Controller
                 session()->forget('key');
                 session()->forget('secret');
 
-                // Check if user exists and accepted privacy policy
                 $user = User::find($sso_data->id);
+                // Check if user is banned
+                if($user->banned){
+                    return redirect()->route('landing')->withError('User '.$user->id.' has been banned in Vatsim Scandinavia for the following reason: <i>'.$user->banned->reason.'</i><br><br>For inquires contact director@vatsim-scandinavia.org');
+                }
+
+                // Check if user exists and accepted privacy policy
+                
                 if($user && $user->accepted_privacy){
                     return $this->vatsimSsoValidationSuccess($sso_data);
                 } else {

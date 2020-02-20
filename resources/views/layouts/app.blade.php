@@ -30,7 +30,7 @@
 
                     @if(Session::has('error') OR isset($error))
                         <div class="alert alert-danger" role="alert">
-                            <strong>Error!</strong> {!! Session::has('error') ? Session::pull("error") : $error !!}
+                            <i class="fa fa-lg fa-exclamation-circle"></i> {!! Session::has('error') ? Session::pull("error") : $error !!}
                         </div>
                     @endif
 

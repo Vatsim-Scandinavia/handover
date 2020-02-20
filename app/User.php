@@ -38,4 +38,13 @@ class User extends Authenticatable
         'remember_token'
     ];
 
+    /**
+     * Link user's endorsement
+     *
+     * @return \App\Solo
+     */
+    public function banned(){
+        return $this->hasOne(BannedUser::class);
+    }
+
 }
