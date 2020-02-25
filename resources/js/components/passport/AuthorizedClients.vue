@@ -10,7 +10,7 @@
         <div v-if="tokens.length > 0">
 
             <div v-for="token in tokens">
-                <p style="font-size: 14px;"><b>{{ token.client.name }}</b> | <span :title="'Created: ' + formatTime(token.created_at) + ' | Expires: ' + formatTime(token.expires_at)">Expires in {{ calcDaysDiff(token.created_at, token.expires_at) }} days</span>&nbsp;<a class="action-link badge badge-danger text-white" style="font-weight: normal" @click="revoke(token)">Revoke</a></p>
+                <p style="font-size: 14px;"><b>{{ token.client.name }}</b> | <span :title="'Created: ' + formatTime(token.created_at) + ' | Expires: ' + formatTime(token.expires_at)">Expires in {{ calcDaysDiff(token.expires_at) }} days</span>&nbsp;<a class="action-link badge badge-danger text-white" style="font-weight: normal" @click="revoke(token)">Revoke</a></p>
             </div>
 
         </div>
@@ -76,11 +76,11 @@
             /**
             * Format time
             */
-            calcDaysDiff(createdDate, expireDate){
-                var cDate = new Date(createdDate);
+            calcDaysDiff(expireDate){
+                var now = Date.now();
                 var eDate = new Date(expireDate);
 
-                const diffTime = Math.abs(eDate - cDate);
+                const diffTime = Math.abs(eDate - now);
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
 
                 return diffDays
