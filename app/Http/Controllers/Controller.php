@@ -7,6 +7,8 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\User;
 
 class Controller extends BaseController
 {
@@ -27,5 +29,10 @@ class Controller extends BaseController
             return mb_convert_encoding($str, "Windows-1252", "UTF-8");
         }
         return $str;
+    }
+
+    public function checkActive($id){
+        $user = User::find($id);
+        return view('active', ['user' => $user]);
     }
 }
