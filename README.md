@@ -31,6 +31,11 @@ Do not run any of the commands as root/sudo, unless explicitly listed!
 8. Add your client auth token with `php artisan passport:client`, skip with ENTER the assign to specific user, name the client something descriptive as it's shown to the user and add the callback URL.
 9. Build the front end with `npm run prod`, this may take a while.
 
+## Updating Data Protection Policy
+1. Update the date and url to PDF in `.env`
+2. If needed, update the `dpp.blade.php` view file regarding the simplified version
+3. Run this SQL query `UPDATE users SET accepted_privacy = 0` in the correct environment
+4. Delete the file(s) in `/storage/framework/sessions` to log everyone out, so they'll be forced to accept again on next login
 
 ## Credentials
 
