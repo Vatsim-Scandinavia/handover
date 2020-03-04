@@ -139,7 +139,6 @@ class LoginController extends Controller
             'region' => $sso_data->region->code,
             'division' => $sso_data->division->code,
             'subdivision' => $sso_data->subdivision->code,
-            'active' => 0,
             'accepted_privacy' => 1,
             'reg_date' => $sso_data->reg_date,
             'last_login' => \Carbon\Carbon::now(),]
