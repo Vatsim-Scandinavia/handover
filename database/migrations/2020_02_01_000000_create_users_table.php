@@ -32,7 +32,7 @@ class CreateUsersTable extends Migration
 
             $table->string('pilot_rating', 4);
 
-            $table->string('country', 2);
+            $table->string('country', 2)->nullable();
             $table->string('region', 8);
             $table->string('division', 3);
             $table->string('subdivision', 3)->nullable();
