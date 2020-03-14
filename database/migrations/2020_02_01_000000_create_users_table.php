@@ -38,6 +38,7 @@ class CreateUsersTable extends Migration
             $table->string('subdivision', 3)->nullable();
 
             $table->tinyInteger('atc_active')->nullable();
+            $table->tinyInteger('visiting_controller')->nullable();
             $table->tinyInteger('accepted_privacy');
 
             $table->rememberToken();
