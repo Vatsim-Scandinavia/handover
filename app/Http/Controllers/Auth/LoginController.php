@@ -106,7 +106,7 @@ class LoginController extends Controller
 
             });
         } catch (SSOException $e) {
-            return redirect()->route('landing')->withError('Could not authenticate: '.$error['message']);
+            return redirect()->route('landing')->withError('Could not authenticate: '.$e->getMessage());
         }
     }
 
