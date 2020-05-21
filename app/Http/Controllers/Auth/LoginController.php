@@ -127,7 +127,6 @@ class LoginController extends Controller
         User::updateOrCreate(
             ['id' => $sso_data->id],
             ['email' => $sso_data->email,
-            'full_name' => Controller::Windows1252ToUTF8($sso_data->name_first)." ".Controller::Windows1252ToUTF8($sso_data->name_last),
             'first_name' => Controller::Windows1252ToUTF8($sso_data->name_first),
             'last_name' => Controller::Windows1252ToUTF8($sso_data->name_last),
             'rating' => $sso_data->rating->id,
