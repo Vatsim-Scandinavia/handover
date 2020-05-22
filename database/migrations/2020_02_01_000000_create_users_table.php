@@ -27,7 +27,6 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('rating');
             $table->string('rating_short', 3);
             $table->string('rating_long', 24);
-            $table->string('rating_grp', 32);
 
             $table->string('pilot_rating', 4);
 
@@ -41,7 +40,10 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('accepted_privacy');
 
             $table->rememberToken();
-            $table->timestamp('reg_date')->nullable();
+            $table->text('access_token')->nullable();
+            $table->text('refresh_token')->nullable();
+            $table->unsignedBigInteger('token_expires')->nullable();
+
             $table->timestamp('last_login')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }

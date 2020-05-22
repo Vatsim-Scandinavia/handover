@@ -12,7 +12,7 @@
 */
 
 Route::namespace('Auth')->group(function () {
-    Route::post('/login', 'LoginController@login')->middleware('guest')->name('login');
+    Route::get('/login', 'LoginController@login')->middleware('guest')->name('login');
     Route::get('/validate', 'LoginController@validateLogin')->middleware('guest');
     Route::get('/logout', 'LoginController@logout')->middleware('auth')->name('logout');
 });

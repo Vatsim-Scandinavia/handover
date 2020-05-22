@@ -13,7 +13,7 @@
         "laravel/framework": "^6.2",
         "laravel/passport": "^8.3",
         "laravel/tinker": "^2.0",
-        "vatsim/sso-laravel": "^3.1"
+        "league/oauth2-client": "^2.4"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.3",
