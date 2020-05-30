@@ -68,16 +68,41 @@ class LoginController extends Controller
             ! isset($resourceOwner->data->vatsim) ||
             $resourceOwner->data->oauth->token_valid !== "true"
         ) {
-            return redirect()->to('/')->withError("Please grant us your full name, email address, VATSIM details, country and continious access to access our services. You will be presented with our Data Protection Policy and ability to decline before the data will get stored with us.");
+            return redirect()->to('/')->withError("Please grant us your full name, email address, VATSIM details, country and continious access to access our services. You will be presented with our Data Protection Policy before the data will get stored with us.");
         }
 
-        $account = $this->completeLogin($resourceOwner, $accessToken);
+        $user = User::find($resourceOwner->data->cid);
 
-        Auth::login(User::find($resourceOwner->data->cid), false);
+        // Check if user is banned
+        if($user && $user->banned){
+            return redirect()->route('landing')->withError('<b>Login denied</b><br>User '.$user->id.' has been banned in '.env('APP_VACC').' for the following reason: <i>'.$user->banned->reason.'</i><br><br>For inquires contact '.env('APP_VACC_CONTACT').'');
+        }
 
-        $intended = $intended = Session::pull('url.intended', route('landing'));
-        return redirect($intended);
+        // Check if user exists and accepted privacy policy                
+        if($user && $user->accepted_privacy){
+            return $this->completeLogin($resourceOwner, $accessToken);
+        } else {
+            session(['resourceOwner' => $resourceOwner, 'accessToken' => $accessToken]); // Store CERT data temporarily
+            return redirect()->route('dpp');
+        }
+
+        
     }
+
+    public function validatePrivacy(Request $get){
+
+        $resourceOwner = session('resourceOwner');
+        $accessToken = session('accessToken');
+        session()->forget('resourceOwner');
+        session()->forget('accessToken');
+
+        if(!$resourceOwner){
+            return redirect()->route('landing')->withError("You need to authenticate yourself before accepting privacy policy");
+        }
+
+        return $this->completeLogin($resourceOwner, $accessToken);
+    }
+
 
     protected function completeLogin($resourceOwner, $token)
     {
@@ -107,7 +132,11 @@ class LoginController extends Controller
 
         $account->save();
 
-        return $account;
+        // Complete login and redirect to intended url
+        Auth::login(User::find($resourceOwner->data->cid), false);
+
+        $intended = $intended = Session::pull('url.intended', route('landing'));
+        return redirect($intended);
     }
 
     public function logout()
