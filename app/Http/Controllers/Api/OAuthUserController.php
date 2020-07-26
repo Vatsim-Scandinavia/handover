@@ -21,7 +21,7 @@ class OAuthUserController
 
         // Here we can serve more data if we need to do that sometime in future.
 
-        return Response::json($return);
+        return Response::json(['status' => 'success', 'data' => $return]);
     }
 }
 
