@@ -38,11 +38,11 @@
         <!-- Scope List -->
         @if (count($scopes) > 0)
             <div class="scopes">
-                <p><strong>This application will be able to:</strong></p>
+                <p><strong>This application will be able to access your:</strong></p>
 
-                <ul>
+                <ul class="list-unstyled">
                     @foreach ($scopes as $scope)
-                        <li>{{ $scope->description }}</li>
+                        <li>&nbsp;{{ $scope->description }}</li>
                     @endforeach
                 </ul>
             </div>
