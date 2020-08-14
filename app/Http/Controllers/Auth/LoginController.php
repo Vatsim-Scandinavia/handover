@@ -1,16 +1,19 @@
 <?php
 namespace App\Http\Controllers\Auth;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Vatsim\OAuth\SSOException;
-use Vatsim\OAuth\SSO;
+use App\User;
+use App\Http\Controllers\VatsimOAuthController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\RatingsController;
 use App\Http\Controllers\PRatingsController;
 use App\Http\Controllers\DivisionsController;
 use App\Http\Controllers\TestController;
-use App\User;
+use League\OAuth2\Client\Token;
+use League\OAuth2\Client\Provider\GenericProvider;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Session;
 
 /**
@@ -20,141 +23,122 @@ use Session;
 class LoginController extends Controller
 {
     use AuthenticatesUsers;
+
+    protected $provider;
+
     /**
-     * @var SSO
-     */
-    private $sso;
-    /**
-     * LoginController constructor.
+     * Create a new controller instance.
+     *
+     * @return void
      */
     public function __construct()
     {
-        $this->sso = new SSO(
-            config('sso.base'),
-            config('sso.key'),
-            config('sso.secret'),
-            config('sso.method'),
-            config('sso.cert'),
-            config('sso.additionalConfig')
-        );
+        $this->provider = new VatsimOAuthController();
     }
 
-    /**
-     * Handle a login request to the application.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
-     */
-    public function login(Request $request){
-
-        if (!Auth::check()) {
-            $this->loginSSO();
-        }
-
-        return redirect()->intended(route('landing'));
-    }
-
-    /**
-     * Redirect user to VATSIM SSO for login
-     *
-     * @throws \Vatsim\OAuth\SSOException
-     */
-    public function loginSSO()
+    public function login(Request $request)
     {
-        try{
-            return $this->sso->login(config('sso.return'), function ($key, $secret, $url) {
-                session()->put('key', $key);
-                session()->put('secret', $secret);
-                session()->save();
-                header('Location: ' . $url);
-                die();
-            });
-        } catch (SSOException $e) {
-            return redirect()->back()->withError("We were unable to contact VATSIM's certification service. Please try again later. If this persists, please contact Web Services. " . $e->getMessage());
+        if (! $request->has('code') || ! $request->has('state')) {
+            $authorizationUrl = $this->provider->getAuthorizationUrl(); // Generates state
+            $request->session()->put('oauthstate', $this->provider->getState());
+			return redirect()->away($authorizationUrl);
+        } else if ($request->input('state') !== session()->pull('oauthstate')) {
+            return redirect()->to('/')->withError("Login state mismatch error. Please try again. If this persists, please contact Web Services.");
+        } else {
+            return $this->verifyLogin($request);
         }
     }
 
-    /**
-     * Validate the login and access protected resources, create the user if they don't exist, update them if they do, and log them in
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     * @throws \Vatsim\OAuth\SSOException
-     */
-    public $newUser;
-    public function validateLogin(Request $request)
+    protected function verifyLogin(Request $request)
     {
-        try{
-            return $this->sso->validate(session('key'), session('secret'), $request->input('oauth_verifier'), function ($sso_data, $request) {
-                session()->forget('key');
-                session()->forget('secret');
-
-                $user = User::find($sso_data->id);
-                // Check if user is banned
-                if($user && $user->banned){
-                    return redirect()->route('landing')->withError('User '.$user->id.' has been banned in '.env('APP_VACC').' for the following reason: <i>'.$user->banned->reason.'</i><br><br>For inquires contact '.env('APP_VACC_CONTACT').'');
-                }
-
-                // Check if user exists and accepted privacy policy
-                
-                if($user && $user->accepted_privacy){
-                    return $this->vatsimSsoValidationSuccess($sso_data);
-                } else {
-                    session(['sso_data' => $sso_data]);
-                    return redirect()->route('dpp');
-                }
-
-            });
-        } catch (SSOException $e) {
-            return redirect()->route('landing')->withError('Could not authenticate: '.$e->getMessage());
+        try {
+            $accessToken = $this->provider->getAccessToken('authorization_code', [
+                'code' => $request->input('code')
+            ]);
+            
+        } catch (IdentityProviderException $e) {
+            return redirect()->to('/')->withError("Authentication error: ".$e->getMessage());
         }
+        $resourceOwner = json_decode(json_encode($this->provider->getResourceOwner($accessToken)->toArray()));
+
+        if (
+            ! isset($resourceOwner->data) ||
+            ! isset($resourceOwner->data->cid) ||
+            ! isset($resourceOwner->data->personal) ||
+            ! isset($resourceOwner->data->vatsim) ||
+            $resourceOwner->data->oauth->token_valid !== "true"
+        ) {
+            return redirect()->to('/')->withError("Please grant us your full name, email address, VATSIM details, country and continious access to access our services. You will be presented with our Data Protection Policy before the data will get stored with us.");
+        }
+
+        $user = User::find($resourceOwner->data->cid);
+
+        // Check if user is banned
+        if($user && $user->banned){
+            return redirect()->route('landing')->withError('<b>Login denied</b><br>User '.$user->id.' has been banned in '.env('APP_VACC').' for the following reason: <i>'.$user->banned->reason.'</i><br><br>For inquires contact '.env('APP_VACC_CONTACT').'');
+        }
+
+        // Check if user exists and accepted privacy policy                
+        if($user && $user->accepted_privacy){
+            return $this->completeLogin($resourceOwner, $accessToken);
+        } else {
+            session(['resourceOwner' => $resourceOwner, 'accessToken' => $accessToken]); // Store CERT data temporarily
+            return redirect()->route('dpp');
+        }
+
+        
     }
 
     public function validatePrivacy(Request $get){
 
-        $sso_data = session('sso_data');
-        session()->forget('sso_data');
+        $resourceOwner = session('resourceOwner');
+        $accessToken = session('accessToken');
+        session()->forget('resourceOwner');
+        session()->forget('accessToken');
 
-        if(!$sso_data){
+        if(!$resourceOwner){
             return redirect()->route('landing')->withError("You need to authenticate yourself before accepting privacy policy");
         }
 
-        return $this->vatsimSsoValidationSuccess($sso_data);
+        return $this->completeLogin($resourceOwner, $accessToken);
     }
 
-    public function vatsimSsoValidationSuccess($sso_data){
 
-        User::updateOrCreate(
-            ['id' => $sso_data->id],
-            ['email' => $sso_data->email,
-            'full_name' => Controller::Windows1252ToUTF8($sso_data->name_first)." ".Controller::Windows1252ToUTF8($sso_data->name_last),
-            'first_name' => Controller::Windows1252ToUTF8($sso_data->name_first),
-            'last_name' => Controller::Windows1252ToUTF8($sso_data->name_last),
-            'rating' => $sso_data->rating->id,
-            'rating_short' => $sso_data->rating->short,
-            'rating_long' => $sso_data->rating->long,
-            'rating_grp' => $sso_data->rating->GRP,
-            'pilot_rating' => $sso_data->pilot_rating->rating,
-            'country' => $sso_data->country->code,
-            'region' => $sso_data->region->code,
-            'division' => $sso_data->division->code,
-            'subdivision' => $sso_data->subdivision->code,
+    protected function completeLogin($resourceOwner, $token)
+    {
+
+        $account = User::updateOrCreate(
+            ['id' => $resourceOwner->data->cid],
+            ['email' => $resourceOwner->data->personal->email,
+            'first_name' => ucfirst(Controller::Windows1252ToUTF8($resourceOwner->data->personal->name_first)),
+            'last_name' => ucfirst(Controller::Windows1252ToUTF8($resourceOwner->data->personal->name_last)),
+            'rating' => $resourceOwner->data->vatsim->rating->id,
+            'rating_short' => $resourceOwner->data->vatsim->rating->short,
+            'rating_long' => $resourceOwner->data->vatsim->rating->long,
+            'pilot_rating' => $resourceOwner->data->vatsim->pilotrating->id,
+            'country' => $resourceOwner->data->personal->country->id,
+            'region' => $resourceOwner->data->vatsim->region->id,
+            'division' => $resourceOwner->data->vatsim->division->id,
+            'subdivision' => $resourceOwner->data->vatsim->subdivision->id,
             'accepted_privacy' => 1,
-            'reg_date' => $sso_data->reg_date,
             'last_login' => \Carbon\Carbon::now(),]
         );
+        
+        if ($resourceOwner->data->oauth->token_valid) { // User has given us permanent access to updated data
+            $account->access_token = $token->getToken();
+            $account->refresh_token = $token->getRefreshToken();
+            $account->token_expires = $token->getExpires();
+        }
 
-        Auth::login(User::find($sso_data->id), false);
+        $account->save();
+
+        // Complete login and redirect to intended url
+        Auth::login(User::find($resourceOwner->data->cid), false);
 
         $intended = $intended = Session::pull('url.intended', route('landing'));
         return redirect($intended);
     }
 
-    /**
-     * Log the user out
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
     public function logout()
     {
         if (! Auth::check()) return redirect()->back();

@@ -2,7 +2,7 @@
 Centralized Handover with OAuth2, created using `Laravel 6`. A extra special thanks to VATSIM UK's open source core system which helped us on the right track with this one.
 
 ## Setup and install
-Just clone this repository and you're almost ready. First make sure you've installed [Composer](https://getcomposer.org) and [Node.js](https://nodejs.org/en/) on your computer.
+Just clone this repository and you're almost ready. First make sure you've installed [Composer](https://getcomposer.org) and [Node.js](https://nodejs.org/en/) in your environment.
 
 ### Development
 
@@ -19,23 +19,22 @@ Just clone this repository and you're almost ready. First make sure you've insta
 
 ### Production
 
-Do not run any of the commands as root/sudo, unless explicitly listed!
+1. Duplicate `.env.example` file into `.env` and make sure you're running correct mysql settings and app_url
+2. In the project folder, run `composer install --no-dev --optimize-autoloader` to install PHP dependecies
+3. Run `npm install --production` to install front-end dependecies
+4. Create app key `php artisan key:generate`
+5. Migrate the database with `php artisan migrate`
+6. Initialize OAuth2 components `php artisan passport:keys`
+7. Add your client auth token with `php artisan passport:client`, skip with ENTER the assign to specific user, name the client something descriptive as it's shown to the user and add the callback URL.
+8. Build the front end with `npm run prod`, this may take a while.
 
-1. Make sure you've the correct permissions to run some of the commands as local user. The `fixwebperm` can be used to achive that `alias fixwebperm="sudo chgrp -R www-data /var/www/*; sudo chmod -R g+rw /var/www/*; find /var/www/* -type d -print0 | sudo xargs -0 chmod g+s"`
-2. Duplicate `.env.example` file into `.env` and make sure you're running correct mysql settings and app_url
-3. In the project folder, run `composer install --no-dev --optimize-autoloader` to install PHP dependecies
-4. Run `npm install --production` to install front-end dependecies
-5. Create app key `php artisan key:generate`
-6. Migrate the database with `php artisan migrate`
-7. Initialize OAuth2 components `php artisan passport:keys`
-8. Add your client auth token with `php artisan passport:client`, skip with ENTER the assign to specific user, name the client something descriptive as it's shown to the user and add the callback URL.
-9. Build the front end with `npm run prod`, this may take a while.
 
 ## Updating Data Protection Policy
 1. Update the date and url to PDF in `.env`
 2. If needed, update the `dpp.blade.php` view file regarding the simplified version
 3. Run this SQL query `UPDATE users SET accepted_privacy = 0` in the correct environment
 4. Delete the file(s) in `/storage/framework/sessions` to log everyone out, so they'll be forced to accept again on next login
+
 
 ## Credentials
 
@@ -46,5 +45,4 @@ Do not run any of the commands as root/sudo, unless explicitly listed!
 * Authorization Endpoint: `/oauth/authorize`
 * Token Endpoint: `/oauth/token`
 * User Information Endpoint: `/api/user`
-
-* Data load in user information equals to all fields in users database table.
+* Login Callback: `/login`

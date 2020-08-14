@@ -39,7 +39,7 @@
                             @yield('content')
                         </div>
                     </div>
-                    @auth <p class="text-white" style="font-size: 10px; padding-top: 5px;">Logged in as {{ Auth::user()->full_name }}, {{ Auth::user()->id }}</p> @endauth
+                    @auth <p class="text-white" style="font-size: 10px; padding-top: 5px;">Logged in as {{ Auth::user()->first_name }} {{ Auth::user()->last_name}}, {{ Auth::user()->id }}</p> @endauth
                 </div>
             </div>
         </div>

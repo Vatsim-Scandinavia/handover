@@ -21,20 +21,18 @@ class CreateUsersTable extends Migration
             $table->unsignedInteger('id')->primary();
             $table->string('email', 64);
 
-            $table->string('full_name'); // We have a full name table entry as some OAuth2 connectors want a single variable of the user's name
             $table->string('first_name');
             $table->string('last_name');
 
             $table->tinyInteger('rating');
             $table->string('rating_short', 3);
             $table->string('rating_long', 24);
-            $table->string('rating_grp', 32);
 
             $table->string('pilot_rating', 4);
 
             $table->string('country', 2)->nullable();
             $table->string('region', 8);
-            $table->string('division', 3);
+            $table->string('division', 3)->nullable();
             $table->string('subdivision', 3)->nullable();
 
             $table->tinyInteger('atc_active')->nullable();
@@ -42,7 +40,10 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('accepted_privacy');
 
             $table->rememberToken();
-            $table->timestamp('reg_date')->nullable();
+            $table->text('access_token')->nullable();
+            $table->text('refresh_token')->nullable();
+            $table->unsignedBigInteger('token_expires')->nullable();
+
             $table->timestamp('last_login')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
