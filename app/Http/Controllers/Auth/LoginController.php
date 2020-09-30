@@ -66,6 +66,7 @@ class LoginController extends Controller
             ! isset($resourceOwner->data->cid) ||
             ! isset($resourceOwner->data->personal) ||
             ! isset($resourceOwner->data->vatsim) ||
+            ! isset($resourceOwner->data->personal->email) ||
             $resourceOwner->data->oauth->token_valid !== "true"
         ) {
             return redirect()->to('/')->withError("Please grant us your full name, email address, VATSIM details, country and continious access to access our services. You will be presented with our Data Protection Policy before the data will get stored with us.");
