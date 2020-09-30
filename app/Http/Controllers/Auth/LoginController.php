@@ -71,12 +71,20 @@ class LoginController extends Controller
         ) {
             return redirect()->to('/')->withError("Please grant us your full name, email address, VATSIM details, country and continious access to access our services. You will be presented with our Data Protection Policy before the data will get stored with us.");
         }
+        
+        if ($resourceOwner->data->vatsim->rating->id == 0) {
+            return redirect()->route('landing')->withError('<b>Login denied.</b><br>Login was denied because you are suspended from VATSIM.');
+        }
+
+        if ($resourceOwner->data->vatsim->rating->id == -1) {
+            return redirect()->route('landing')->withError('<b>Login denied.</b><br>Login was denied because your account is inactive.');
+        }
 
         $user = User::find($resourceOwner->data->cid);
 
         // Check if user is banned
         if($user && $user->banned){
-            return redirect()->route('landing')->withError('<b>Login denied</b><br>User '.$user->id.' has been banned in '.env('APP_VACC').' for the following reason: <i>'.$user->banned->reason.'</i><br><br>For inquires contact '.env('APP_VACC_CONTACT').'');
+            return redirect()->route('landing')->withError('<br>Login denied</br><br>User '.$user->id.' has been banned in '.env('APP_VACC').' for the following reason: <i>'.$user->banned->reason.'</i><br><br>For inquires contact '.env('APP_VACC_CONTACT').'');
         }
 
         // Check if user exists and accepted privacy policy                
