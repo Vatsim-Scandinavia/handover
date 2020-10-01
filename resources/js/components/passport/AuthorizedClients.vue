@@ -13,7 +13,7 @@
                 <p style="font-size: 14px;">
                 <b>{{ token.client.name }}</b>
                  | 
-                 <span :title="'Created: ' + formatTime(token.created_at) + ' | Expires: ' + formatTime(token.expires_at)">Expires in {{ calcDaysDiff(token.expires_at) }} days</span>
+                 <span :title="'Created: ' + formatTime(token.created_at) + ' | Expires: ' + formatTime(token.expires_at)">Expires {{ token.expires_at | moment("from", "now") }}</span>
                  &nbsp;
                  <a class="action-link badge badge-danger text-white" style="font-weight: normal" @click="revoke(token)">Revoke</a>
                  </p>
@@ -80,16 +80,6 @@
                         .then(response => {
                             this.getTokens();
                         });
-            },
-
-            /**
-            * Format time
-            */
-            calcDaysDiff(expireDate){
-                //var expiration = moment(expireDate).format("YYYY-MM-DD");
-                //var current_date = moment().format("YYYY-MM-DD");
-                //var days = moment(expireDate).diff('now', 'days');
-                return moment(expireDate, 'YYYY-MM-DDTHH:ii:ss').diff(moment(), 'days');
             },
 
             /**
