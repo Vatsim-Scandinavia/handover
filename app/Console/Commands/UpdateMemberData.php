@@ -49,13 +49,24 @@ class UpdateMemberData extends Command
     public function handle()
     {
 
-        $users = User::all();
+        $users = User::query()->where('refresh_token', '!=', null)->get();
 
         foreach ($users as $user) {
 
             if (Carbon::parse($user->token_expires)->isPast()) {
 
                 $refresh = $this->connectHelper->refreshToken($user);
+
+                if (!$refresh) {
+
+                    $user->access_token = null;
+                    $user->refresh_token = null;
+                    $user->token_expires = null;
+                    $user->save();
+
+                    continue;
+
+                }
 
                 $user->access_token = $refresh->access_token;
                 $user->refresh_token = $refresh->refresh_token;

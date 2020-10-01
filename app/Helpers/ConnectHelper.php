@@ -55,6 +55,10 @@ class ConnectHelper
                 ]
             ]);
 
+            if ($response->getStatusCode() != 200) {
+                return false;
+            }
+
             return json_decode($response->getBody());
         } catch(\Exception $exception) {
             Log::critical($exception->getMessage());
