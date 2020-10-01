@@ -89,7 +89,7 @@
                 //var expiration = moment(expireDate).format("YYYY-MM-DD");
                 //var current_date = moment().format("YYYY-MM-DD");
                 //var days = moment(expireDate).diff('now', 'days');
-                return moment(expireDate, 'YYYY-MM-DD HH:ii:ss').diff(moment(), 'days');
+                return moment(expireDate, 'YYYY-MM-DDTHH:ii:ss').diff(moment(), 'days');
             },
 
             /**
