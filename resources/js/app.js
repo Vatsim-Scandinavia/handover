@@ -2,6 +2,11 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import moment from 'moment';
+import VueMoment from 'vue-moment';
+
+Vue.use(VueMoment, {moment});
+
 Vue.component(
     'passport-clients',
     require('./components/passport/Clients.vue').default
