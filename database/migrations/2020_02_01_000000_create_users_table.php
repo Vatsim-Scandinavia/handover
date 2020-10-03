@@ -32,8 +32,8 @@ class CreateUsersTable extends Migration
 
             $table->string('country', 2)->nullable();
             $table->string('region', 8);
-            $table->string('division', 3)->nullable();
-            $table->string('subdivision', 3)->nullable();
+            $table->string('division', 4)->nullable();
+            $table->string('subdivision', 4)->nullable();
 
             $table->tinyInteger('atc_active')->nullable();
             $table->tinyInteger('visiting_controller')->nullable();
