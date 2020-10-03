@@ -130,16 +130,12 @@ class LoginController extends Controller
             'division' => $resourceOwner->data->vatsim->division->id,
             'subdivision' => $resourceOwner->data->vatsim->subdivision->id,
             'accepted_privacy' => 1,
-            'last_login' => \Carbon\Carbon::now(),]
+            'last_login' => \Carbon\Carbon::now(),
+            'access_token' => $token->getToken(),
+            'refresh_token' => $token->getRefreshToken(),
+            'token_expires' => $token->getExpires()
+            ]
         );
-        
-        if ($resourceOwner->data->oauth->token_valid) { // User has given us permanent access to updated data
-            $account->access_token = $token->getToken();
-            $account->refresh_token = $token->getRefreshToken();
-            $account->token_expires = $token->getExpires();
-        }
-
-        $account->save();
 
         // Complete login and redirect to intended url
         Auth::login(User::find($resourceOwner->data->cid), false);
