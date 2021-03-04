@@ -41,6 +41,7 @@ elif [ "$COMMAND" = "init" ]; then
 
     # Generate PHP key
     php artisan key:generate
+    php artisan passport:keys
 
 else
 
