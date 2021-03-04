@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="robots" content="noindex">
 
-    <title>{{ config('app.name', 'VATSCA Handover') }}</title>
+    <title>{{ config('app.name', 'Handover') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
