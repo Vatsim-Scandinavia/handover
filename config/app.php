@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'VATSCA Handover'),
+    'name' => env('APP_NAME', 'Handover'),
 
     /*
     |--------------------------------------------------------------------------
