@@ -84,7 +84,7 @@ class LoginController extends Controller
 
         // Check if user is banned
         if($user && $user->banned){
-            return redirect()->route('landing')->withError('<br>Login denied</br><br>User '.$user->id.' has been banned in '.env('APP_VACC').' for the following reason: <i>'.$user->banned->reason.'</i><br><br>For inquires contact '.env('APP_VACC_CONTACT').'');
+            return redirect()->route('landing')->withError('<br>Login denied</br><br>User '.$user->id.' has been banned in '.env('APP_OWNER_SHORT').' for the following reason: <i>'.$user->banned->reason.'</i><br><br>For inquires contact '.env('APP_OWNER_CONTACT').'');
         }
 
         // Check if user exists and accepted privacy policy                

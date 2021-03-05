@@ -3,6 +3,7 @@
 /public/storage
 public/css/*
 public/js/*
+public/images/logos/*
 /storage/*.key
 /vendor
 .env

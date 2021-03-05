@@ -13,7 +13,32 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'VATSCA Handover'),
+    'name' => env('APP_NAME', 'Handover'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Owner
+    |--------------------------------------------------------------------------
+    |
+    | This value is the owner of your application. This value is used when the
+    | framework needs to place the application's owner in a notification or
+    | any other location as required by the application or its packages.
+    |
+    */
+
+    'owner' => env('APP_OWNER', 'VATSIM'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Short name of application owner
+    |--------------------------------------------------------------------------
+    |
+    | Same as above, but this is the short name of your subdivision, excluding VAT prefix.
+    | For example 'SCA', NOT 'VATSCA' as that will break some checking logic.
+    |
+    */
+
+    'owner_short' => env('APP_OWNER_SHORT', 'SCA'),
 
     /*
     |--------------------------------------------------------------------------
