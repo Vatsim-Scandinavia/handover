@@ -60,8 +60,10 @@ class ConnectHelper
             }
 
             return json_decode($response->getBody());
+        } catch(\League\OAuth2\Server\Exception\OAuthServerException $exception){
+            return false;
         } catch(\Exception $exception) {
-            Log::critical($exception->getMessage());
+            Log::critical($exception->getMessage());;
         }
 
     }
