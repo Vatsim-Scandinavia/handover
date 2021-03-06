@@ -22,11 +22,11 @@
                     We process your data in order to provide records of trainings, endorsements, member lists and to contact our users and improve our services.
                 </div>
                 <div class="pp-bullet">
-                    <i class="fas fa-handshake-alt"></i>
+                    <i class="fas fa-handshake"></i>
                     If you log into the following third-party services, we will share the data with the following services: Discord.
                 </div>
                 <div class="pp-bullet">
-                    <i class="fas fa-shield"></i>
+                    <i class="fas fa-shield-alt"></i>
                     We process the personal data of our members confidently, and we only share it with third-parties for authentication purposes.
                 </div>
                 <div class="pp-bullet">
