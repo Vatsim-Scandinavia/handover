@@ -58,7 +58,10 @@ class LoginController extends Controller
             
         } catch (IdentityProviderException $e) {
             return redirect()->to('/')->withError("Authentication error: ".$e->getMessage());
+        } catch (OAuthServerException $e) {
+            return redirect()->to('/')->withError("OAuth Authentication error: ".$e->getMessage());
         }
+        
         $resourceOwner = json_decode(json_encode($this->provider->getResourceOwner($accessToken)->toArray()));
 
         if (
