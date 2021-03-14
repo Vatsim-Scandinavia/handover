@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Log;
 use App\User;
 use App\Http\Controllers\VatsimOAuthController;
 use App\Http\Controllers\Controller;
@@ -59,9 +60,10 @@ class LoginController extends Controller
         } catch (IdentityProviderException $e) {
             return redirect()->to('/')->withError("Authentication error: ".$e->getMessage());
         } catch (OAuthServerException $e) {
+            Log::critical("Error in OAuthServerException: ".$e);
             return redirect()->to('/')->withError("OAuth Authentication error: ".$e->getMessage());
         }
-        
+
         $resourceOwner = json_decode(json_encode($this->provider->getResourceOwner($accessToken)->toArray()));
 
         if (
