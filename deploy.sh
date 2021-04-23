@@ -21,7 +21,13 @@ php -r "file_exists('.env') || copy('.env.example', '.env');"
 composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
 composer dump-autoload
 
-npm install
+if [ "$COMMAND" = "dev" ]; then 
+    # Install all dependecies
+    npm install
+else
+    #Install without dev dependecies
+    npm install --production
+fi
 
 # Adjust directory permissions
 chmod -R 775 storage bootstrap/cache

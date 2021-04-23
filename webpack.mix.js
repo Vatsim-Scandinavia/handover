@@ -13,5 +13,5 @@ const mix = require('laravel-mix');
  */
 
 mix.setResourceRoot(process.env.APP_URL);
-mix.js('resources/js/app.js', 'public/js')
+mix.js('resources/js/app.js', 'public/js').vue()
     .sass('resources/sass/app.scss', 'public/css');
