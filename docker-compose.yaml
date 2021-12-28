@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  web:
+    container_name: handover
+    image: vatsca/apache:7.4
+    ports:
+        - 8000:80
+    extra_hosts:
+        - "host.docker.internal:host-gateway"
+    volumes:
+      - ./:/var/www/html
+      - ./apache:/var/www/logs
