@@ -11,8 +11,6 @@
 |
 */
 
-URL::forceScheme('https');
-
 Route::namespace('Auth')->group(function () {
     Route::get('/login', 'LoginController@login')->middleware('guest')->name('login');
     Route::get('/validate', 'LoginController@validateLogin')->middleware('guest');
