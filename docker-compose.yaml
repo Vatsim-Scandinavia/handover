@@ -3,7 +3,7 @@ version: '3'
 services:
   web:
     container_name: handover
-    image: vatsca/apache:7.4
+    image: vatsca/apache:php-7.4
     ports:
         - 5000:80
         - 5001:443
