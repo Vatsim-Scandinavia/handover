@@ -13,7 +13,8 @@
         "laravel/passport": "^10.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
-        "league/oauth2-client": "^2.6.1"
+        "league/oauth2-client": "^2.6.1",
+        "sentry/sentry-laravel": "^2.12"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.3",

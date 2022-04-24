@@ -23,3 +23,4 @@ Route::get('/validate/dpp', 'Controller@privacy')->name('dpp');
 Route::post('/validate/dpp', 'Auth\LoginController@validatePrivacy')->name('dpp.accept');
 
 Route::get('/{any?}', 'Controller@index')->where('any', '.*')->name('landing');
+
