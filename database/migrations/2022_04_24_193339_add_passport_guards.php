@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DeleteVisitingColumn extends Migration
+class AddPassportGuards extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class DeleteVisitingColumn extends Migration
      */
     public function up()
     {
-        Schema::table('users', function($table) {
-            $table->dropColumn('visiting_controller');
+        Schema::table('oauth_clients', function (Blueprint $table) {
+            $table->string('provider')->after('secret')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class DeleteVisitingColumn extends Migration
      */
     public function down()
     {
-        Schema::table('users', function($table) {
-            $table->tinyInteger('visiting_controller')->after('atc_active');
+        Schema::table('oauth_clients', function($table) {
+            $table->dropColumn('provider');
         });
     }
 }
