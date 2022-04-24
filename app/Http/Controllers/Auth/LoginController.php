@@ -40,7 +40,9 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         if (! $request->has('code') || ! $request->has('state')) {
-            $authorizationUrl = $this->provider->getAuthorizationUrl(); // Generates state
+            $authorizationUrl = $this->provider->getAuthorizationUrl([
+                'required_scopes' => join(' ', config('vatsim_auth.scopes')),
+            ]);
             $request->session()->put('oauthstate', $this->provider->getState());
 			return redirect()->away($authorizationUrl);
         } else if ($request->input('state') !== session()->pull('oauthstate')) {
