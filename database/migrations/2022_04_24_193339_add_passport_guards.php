@@ -13,9 +13,11 @@ class AddPassportGuards extends Migration
      */
     public function up()
     {
-        Schema::table('oauth_clients', function (Blueprint $table) {
-            $table->string('provider')->after('secret')->nullable();
-        });
+        if(!Schema::hasColumn('oauth_clients', 'provider')){
+            Schema::table('oauth_clients', function (Blueprint $table) {
+                $table->string('provider')->after('secret')->nullable();
+            });
+        }
     }
 
     /**
