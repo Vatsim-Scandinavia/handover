@@ -1,9 +1,9 @@
 ## Handover
-Centralized Handover with OAuth2, created using `Laravel 6 LTS`. Created by [Daniel L.](https://github.com/blt950) (1352906) and [Matan B.](https://github.com/MatanBudimir) (1375048). An extra special thanks to VATSIM UK's open source core system which helped us on the right track with this one.
+Centralized Handover with OAuth2, using `Laravel 9`. Created by [Daniel L.](https://github.com/blt950) (1352906) and [Matan B.](https://github.com/MatanBudimir) (1375048). An extra special thanks to VATSIM UK's open source core system which helped us on the right track with this one.
 
 ## Prerequisites
 - An environment that can host PHP websites, such as Apache, Ngnix or similar.
-- [Laravel 6 Requirements](https://laravel.com/docs/6.x/installation#server-requirements)
+- [Laravel 9 Requirements](https://laravel.com/docs/9.x/deployment#server-requirements)
 - Installed SSL Certificate to serve this service through HTTPS
 
 ## Setup and install
