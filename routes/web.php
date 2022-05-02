@@ -17,8 +17,6 @@ Route::namespace('Auth')->group(function () {
     Route::get('/logout', 'LoginController@logout')->middleware('auth')->name('logout');
 });
 
-Route::get('/active/{id}', 'Controller@checkActive')->middleware('auth'); // Temporary active check
-
 Route::get('/validate/dpp', 'Controller@privacy')->name('dpp');
 Route::post('/validate/dpp', 'Auth\LoginController@validatePrivacy')->name('dpp.accept');
 

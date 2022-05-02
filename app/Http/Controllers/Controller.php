@@ -30,9 +30,4 @@ class Controller extends BaseController
         }
         return $str;
     }
-
-    public function checkActive($id){
-        $user = User::find($id);
-        return view('active', ['user' => $user]);
-    }
 }
