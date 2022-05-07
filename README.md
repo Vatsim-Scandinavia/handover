@@ -1,5 +1,5 @@
 ## Handover
-Centralized Handover with OAuth2, using `Laravel 9`. Created by [Daniel L.](https://github.com/blt950) (1352906) and [Matan B.](https://github.com/MatanBudimir) (1375048). An extra special thanks to VATSIM UK's open source core system which helped us on the right track with this one.
+Centralised Handover with OAuth2, using `Laravel 9`. Created by [Daniel L.](https://github.com/blt950) (1352906) and [Matan B.](https://github.com/MatanBudimir) (1375048). An extra special thanks to VATSIM UK's open source core system which helped us on the right track with this one.
 
 ## Prerequisites
 - An environment that can host PHP websites, such as Apache, Ngnix or similar.
@@ -11,9 +11,10 @@ Just clone this repository and you're almost ready. First, make sure you've inst
 
 1. Run `./deploy init` to setup the required files
 2. Configure the .env file accordingly, everything from top down to and including VATSIM OAuth should be configured, rest is optional.
-3. [Setup Cron in your environment](https://laravel.com/docs/8.x/scheduling#running-the-scheduler) 
+3. [Setup Cron in your environment](https://laravel.com/docs/9.x/scheduling#running-the-scheduler) 
 4. Run `npm run dev` in development environment or `npm run dev` in production to build front-end assets
-5. Run `php artisan serve` to host the page at `localhost:8000` in development environment. Note: It's tricky to host this locally as it requires HTTPS, so it might in some cases be easier to test in a staging environment with a proper domain.
+5. Run `php artisan serve` to host the page at `localhost:8000` in development environment. Note: It's tricky to host this locally due to HTTPS requirement, so it might in some cases be easier to test in a staging environment with a proper domain or an docker container.
+6. Make sure your PHP environment allows running `curl_multi_exec` function
 
 ## Adding OAuth Clients
 Add your client auth token with `php artisan passport:client`, skip with ENTER when asked to assign to specific user. Name the client something descriptive as it's shown to the user and add the callback URL. The generated ID and Secret can now be used from other OAuth2 services to connect to Handover.
