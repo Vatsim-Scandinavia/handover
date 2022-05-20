@@ -9,12 +9,16 @@ Centralised Handover with OAuth2, using `Laravel 9`. Created by [Daniel L.](http
 ## Setup and install
 Just clone this repository and you're almost ready. First, make sure you've installed [Composer](https://getcomposer.org) and [Node.js](https://nodejs.org/en/) in your environment.
 
-1. Run `./deploy init` to setup the required files
+1. Run `./deploy init <container name>` to setup the required files, if you're not using container run the deploy.sh located in `.docker` folder instead.
 2. Configure the .env file accordingly, everything from top down to and including VATSIM OAuth should be configured, rest is optional.
 3. [Setup Cron in your environment](https://laravel.com/docs/9.x/scheduling#running-the-scheduler) 
 4. Run `npm run dev` in development environment or `npm run dev` in production to build front-end assets
 5. Run `php artisan serve` to host the page at `localhost:8000` in development environment. Note: It's tricky to host this locally due to HTTPS requirement, so it might in some cases be easier to test in a staging environment with a proper domain or an docker container.
 6. Make sure your PHP environment allows running `curl_multi_exec` function
+
+## Deployment
+
+To deploy in development environment use `./deploy dev <container name>`, in production use `./deploy prod <container name>`. This will automatically put the site in maintenance mode while it's deploying and open back up when finished.
 
 ## Adding OAuth Clients
 Add your client auth token with `php artisan passport:client`, skip with ENTER when asked to assign to specific user. Name the client something descriptive as it's shown to the user and add the callback URL. The generated ID and Secret can now be used from other OAuth2 services to connect to Handover.
