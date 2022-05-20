@@ -13,7 +13,7 @@ function run_php () {
     if [ -e "/usr/bin/php8.1" ]; then
         /usr/bin/php8.1 $@
     elif [ -e "/usr/local/bin/php8.1" ]; then
-        /usr/local/bin/php8.0 $@
+        /usr/local/bin/php8.1 $@
     elif [ -e "/usr/bin/php8.0" ]; then
         /usr/bin/php8.1 $@
     elif [ -e "/usr/local/bin/php8.0" ]; then
