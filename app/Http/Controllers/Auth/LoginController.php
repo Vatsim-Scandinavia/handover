@@ -126,8 +126,8 @@ class LoginController extends Controller
         $account = User::updateOrCreate(
             ['id' => $resourceOwner->data->cid],
             ['email' => $resourceOwner->data->personal->email,
-            'first_name' => ucfirst(mb_convert_encoding($resourceOwner->data->personal->name_first)),
-            'last_name' => ucfirst(mb_convert_encoding($resourceOwner->data->personal->name_last)),
+            'first_name' => ucfirst(mb_convert_encoding($resourceOwner->data->personal->name_first, "UTF-8")),
+            'last_name' => ucfirst(mb_convert_encoding($resourceOwner->data->personal->name_last, "UTF-8")),
             'rating' => $resourceOwner->data->vatsim->rating->id,
             'rating_short' => $resourceOwner->data->vatsim->rating->short,
             'rating_long' => $resourceOwner->data->vatsim->rating->long,
