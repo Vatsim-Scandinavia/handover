@@ -81,8 +81,8 @@ class UpdateMemberData extends Command
             if (collect($response)->isNotEmpty()) {
 
                 $user->email = $response->data->personal->email;
-                $user->first_name = ucfirst($response->data->personal->name_first);
-                $user->last_name = ucfirst($response->data->personal->name_last);
+                $user->first_name = ucfirst(utf8_encode($response->data->personal->name_first));
+                $user->last_name = ucfirst(utf8_encode($response->data->personal->name_last));
                 $user->rating = $response->data->vatsim->rating->id;
                 $user->rating_short = $response->data->vatsim->rating->short;
                 $user->rating_long = $response->data->vatsim->rating->long;
