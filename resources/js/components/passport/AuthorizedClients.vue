@@ -66,7 +66,7 @@
              * Get all of the authorized tokens for the user.
              */
             getTokens() {
-                axios.get(process.env.APP_URL + '/oauth/tokens')
+                axios.get(process.env.MIX_APP_URL + '/oauth/tokens')
                         .then(response => {
                             this.tokens = response.data;
                         });
@@ -76,7 +76,7 @@
              * Revoke the given token.
              */
             revoke(token) {
-                axios.delete(process.env.APP_URL + '/oauth/tokens/' + token.id)
+                axios.delete(process.env.MIX_APP_URL + '/oauth/tokens/' + token.id)
                         .then(response => {
                             this.getTokens();
                         });
