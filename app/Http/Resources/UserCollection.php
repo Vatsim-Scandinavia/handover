@@ -24,7 +24,7 @@ class UserCollection extends JsonResource
             
             'full_name' => ($this->tokenCan('full_name')) ? "{$this->first_name} {$this->last_name}" : null,
 
-            'full_name_cid' => ($this->tokenCan('full_name')) ? "{$this->first_name} {$this->last_name} - {$this->id}" : null,
+            'full_name_cid' => ($this->tokenCan('full_name')) ? "{$this->first_name} {$this->last_name} ({$this->id})" : null,
             
             'email' => ($this->tokenCan('email')) ? $this->email : null,
 
