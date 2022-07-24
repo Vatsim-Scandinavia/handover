@@ -71,8 +71,8 @@ elif [ "$ENV" = "init" ]; then
     run_php artisan key:generate
 
     # Init Passport
-    php artisan passport:install
-    php artisan passport:keys
+    run_php artisan passport:install
+    run_php artisan passport:keys
 
     # Create front-end assets
     npm run dev

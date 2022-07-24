@@ -9,7 +9,7 @@ Centralised Handover with OAuth2, using `Laravel 9`. Created by [Daniel L.](http
 ## Setup and install
 Just clone this repository and you're almost ready. First, make sure you've installed [Composer](https://getcomposer.org) and [Node.js](https://nodejs.org/en/) in your environment.
 
-1. Run `./deploy init <container name>` to setup the required files, if you're not using container run the deploy.sh located in `.docker` folder instead.
+1. Run `./deploy init <container name>` in root folder to setup the required files. If you're not using Docker containers run `./deploy init` directly located in `.docker` folder instead.
 2. Configure the .env file accordingly, everything from top down to and including VATSIM OAuth should be configured, rest is optional.
 3. [Setup Cron in your environment](https://laravel.com/docs/9.x/scheduling#running-the-scheduler) 
 4. Run `npm run dev` in development environment or `npm run dev` in production to build front-end assets
