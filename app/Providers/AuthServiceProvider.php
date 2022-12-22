@@ -31,7 +31,7 @@ class AuthServiceProvider extends ServiceProvider
             'full_name' => 'First and last name',
             'email' => 'E-mail address',
             'vatsim_details' => 'Ratings and divisions',
-            'country' => 'Country of residence'
+            'country' => 'Registered country'
         ]);
 
         Passport::setDefaultScope([
