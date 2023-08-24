@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'owner_contact' => env('APP_OWNER_CONTACT', 'webmaster@vatsim.net')
+    'owner_contact' => env('APP_OWNER_CONTACT', 'webmaster@vatsim.net'),
     'owner' => env('APP_OWNER', 'VATSIM'),
 
     /*
