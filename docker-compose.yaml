@@ -3,13 +3,16 @@ version: '3'
 services:
   web:
     container_name: handover
-    image: vatsca/apache:php-8.1
+    build: .
     ports:
-        - 5000:80
-        - 5001:443
+        - 8080:80
+        - 8443:443
     extra_hosts:
         - "host.docker.internal:host-gateway"
-        - "vatsca.local:host-gateway"
+    environment:
+      - APP_URL=https://localhost:8080
+      - DB_HOST=host.docker.internal
+      - APP_ENV=local
+      - APP_DEBUG=true
     volumes:
-      - ./:/var/www/html
-      - ./apache:/var/www/logs
+      - ./:/app
