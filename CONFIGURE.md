@@ -5,7 +5,7 @@ Table of Contents
   - [Required](#required)
   - [Optional: Theming](#optional-theming)
   - [Optional: Extras](#optional-extras)
-  
+
 ## Environment
 
 Here is a list over all environment variables you may tweak. You may start the container with `docker-compose.yaml` from the root folder, but fill it out with the required variables first.
@@ -19,7 +19,7 @@ Table with all the variables, default value and explanation. Override the enviro
 | APP_NAME | Handover | Name of your subdivision |
 | APP_OWNER | Subdivision Name | Name of your subdivision |
 | APP_OWNER_SHORT | SCA | Usually 3 letter name identifying your vACC within VATSIM API |
-| APP_OWNER_CONTACT | webmaster@yourvacc.com | E-mail address of your director |
+| APP_OWNER_CONTACT | webmaster@yourvacc.com | E-mail address of your person for ban disputes |
 | APP_DPP_URL | https://vatsim.net | URL to your Data Protection Policy |
 | APP_DPP_DATE | 2019-10-10 | Date of your Data Protection Policy |
 | APP_DPO_MAIL | webmaster@vatsim.net | E-mail address of your Data Protection Officer |
