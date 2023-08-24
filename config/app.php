@@ -89,9 +89,9 @@ return [
     |
     */
 
-    'dpp_url' => env('DPP_URL', 'https://vatsim.net'),
-    'dpp_date' => env('DPP_DATE', '2019-10-10'),
-    'dpo_mail' => env('DPO_MAIL', 'webmaster@vatsim.net'),
+    'dpp_url' => env('APP_DPP_URL', 'https://vatsim.net'),
+    'dpp_date' => env('APP_DPP_DATE', '2019-10-10'),
+    'dpo_mail' => env('APP_DPO_MAIL', 'webmaster@vatsim.net'),
 
     /*
     |--------------------------------------------------------------------------
