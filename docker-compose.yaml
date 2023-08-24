@@ -7,12 +7,25 @@ services:
     ports:
         - 8080:80
         - 8443:443
-    extra_hosts:
-        - "host.docker.internal:host-gateway"
-    environment:
-      - APP_URL=https://localhost:8080
-      - DB_HOST=host.docker.internal
-      - APP_ENV=local
-      - APP_DEBUG=true
     volumes:
-      - ./:/app
+      - sessions:/app/storage/framework/sessions
+    environment:
+      # Please check the complete configure guide for all variables and their description
+      # You need to adjust this file to your needs
+      - APP_NAME=Handover
+      - APP_OWNER=Your VACC Name
+      - APP_OWNER_SHORT=SCA
+      - APP_OWNER_CONTACT="director@yourvacc.com"
+      - APP_URL=https://handover.yourvacc.com
+      - APP_ENV=production
+      - APP_DPP_URL="https://yourvacc.com/link/to/dpp"
+      - APP_DPP_DATE="20. February 2020"
+      - APP_DPO_MAIL="dpo@yourvacc.com"
+      - DB_HOST=localhost
+      - DB_DATABASE=handover
+      - DB_USERNAME=handover
+      - DB_PASSWORD=yourPASShere
+      - VATSIM_OAUTH_CLIENT=yourCLIENThere
+      - VATSIM_OAUTH_SERET=yourSECREThere
+volumes:
+  sessions:

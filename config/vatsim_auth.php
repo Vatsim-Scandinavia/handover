@@ -32,6 +32,6 @@ return [
     /**
      * The scopes the user will be requested
      */
-    'scopes' => explode(',', env('VATSIM_OAUTH_SCOPES')),
+    'scopes' => explode(',', env('VATSIM_OAUTH_SCOPES', 'full_name,email,vatsim_details,country')),
 
 ]; 
