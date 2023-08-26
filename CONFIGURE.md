@@ -37,16 +37,20 @@ Table with all the variables, default value and explanation. Override the enviro
 | VATSIM_OAUTH_SECRET | null | OAuth secret of your subdivision |
 
 
-### Optional: Theming (TODO)
+### Optional: Theming
 
-To change the logo to yours, bind your logo image files to `public/images/logos` and change the following variables:
+#### Logo
+To change the logo to yours, bind your logo image files to `/app/public/images/logos` and change the following variables:
 
 | Variable | Default value | Explanation |
 | ------- | --- | --- |
-| APP_LOGO | vatsca.svg | The logo of your subdivision, located in `public/images/logos` |
-| APP_LOGO_MAIL | vatsca-email.png | The logo of your subdivision, located in `public/images/logos` |
+| APP_LOGO | vatsca.svg | The logo of your choice, located in `/app/public/images/logos` |
 
-To change the colors of your Control Center, change the following variables and run `npm run prod` in the container to rebuild.
+
+#### Colors
+
+To change the bootstrap colors to match your division, first change the environment variables and then run the following command
+
 
 | Variable | Default value | Explanation |
 | ------- | --- | --- |
@@ -59,6 +63,22 @@ To change the colors of your Control Center, change the following variables and 
 | BOOTSTRAP_COLOR_DANGER | #b63f3f | Danger color of your theme |
 | BOOTSTRAP_BORDER_RADIUS | 2px | Border radius of your theme |
 
+
+Run this command to build the theme. If you get an error like `"#5f271a" is not a color`, remove the `"` quotes from your environment variable.
+```sh
+docker exec -it handover sh container/theme/build.sh
+```
+
+> **Note**
+> Building custom themes will increase your container size with ~1GB. This is because the container out of the box has already built theme files. When you run this command, we install dependencies inside your container to build the theme.
+
+#### Simplified DPP
+
+To change the icons and bullet points the simplified DPP, bind your blade **file** to `/app/resources/views/parts/dpp-bullets.blade.php`. We recommend duplicating the original file and then editing it to your liking.
+
+#### Header text
+
+To change the header text, bind your blade **file** to `/app/resources/views/layouts/header.blade.php` and name it `header.blade.php`. We recommend duplicating the original file and then editing it to your liking.
 
 ### Optional: Extras
 
