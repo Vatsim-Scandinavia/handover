@@ -27,7 +27,7 @@
             <div class="row justify-content-center" style="padding-top: 10%">
                 <div class="col-md-6 text-center">
 
-                    <a href="{{ env('APP_URL') }}"><img src="{{asset('img/logos/vat'.mb_strtolower(Config::get('app.owner_short')).'.svg')}}" alt="{{Config::get('app.owner_contact')}} logo" class="w-100 pb-4" style="max-width: 300px"/></a>
+                    <a href="{{ env('APP_URL') }}"><img src="{{ asset('images/logos/'.Config::get('app.logo')) }}" alt="{{ Config::get('app.owner_contact') }} logo" class="w-100 pb-4" style="max-width: 300px"/></a>
 
                     @if(Session::has('error') OR isset($error))
                         <div class="alert alert-danger" role="alert">

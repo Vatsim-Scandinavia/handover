@@ -12,7 +12,6 @@ RUN npm ci --omit dev && \
 ####################################################################################################
 # Primary container
 
-# Primary container
 FROM docker.io/library/php:8.1.10-apache-bullseye
 
 # Default container port for the apache configuration

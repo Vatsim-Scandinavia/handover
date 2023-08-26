@@ -17,4 +17,3 @@ if [ -z "$APP_KEY" ] && [ ! -f "$SERVICE_ROOT/.env" ]; then
 fi
 
 exec docker-php-entrypoint "$@"
-
