@@ -12,43 +12,59 @@ class UserCollection extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
-    {
+    public function toArray($request) {
+    
         return [
             
-            'id' => $this->id,
-            
-            'first_name' => ($this->tokenCan('full_name')) ? $this->first_name : null,
-            
-            'last_name' => ($this->tokenCan('full_name')) ? $this->last_name : null,
-            
-            'full_name' => ($this->tokenCan('full_name')) ? "{$this->first_name} {$this->last_name}" : null,
+            'cid' => $this->id,
 
-            'full_name_cid' => ($this->tokenCan('full_name')) ? "{$this->first_name} {$this->last_name} ({$this->id})" : null,
+            'personal' => [
+                'name_first' => ($this->tokenCan('full_name')) ? $this->first_name : null,
             
-            'email' => ($this->tokenCan('email')) ? $this->email : null,
+                'name_last' => ($this->tokenCan('full_name')) ? $this->last_name : null,
+                
+                'name_full' => ($this->tokenCan('full_name')) ? "{$this->first_name} {$this->last_name}" : null,
 
-            'country' => ($this->tokenCan('country')) ? $this->country : null,
+                'name_full_cid' => ($this->tokenCan('full_name')) ? "{$this->first_name} {$this->last_name} ({$this->id})" : null,
+                
+                'email' => ($this->tokenCan('email')) ? $this->email : null,
 
-            'vatsim_details' => [
+                'country' => [
+                    'id' => ($this->tokenCan('country')) ? $this->country : null,
+                    'name' => 'N/A',
+                ],
+                
+            ],
 
-                'controller_rating' => [
+            'vatsim' => [
+
+                'rating' => [
                     'id' => ($this->tokenCan('vatsim_details')) ? $this->rating : null,
                     'short' => ($this->tokenCan('vatsim_details')) ? $this->rating_short : null,
                     'long' => ($this->tokenCan('vatsim_details')) ? $this->rating_long : null
                 ],
+
+                'pilotrating' => [
+                    'id' => ($this->tokenCan('vatsim_details')) ? $this->pilot_rating : null,
+                    'short' => 'N/A',
+                    'long' => 'N/A',
+                ],
                 
-                'pilot_rating' => ($this->tokenCan('vatsim_details')) ? $this->pilot_rating : null,
+                'region' => [
+                    'id' => ($this->tokenCan('vatsim_details')) ? $this->region : null,
+                    'name' => 'N/A',
+                ],
 
-                'region' => ($this->tokenCan('vatsim_details')) ? $this->region : null,
-                
-                'division' => ($this->tokenCan('vatsim_details')) ? $this->division : null,
+                'division' => [
+                    'id' => ($this->tokenCan('vatsim_details')) ? $this->division : null,
+                    'name' => 'N/A',
+                ],
 
-                'subdivision' => ($this->tokenCan('vatsim_details')) ? $this->subdivision : null,
+                'subdivision' => [
+                    'id' => ($this->tokenCan('vatsim_details')) ? $this->subdivision : null,
+                    'name' => 'N/A',
+                ],
 
-                'active_atc' => ($this->tokenCan('vatsim_details')) ? (bool) $this->atc_active : null,
-
-                'visiting_controller' => ($this->tokenCan('vatsim_details')) ? (bool) $this->visting_controller : null,
             ],
         ];
     }
