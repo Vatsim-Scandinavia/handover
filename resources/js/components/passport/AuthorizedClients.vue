@@ -6,17 +6,11 @@
 
 <template>
     <div>
-        <h5 class="mb-4">Your Authorized Sessions</h5>
+        <h5 class="mb-4">Your data has been shared to</h5>
         <div v-if="tokens.length > 0">
 
             <div v-for="token in tokens">
-                <p style="font-size: 14px;">
-                <b>{{ token.client.name }}</b>
-                 | 
-                 <span :title="'Created: ' + formatTime(token.created_at) + ' | Expires: ' + formatTime(token.expires_at)">Expires {{ token.expires_at | moment("from", "now") }}</span>
-                 &nbsp;
-                 <a class="action-link badge badge-danger text-white" style="font-weight: normal" @click="revoke(token)">Revoke</a>
-                 </p>
+                {{ token.client.name }}
             </div>
 
         </div>

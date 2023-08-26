@@ -5,7 +5,7 @@
         @include('layouts.header')
 
         <h5>Privacy Policy</h5>
-        <p>In order to log into our services, we require you to first accept our privacy policy and grant us permission to process your data.</p>
+        <p>Accept our privacy policy to login into our services.</p>
         <p>Last update: {{ Config::get('app.dpp_date') }}, <a class="text-info" target="_blank" href="{{ Config::get('app.dpp_url') }}">read the full privacy policy.</a></p>
 
         <div class="card mb-4 border-left-danger">

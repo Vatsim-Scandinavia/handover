@@ -31,3 +31,11 @@ html,body {
 	margin-right: 5px;
 	color: #333;
 }
+
+.alert a {
+	text-decoration: underline;
+
+	&:hover{
+		text-decoration: none;
+	}
+}
