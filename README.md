@@ -37,11 +37,17 @@ To setup your Docker instance simply follow these steps:
 7. Setup a crontab _outside_ the container to run `* * * * * docker exec --user www-data -i handover php artisan schedule:run >/dev/null` every minute. This patches into the container and runs the required cronjobs.
 8. Bind the 8080 (HTTP) and/or 8443 (HTTPS) port to your reverse proxy or similar.
 
-## Adding OAuth Clients (TODO: Docker command)
-Add your client auth token with `php artisan passport:client`, skip with ENTER when asked to assign to specific user. Name the client something descriptive as it's shown to the user and add the callback URL. The generated ID and Secret can now be used from other OAuth2 services to connect to Handover.
+## Adding OAuth Clients
+Add your client auth token with 
+```sh
+docker exec -it handover php artisan passport:client
+```
+Skip with ENTER when asked to assign to specific user. Name the client something descriptive as it's shown to the user and add the callback URL. The generated ID and Secret can now be used from other OAuth2 services to connect to Handover.
 
 ## Updating Data Protection Policy (TODO: Docker command)
-1. Update the date and url to PDF in `.env`
+When you update your DPP, you should make all users explicitly accept the new policy again. To do this, follow these steps:
+
+1. Update the date and url to DPP in your environment variables
 2. If needed, update the `dpp.blade.php` view file regarding the simplified version
 3. Run this SQL query `UPDATE users SET accepted_privacy = 0` in the correct environment
 4. Delete the file(s) in `/storage/framework/sessions` to log everyone out, so they'll be forced to accept again on next login
