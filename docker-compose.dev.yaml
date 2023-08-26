@@ -5,25 +5,28 @@ services:
     container_name: handover
     build: .
     ports:
-        - 8080:80
-        - 8443:443
-    environment:
-      # Please check the complete configure guide for all variables and their description
-      # You need to adjust this file to your needs
-      - APP_NAME=Handover
-      - APP_OWNER=Your VACC Name
-      - APP_OWNER_SHORT=SCA
-      - APP_OWNER_CONTACT="director@yourvacc.com"
-      - APP_URL=https://handover.yourvacc.com
-      - APP_ENV=local
-      - APP_DEBUG=true
-      - APP_DPP_URL="https://yourvacc.com/link/to/dpp"
-      - APP_DPP_DATE="20. February 2020"
-      - APP_DPO_MAIL="dpo@yourvacc.com"
-      - DB_HOST=localhost
-      - DB_DATABASE=handover
-      - DB_USERNAME=handover
-      - DB_PASSWORD=yourPASShere
-      - VATSIM_OAUTH_BASE=https://auth-dev.vatsim.net
-      - VATSIM_OAUTH_CLIENT=yourCLIENThere
-      - VATSIM_OAUTH_SECRET=yourSECREThere
+      - 8080:80
+      - 8443:443
+    volumes:
+      - ./:/app
+    #environment:
+      #
+      # Create yourself a .env file with these variables
+      #
+      #- APP_NAME=Handover
+      #- APP_OWNER=Your VACC Name
+      #- APP_OWNER_SHORT=SCA
+      #- APP_OWNER_CONTACT="director@yourvacc.com"
+      #- APP_URL=https://handover.yourvacc.com
+      #- APP_ENV=local
+      #- APP_DEBUG=true
+      #- APP_DPP_URL="https://yourvacc.com/link/to/dpp"
+      #- APP_DPP_DATE="20. February 2020"
+      #- APP_DPO_MAIL="dpo@yourvacc.com"
+      #- DB_HOST=localhost
+      #- DB_DATABASE=handover
+      #- DB_USERNAME=handover
+      #- DB_PASSWORD=yourPASShere
+      #- VATSIM_OAUTH_BASE=https://auth-dev.vatsim.net
+      #- VATSIM_OAUTH_CLIENT=yourCLIENThere
+      #- VATSIM_OAUTH_SECRET=yourSECREThere
