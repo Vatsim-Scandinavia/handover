@@ -6,7 +6,7 @@
 
 <template>
     <div>
-        <h2 class="mb-4">Data Shared</h2>
+        <h2 class="mb-4">Account Linked to</h2>
         <div v-if="tokens.length > 0">
 
             <div v-for="token in tokens">
@@ -16,7 +16,7 @@
 
         </div>
         <div v-if="tokens.length == 0">
-            <p class="text-muted">Your data is not shared to any service.</p>
+            <p class="text-muted">Your data is not shared to any service yet.</p>
         </div>
     </div>
 </template>
