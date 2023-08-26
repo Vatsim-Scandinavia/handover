@@ -47,13 +47,15 @@ docker exec -it handover php artisan passport:client
 ```
 Skip with ENTER when asked to assign to specific user. Name the client something descriptive as it's shown to the user and add the callback URL. The generated ID and Secret can now be used from other OAuth2 services to connect to Handover.
 
-## Updating Data Protection Policy (TODO: Docker command)
+## Updating Data Protection Policy
 When you update your DPP, you should make all users explicitly accept the new policy again. To do this, follow these steps:
 
-1. Update the date and url to DPP in your environment variables
-2. If needed, update the `dpp.blade.php` view file regarding the simplified version
-3. Run this SQL query `UPDATE users SET accepted_privacy = 0` in the correct environment
-4. Delete the file(s) in `/storage/framework/sessions` to log everyone out, so they'll be forced to accept again on next login
+1. Update the date and url to DPP in your environment variables. This should also recreate the container in the process to make sure everyone needs to login again.
+2. If needed, update the DPP simplified version according to [the configuration manual](CONFIGURE.md#optional-theming)
+3. Reset all user's accepted_privacy variable in database with
+```sh
+docker exec -it handover php artisan reset:acceptedprivacy
+```
 
 ## Present automation
 The only job the cron has automated today is daily member check and pull freshest data from VATSIM
