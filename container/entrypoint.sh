@@ -13,7 +13,7 @@ fi
 if [ -z "$APP_KEY" ] && [ ! -f "$SERVICE_ROOT/.env" ]; then
     cp container/default.env .env
     php artisan key:generate
-    php artisan passport:install
+    php artisan passport:keys
 fi
 
 exec docker-php-entrypoint "$@"
