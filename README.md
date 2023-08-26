@@ -28,14 +28,8 @@ To setup your Docker instance simply follow these steps:
    ```sh
    docker exec -it handover php artisan migrate
    ```
-6. To ensure that users will not need to log in after each time you re-deploy or upgrade the container, you need to create and store an application key in your environment and setup a shared volume. 
-   ```sh
-   docker exec -it handover php artisan key:get
-   docker volume create handover_sessions
-   ```
-   Copy the key and set it as the `APP_KEY` environment variable in your Docker configuration and bind the volume when creating the container with `handover_sessions:/app/storage/framework/sessions`.
-7. Setup a crontab _outside_ the container to run `* * * * * docker exec --user www-data -i handover php artisan schedule:run >/dev/null` every minute. This patches into the container and runs the required cronjobs.
-8. Bind the 8080 (HTTP) and/or 8443 (HTTPS) port to your reverse proxy or similar.
+6. Setup a crontab _outside_ the container to run `* * * * * docker exec --user www-data -i handover php artisan schedule:run >/dev/null` every minute. This patches into the container and runs the required cronjobs.
+7. Bind the 8080 (HTTP) and/or 8443 (HTTPS) port to your reverse proxy or similar.
 
 Refer to the [CONFIGURE.md](CONFIGURE.md#optional-theming) for information about theming text, colors and logos.
 
