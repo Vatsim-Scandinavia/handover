@@ -70,7 +70,8 @@ docker exec -it handover sh container/theme/build.sh
 ```
 
 > **Note**
-> Building custom themes will increase your container size with ~200mb when completed. When you run this command, we need install dependencies inside your container to build the theme and then remove them again. This is done to keep the container size down.
+> 1. Building custom themes will increase your container size with ~200mb when completed. When you run this command, we need install dependencies inside your container to build the theme and then remove them again. This is done to keep the container size down.
+> 2. You need to run this command each time you recreate the container.
 
 #### Simplified DPP
 
