@@ -17,3 +17,4 @@ yarn-error.log
 apache/*
 public/js/app.js.LICENSE.txt
 docker-compose.local.yaml
+public/mix-manifest.json
