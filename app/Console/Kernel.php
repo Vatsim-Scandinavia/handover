@@ -24,10 +24,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
-
+        // Update member data
         $schedule->command('member:data')->daily();
+
+        // Purged revoked items and items expired for more than seven days
+        $schedule->command('passport:purge')->daily();
     }
 
     /**
