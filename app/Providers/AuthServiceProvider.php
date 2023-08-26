@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Passport\Passport;
+use App\Models\Passport\Client;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -43,15 +44,17 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::routes(function ($router) {
             $router->forAuthorization();
-            Passport::tokensExpireIn(now()->addDays(365));
+            Passport::tokensExpireIn(now()->addYears(50));
 
             $router->forAccessTokens();
-            Passport::refreshTokensExpireIn(now()->addDays(365));
+            Passport::refreshTokensExpireIn(now()->addYears(50));
 
             //$router->forTransientTokens(); // the tokens we issue are permanent
             //$router->forClients(); // we don't want external applications using our oauth flows
             //$router->forPersonalAccessTokens(); // we don't have a user-facing API yet
         });
+
+        Passport::useClientModel(Client::class);
 
         $this->registerPolicies();
     }
