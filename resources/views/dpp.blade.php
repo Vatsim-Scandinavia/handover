@@ -6,7 +6,7 @@
 
         <h5>Privacy Policy</h5>
         <p>In order to log into our services, we require you to first accept our privacy policy and grant us permission to process your data.</p>
-        <p>Last update: {{ env('APP_DPP_DATE') }}, <a class="text-info" target="_blank" href="{{ env('APP_DPP_URL') }}">read the full privacy policy.</a></p>
+        <p>Last update: {{ Config::get('app.dpp_date') }}, <a class="text-info" target="_blank" href="{{ Config::get('app.dpp_url') }}">read the full privacy policy.</a></p>
 
         <div class="card mb-4 border-left-danger">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -48,7 +48,7 @@
                 <div class="pp-bullet">
                     <i class="fas fa-envelope"></i>
                     
-                For questions or inquires, contact our Data Protection Officer at <a href="mailto:{{ env('APP_DPO_MAIL') }}">{{ env('APP_DPO_MAIL') }}</a>
+                For questions or inquires, contact our Data Protection Officer at <a href="mailto:{{ Config::get('app.dpo_mail') }}">{{ Config::get('app.dpo_mail') }}</a>
                 </div>
             </div>
         </div>

@@ -26,6 +26,7 @@ return [
     |
     */
 
+    'owner_contact' => env('APP_OWNER_CONTACT', 'webmaster@vatsim.net'),
     'owner' => env('APP_OWNER', 'VATSIM'),
 
     /*
@@ -80,6 +81,17 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
 
     'asset_url' => env('ASSET_URL', null),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Data Protection Variables
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'dpp_url' => env('APP_DPP_URL', 'https://vatsim.net'),
+    'dpp_date' => env('APP_DPP_DATE', '2019-10-10'),
+    'dpo_mail' => env('APP_DPO_MAIL', 'webmaster@vatsim.net'),
 
     /*
     |--------------------------------------------------------------------------

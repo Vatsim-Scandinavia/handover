@@ -3,7 +3,7 @@ version: '3'
 services:
   web:
     container_name: handover
-    image: ghcr.io/vatsim-scandinavia/handover:v3
+    build: .
     ports:
         - 8080:80
         - 8443:443
@@ -17,7 +17,8 @@ services:
       - APP_OWNER_SHORT=SCA
       - APP_OWNER_CONTACT="director@yourvacc.com"
       - APP_URL=https://handover.yourvacc.com
-      - APP_ENV=production
+      - APP_ENV=local
+      - APP_DEBUG=true
       - APP_DPP_URL="https://yourvacc.com/link/to/dpp"
       - APP_DPP_DATE="20. February 2020"
       - APP_DPO_MAIL="dpo@yourvacc.com"
@@ -25,6 +26,7 @@ services:
       - DB_DATABASE=handover
       - DB_USERNAME=handover
       - DB_PASSWORD=yourPASShere
+      - VATSIM_OAUTH_BASE=https://auth-dev.vatsim.net
       - VATSIM_OAUTH_CLIENT=yourCLIENThere
       - VATSIM_OAUTH_SECRET=yourSECREThere
 volumes:
