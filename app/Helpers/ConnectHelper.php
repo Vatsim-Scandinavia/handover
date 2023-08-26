@@ -15,7 +15,7 @@ class ConnectHelper
     public function __construct()
     {
         $this->client = $this->client();
-        $this->baseUrl = env('VATSIM_OAUTH_BASE', 'https://auth.vatsim.net');
+        $this->baseUrl = config('vatsim_auth.base');
     }
 
     protected function client() {
@@ -51,9 +51,9 @@ class ConnectHelper
                 'form_params' => [
                     'grant_type' => 'refresh_token',
                     'refresh_token' => $user->refresh_token,
-                    'client_id' => env('VATSIM_OAUTH_CLIENT'),
-                    'client_secret' => env('VATSIM_OAUTH_SECRET'),
-                    'scope' => str_replace(',', ' ', env('VATSIM_OAUTH_SCOPES')),
+                    'client_id' => config('vatsim_auth.id'),
+                    'client_secret' => config('vatsim_auth.secret'),
+                    'scope' => str_replace(',', ' ', config('vatsim_auth.scopes')),
                 ]
             ]);
 
