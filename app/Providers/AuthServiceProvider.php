@@ -42,18 +42,8 @@ class AuthServiceProvider extends ServiceProvider
             'country'
         ]);
 
-        Passport::routes(function ($router) {
-            $router->forAuthorization();
-            Passport::tokensExpireIn(now()->addYears(50));
-
-            $router->forAccessTokens();
-            Passport::refreshTokensExpireIn(now()->addYears(50));
-
-            //$router->forTransientTokens(); // the tokens we issue are permanent
-            //$router->forClients(); // we don't want external applications using our oauth flows
-            //$router->forPersonalAccessTokens(); // we don't have a user-facing API yet
-        });
-
+        Passport::tokensExpireIn(now()->addYears(50));
+        Passport::refreshTokensExpireIn(now()->addYears(50));
         Passport::useClientModel(Client::class);
 
         $this->registerPolicies();
