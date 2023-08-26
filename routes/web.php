@@ -17,8 +17,10 @@ Route::namespace('Auth')->group(function () {
     Route::get('/logout', 'LoginController@logout')->middleware('auth')->name('logout');
 });
 
-Route::get('/validate/dpp', 'Controller@privacy')->name('dpp');
-Route::post('/validate/dpp', 'Auth\LoginController@validatePrivacy')->name('dpp.accept');
+Route::middleware(['suspended'])->group(function () {
+    Route::get('/validate/dpp', 'Controller@privacy')->name('dpp');
+    Route::post('/validate/dpp', 'Auth\LoginController@validatePrivacy')->name('dpp.accept');
 
-Route::get('/{any?}', 'Controller@index')->where('any', '.*')->name('landing');
-
+    Route::get('/{any?}', 'Controller@index')->where('any', '.*')->name('landing');
+});
+ 
