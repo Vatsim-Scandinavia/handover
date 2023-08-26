@@ -14,23 +14,55 @@ html,body {
     color: #011328;
 }
 
+h1{
+	font-size: 2.5rem;
+}
+
+h2{
+	font-size: 1.5rem;
+}
+
+p, .pp-bullet {
+	font-size: 0.9rem;
+
+	a {
+		color: $primary !important;
+		text-decoration: underline;
+
+		&:hover{
+			text-decoration: none;
+		}
+	}
+
+}
+
+.bt{
+	border-top: 1px solid lightgray;
+}
+
+.bm{
+	border-bottom: 1px solid lightgray;
+}
+
 .fill {
     min-height: 100%;
     height: 100%;
 }
 
-.pp-bullet{
-	font-weight: 200;
-	font-size: 14px;
-	margin-bottom: 10px;
-	color: #6c757d;
+.dpp {
+	.pp-bullet{
+		font-weight: 200;
+		margin-bottom: 10px;
+		color: #6c757d;
+	}
+	
+	.pp-bullet i{
+		width: 15px;
+		margin-right: 5px;
+		color: #333;
+	}
 }
 
-.pp-bullet i{
-	width: 15px;
-	margin-right: 5px;
-	color: #333;
-}
 
 .alert a {
 	text-decoration: underline;

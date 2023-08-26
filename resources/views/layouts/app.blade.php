@@ -24,7 +24,7 @@
 <body>
     <div class="bg-primary min-vh-100 pb-2">
         <div class="container">
-            <div class="row justify-content-center" style="padding-top: 10%">
+            <div class="row justify-content-center pt-4 pb-4">
                 <div class="col-md-6 text-center">
 
                     <a href="{{ env('APP_URL') }}"><img src="{{ asset('images/logos/'.Config::get('app.logo')) }}" alt="{{ Config::get('app.owner_contact') }} logo" class="w-100 pb-4" style="max-width: 300px"/></a>

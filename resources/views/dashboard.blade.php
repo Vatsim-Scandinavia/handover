@@ -2,11 +2,9 @@
 
 @section('content')
     @include('layouts.header')
-    <div class="container py-4" id="app">
+    <div class="container py-4 mb-4 bt bm" id="app">
         <passport-authorized-clients></passport-authorized-clients>
     </div>
-    
-    <hr>
 
     <div class="alert alert-info text-sm" style="font-size: 12px" role="alert">
         <i class="fas fa-info-circle"></i>&nbsp;To delete your personal data contact the <a href="mailto:{{ Config::get('app.dpo_mail') }}">Data Protection Officer</a>.

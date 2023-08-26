@@ -1,3 +1,4 @@
-<h3>Handover</h3>
-<p>Centralised Login Service</p>
-<hr>
+<div class="header">
+    <h1>Handover</h1>
+    <p>Centralised Login Service</p>
+</div>

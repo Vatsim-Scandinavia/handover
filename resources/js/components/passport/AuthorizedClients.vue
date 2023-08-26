@@ -6,16 +6,17 @@
 
 <template>
     <div>
-        <h5 class="mb-4">Your data has been shared to</h5>
+        <h2 class="mb-4">Data Shared</h2>
         <div v-if="tokens.length > 0">
 
             <div v-for="token in tokens">
-                {{ token.client.name }}
+                <a v-bind:href="token.client.redirect" target="_blank">{{ token.client.name }}</a>
+                <i class="fa-solid fa-arrow-up-right-from-square text-muted"></i>
             </div>
 
         </div>
         <div v-if="tokens.length == 0">
-            <p class="text-muted">No authorisations recorded.</p>
+            <p class="text-muted">Your data is not shared to any service.</p>
         </div>
     </div>
 </template>
