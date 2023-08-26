@@ -39,6 +39,13 @@ To setup your Docker instance simply follow these steps:
 
 Refer to the [CONFIGURE.md](CONFIGURE.md#optional-theming) for information about theming text, colors and logos.
 
+## Updating
+
+After recreating the docker container, remember to run the migration to make sure your database is up to date.
+```sh
+docker exec -it handover php artisan migrate
+```
+
 ## Adding OAuth Clients
 Add your client auth token with 
 ```sh
