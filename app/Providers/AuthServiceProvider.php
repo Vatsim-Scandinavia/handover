@@ -42,8 +42,8 @@ class AuthServiceProvider extends ServiceProvider
             'country'
         ]);
 
-        Passport::tokensExpireIn(now()->addYears(50));
-        Passport::refreshTokensExpireIn(now()->addYears(50));
+        Passport::tokensExpireIn(now()->addMonths(1));
+        Passport::refreshTokensExpireIn(now()->addYears(100));
         Passport::useClientModel(Client::class);
 
         $this->registerPolicies();
