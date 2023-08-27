@@ -26,7 +26,7 @@ To setup your Docker instance simply follow these steps:
 4. Start the container in the background.
 5. Setup the database.
    ```sh
-   docker exec -it handover php artisan migrate
+   docker exec -it --user www-data handover php artisan migrate
    ```
 6. Setup a crontab _outside_ the container to run `* * * * * docker exec --user www-data -i handover php artisan schedule:run >/dev/null` every minute. This patches into the container and runs the required cronjobs.
 7. Bind the 8080 (HTTP) and/or 8443 (HTTPS) port to your reverse proxy or similar.
@@ -37,13 +37,13 @@ Refer to the [CONFIGURE.md](CONFIGURE.md#optional-theming) for information about
 
 After recreating the docker container, remember to run the migration to make sure your database is up to date.
 ```sh
-docker exec -it handover php artisan migrate
+docker exec -it --user www-data handover php artisan migrate
 ```
 
 ## Adding OAuth Clients
 Add your client auth token with 
 ```sh
-docker exec -it handover php artisan passport:client
+docker exec -it --user www-data handover php artisan passport:client
 ```
 Skip with ENTER when asked to assign to specific user. Name the client something descriptive as it's shown to the user and add the callback URL. The generated ID and Secret can now be used from other OAuth2 services to connect to Handover.
 
@@ -54,7 +54,7 @@ When you update your DPP, you should make all users explicitly accept the new po
 2. If needed, update the DPP simplified version according to [the configuration manual](CONFIGURE.md#optional-theming)
 3. Reset all user's accepted_privacy variable in database with
 ```sh
-docker exec -it handover php artisan reset:acceptedprivacy
+docker exec -it --user www-data handover php artisan reset:acceptedprivacy
 ```
 
 ## Present automation
