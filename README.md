@@ -23,13 +23,19 @@ To setup your Docker instance simply follow these steps:
 1. Pull the `ghcr.io/vatsim-scandinavia/handover:v3` Docker image
 2. Setup your MySQL database (not included in Docker image)
 3. Configure the environment variables as described in the [CONFIGURE.md](CONFIGURE.md#environment)
-4. Start the container in the background.
-5. Setup the database.
+4. To ensure that users will not need to log in after each time you re-deploy or upgrade the container, you need to create and store an application key in your environment and setup a shared volume. 
+   ```sh
+   docker exec -it handover php artisan key:get
+   docker volume create handover_storage
+   ```
+   Copy the key and set it as the `APP_KEY` environment variable in your Docker configuration and bind the volume when creating the container with `handover_storage:/app/storage`.
+5. Start the container in the background.
+6. Setup the database.
    ```sh
    docker exec -it --user www-data handover php artisan migrate
    ```
-6. Setup a crontab _outside_ the container to run `* * * * * docker exec --user www-data -i handover php artisan schedule:run >/dev/null` every minute. This patches into the container and runs the required cronjobs.
-7. Bind the 8080 (HTTP) and/or 8443 (HTTPS) port to your reverse proxy or similar.
+7. Setup a crontab _outside_ the container to run `* * * * * docker exec --user www-data -i handover php artisan schedule:run >/dev/null` every minute. This patches into the container and runs the required cronjobs.
+8. Bind the 8080 (HTTP) and/or 8443 (HTTPS) port to your reverse proxy or similar.
 
 Refer to the [CONFIGURE.md](CONFIGURE.md#optional-theming) for information about theming text, colors and logos.
 
@@ -50,12 +56,16 @@ Skip with ENTER when asked to assign to specific user. Name the client something
 ## Updating Data Protection Policy
 When you update your DPP, you should make all users explicitly accept the new policy again. To do this, follow these steps:
 
-1. Update the date and url to DPP in your environment variables. This should also recreate the container in the process to make sure everyone needs to login again.
+1. Update the date and url to DPP in your environment variables.
 2. If needed, update the DPP simplified version according to [the configuration manual](CONFIGURE.md#optional-theming)
 3. Reset all user's accepted_privacy variable in database with
-```sh
-docker exec -it --user www-data handover php artisan reset:acceptedprivacy
-```
+   ```sh
+   docker exec -it --user www-data handover php artisan reset:acceptedprivacy
+   ```
+4. To make sure everyone needs to login again, delete the sessions:
+   ```sh
+   docker exec -it --user www-data rm -rf /app/storage/framework/sessions/*
+   ```
 
 ## Present automation
 The only job the cron has automated today is daily member check and pull freshest data from VATSIM

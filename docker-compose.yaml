@@ -7,6 +7,8 @@ services:
     ports:
         - 8080:80
         - 8443:443
+    volumes:
+      - storage:/app/storage
     environment:
       # Please check the complete configure guide for all variables and their description
       # You need to adjust this file to your needs
@@ -25,3 +27,5 @@ services:
       - DB_PASSWORD=yourPASShere
       - VATSIM_OAUTH_CLIENT=yourCLIENThere
       - VATSIM_OAUTH_SECRET=yourSECREThere
+volumes:
+  storage:
