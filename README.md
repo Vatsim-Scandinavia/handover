@@ -64,7 +64,7 @@ When you update your DPP, you should make all users explicitly accept the new po
    ```
 4. To make sure everyone needs to login again, delete the sessions:
    ```sh
-   docker exec -it --user www-data rm -rf /app/storage/framework/sessions/*
+   docker exec -it --user www-data handover sh -c 'rm -rf /app/storage/framework/sessions/*'
    ```
 
 ## Present automation
