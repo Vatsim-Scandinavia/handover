@@ -3,17 +3,28 @@
 echo "Starting theme building process..."
 
 # Install
-apt install curl -y
-curl -sL https://deb.nodesource.com/setup_20.x | bash -
+apt update
+apt install -y ca-certificates curl gnupg
+mkdir -p /etc/apt/keyrings
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+
+NODE_MAJOR=20
+echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+
+apt update
 apt install nodejs -y
 
 # Build
 npm ci --omit dev
-npm run prod
+su www-data -s npm run prod
 
 # Cleanup
 npm cache clean --force
-apt remove curl nodejs -y
+apt purge curl gnupg nodejs -y
+apt autoremove -y
+rm -r /etc/apt/sources.list.d/nodesource.list
+rm -r /etc/apt/keyrings/nodesource.gpg
+
 rm -rf /app/node_modules/
 
 echo "Theme building process complete. Cleaned up all dependecies to save space."

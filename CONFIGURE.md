@@ -66,7 +66,7 @@ To change the bootstrap colors to match your division, first change the environm
 
 Run this command to build the theme. If you get an error like `"#5f271a" is not a color`, remove the `"` quotes from your environment variable.
 ```sh
-docker exec -it --user www-data handover sh container/theme/build.sh
+docker exec -it handover sh container/theme/build.sh
 ```
 
 > **Note**
