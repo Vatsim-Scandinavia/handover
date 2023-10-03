@@ -16,7 +16,8 @@ apt install nodejs -y
 
 # Build
 npm ci --omit dev
-su www-data -s npm run prod
+npm config set cache /tmp --global
+su www-data -s /usr/bin/npm run prod
 
 # Cleanup
 npm cache clean --force
