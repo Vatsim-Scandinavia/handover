@@ -66,6 +66,19 @@ class UserCollection extends JsonResource
                 ],
 
             ],
+
+            'oauth' => [
+                // We're not entirely sure what the purpose of this field is, at least
+                // not for the time being.
+                //
+                // In Handover, a client making a request to the /api/user endpoint
+                // isn't going to receive a valid response containing this field
+                // *UNLESS* the token *IS* valid. Thus, if you're seeing this, you're
+                // already on the other side of the airtight hatchway.
+                //
+                // Oh, and it's apparently meant to be a string.
+                'token_valid' => 'true',
+            ],
         ];
     }
 }
