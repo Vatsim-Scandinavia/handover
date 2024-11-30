@@ -5,8 +5,8 @@ services:
     container_name: handover
     build: .
     ports:
-      - 8000:80
-      - 8001:443
+      - 5000:80
+      - 5001:443
     volumes:
       - ./:/app
     #environment:
