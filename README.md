@@ -1,5 +1,5 @@
 ## Handover
-Centralised Handover with OAuth2, using `Laravel 10`. Created by [Daniel L.](https://github.com/blt950) (1352906) and [Matan B.](https://github.com/MatanBudimir) (1375048). An extra special thanks to VATSIM UK's open source core system which helped us on the right track with this one.
+Centralised Handover with OAuth2, using `Laravel 11`. Created by [Daniel L.](https://github.com/blt950) (1352906) and [Matan B.](https://github.com/MatanBudimir) (1375048). An extra special thanks to VATSIM UK's open source core system which helped us on the right track with this one.
 
 ## Prerequisites
 

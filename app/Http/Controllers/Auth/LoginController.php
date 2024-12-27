@@ -46,7 +46,7 @@ class LoginController extends Controller
             $request->session()->put('oauthstate', $this->provider->getState());
 			return redirect()->away($authorizationUrl);
         } else if ($request->input('state') !== session()->pull('oauthstate')) {
-            return redirect()->to('/')->withError("Login state mismatch error. Please try again. If this persists, please contact Web Services.");
+            return redirect()->to('/')->withError("Login state mismatch error. Please try again. If this persists, please contact technical department.");
         } else {
             return $this->verifyLogin($request);
         }
