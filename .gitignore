@@ -19,3 +19,4 @@ public/js/app.js.LICENSE.txt
 docker-compose.local.yaml
 public/mix-manifest.json
 .DS_Store
+resources/sass/_env.scss
