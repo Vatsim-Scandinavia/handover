@@ -13,19 +13,25 @@ $fa-font-path: "@fortawesome/fontawesome-free/webfonts";
 
 html,body {
     height: 100%;
-    color: #011328;
 }
 
 h1{
 	font-size: 2.5rem;
+	color: #011328;
 }
 
 h2{
 	font-size: 1.5rem;
+	color: #011328;
+}
+
+i{
+	margin-left: 0.25rem;
 }
 
 p, .pp-bullet {
 	font-size: 0.9rem;
+	color: #011328;
 
 	a {
 		color: $primary !important;

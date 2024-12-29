@@ -14,7 +14,7 @@ In the instructions where we use `docker exec`, we assume your container is name
 If you don't want to use Docker, you need:
 - An environment that can host PHP websites, such as Apache, Ngnix or similar.
 - MySQL database to store data.
-- Comply with [Laravel 10 Requirements](https://laravel.com/docs/10.x/deployment)
+- Comply with [Laravel 11 Requirements](https://laravel.com/docs/11.x/deployment)
 - Manually build the composer, npm and setting up cron jobs and clearing all caches on updates.
 
 ## Setup and install
