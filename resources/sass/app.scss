@@ -3,27 +3,35 @@
 
 // 3rd Party
 @import '~bootstrap/scss/bootstrap';
-@import '~@fortawesome/fontawesome-free/scss/brands';
-@import '~@fortawesome/fontawesome-free/scss/regular';
-@import '~@fortawesome/fontawesome-free/scss/solid';
-@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+
+$fa-font-path: "@fortawesome/fontawesome-free/webfonts";
+@import "@fortawesome/fontawesome-free/scss/fontawesome";
+@import "@fortawesome/fontawesome-free/scss/solid";
+@import "@fortawesome/fontawesome-free/scss/regular";
+@import "@fortawesome/fontawesome-free/scss/brands";
 
 
 html,body {
     height: 100%;
-    color: #011328;
 }
 
 h1{
 	font-size: 2.5rem;
+	color: #011328;
 }
 
 h2{
 	font-size: 1.5rem;
+	color: #011328;
+}
+
+i{
+	margin-left: 0.25rem;
 }
 
 p, .pp-bullet {
 	font-size: 0.9rem;
+	color: #011328;
 
 	a {
 		color: $primary !important;

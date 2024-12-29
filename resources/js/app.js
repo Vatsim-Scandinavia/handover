@@ -1,30 +1,21 @@
-require('./bootstrap');
-
-import Vue from 'vue';
+import * as bootstrap from 'bootstrap'
 import moment from 'moment';
-import VueMoment from 'vue-moment';
+import { createApp } from 'vue';
+import AuthorizedClients from './components/passport/AuthorizedClients.vue';
+import Clients from './components/passport/Clients.vue';
+import PersonalAccessTokens from './components/passport/PersonalAccessTokens.vue';
+import axios from 'axios';
 
+window.axios = axios;
+window.bootstrap = bootstrap;
 window.moment = moment;
-window.Vue = Vue;
+window.createApp = createApp;
 
 
-Vue.use(VueMoment, {moment});
+const app = createApp({});
 
-Vue.component(
-    'passport-clients',
-    require('./components/passport/Clients.vue').default
-);
+app.component('passport-authorized-clients', AuthorizedClients);
+app.component('passport-clients', Clients);
+app.component('passport-personal-access-tokens', PersonalAccessTokens);
 
-Vue.component(
-    'passport-authorized-clients',
-    require('./components/passport/AuthorizedClients.vue').default
-);
-
-Vue.component(
-    'passport-personal-access-tokens',
-    require('./components/passport/PersonalAccessTokens.vue').default
-);
-
-const app = new Vue({
-    el: '#app'
-});
+app.mount('#app');

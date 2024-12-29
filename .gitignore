@@ -1,8 +1,7 @@
 /node_modules
 /public/hot
 /public/storage
-public/css/*
-public/js/*
+public/build/*
 public/fonts/vendor/*
 /storage/*.key
 /vendor
@@ -18,3 +17,5 @@ apache/*
 public/js/app.js.LICENSE.txt
 docker-compose.local.yaml
 public/mix-manifest.json
+.DS_Store
+resources/sass/_env.scss
