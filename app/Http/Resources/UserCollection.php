@@ -46,8 +46,8 @@ class UserCollection extends JsonResource
 
                 'pilotrating' => [
                     'id' => ($this->tokenCan('vatsim_details')) ? $this->pilot_rating : null,
-                    'short' => 'N/A',
-                    'long' => 'N/A',
+                    'short' => ($this->tokenCan('vatsim_details')) ? $this->pilot_rating_short : null,
+                    'long' => ($this->tokenCan('vatsim_details')) ? $this->pilot_rating_long : null
                 ],
                 
                 'region' => [

@@ -29,7 +29,7 @@ class User extends Authenticatable
      */
 
     protected $fillable = [
-        'id', 'email', 'first_name', 'last_name', 'rating', 'rating_short', 'rating_long', 'rating_grp', 'pilot_rating', 'country', 'region', 'division', 'subdivision', 'atc_active', 'accepted_privacy', 'reg_date', 'last_login', 'access_token', 'refresh_token', 'token_expires'
+        'id', 'email', 'first_name', 'last_name', 'rating', 'rating_short', 'rating_long', 'rating_grp', 'pilot_rating', 'pilot_rating_short', 'pilot_rating_long', 'country', 'region', 'division', 'subdivision', 'atc_active', 'accepted_privacy', 'reg_date', 'last_login', 'access_token', 'refresh_token', 'token_expires'
     ];
 
     /**

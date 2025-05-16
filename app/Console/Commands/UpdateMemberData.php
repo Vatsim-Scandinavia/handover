@@ -87,6 +87,8 @@ class UpdateMemberData extends Command
                 $user->rating_short = $response->data->vatsim->rating->short;
                 $user->rating_long = $response->data->vatsim->rating->long;
                 $user->pilot_rating = $response->data->vatsim->pilotrating->id;
+                $user->pilot_rating_short = $response->data->vatsim->pilotrating->short;
+                $user->pilot_rating_long = $response->data->vatsim->pilotrating->long;
                 $user->country = $response->data->personal->country->id;
                 $user->region = $response->data->vatsim->region->id;
                 $user->division = $response->data->vatsim->division->id;

@@ -132,6 +132,8 @@ class LoginController extends Controller
             'rating_short' => $resourceOwner->data->vatsim->rating->short,
             'rating_long' => $resourceOwner->data->vatsim->rating->long,
             'pilot_rating' => $resourceOwner->data->vatsim->pilotrating->id,
+            'pilot_rating_short' => $resourceOwner->data->vatsim->pilotrating->short,
+            'pilot_rating_long' => $resourceOwner->data->vatsim->pilotrating->long,
             'country' => $resourceOwner->data->personal->country->id,
             'region' => $resourceOwner->data->vatsim->region->id,
             'division' => $resourceOwner->data->vatsim->division->id,
