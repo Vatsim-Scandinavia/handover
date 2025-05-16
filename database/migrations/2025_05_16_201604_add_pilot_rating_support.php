@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('pilot_rating_short', 6)->nullable()->after('pilot_rating');
-            $table->string('pilot_rating_long', 24)->nullable()->after('pilot_rating_short');
+            $table->string('pilot_rating_long', 32)->nullable()->after('pilot_rating_short');
         });
         
     }
