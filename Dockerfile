@@ -1,5 +1,5 @@
 # Intermediate build container for front-end resources
-FROM docker.io/library/node:23.5.0-alpine as frontend
+FROM docker.io/library/node:24.6.0-alpine AS frontend
 # Easy to prune intermediary containers
 LABEL stage=build
 
@@ -12,7 +12,7 @@ RUN npm ci --omit dev && \
 ####################################################################################################
 # Primary container
 
-FROM docker.io/library/php:8.3.13-apache-bookworm
+FROM docker.io/library/php:8.3.24-apache-bookworm
 
 # Default container port for the apache configuration
 EXPOSE 80 443
