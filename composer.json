@@ -10,7 +10,7 @@
     "require": {
         "php": "^8.3.13",
         "laravel/framework": "^12.0",
-        "laravel/passport": "^12.0",
+        "laravel/passport": "^13.7",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.5.2",
         "league/oauth2-client": "^2.6.1",
