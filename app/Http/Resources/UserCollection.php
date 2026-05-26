@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\GroupResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserCollection extends JsonResource
@@ -79,6 +80,13 @@ class UserCollection extends JsonResource
                 // Oh, and it's apparently meant to be a string.
                 'token_valid' => 'true',
             ],
+
+            'groups' => $this->when(
+                $this->tokenCan('groups'),
+                fn () => GroupResource::collection(
+                    $this->groups()->with('tags', 'attributeValues.definition')->get()
+                )
+            ),
         ];
     }
 }

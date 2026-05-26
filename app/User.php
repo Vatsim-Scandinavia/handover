@@ -3,6 +3,9 @@
 namespace App;
 
 use App\Http\Controllers\VatsimOAuthController;
+use App\Models\Group;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use League\OAuth2\Client\Token\AccessToken;
 use Laravel\Passport\HasApiTokens;
@@ -11,9 +14,10 @@ use Laravel\Passport\HasApiTokens;
 class User extends Authenticatable
 {
 
-    use HasApiTokens;
+    use HasApiTokens, HasFactory;
 
     public $timestamps = false;
+    public $incrementing = false;
 
     /**
      * The primary key associated with the table.
@@ -48,6 +52,12 @@ class User extends Authenticatable
      */
     public function banned(){
         return $this->hasOne(BannedUser::class);
+    }
+
+    public function groups(): BelongsToMany
+    {
+        return $this->belongsToMany(Group::class, 'group_user')
+            ->withPivot('added_by', 'created_at');
     }
 
      /**
