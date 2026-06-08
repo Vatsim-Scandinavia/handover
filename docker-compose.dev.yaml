@@ -7,6 +7,8 @@ services:
     ports:
       - 5000:80
       - 5001:443
+    networks:
+      - sail
     volumes:
       - ./:/app
     #environment:
@@ -30,3 +32,34 @@ services:
       #- VATSIM_OAUTH_BASE=https://auth-dev.vatsim.net
       #- VATSIM_OAUTH_CLIENT=yourCLIENThere
       #- VATSIM_OAUTH_SECRET=yourSECREThere
+  mysql:
+      image: 'mysql:8.4.8'
+      ports:
+          - '${FORWARD_DB_PORT:-3306}:3306'
+      environment:
+          MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+          MYSQL_ROOT_HOST: '%'
+          MYSQL_DATABASE: '${DB_DATABASE}'
+          MYSQL_USER: '${DB_USERNAME}'
+          MYSQL_PASSWORD: '${DB_PASSWORD}'
+          MYSQL_ALLOW_EMPTY_PASSWORD: 1
+          MYSQL_EXTRA_OPTIONS: '${MYSQL_EXTRA_OPTIONS:-}'
+      networks:
+        - sail
+      volumes:
+          - 'sail-mysql:/var/lib/mysql'
+          - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+      healthcheck:
+          test:
+              - CMD
+              - mysqladmin
+              - ping
+              - '-p${DB_PASSWORD}'
+          retries: 3
+          timeout: 5s
+networks:
+    sail:
+        driver: bridge
+volumes:
+    sail-mysql:
+        driver: local
