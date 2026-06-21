@@ -47,6 +47,11 @@
             "Database\\Seeders\\": "database/seeders/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "prefer-stable": true,
     "scripts": {
         "post-autoload-dump": [

@@ -8,12 +8,6 @@ use Illuminate\Support\Facades\Log;
 use App\User;
 use App\Http\Controllers\VatsimOAuthController;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\RatingsController;
-use App\Http\Controllers\PRatingsController;
-use App\Http\Controllers\DivisionsController;
-use App\Http\Controllers\TestController;
-use League\OAuth2\Client\Token;
-use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Session;
 
@@ -44,7 +38,7 @@ class LoginController extends Controller
                 'required_scopes' => join(' ', config('vatsim_auth.scopes')),
             ]);
             $request->session()->put('oauthstate', $this->provider->getState());
-			return redirect()->away($authorizationUrl);
+            return redirect()->away($authorizationUrl);
         } else if ($request->input('state') !== session()->pull('oauthstate')) {
             return redirect()->to('/')->withError("Login state mismatch error. Please try again. If this persists, please contact technical department.");
         } else {
@@ -58,12 +52,11 @@ class LoginController extends Controller
             $accessToken = $this->provider->getAccessToken('authorization_code', [
                 'code' => $request->input('code')
             ]);
-            
         } catch (IdentityProviderException $e) {
             return redirect()->to('/')->withError("Authentication error: ".$e->getMessage());
-        } catch (OAuthServerException $e) {
-            Log::critical("Error in OAuthServerException: ".$e);
-            return redirect()->to('/')->withError("OAuth Authentication error: ".$e->getMessage());
+        } catch (\Exception $e) {
+            Log::error('OAuth token exchange failed: '.get_class($e).' '.$e->getMessage());
+            return redirect()->to('/')->withError("Authentication error: ".$e->getMessage());
         }
 
         $resourceOwner = json_decode(json_encode($this->provider->getResourceOwner($accessToken)->toArray()));
@@ -78,7 +71,7 @@ class LoginController extends Controller
         ) {
             return redirect()->to('/')->withError("Please grant us your full name, email address, VATSIM details, country and continious access to access our services. You will be presented with our Data Protection Policy before the data will get stored with us.");
         }
-        
+
         if ($resourceOwner->data->vatsim->rating->id == 0) {
             return redirect()->route('landing')->withError('<b>Login denied.</b><br>Login was denied because you are suspended from VATSIM.');
         }
@@ -94,15 +87,13 @@ class LoginController extends Controller
             return redirect()->route('landing')->withError('<br>Login denied</br><br>User '.$user->id.' has been banned in '.\Config::get('app.owner_short').' for the following reason: <i>'.$user->banned->reason.'</i><br><br>For inquires contact '.\Config::get('app.owner_contact').'');
         }
 
-        // Check if user exists and accepted privacy policy                
+        // Check if user exists and accepted privacy policy
         if($user && $user->accepted_privacy){
             return $this->completeLogin($resourceOwner, $accessToken);
         } else {
             session(['resourceOwner' => $resourceOwner, 'accessToken' => $accessToken]); // Store CERT data temporarily
             return redirect()->route('dpp');
         }
-
-        
     }
 
     public function validatePrivacy(Request $get){
@@ -122,7 +113,6 @@ class LoginController extends Controller
 
     protected function completeLogin($resourceOwner, $token)
     {
-
         $account = User::updateOrCreate(
             ['id' => $resourceOwner->data->cid],
             ['email' => $resourceOwner->data->personal->email,
@@ -149,7 +139,7 @@ class LoginController extends Controller
         // Complete login and redirect to intended url
         Auth::login(User::find($resourceOwner->data->cid), false);
 
-        $intended = $intended = Session::pull('url.intended', route('landing'));
+        $intended = Session::pull('url.intended', route('landing'));
         return redirect($intended);
     }
 
