@@ -17,6 +17,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Version
+    |--------------------------------------------------------------------------
+    |
+    | This is the value of the SIMVER of the application.
+    | Managed automatically by release-please.
+    |
+    */
+    /* x-release-please-start-version */
+    'version' => '3.2.0',
+    /* x-release-please-end */
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Owner
     |--------------------------------------------------------------------------
     |
