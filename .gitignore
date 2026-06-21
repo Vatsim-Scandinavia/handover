@@ -5,6 +5,7 @@ public/build/*
 public/fonts/vendor/*
 /storage/*.key
 /vendor
+.direnv
 .env
 .env.backup
 .phpunit.result.cache
@@ -19,3 +20,6 @@ docker-compose.local.yaml
 public/mix-manifest.json
 .DS_Store
 resources/sass/_env.scss
+.miserc.toml
+mise.*.toml
+
