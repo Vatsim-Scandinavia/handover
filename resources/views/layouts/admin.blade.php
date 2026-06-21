@@ -44,6 +44,8 @@
                     @endif
 
                     @yield('content')
+
+                    <x-version-footer class="text-end" />
                 </div>
             </div>
         </div>
