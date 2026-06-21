@@ -36,6 +36,11 @@ class GroupMemberController extends Controller
     public function store(Request $request, Group $group)
     {
         $this->requireAccess($request, $group);
+
+        if ($group->is_admin_group && !$request->attributes->get('is_group_admin')) {
+            return back()->withErrors(['member' => 'Only admins can add members to an admin group.']);
+        }
+
         $request->validate(['cid' => ['required', 'integer']]);
 
         $user = User::find($request->cid);
