@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthorizedClientController;
 use App\Http\Controllers\GroupAttributeDefinitionController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GroupManagerRuleController;
@@ -56,6 +57,9 @@ Route::middleware(['auth', 'groups.manage'])->prefix('groups')->name('groups.')-
         ->where('type', 'group|tag|attribute')
         ->where('rule', '[0-9]+');
 });
+
+Route::middleware('auth')->get('/account/authorized-clients', AuthorizedClientController::class)
+    ->name('account.authorized-clients');
 
 Route::middleware(['suspended'])->group(function () {
     Route::get('/validate/dpp', 'Controller@privacy')->name('dpp');

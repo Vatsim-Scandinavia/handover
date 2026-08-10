@@ -7,15 +7,15 @@
 <template>
     <div>
         <h2 class="mb-4">Account Linked to</h2>
-        <div v-if="tokens.length > 0">
+        <div v-if="clients.length > 0">
 
-            <div v-for="token in tokens">
-                <a v-bind:href="token.client.redirect_uris[0]" target="_blank">{{ token.client.name }}</a>
+            <div v-for="client in clients">
+                <a v-bind:href="client.url" target="_blank">{{ client.name }}</a>
                 <i class="fa-solid fa-arrow-up-right-from-square text-muted"></i>
             </div>
 
         </div>
-        <div v-if="tokens.length == 0">
+        <div v-if="clients.length == 0">
             <p class="text-muted">Your data is not shared to any service yet.</p>
         </div>
     </div>
@@ -23,66 +23,32 @@
 
 <script>
 
-    import moment from 'moment';
-
     export default {
         /*
          * The component's data.
          */
         data() {
             return {
-                tokens: []
+                clients: []
             };
         },
 
         /**
-         * Prepare the component (Vue 1.x).
-         */
-        ready() {
-            this.prepareComponent();
-        },
-
-        /**
-         * Prepare the component (Vue 2.x).
+         * Prepare the component.
          */
         mounted() {
-            this.prepareComponent();
+            this.getClients();
         },
 
         methods: {
             /**
-             * Prepare the component (Vue 2.x).
+             * Get all of the third-party clients the user has authorized.
              */
-            prepareComponent() {
-                this.getTokens();
-            },
-
-            /**
-             * Get all of the authorized tokens for the user.
-             */
-            getTokens() {
-                axios.get('/oauth/tokens')
+            getClients() {
+                axios.get('/account/authorized-clients')
                         .then(response => {
-                            this.tokens = response.data;
+                            this.clients = response.data;
                         });
-            },
-
-            /**
-             * Revoke the given token.
-             */
-            revoke(token) {
-                axios.delete('/oauth/tokens/' + token.id)
-                        .then(response => {
-                            this.getTokens();
-                        });
-            },
-
-            /**
-            * Format time
-            */
-            formatTime(timestamp){
-                var date = new Date(timestamp);
-                return date.toLocaleDateString("no-NO") + " " + date.toLocaleTimeString("no-NO");
             }
         }
     }
