@@ -48,6 +48,11 @@ class AuthServiceProvider extends ServiceProvider
         Passport::refreshTokensExpireIn(now()->addYears(100));
         Passport::useClientModel(Client::class);
 
+        // This application uses the legacy Passport schema where oauth_clients.id
+        // is an auto-incrementing integer. Passport 13 defaults to UUID client
+        // ids, which cannot be stored in that column, so keep integer keys.
+        Passport::$clientUuids = false;
+
         $this->registerPolicies();
     }
 }
