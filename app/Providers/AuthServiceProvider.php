@@ -53,6 +53,15 @@ class AuthServiceProvider extends ServiceProvider
         // ids, which cannot be stored in that column, so keep integer keys.
         Passport::$clientUuids = false;
 
+        // Passport 13 is headless: AuthorizationController::authorize() method-injects
+        // an AuthorizationViewResponse, which is unbound by default. Without binding
+        // it, every /oauth/authorize request fails with "not instantiable". All of
+        // this app's clients auto-approve (Client::skipsAuthorization), so the consent
+        // screen is never rendered, but the binding must exist for the route to resolve.
+        Passport::authorizationView(fn (array $parameters) => response(
+            'This application does not require explicit authorization.'
+        ));
+
         $this->registerPolicies();
     }
 }
