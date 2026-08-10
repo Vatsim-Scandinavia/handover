@@ -23,3 +23,12 @@ resources/sass/_env.scss
 .miserc.toml
 mise.*.toml
 
+# boost
+AGENTS.md
+CLAUDE.md
+.codex/*
+.claude/*
+.cursor/*
+.agents/skills/*
+.mcp.json
+opencode.json
