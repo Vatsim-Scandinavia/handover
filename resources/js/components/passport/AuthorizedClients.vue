@@ -10,7 +10,7 @@
         <div v-if="tokens.length > 0">
 
             <div v-for="token in tokens">
-                <a v-bind:href="token.client.redirect" target="_blank">{{ token.client.name }}</a>
+                <a v-bind:href="token.client.redirect_uris[0]" target="_blank">{{ token.client.name }}</a>
                 <i class="fa-solid fa-arrow-up-right-from-square text-muted"></i>
             </div>
 
