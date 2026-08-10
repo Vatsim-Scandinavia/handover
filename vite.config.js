@@ -35,6 +35,16 @@ export default ({ mode }) => {
                 refresh: true,
             }),
         ],
+        css: {
+            preprocessorOptions: {
+                scss: {
+                    // Silence Sass deprecation warnings originating from
+                    // dependencies (e.g. Bootstrap's legacy @import and
+                    // color functions) while keeping warnings from our own SCSS.
+                    quietDeps: true,
+                },
+            },
+        },
         resolve: {
             alias: {
                 vue: 'vue/dist/vue.esm-bundler.js',
