@@ -3,6 +3,8 @@
 namespace App\Http\Resources;
 
 use App\Http\Resources\GroupResource;
+use App\Models\Group;
+use App\Services\GroupMembershipResolver;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserCollection extends JsonResource
@@ -83,9 +85,19 @@ class UserCollection extends JsonResource
 
             'groups' => $this->when(
                 $this->tokenCan('groups'),
-                fn () => GroupResource::collection(
-                    $this->groups()->with('tags', 'attributeValues.definition')->get()
-                )
+                function () {
+                    $map = app(GroupMembershipResolver::class)->effectiveMembership($this->resource);
+                    if ($map === []) {
+                        return [];
+                    }
+
+                    return Group::whereIn('id', array_keys($map))
+                        ->with('tags', 'attributeValues.definition')
+                        ->orderBy('name')
+                        ->get()
+                        ->map(fn (Group $g) => new GroupResource($g, direct: $map[$g->id] === null))
+                        ->values();
+                }
             ),
         ];
     }

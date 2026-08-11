@@ -49,6 +49,22 @@
         </div>
         @endif
 
+        @if($group->parents->isNotEmpty())
+        <p><strong>Parent groups:</strong>
+            @foreach($group->parents as $parent)
+            <a href="{{ route('groups.show', $parent) }}" class="badge bg-info text-dark text-decoration-none">{{ $parent->name }}</a>
+            @endforeach
+        </p>
+        @endif
+
+        @if($group->children->isNotEmpty())
+        <p><strong>Child groups:</strong>
+            @foreach($group->children as $child)
+            <a href="{{ route('groups.show', $child) }}" class="badge bg-light text-dark text-decoration-none">{{ $child->name }}</a>
+            @endforeach
+        </p>
+        @endif
+
         @if($isAdmin)
         <div class="mt-3 text-muted" style="font-size:13px">
             <span class="badge bg-danger">System Administrator</span> You have full administrative access.

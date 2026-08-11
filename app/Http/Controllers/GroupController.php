@@ -60,7 +60,7 @@ class GroupController extends Controller
         if (!$request->attributes->get('is_group_admin') && !$this->service->canManage($request->user(), $group)) {
             abort(403);
         }
-        $group->load('tags', 'attributeValues.definition');
+        $group->load('tags', 'attributeValues.definition', 'parents', 'children');
         $definitions = GroupAttributeDefinition::orderBy('key')->get();
         $isAdmin = $request->attributes->get('is_group_admin');
         $grantingRules = $isAdmin ? [] : $this->service->grantingRulesFor($request->user(), $group);
@@ -70,9 +70,13 @@ class GroupController extends Controller
     public function edit(Request $request, Group $group)
     {
         $this->requireAdmin($request);
-        $group->load('tags', 'attributeValues.definition');
+        $group->load('tags', 'attributeValues.definition', 'parents');
         $definitions = GroupAttributeDefinition::orderBy('key')->get();
-        return view('groups.edit', compact('group', 'definitions'));
+        // Candidate parents: every other group (cycle attempts are rejected on submit).
+        $candidateParents = Group::where('id', '!=', $group->id)
+            ->orderBy('name')
+            ->get(['id', 'name', 'is_admin_group']);
+        return view('groups.edit', compact('group', 'definitions', 'candidateParents'));
     }
 
     public function update(Request $request, Group $group)

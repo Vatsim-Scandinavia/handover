@@ -13,6 +13,24 @@
     <div class="d-flex flex-column justify-content-center align-items-center gap-3">
         <a href="{{route('logout')}}" class="btn btn btn-primary">Logout</a>
 
+        @if($groups->isNotEmpty())
+        <div class="card w-100" style="max-width:480px">
+            <div class="card-header"><strong>Your groups</strong></div>
+            <ul class="list-group list-group-flush">
+                @foreach($groups as $row)
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ $row['group']->name }}</span>
+                    @if($row['via'] === null)
+                    <span class="badge bg-primary">Direct</span>
+                    @else
+                    <span class="badge bg-secondary">Inherited via {{ $row['via'] }}</span>
+                    @endif
+                </li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
         @can('viewAny', \App\Models\Group::class)
             <a href="{{ route('groups.index') }}" class="btn btn-outline-secondary" style="font-size: 14px;">
                 <i class="fas fa-users-cog"></i>&nbsp;Manage groups

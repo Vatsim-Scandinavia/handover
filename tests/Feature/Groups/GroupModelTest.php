@@ -57,4 +57,19 @@ class GroupModelTest extends TestCase
         $group->members()->attach($user->id, ['created_at' => now()]);
         $this->assertCount(1, $user->fresh()->groups);
     }
+
+    public function test_group_hierarchy_relations_resolve_parents_and_children(): void
+    {
+        $parent = \App\Models\Group::factory()->create();
+        $child = \App\Models\Group::factory()->create();
+
+        \Illuminate\Support\Facades\DB::table('group_hierarchy')->insert([
+            'parent_id' => $parent->id,
+            'child_id'  => $child->id,
+        ]);
+
+        $this->assertTrue($child->parents->contains($parent));
+        $this->assertTrue($parent->children->contains($child));
+        $this->assertFalse($parent->parents->contains($child));
+    }
 }

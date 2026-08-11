@@ -35,7 +35,8 @@ class ApiGroupsScopeTest extends TestCase
             ->assertStatus(200)
             ->assertJsonPath('data.groups.0.slug', 'vacc-norway')
             ->assertJsonPath('data.groups.0.name', 'vACC Norway')
-            ->assertJsonStructure(['data' => ['groups' => [['id', 'slug', 'name', 'tags', 'attributes']]]]);
+            ->assertJsonPath('data.groups.0.direct', true)
+            ->assertJsonStructure(['data' => ['groups' => [['id', 'slug', 'name', 'direct', 'tags', 'attributes']]]]);
     }
 
     public function test_groups_response_includes_tags_and_attributes(): void

@@ -36,6 +36,18 @@ class Group extends Model
             ->withPivot('added_by', 'created_at');
     }
 
+    // Groups this group nests INTO (its parents). Roll-up flows toward these.
+    public function parents(): BelongsToMany
+    {
+        return $this->belongsToMany(Group::class, 'group_hierarchy', 'child_id', 'parent_id');
+    }
+
+    // Groups nested INTO this group (its children).
+    public function children(): BelongsToMany
+    {
+        return $this->belongsToMany(Group::class, 'group_hierarchy', 'parent_id', 'child_id');
+    }
+
     // Rules FROM this group (what it manages)
     public function managerRulesByGroup(): HasMany
     {

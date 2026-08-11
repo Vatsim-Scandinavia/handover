@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\DB;
 
 class GroupManagerService
 {
+    public function __construct(
+        private GroupMembershipResolver $resolver = new GroupMembershipResolver()
+    ) {}
+
     public function isAdmin(User $user): bool
     {
         return $user->groups()->where('is_admin_group', true)->exists();
@@ -41,18 +45,33 @@ class GroupManagerService
 
     public function grantingRulesFor(User $user, Group $group): array
     {
-        $userGroupIds = $user->groups()->pluck('groups.id')->toArray();
+        $membership = $this->resolver->effectiveMembership($user);
+        $userGroupIds = array_keys($membership);
         if (empty($userGroupIds)) {
             return [];
         }
 
+        // Name lookup for the "inherited via X" suffix.
+        $viaNames = Group::whereIn('id', array_values(array_filter($membership, fn ($v) => $v !== null)))
+            ->pluck('name', 'id');
+        $inheritedSuffix = function (string $managerGroupId) use ($membership, $viaNames): string {
+            $viaId = $membership[$managerGroupId] ?? null;
+            return $viaId === null ? '' : ' (inherited via "' . ($viaNames[$viaId] ?? 'unknown') . '")';
+        };
+
         $rules = [];
 
+        // NB: uses a by-reference closure (not `fn (...) =>`), because PHP arrow
+        // functions capture outer variables by value — an arrow fn here would push
+        // into a local copy of $rules and silently discard it (pre-existing latent
+        // bug fixed while wiring in the inherited-via suffix).
         GroupManagerRuleByGroup::whereIn('manager_group_id', $userGroupIds)
             ->where('target_group_id', $group->id)
             ->with('managerGroup')
             ->get()
-            ->each(fn ($r) => $rules[] = "Member of \"{$r->managerGroup->name}\"");
+            ->each(function ($r) use (&$rules, $inheritedSuffix) {
+                $rules[] = "Member of \"{$r->managerGroup->name}\"" . $inheritedSuffix($r->manager_group_id);
+            });
 
         $groupTags = $group->tags->pluck('tag')->toArray();
         if (!empty($groupTags)) {
@@ -60,7 +79,9 @@ class GroupManagerService
                 ->whereIn('target_tag', $groupTags)
                 ->with('managerGroup')
                 ->get()
-                ->each(fn ($r) => $rules[] = "Member of \"{$r->managerGroup->name}\" (via tag \"{$r->target_tag}\")");
+                ->each(function ($r) use (&$rules, $inheritedSuffix) {
+                    $rules[] = "Member of \"{$r->managerGroup->name}\" (via tag \"{$r->target_tag}\")" . $inheritedSuffix($r->manager_group_id);
+                });
         }
 
         $group->loadMissing('attributeValues.definition');
@@ -71,9 +92,9 @@ class GroupManagerService
         GroupManagerRuleByAttribute::whereIn('manager_group_id', $userGroupIds)
             ->with('managerGroup')
             ->get()
-            ->each(function ($r) use ($groupAttrPairs, &$rules) {
+            ->each(function ($r) use ($groupAttrPairs, &$rules, $inheritedSuffix) {
                 if (($groupAttrPairs[$r->target_attribute_key] ?? null) === $r->target_attribute_value) {
-                    $rules[] = "Member of \"{$r->managerGroup->name}\" (via {$r->target_attribute_key}={$r->target_attribute_value})";
+                    $rules[] = "Member of \"{$r->managerGroup->name}\" (via {$r->target_attribute_key}={$r->target_attribute_value})" . $inheritedSuffix($r->manager_group_id);
                 }
             });
 
@@ -82,7 +103,7 @@ class GroupManagerService
 
     private function resolveManageableGroupIds(User $user): array
     {
-        $userGroupIds = $user->groups()->pluck('groups.id')->toArray();
+        $userGroupIds = $this->resolver->effectiveGroupIds($user);
         if (empty($userGroupIds)) {
             return [];
         }

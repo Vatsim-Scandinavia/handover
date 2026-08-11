@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthorizedClientController;
 use App\Http\Controllers\GroupAttributeDefinitionController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\GroupHierarchyController;
 use App\Http\Controllers\GroupManagerRuleController;
 use App\Http\Controllers\GroupMemberController;
 
@@ -49,6 +50,9 @@ Route::middleware(['auth', 'groups.manage'])->prefix('groups')->name('groups.')-
     Route::get('{group}/members', [GroupMemberController::class, 'index'])->name('members.index');
     Route::post('{group}/members', [GroupMemberController::class, 'store'])->name('members.store');
     Route::delete('{group}/members/{user}', [GroupMemberController::class, 'destroy'])->name('members.destroy');
+
+    Route::post('{group}/parents', [GroupHierarchyController::class, 'store'])->name('parents.store');
+    Route::delete('{group}/parents/{parent}', [GroupHierarchyController::class, 'destroy'])->name('parents.destroy');
 
     Route::get('{group}/rules', [GroupManagerRuleController::class, 'index'])->name('rules.index');
     Route::post('{group}/rules', [GroupManagerRuleController::class, 'store'])->name('rules.store');

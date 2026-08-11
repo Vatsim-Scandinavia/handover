@@ -14,6 +14,27 @@ Manager access is resolved at request time by checking whether any rule points a
 
 ---
 
+## Nested groups (transitive membership)
+
+Groups can be nested inside other groups, forming a directed acyclic graph. When
+group **C** is nested into group **P**, every member of **C** becomes an *inherited*
+(transitive) member of **P** and of P's ancestors. A group may have multiple parents.
+Cycles are rejected when an edge is created.
+
+Inherited membership is reflected in two places:
+
+- The `groups` API array lists inherited groups alongside direct ones, each tagged
+  with a `direct` boolean (`false` for inherited).
+- Manager rules match on a user's *effective* group set, so managing rights held by a
+  parent group flow down to members of its children.
+
+Nesting deliberately does **not** grant admin: a user in a group nested under an admin
+group is not an administrator. Admin access is always a direct membership.
+
+Nesting edges are edited by system administrators on a group's edit page.
+
+---
+
 ## Access
 
 There are three access levels. System administrators (members of any `is_admin_group` group) have full CRUD over groups, memberships, rules, and attribute definitions. Group managers can add and remove members of the groups their rules cover, but cannot edit group metadata or rules. Everyone else can view their own memberships via the API.
@@ -35,6 +56,7 @@ Requesting the `groups` scope appends a `groups` array to the `/api/user` respon
       "id": "018f1e2a-7c3d-7000-8000-abcdef012345",
       "slug": "vacc-norway",
       "name": "vACC Norway",
+      "direct": true,
       "tags": ["vacc", "eur"],
       "attributes": {
         "region": "EUR",
@@ -46,6 +68,8 @@ Requesting the `groups` scope appends a `groups` array to the `/api/user` respon
 ```
 
 Use `id` (UUIDv7) as the stable canonical reference in client applications. `slug` is human-readable but not guaranteed to stay the same. Tags and attributes carry no API stability contract.
+
+**Compatibility note:** once nesting is in use, the `groups` array includes inherited groups. Clients that want only directly-assigned groups should filter on `direct: true`.
 
 ---
 
