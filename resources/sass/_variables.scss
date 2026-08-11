@@ -1,6 +1,8 @@
 // Override Bootstrap default variables here
 // Do not edit any of the files in /vendor/bootstrap/scss/!
 
+@use "sass:color";
+
 @import "_env";
 
 // Color Variables
@@ -66,7 +68,7 @@ $box-shadow: 0 0.15rem 1.75rem 0 rgba($gray-900, .15) !default;
 
 // Borders Radius
 $border-radius: $envBorderRadius !default;
-$border-color: darken($gray-200, 2%);
+$border-color: color.adjust($gray-200, $lightness: -2%);
 
 // Spacing Variables
 // Change below variable if the height of the navbar changes
