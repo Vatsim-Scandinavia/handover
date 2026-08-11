@@ -1,14 +1,19 @@
+// Font Awesome
+// FA7 renamed $fa-font-path to $font-path and moved to Sass modules, so
+// point it at the node_modules webfonts so Vite resolves and bundles them.
+@use "@fortawesome/fontawesome-free/scss/variables" with (
+    $font-path: "@fortawesome/fontawesome-free/webfonts"
+);
+@use "@fortawesome/fontawesome-free/scss/fontawesome";
+@use "@fortawesome/fontawesome-free/scss/solid";
+@use "@fortawesome/fontawesome-free/scss/regular";
+@use "@fortawesome/fontawesome-free/scss/brands";
+
 // Variables
 @import 'variables';
 
 // 3rd Party
 @import '~bootstrap/scss/bootstrap';
-
-$fa-font-path: "@fortawesome/fontawesome-free/webfonts";
-@import "@fortawesome/fontawesome-free/scss/fontawesome";
-@import "@fortawesome/fontawesome-free/scss/solid";
-@import "@fortawesome/fontawesome-free/scss/regular";
-@import "@fortawesome/fontawesome-free/scss/brands";
 
 
 html,body {
@@ -63,7 +68,7 @@ p, .pp-bullet {
 		margin-bottom: 10px;
 		color: #6c757d;
 	}
-	
+
 	.pp-bullet i{
 		width: 15px;
 		margin-right: 5px;
