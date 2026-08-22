@@ -11,7 +11,11 @@
         <form method="POST" action="{{ route('groups.store') }}">
             @csrf
             @include('groups._form', ['group' => null])
-            <button class="btn btn-primary">Create Group</button>
+            <div class="row">
+                <div class="col-sm-9 offset-sm-3">
+                    <button class="btn btn-primary">Create Group</button>
+                </div>
+            </div>
         </form>
     </div>
 </div>

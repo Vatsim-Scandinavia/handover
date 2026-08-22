@@ -61,22 +61,27 @@ class GroupController extends Controller
             abort(403);
         }
         $group->load('tags', 'attributeValues.definition', 'parents', 'children');
-        $definitions = GroupAttributeDefinition::orderBy('key')->get();
+        $group->loadCount('members');
         $isAdmin = $request->attributes->get('is_group_admin');
         $grantingRules = $isAdmin ? [] : $this->service->grantingRulesFor($request->user(), $group);
-        return view('groups.show', compact('group', 'definitions', 'isAdmin', 'grantingRules'));
-    }
 
-    public function edit(Request $request, Group $group)
-    {
-        $this->requireAdmin($request);
-        $group->load('tags', 'attributeValues.definition', 'parents');
-        $definitions = GroupAttributeDefinition::orderBy('key')->get();
-        // Candidate parents: every other group (cycle attempts are rejected on submit).
-        $candidateParents = Group::where('id', '!=', $group->id)
-            ->orderBy('name')
-            ->get(['id', 'name', 'is_admin_group']);
-        return view('groups.edit', compact('group', 'definitions', 'candidateParents'));
+        $definitions = collect();
+        $candidateParents = collect();
+        $candidateChildren = collect();
+        if ($isAdmin) {
+            $definitions = GroupAttributeDefinition::orderBy('key')->get();
+            // Candidates: every other group (cycle/self attempts are rejected on submit).
+            $others = Group::where('id', '!=', $group->id)
+                ->orderBy('name')
+                ->get(['id', 'name', 'is_admin_group']);
+            $candidateParents = $others;
+            $candidateChildren = $others;
+        }
+
+        return view('groups.show', compact(
+            'group', 'isAdmin', 'grantingRules',
+            'definitions', 'candidateParents', 'candidateChildren'
+        ));
     }
 
     public function update(Request $request, Group $group)

@@ -16,7 +16,7 @@
             @endif
         </x-slot:actions>
     </x-card-header>
-    <div class="card-body p-0">
+    <div class="card-body">
         <div class="table-responsive">
             <table class="table table-sm mb-0">
                 <thead><tr><th>Slug</th><th>Name</th><th>Tags</th><th>Members</th><th>Admin</th><th></th></tr></thead>

@@ -51,6 +51,47 @@ class GroupHierarchyController extends Controller
         return back()->with('success', 'Parent group removed.');
     }
 
+    // Nest a child group INTO {group}. Edge is (parent = {group}, child = selected).
+    public function storeChild(Request $request, Group $group)
+    {
+        $this->requireAdmin($request);
+
+        $data = $request->validate([
+            'child_id' => ['required', 'uuid', 'exists:groups,id'],
+        ]);
+        $childId = $data['child_id'];
+
+        if ($childId === $group->id) {
+            return back()->withErrors(['child_id' => 'A group cannot nest into itself.']);
+        }
+        if ($this->wouldCreateCycle(childId: $childId, parentId: $group->id)) {
+            return back()->withErrors(['child_id' => 'That would create a nesting cycle.']);
+        }
+
+        // Idempotent: primary key (parent_id, child_id) makes a duplicate a no-op.
+        DB::table('group_hierarchy')->insertOrIgnore([
+            'parent_id' => $group->id,
+            'child_id'  => $childId,
+        ]);
+        $this->service->incrementCacheVersion();
+
+        return back()->with('success', 'Child group added.');
+    }
+
+    // Remove the nesting edge ({group} -> child).
+    public function destroyChild(Request $request, Group $group, string $child)
+    {
+        $this->requireAdmin($request);
+
+        DB::table('group_hierarchy')
+            ->where('parent_id', $group->id)
+            ->where('child_id', $child)
+            ->delete();
+        $this->service->incrementCacheVersion();
+
+        return back()->with('success', 'Child group removed.');
+    }
+
     /**
      * Adding edge (parent=P, child=C) closes a cycle iff C is already reachable
      * going upward (child -> parent) from P. Walk upward from P; if we reach C, reject.

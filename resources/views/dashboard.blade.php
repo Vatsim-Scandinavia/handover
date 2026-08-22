@@ -14,7 +14,7 @@
         <a href="{{route('logout')}}" class="btn btn btn-primary">Logout</a>
 
         @if($groups->isNotEmpty())
-        <div class="card w-100" style="max-width:480px">
+        <div class="card w-100">
             <div class="card-header"><strong>Your groups</strong></div>
             <ul class="list-group list-group-flush">
                 @foreach($groups as $row)

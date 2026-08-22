@@ -7,6 +7,9 @@ use Laravel\Passport\Passport;
 use App\Models\Passport\Client;
 use App\Models\Group;
 use App\Policies\GroupPolicy;
+use App\Services\GroupManagerService;
+use App\User;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -61,6 +64,8 @@ class AuthServiceProvider extends ServiceProvider
         Passport::authorizationView(fn (array $parameters) => response(
             'This application does not require explicit authorization.'
         ));
+
+        Gate::define('manage-oauth-clients', fn (User $user): bool => app(GroupManagerService::class)->isAdmin($user));
 
         $this->registerPolicies();
     }

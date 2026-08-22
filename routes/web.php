@@ -6,6 +6,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GroupHierarchyController;
 use App\Http\Controllers\GroupManagerRuleController;
 use App\Http\Controllers\GroupMemberController;
+use App\Http\Controllers\OAuthClientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,16 +44,19 @@ Route::middleware(['auth', 'groups.manage'])->prefix('groups')->name('groups.')-
 
     // {group} wildcard routes — bound by slug via Group::getRouteKeyName()
     Route::get('{group}', [GroupController::class, 'show'])->name('show');
-    Route::get('{group}/edit', [GroupController::class, 'edit'])->name('edit');
     Route::patch('{group}', [GroupController::class, 'update'])->name('update');
     Route::delete('{group}', [GroupController::class, 'destroy'])->name('destroy');
 
     Route::get('{group}/members', [GroupMemberController::class, 'index'])->name('members.index');
+    Route::get('{group}/members/all', [GroupMemberController::class, 'all'])->name('members.all');
     Route::post('{group}/members', [GroupMemberController::class, 'store'])->name('members.store');
     Route::delete('{group}/members/{user}', [GroupMemberController::class, 'destroy'])->name('members.destroy');
 
     Route::post('{group}/parents', [GroupHierarchyController::class, 'store'])->name('parents.store');
     Route::delete('{group}/parents/{parent}', [GroupHierarchyController::class, 'destroy'])->name('parents.destroy');
+
+    Route::post('{group}/children', [GroupHierarchyController::class, 'storeChild'])->name('children.store');
+    Route::delete('{group}/children/{child}', [GroupHierarchyController::class, 'destroyChild'])->name('children.destroy');
 
     Route::get('{group}/rules', [GroupManagerRuleController::class, 'index'])->name('rules.index');
     Route::post('{group}/rules', [GroupManagerRuleController::class, 'store'])->name('rules.store');
@@ -64,6 +68,15 @@ Route::middleware(['auth', 'groups.manage'])->prefix('groups')->name('groups.')-
 
 Route::middleware('auth')->get('/account/authorized-clients', AuthorizedClientController::class)
     ->name('account.authorized-clients');
+
+Route::middleware(['auth', 'admin'])->prefix('admin/oauth-clients')->name('admin.oauth-clients.')->group(function () {
+    Route::get('/', [OAuthClientController::class, 'index'])->name('index');
+    Route::get('data', [OAuthClientController::class, 'data'])->name('data');
+    Route::post('/', [OAuthClientController::class, 'store'])->name('store');
+    Route::put('{client}', [OAuthClientController::class, 'update'])->name('update');
+    Route::delete('{client}', [OAuthClientController::class, 'destroy'])->name('destroy');
+    Route::post('{client}/secret', [OAuthClientController::class, 'regenerateSecret'])->name('secret');
+});
 
 Route::middleware(['suspended'])->group(function () {
     Route::get('/validate/dpp', 'Controller@privacy')->name('dpp');

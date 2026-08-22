@@ -84,3 +84,7 @@ p, .pp-bullet {
 		text-decoration: none;
 	}
 }
+
+// Alpine: hide x-cloak elements until Alpine initialises, so editing
+// controls don't flash before the toggle state is applied.
+[x-cloak] { display: none !important; }

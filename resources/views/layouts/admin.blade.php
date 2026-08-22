@@ -21,6 +21,9 @@
                                 <strong>{{ config('app.name', 'Handover') }}</strong>
                             </a>
                             <a href="{{ route('groups.index') }}" class="text-white text-decoration-none" style="font-size: 14px;">Groups</a>
+                            @can('manage-oauth-clients')
+                                <a href="{{ route('admin.oauth-clients.index') }}" class="text-white text-decoration-none" style="font-size: 14px;">OAuth Clients</a>
+                            @endcan
                         </div>
                         <div class="text-white" style="font-size: 12px;">
                             {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
