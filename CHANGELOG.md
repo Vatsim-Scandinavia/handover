@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.3.1](https://github.com/Vatsim-Scandinavia/handover/compare/v3.3.0...v3.3.1) (2026-10-24)
+
+
+### Bug Fixes
+
+* **docker:** upgrade PHP to 8.3.36 for security fixes ([999a328](https://github.com/Vatsim-Scandinavia/handover/commit/999a328a1c03a8792245898c63821de68e72ae05))
+
 ## [3.3.0](https://github.com/Vatsim-Scandinavia/handover/compare/v3.2.0...v3.3.0) (2026-06-21)
 
 
