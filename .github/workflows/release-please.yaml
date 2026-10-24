@@ -23,3 +23,6 @@ jobs:
       - uses: googleapis/release-please-action@v4
         with:
           token: ${{ secrets.VATSCA_BOT_TOKEN }}
+          # Release from the branch the workflow runs on, so maintenance
+          # branches can be released via workflow_dispatch.
+          target-branch: ${{ github.ref_name }}
