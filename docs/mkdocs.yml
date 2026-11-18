@@ -108,6 +108,7 @@ nav:
       - Background jobs: reference/background-jobs.md
       - Decisions:
           - Token lifetimes: adr/0001-token-lifetimes-and-refresh-policy.md
+          - Client ids and schema: adr/0002-client-ids-and-schema.md
       - Contribute: contribute.md
       - Upgrading: upgrade.md
 
