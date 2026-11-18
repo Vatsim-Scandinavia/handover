@@ -39,3 +39,6 @@ docs_site/
 docs/.venv/
 docs/__pycache__/
 docs/.pdm-python
+
+# temporary files and docs
+.scratch/
