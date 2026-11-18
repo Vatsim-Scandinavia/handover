@@ -133,14 +133,15 @@ class TransitiveMembersRosterTest extends TestCase
         $child = Group::factory()->create();
         $this->nest($child, $group);
 
-        $this->enrol($group, User::factory()->create(['first_name' => 'Ada']));
-        $this->enrol($child, User::factory()->create(['first_name' => 'Bo']));
+        // Full names in a cell: a bare "Bo" also matches random faker values like "Bode".
+        $this->enrol($group, User::factory()->create(['first_name' => 'Ada', 'last_name' => 'Directly']));
+        $this->enrol($child, User::factory()->create(['first_name' => 'Bo', 'last_name' => 'Inherited']));
 
         $this->actingAs($this->admin())
             ->get(route('groups.members.index', $group))
             ->assertOk()
-            ->assertSee('Ada')
-            ->assertDontSee('Bo')        // inherited member not on the direct view
+            ->assertSee('<td>Ada Directly</td>', false)
+            ->assertDontSee('<td>Bo Inherited</td>', false)  // inherited member not on the direct view
             ->assertSee('Add Member');   // direct view keeps management controls
     }
 

@@ -153,7 +153,7 @@ class GroupMemberTest extends TestCase
 
         $this->actingAs($this->adminUser())
             ->get(route('groups.members.index', $group) . '?search=Zar')
-            ->assertSee('Zara')
-            ->assertDontSee('Bob');
+            ->assertSee('<td>Zara Smith</td>', false)
+            ->assertDontSee('<td>Bob Jones</td>', false);
     }
 }
