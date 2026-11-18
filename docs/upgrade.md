@@ -1,78 +1,148 @@
+---
+icon: material/cog-refresh
+---
+
 # Upgrading
 
-Operational steps for moving Handover between versions. Run the commands below inside the application container.
+These are the operational steps for moving Handover between versions.
+Always read the section for your target version first. Some releases need manual steps.
 
----
+--8<-- "exec-in-container.md"
 
 ## Before you upgrade
 
-- Read the version-specific notes below first; some releases need manual steps.
-- Back up at least the database, plus `.env` and the OAuth signing keys under `storage/` (`oauth-private.key` and `oauth-public.key`). The keys are not in the container image, and losing them invalidates every access token already issued.
-- Rehearse on staging with a copy of production data whenever a release has breaking changes.
-- Enable maintenance mode for the duration of the migration, then lift it once verified:
-  ```sh
-  php artisan down
-  # ... perform the upgrade ...
-  php artisan up
-  ```
-- Keep a rollback path: note the current version (or image tag) and retain the backup until the new version is confirmed healthy.
-- Check requirements (PHP version and extensions) for the target release before starting.
+- Back up the database, plus the storage volume. The volume holds the OAuth signing keys (`oauth-private.key` and `oauth-public.key`). Losing them invalidates every access token already issued.
+- Rehearse on staging with a copy of production data when a release has breaking changes.
+- Note the image tag you run now, and keep the backup until the new version is confirmed healthy.
+- Put Handover in maintenance mode for the duration of the upgrade. The flag lives on the storage volume, so it survives recreating the container:
 
----
+    ```sh
+    php artisan down
+    # ... perform the upgrade ...
+    php artisan up
+    ```
 
 ## All versions
 
-After deploying any new version, apply database changes and clear caches:
+Pull the new image and recreate the container.
+The image ships with Composer dependencies installed and frontend assets built, so you do not build anything yourself.
+
+Then apply database changes and clear caches:
 
 ```sh
-php artisan migrate
+php artisan migrate --force
 php artisan optimize:clear
 ```
 
-Rebuild the frontend when its dependencies or assets changed:
+If you run a [custom theme](setup/theme.md), run the theme build again, because recreating the container resets it.
 
-```sh
-npm ci && npm run build
-```
+!!! info "Why `--force`"
+    In production, `migrate` asks for confirmation.
+    Without an interactive terminal it answers no and does nothing.
+    `--force` skips the prompt.
 
----
+## Upgrading from 3.x to 4.0.0 { #upgrading-to-400 }
 
-## Upgrading to 4.0.0
+This release moves Handover to Laravel 13 and Laravel Passport 13, and the frontend toolchain to Vite 8 and jQuery 4.
+It needs one manual step on the database: hashing the OAuth client secrets.
 
-This release upgrades the framework to Laravel 13 and Laravel Passport 13, and moves the frontend toolchain (Vite 8, jQuery 4, and others) to their latest majors. It requires PHP 8.3 or newer.
+!!! danger "OAuth breaks until you hash the client secrets"
+    Every integration fails to get a token at `/oauth/token` until you run `php artisan passport:hash`.
+    Members cannot log in to any connected service in the meantime.
+    Plan the upgrade so you run it straight after the migration.
 
-One manual step is required, and OAuth will break without it.
+### Upgrade steps
 
-### OAuth client secrets are now hashed
+1. Back up the database. This is not optional for this release: hashing the secrets cannot be undone, and a [rollback](#rolling-back-to-3x) needs the backup.
+2. Enable maintenance mode in the running 3.x container:
 
-Passport 13 hashes client secrets by default. Handover's existing clients were stored with plaintext secrets, so every third-party integration fails to authenticate at `/oauth/token` until the stored secrets are hashed. Run once, per environment:
+    ```sh
+    php artisan down
+    ```
 
-```sh
-php artisan passport:hash
-```
+3. Change the image tag from `:v3` to `:v4`, pull it, and recreate the container.
+   The floating `:v3` tag never moves to 4.0.0, so you must change it.
+4. Apply the database changes. This adds the `group_hierarchy` table for [nested groups](groups.md#nested-groups-transitive-membership):
 
-Client owners do nothing: they keep sending their existing secret, and Passport hashes the incoming value to compare it. Clients created after the upgrade are hashed automatically.
+    ```sh
+    php artisan migrate --force
+    ```
 
-> Never run this in CI or tests; it rewrites stored secrets.
+5. Hash the OAuth client secrets. Run this once per environment:
 
-### Steps
+    ```sh
+    php artisan passport:hash --force
+    ```
 
-1. Work through the [pre-upgrade checklist](#before-you-upgrade) (backup, maintenance mode).
-2. Deploy `4.0.0` and install dependencies:
-   ```sh
-   composer install --no-dev --optimize-autoloader
-   npm ci && npm run build
-   ```
-3. Apply migrations and hash client secrets:
-   ```sh
-   php artisan migrate
-   php artisan passport:hash
-   ```
-4. Clear caches:
-   ```sh
-   php artisan optimize:clear
-   ```
+    Like `migrate`, the command asks for confirmation and answers no without an interactive terminal. `--force` skips the prompt.
+    Running it twice is safe: it skips secrets that are already hashed.
 
-### Why this is a major release
+6. Clear the caches:
 
-As an OAuth provider, Handover depends on Passport behaviour that changed in 13: it became headless (the authorization endpoint now needs a view bound) and switched client IDs to UUIDs, which the integer `oauth_clients` schema cannot store. Both are fixed within the release and need no action from you. Client-secret hashing above cannot be handled automatically because it rewrites stored data, which is what makes 4.0.0 a breaking release rather than a 3.x patch.
+    ```sh
+    php artisan optimize:clear
+    ```
+
+7. If you run a [custom theme](setup/theme.md), run the theme build again.
+8. Lift maintenance mode:
+
+    ```sh
+    php artisan up
+    ```
+
+9. Log in to a connected service through Handover. This confirms that the token exchange works with hashed secrets.
+
+!!! warning
+    Never run `passport:hash` in CI or tests. It rewrites stored secrets.
+
+### Rolling back to 3.x
+
+Once you have run `passport:hash`, a 3.x container cannot verify any client secret, because 3.x compares secrets in plain text.
+Switching the image back is not enough.
+
+1. Switch the image tag back to the one you noted before the upgrade, and recreate the container.
+2. Restore the database backup you took in step 1.
+3. Clear the caches with `php artisan optimize:clear`.
+
+The `group_hierarchy` table from 4.0.0 does no harm to 3.x if you keep it, but the restore removes it anyway.
+
+### What changed
+
+#### Client secrets are hashed
+
+Passport 13 hashes client secrets by default.
+3.x stored them in plain text, which is why the manual `passport:hash` step exists.
+
+Client owners change nothing.
+They keep sending their existing secret, and Passport hashes the incoming value to compare it.
+Clients you create after the upgrade are hashed from the start.
+Handover shows a new client's secret only once, so copy it when you create the client.
+
+#### OAuth clients are managed in the admin UI
+
+Administrators now create, edit and delete clients, and regenerate their secrets, under **OAuth Clients** in the admin header.
+See [OAuth clients](concepts/oauth-clients.md).
+
+Passport's JSON routes are gone: `/oauth/clients`, `/oauth/scopes`, `/oauth/tokens` and `/oauth/personal-access-tokens`.
+If you scripted against them, use the admin UI or the [artisan commands](reference/commands.md) instead.
+The routes your integrations use, `/oauth/authorize`, `/oauth/token` and `/api/user`, are unchanged.
+
+#### Client IDs stay integers
+
+Passport 13 uses UUIDs for new client IDs by default.
+Handover keeps integer IDs, so existing integrations keep their client ID.
+
+#### The groups API reports inherited groups
+
+Each entry in the `groups` array now has a `direct` field.
+Once you nest groups, the array also lists groups a member inherits.
+Clients that only want direct memberships should filter on `direct: true`.
+See the [user API](reference/api.md#groups).
+
+#### Why this is a major release
+
+Passport 13 changed behaviour Handover depends on as an OAuth provider.
+It became headless, so the authorization endpoint needs a view bound, and it switched client IDs to UUIDs.
+Handover handles both in code.
+Hashing the client secrets cannot be handled in code, because it rewrites stored data.
+That manual step is what makes this 4.0.0 rather than a 3.x release.

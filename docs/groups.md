@@ -6,7 +6,7 @@ The groups system is a general-purpose membership and delegation layer. Administ
 
 ## How it works
 
-A group has a slug, an optional description, tags, and attribute values. Tags are free-form strings; attributes are key/value pairs drawn from a global schema of attribute definitions (e.g. `region`, `division`). Any number of groups can be marked as admin groups — members of those groups have full system access.
+A group has a slug, an optional description, tags, and attribute values. Tags are free-form strings; attributes are key/value pairs drawn from a global schema of attribute definitions (e.g. `region`, `division`). Any number of groups can be marked as admin groups. Members of those groups have full system access.
 
 Manager rules control delegation. A rule says that members of one group (the manager group) can manage the membership of other groups. Rules can match by a specific target group, by tag (any group carrying a given tag), or by attribute value (any group whose attribute matches a key/value pair). Tag and attribute rules are global: they match every group that satisfies the pattern, including ones created in the future.
 
@@ -45,31 +45,9 @@ The web interface lives under `/groups`. Managers see only the groups they can m
 
 ## API
 
-Requesting the `groups` scope appends a `groups` array to the `/api/user` response:
-
-```json
-{
-  "cid": 1234567,
-  "personal": { "...": "..." },
-  "groups": [
-    {
-      "id": "018f1e2a-7c3d-7000-8000-abcdef012345",
-      "slug": "vacc-norway",
-      "name": "vACC Norway",
-      "direct": true,
-      "tags": ["vacc", "eur"],
-      "attributes": {
-        "region": "EUR",
-        "division": "EUD"
-      }
-    }
-  ]
-}
-```
-
-Use `id` (UUIDv7) as the stable canonical reference in client applications. `slug` is human-readable but not guaranteed to stay the same. Tags and attributes carry no API stability contract.
-
-**Compatibility note:** once nesting is in use, the `groups` array includes inherited groups. Clients that want only directly-assigned groups should filter on `direct: true`.
+Requesting the `groups` scope adds a `groups` array to the `/api/user` response.
+Each entry carries the group's `id`, `slug`, `name`, tags, attributes, and whether the membership is `direct`.
+See the [user API](reference/api.md#groups) for the response shape and the stability of each field.
 
 ---
 
@@ -83,4 +61,4 @@ To manage a whole region or division uniformly, assign a shared attribute (e.g. 
 
 Manager rules can be mutual or self-referential, which supports federated governance patterns where groups co-administer each other.
 
-To bootstrap the first administrator, run `php artisan groups:add-admin {cid}`. This finds or creates a `system-administrators` admin group and adds the user to it.
+To bootstrap the first administrator, run `php artisan groups:add-admin {cid}`. This finds or creates a `system-administrators` admin group and adds the user to it. See [artisan commands](reference/commands.md#groupsadd-admin).

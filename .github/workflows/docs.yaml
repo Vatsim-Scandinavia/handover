@@ -1,0 +1,121 @@
+---
+name: Publish Documentation
+
+on:
+  push:
+    branches:
+      - main
+      - docs/*
+    tags:
+      - '**'
+  pull_request:
+    paths:
+      - "**.md"
+      - docs/**
+      - mise.toml
+      - .github/workflows/docs.yaml
+
+env:
+  COLUMNS: 150
+  NO_MKDOCS_2_WARNING: 1
+
+defaults:
+  run:
+    working-directory: ./docs
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      CONTRIBUTORS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      pdm_version: ${{ steps.pdm_version.outputs.version }}
+    steps:
+      # Full history gives the git revision date plugins real dates
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: read pdm version from mise config
+        id: pdm_version
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import pathlib
+          import tomllib
+
+          mise_config = tomllib.loads(pathlib.Path("../mise.toml").read_text())
+          pdm_version = mise_config.get("tools", {}).get("pdm")
+          if not pdm_version:
+              raise SystemExit("Missing [tools].pdm in mise.toml")
+          print(f"version={pdm_version}")
+          PY
+
+      - uses: pdm-project/setup-pdm@v4
+        with:
+          version: ${{ steps.pdm_version.outputs.version }}
+          python-version: '3.13'
+          cache: true
+          cache-dependency-path: docs/pdm.lock
+
+      - name: install
+        run: pdm install
+
+      - name: build in strict mode
+        run: pdm run docs:check
+
+  publish:
+    needs: [build]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    timeout-minutes: 30
+    concurrency:
+      group: ${{ github.workflow }}
+    permissions:
+      contents: write
+    env:
+      CONTRIBUTORS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      DOCS_BRANCH: gh-pages
+      DOCS_LATEST_ALIAS: latest
+      DOCS_DEVELOPMENT_ALIAS: dev
+    steps:
+      # Full history gives correct revision dates and the docs branch, if it exists
+      - name: checkout current branch
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: pdm-project/setup-pdm@v4
+        with:
+          version: ${{ needs.build.outputs.pdm_version }}
+          python-version: '3.13'
+          cache-dependency-path: docs/pdm.lock
+
+      - name: install
+        run: |
+          pdm venv create --with-pip --force $PYTHON
+          pdm install
+
+      - name: set git credentials
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: get major-minor tag for docs
+        if: "startsWith(github.ref, 'refs/tags/') && !contains(github.ref_name, 'alpha') && !contains(github.ref_name, 'beta') && !contains(github.ref_name, 'rc')"
+        id: tag
+        run: |
+          MINOR=$(echo "${{ github.ref_name }}" | sed -En 's/^v?(([0-9]+)\.([0-9]+))\.([0-9]+)$/\1/p')
+          [ "$MINOR" != "" ] || { echo "Couldn't parse tag to get major-minor version"; exit 1; }
+          echo "minor=$MINOR" >> $GITHUB_OUTPUT
+
+      - name: deploy development documentation
+        run: >-
+          pdm run mike deploy -b "${{ env.DOCS_BRANCH }}"
+          "${{ env.DOCS_DEVELOPMENT_ALIAS }}" --push
+        if: "!startsWith(github.ref, 'refs/tags/')"
+
+      - name: deploy latest documentation for v${{ steps.tag.outputs.minor }}
+        run: >-
+          pdm run mike deploy -b "${{ env.DOCS_BRANCH }}"
+          "${{ steps.tag.outputs.minor }}" "${{ env.DOCS_LATEST_ALIAS }}" --update-aliases --push
+        if: "startsWith(github.ref, 'refs/tags/') && !contains(github.ref_name, 'alpha') && !contains(github.ref_name, 'beta') && !contains(github.ref_name, 'rc')"

@@ -1,0 +1,181 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+---
+# The name of the documentation site.
+site_name: Handover Docs
+
+# The description of what Handover essentially is.
+site_description: OAuth2 single sign-on provider for VATSIM divisions
+
+# The copyright footer at the bottom.
+copyright: Copyright © 2019–2026 VATSIM Scandinavia contributors
+
+# Fail on warnings.
+strict: true
+
+# The project is configured to exist in a single folder to avoid
+# cross-contamination with the source files in PHP.
+docs_dir: .
+
+# The site is built in a folder above to avoid it being copied into itself.
+site_dir: ../docs_site
+
+theme:
+  name: 'material'
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: cyan
+      toggle:
+        icon: material/lightbulb-outline
+        name: "Switch to dark mode"
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: cyan
+      toggle:
+        icon: material/lightbulb
+        name: "Switch to light mode"
+  features:
+    # provide edit links for docs
+    - content.action.edit
+    # show custom tabs for instructions
+    - content.tabs.link
+    # add annotations to code
+    - content.code.annotate
+    # clipboard access for code
+    - content.code.copy
+    # use fancy material tooltips in lieu of browser default
+    - content.tooltips
+    # use fancy material tooltips for footnotes
+    - content.footnote.tooltips
+    # get rid of annotations we don't care to see
+    - announce.dismiss
+    # tabs at the top from level 1 navigation
+    - navigation.tabs
+    # footer at the bottom
+    - navigation.footer
+    # use XHR for page browsing
+    - navigation.instant
+    # add sections to the vertical left navigation menu
+    - navigation.sections
+  logo: '_assets/logo.svg'
+  favicon: '_assets/favicon.ico'
+
+# The name of the GitHub repository.
+repo_name: vatsim-scandinavia/handover
+
+# The URL to the GitHub repository.
+repo_url: https://github.com/vatsim-scandinavia/handover
+
+# Where do we publish the docs to?
+site_url: https://docs.vatsca.org/handover/
+
+# The URL we'll append to the repo_url to give edit links.
+edit_uri: edit/main/docs/
+
+# Additional information used by mkdocs-material.
+extra:
+  version:
+    provider: mike
+  social:
+    - icon: fontawesome/solid/house
+      link: https://www.vatsim-scandinavia.org
+    - icon: fontawesome/brands/github
+      link: https://github.com/vatsim-scandinavia
+extra_css:
+  - stylesheets/extra.css
+# The navigation configuration. While this can be automatically discovered,
+# we get greater control by manually creating the structure.
+nav:
+  - Home:
+      - Home: index.md
+  - Getting started:
+      - Installation: installation.md
+      - Environment variables: reference/environment-variables.md
+      - Setup:
+          - Customising the theme: setup/theme.md
+          - Data protection policy: setup/dpp.md
+  - Usage:
+      - OAuth clients: concepts/oauth-clients.md
+      - Groups: groups.md
+  - Integrations:
+      - Connecting a client: integrations/clients.md
+      - VATSIM Connect: integrations/vatsim-connect.md
+  - Reference:
+      - User API: reference/api.md
+      - Artisan commands: reference/commands.md
+      - Background jobs: reference/background-jobs.md
+      - Contribute: contribute.md
+      - Upgrading: upgrade.md
+
+# Perform additional validation for the documentation content.
+# https://www.mkdocs.org/user-guide/configuration/#validation
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+
+markdown_extensions:
+  - toc:
+      permalink: true
+      title: Page contents
+  - admonition
+  - pymdownx.details
+  - pymdownx.tilde
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      pygments_lang_class: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.snippets:
+      check_paths: true
+      base_path:
+        - _includes
+        - .
+      auto_append:
+        - abbreviations.md
+  - pymdownx.extra
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.tabbed:
+      alternate_style: true
+
+# Substitute %%version%%, %%major%% and %%image_tag%% into page content.
+hooks:
+  - variables.py
+
+plugins:
+  # Generate multiple versions of docs
+  - mike:
+      alias_type: symlink
+      canonical_version: latest
+  - search
+  # Exclude files that aren't part of the site
+  - exclude:
+      glob:
+        - _includes/*
+        - __pycache__/*
+        - '*.py'
+        # Internal design specs and plans, not user documentation
+        - superpowers/*
+        # Tooling for building the docs
+        - mkdocs.yml
+        - pyproject.toml
+        - pdm.lock
+  # Show creation and revision date on each page
+  - git-revision-date-localized:
+      enabled: !ENV ["CI", false]
+      enable_creation_date: true
+      exclude:
+        - index.md
+        # pdm installs the venv inside docs_dir in CI
+        - .venv/*
+  # Show people who've contributed on each page
+  - git-committers:
+      enabled: !ENV ["CI", false]
+      repository: Vatsim-Scandinavia/handover
+      branch: main
+      token: !ENV ["CONTRIBUTORS_TOKEN"]
