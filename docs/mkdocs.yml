@@ -106,6 +106,8 @@ nav:
       - User API: reference/api.md
       - Artisan commands: reference/commands.md
       - Background jobs: reference/background-jobs.md
+      - Decisions:
+          - Token lifetimes: adr/0001-token-lifetimes-and-refresh-policy.md
       - Contribute: contribute.md
       - Upgrading: upgrade.md
 
