@@ -33,3 +33,9 @@ CLAUDE.md
 .agents/skills/*
 .mcp.json
 opencode.json
+
+# mkdocs
+docs_site/
+docs/.venv/
+docs/__pycache__/
+docs/.pdm-python

@@ -1,0 +1,26 @@
+[project]
+name = "handover-docs"
+version = "0.1.0"
+description = "Documentation site for Handover"
+authors = [
+    {name = "Thor K. Høgås", email = "thor@roht.no"},
+]
+requires-python = ">=3.13"
+license = {text = "GPL3"}
+dependencies = [
+    "mkdocs>=1.6.1, <2.0.0",
+    "mkdocs-material>=9.8.1",
+    "mike>=2.2.0",
+    "mkdocs-exclude>=1.0.2",
+    "mkdocs-git-revision-date-localized-plugin>=1.7.0",
+    "mkdocs-git-committers-plugin-2>=2.5.0",
+]
+
+[tool.pdm]
+distribution = false
+[tool.pdm.scripts]
+"docs:serve" = { cmd = "mike serve", help = "View local documentation" }
+"docs:build" = { cmd = "mike deploy --ignore-remote-status dev", help = "Build local documentation" }
+# mkdocs refuses docs_dir "." unless the config file path is relative, hence -f
+"docs:check" = { cmd = "mkdocs build --strict -f mkdocs.yml", help = "Build the site in strict mode, as CI does" }
+"docs:live" = { cmd = "mkdocs serve -f mkdocs.yml", help = "Serve the current sources with live reload" }

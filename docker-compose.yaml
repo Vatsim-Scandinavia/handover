@@ -10,7 +10,7 @@ services:
     volumes:
       - storage:/app/storage
     environment:
-      # Please check the complete configure guide for all variables and their description
+      # See https://docs.vatsca.org/handover/latest/reference/environment-variables/ for all variables
       # You need to adjust this file to your needs
       - APP_NAME=Handover
       - APP_OWNER=Your VACC Name

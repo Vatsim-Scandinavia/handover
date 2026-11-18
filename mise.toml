@@ -1,2 +1,6 @@
 [env]
 _.file = ".env"
+
+[tools]
+# Python package manager for the documentation in docs/
+pdm = "2.29.7"
