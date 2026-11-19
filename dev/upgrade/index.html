@@ -1404,10 +1404,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#client-ids-stay-integers" class="md-nav__link">
+  <a href="#oauth-clients-use-the-passport-13-schema" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Client IDs stay integers
+        OAuth clients use the Passport 13 schema
       
     </span>
   </a>
@@ -1592,10 +1592,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#client-ids-stay-integers" class="md-nav__link">
+  <a href="#oauth-clients-use-the-passport-13-schema" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Client IDs stay integers
+        OAuth clients use the Passport 13 schema
       
     </span>
   </a>
@@ -1715,7 +1715,7 @@ For details, see <a href="#token-lifetimes-are-shorter">token lifetimes are shor
 </div>
 <h3 id="upgrade-steps">Upgrade steps<a class="headerlink" href="#upgrade-steps" title="Permanent link">&para;</a></h3>
 <ol>
-<li>Back up the database. This is not optional for this release: hashing the secrets cannot be undone, and a <a href="#rolling-back-to-3x">rollback</a> needs the backup.</li>
+<li>Back up the database. This is not optional for this release: hashing the secrets and changing the client schema cannot be undone, and a <a href="#rolling-back-to-3x">rollback</a> needs the backup.</li>
 <li>
 <p>Enable maintenance mode in the running 3.x container:</p>
 <div class="language-sh highlight"><pre><span></span><code>php<span class="w"> </span>artisan<span class="w"> </span>down
@@ -1726,7 +1726,7 @@ For details, see <a href="#token-lifetimes-are-shorter">token lifetimes are shor
    The floating <code>:v3</code> tag never moves to 4.0.0, so you must change it.</p>
 </li>
 <li>
-<p>Apply the database changes. This adds the <code>group_hierarchy</code> table for <a href="../groups/#nested-groups-transitive-membership">nested groups</a> and shortens the lifetime of existing refresh tokens:</p>
+<p>Apply the database changes. This adds the <code>group_hierarchy</code> table for <a href="../groups/#nested-groups-transitive-membership">nested groups</a>, shortens the lifetime of existing refresh tokens, and moves OAuth clients to the <a href="#oauth-clients-use-the-passport-13-schema">Passport 13 client schema</a>:</p>
 <div class="language-sh highlight"><pre><span></span><code>php<span class="w"> </span>artisan<span class="w"> </span>migrate<span class="w"> </span>--force
 </code></pre></div>
 </li>
@@ -1767,6 +1767,10 @@ Switching the image back is not enough.</p>
 <li>Clear the caches with <code>php artisan optimize:clear</code>.</li>
 </ol>
 <p>The <code>group_hierarchy</code> table from 4.0.0 does no harm to 3.x if you keep it, but the restore removes it anyway.</p>
+<p>3.x cannot read the 4.0.0 client schema, so you must restore the backup.
+The restore removes every client created after the upgrade, together with its tokens.
+Clients created after the upgrade have UUID IDs, which 3.x cannot store.
+To keep such a client, create it again in 3.x and give the service its new ID and secret.</p>
 <h3 id="what-changed">What changed<a class="headerlink" href="#what-changed" title="Permanent link">&para;</a></h3>
 <h4 id="client-secrets-are-hashed">Client secrets are hashed<a class="headerlink" href="#client-secrets-are-hashed" title="Permanent link">&para;</a></h4>
 <p>Passport 13 hashes client secrets by default.
@@ -1796,9 +1800,21 @@ The migration updates each existing refresh token as follows:</p>
 <li>Otherwise, the refresh token expires 30 days after its access token expires.</li>
 </ul>
 <p>The migration never extends a refresh token's expiry.</p>
-<h4 id="client-ids-stay-integers">Client IDs stay integers<a class="headerlink" href="#client-ids-stay-integers" title="Permanent link">&para;</a></h4>
-<p>Passport 13 uses UUIDs for new client IDs by default.
-Handover keeps integer IDs, so existing integrations keep their client ID.</p>
+<h4 id="oauth-clients-use-the-passport-13-schema">OAuth clients use the Passport 13 schema<a class="headerlink" href="#oauth-clients-use-the-passport-13-schema" title="Permanent link">&para;</a></h4>
+<p>Client IDs are now strings.
+Existing clients keep their numeric ID, such as <code>5</code>, so existing integrations change nothing.
+New clients get a UUID as their ID.</p>
+<p>Each client now stores its redirect URIs as a list and its grant types explicitly.
+The migration fills both from the old columns:</p>
+<ul>
+<li>The redirect URIs come from the old comma-separated <code>redirect</code> column.</li>
+<li>The grant types are exactly the ones Passport allowed the client before the upgrade. For a client created in the admin UI, these are authorization code, refresh token, client credentials, implicit and device code.</li>
+</ul>
+<p>New clients get only authorization code and refresh token.
+Administrators can change the grant types and redirect URIs of any client in the admin UI.
+Editing a client in the admin UI no longer drops its extra redirect URIs.
+See <a href="../concepts/oauth-clients/#grant-types">OAuth clients</a>.</p>
+<p>The old <code>redirect</code>, <code>personal_access_client</code> and <code>password_client</code> columns stay in the database, but Handover no longer reads them.</p>
 <h4 id="the-groups-api-reports-inherited-groups">The groups API reports inherited groups<a class="headerlink" href="#the-groups-api-reports-inherited-groups" title="Permanent link">&para;</a></h4>
 <p>Each entry in the <code>groups</code> array now has a <code>direct</code> field.
 Once you nest groups, the array also lists groups a member inherits.
@@ -1807,7 +1823,7 @@ See the <a href="../reference/api/#groups">user API</a>.</p>
 <h4 id="why-this-is-a-major-release">Why this is a major release<a class="headerlink" href="#why-this-is-a-major-release" title="Permanent link">&para;</a></h4>
 <p>Passport 13 changed behaviour Handover depends on as an OAuth provider.
 It became headless, so the authorization endpoint needs a view bound, and it switched client IDs to UUIDs.
-Handover handles both in code.
+Handover handles both in code, and existing clients keep their numeric IDs.
 Hashing the client secrets cannot be handled in code, because it rewrites stored data.
 That manual step is what makes this 4.0.0 rather than a 3.x release.</p>
 <!--
@@ -1839,7 +1855,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 19, 2026 01:50:05 UTC">November 19, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 19, 2026 01:57:25 UTC">November 19, 2026</span>
   </span>
 
     

@@ -820,6 +820,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Managing clients in the browser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#redirect-uris" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Redirect URIs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grant-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Grant types
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1385,6 +1413,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Managing clients in the browser">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#redirect-uris" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Redirect URIs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grant-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Grant types
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1440,10 +1496,10 @@ Each client gets an ID and a secret, which the service uses to talk to Handover.
 <p>Administrators manage clients. An administrator is a direct member of a group marked as an admin group, see <a href="../../groups/#access">groups</a>.</p>
 <h2 id="managing-clients-in-the-browser">Managing clients in the browser<a class="headerlink" href="#managing-clients-in-the-browser" title="Permanent link">&para;</a></h2>
 <p>Open <strong>OAuth Clients</strong> in the header of the groups pages, or go to <code>/admin/oauth-clients</code>.
-The page lists every active client with its ID, name and redirect URI.</p>
+The page lists every active client with its ID, name, redirect URIs and grant types.</p>
 <ul>
-<li><strong>New client</strong>: enter a descriptive name and the redirect URI of the service. Members see the name, so make it clear.</li>
-<li><strong>Edit</strong>: change the name or the redirect URI.</li>
+<li><strong>New client</strong>: enter a descriptive name and the redirect URIs of the service. Members see the name, so make it clear.</li>
+<li><strong>Edit</strong>: change the name, redirect URIs or grant types.</li>
 <li><strong>Regenerate</strong>: create a new secret. The old secret stops working at once.</li>
 <li><strong>Delete</strong>: remove the client and revoke its existing tokens.</li>
 </ul>
@@ -1453,8 +1509,40 @@ The page lists every active client with its ID, name and redirect URI.</p>
 It shows the plaintext secret once, after you create a client or regenerate its secret.
 If you lose it, regenerate the secret and update the service.</p>
 </div>
-<p>Clients created here are confidential clients for the authorization code grant.
-Each client has one redirect URI.</p>
+<p>Clients created here are confidential.
+A new client gets a UUID as its ID. Clients created before 4.0.0 keep their numeric ID.</p>
+<h3 id="redirect-uris">Redirect URIs<a class="headerlink" href="#redirect-uris" title="Permanent link">&para;</a></h3>
+<p>A client can have several redirect URIs, such as one per hostname of the service.
+The service must send one of them exactly, so <code>https://example.test/callback</code> does not match <code>https://example.test/callback/</code>.</p>
+<h3 id="grant-types">Grant types<a class="headerlink" href="#grant-types" title="Permanent link">&para;</a></h3>
+<p>Grant types set how a client may get tokens.
+A new client gets <strong>Authorization code</strong> and <strong>Refresh token</strong>, which is what a service that signs members in needs.</p>
+<table>
+<thead>
+<tr>
+<th>Grant type</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization code</td>
+<td>Sign members in through the browser.</td>
+</tr>
+<tr>
+<td>Refresh token</td>
+<td>Get a new access token without signing the member in again. Untick it to make members sign in again once the access token expires.</td>
+</tr>
+<tr>
+<td>Client credentials</td>
+<td>Let the service get a token for itself, with no member.</td>
+</tr>
+</tbody>
+</table>
+<p>Clients created before 4.0.0 keep the grant types they had, which include client credentials, implicit and device code.
+Handover does not support implicit, password, personal access or device code.
+The form shows them only on clients that already have them, so you can untick them but not add them.
+If a service does not use a grant type, untick it.</p>
 <h2 id="managing-clients-on-the-command-line">Managing clients on the command line<a class="headerlink" href="#managing-clients-on-the-command-line" title="Permanent link">&para;</a></h2>
 <p>You can also create a client with Passport's command:</p>
 <div class="language-sh highlight"><pre><span></span><code>php<span class="w"> </span>artisan<span class="w"> </span>passport:client
@@ -1505,7 +1593,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 18, 2026 21:18:16 UTC">November 18, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 19, 2026 01:57:25 UTC">November 19, 2026</span>
   </span>
 
     
