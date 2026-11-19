@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.0.0-beta.2](https://github.com/Vatsim-Scandinavia/handover/compare/v4.0.0-beta.1...v4.0.0-beta.2) (2026-11-19)
+
+
+### Bug Fixes
+
+* **dashboard:** list authorized clients again on Passport 13 ([80e3a91](https://github.com/Vatsim-Scandinavia/handover/commit/80e3a91596fb1648434dc4563706565889ad97ef))
+
+
+### Miscellaneous Chores
+
+* drop release-please last-release-sha after 4.0.0-beta.1 ([9f4032f](https://github.com/Vatsim-Scandinavia/handover/commit/9f4032f14f3ad1bfbeb48ade9805410877f3de7a))
+
 ## [4.0.0-beta.1](https://github.com/Vatsim-Scandinavia/handover/compare/v3.3.1...v4.0.0-beta.1) (2026-11-19)
 
 
