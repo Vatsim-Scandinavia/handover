@@ -1,6 +1,6 @@
 # User API
 
-Clients fetch the logged-in member's data from one endpoint.
+Clients fetch the logged-in member's data from one endpoint, available at two paths.
 The response has the same shape as VATSIM Connect's, plus an optional `groups` array.
 
 ## Request
@@ -10,6 +10,8 @@ GET /api/user
 Authorization: Bearer ACCESS_TOKEN
 Accept: application/json
 ```
+
+`GET /api/v1/user` is an alias. It returns exactly the same response.
 
 ## Response
 
