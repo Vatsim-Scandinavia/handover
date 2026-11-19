@@ -11,7 +11,7 @@
 
             <div v-for="client in clients">
                 <a v-bind:href="client.url" target="_blank">{{ client.name }}</a>
-                <i class="fa-solid fa-arrow-up-right-from-square text-muted"></i>
+                <i class="fa-solid fa-arrow-up-right-from-square text-muted ms-1"></i>
             </div>
 
         </div>
