@@ -3,6 +3,7 @@
 namespace Tests\Feature\Passport;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 use Laravel\Passport\ClientRepository;
 use Tests\TestCase;
 
@@ -10,36 +11,18 @@ class ClientCreationTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * The application uses the legacy Passport schema where oauth_clients.id
-     * is an auto-incrementing integer. Passport 13 defaults to UUID client
-     * ids, which cannot be stored in that column, so client creation must
-     * keep producing sequential integer ids.
-     */
-    public function test_creates_client_with_auto_incrementing_integer_id(): void
+    public function test_creates_client_with_a_uuid7_id(): void
     {
-        $clients = app(ClientRepository::class);
-
-        $first = $clients->createAuthorizationCodeGrantClient(
+        $client = app(ClientRepository::class)->createAuthorizationCodeGrantClient(
             'First Client',
-            ['https://first.test/callback'],
-        );
-        $second = $clients->createAuthorizationCodeGrantClient(
-            'Second Client',
-            ['https://second.test/callback'],
+            ['https://first.test/callback', 'https://first.test/other'],
         );
 
-        $this->assertTrue(
-            ctype_digit((string) $first->id),
-            'Client id should be an integer, got: '.$first->id,
-        );
-        $this->assertEquals($first->id + 1, $second->id);
+        $this->assertTrue(Str::isUuid($client->id, 7), 'Client id should be a UUIDv7, got: '.$client->id);
 
-        // Redirect URIs are persisted to the legacy single "redirect" column.
-        $this->assertDatabaseHas('oauth_clients', [
-            'id' => $first->id,
-            'name' => 'First Client',
-            'redirect' => 'https://first.test/callback',
-        ]);
+        $client = $client->fresh();
+        $this->assertSame(['https://first.test/callback', 'https://first.test/other'], $client->redirect_uris);
+        $this->assertSame(['authorization_code', 'refresh_token'], $client->grant_types);
+        $this->assertNull($client->owner_id);
     }
 }

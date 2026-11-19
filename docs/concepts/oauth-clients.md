@@ -8,10 +8,10 @@ Administrators manage clients. An administrator is a direct member of a group ma
 ## Managing clients in the browser
 
 Open **OAuth Clients** in the header of the groups pages, or go to `/admin/oauth-clients`.
-The page lists every active client with its ID, name and redirect URI.
+The page lists every active client with its ID, name, redirect URIs and grant types.
 
-- **New client**: enter a descriptive name and the redirect URI of the service. Members see the name, so make it clear.
-- **Edit**: change the name or the redirect URI.
+- **New client**: enter a descriptive name and the redirect URIs of the service. Members see the name, so make it clear.
+- **Edit**: change the name, redirect URIs or grant types.
 - **Regenerate**: create a new secret. The old secret stops working at once.
 - **Delete**: remove the client and revoke its existing tokens.
 
@@ -20,8 +20,29 @@ The page lists every active client with its ID, name and redirect URI.
     It shows the plaintext secret once, after you create a client or regenerate its secret.
     If you lose it, regenerate the secret and update the service.
 
-Clients created here are confidential clients for the authorization code grant.
-Each client has one redirect URI.
+Clients created here are confidential.
+A new client gets a UUID as its ID. Clients created before 4.0.0 keep their numeric ID.
+
+### Redirect URIs
+
+A client can have several redirect URIs, such as one per hostname of the service.
+The service must send one of them exactly, so `https://example.test/callback` does not match `https://example.test/callback/`.
+
+### Grant types
+
+Grant types set how a client may get tokens.
+A new client gets **Authorization code** and **Refresh token**, which is what a service that signs members in needs.
+
+| Grant type | Use |
+| ---------- | --- |
+| Authorization code | Sign members in through the browser. |
+| Refresh token | Get a new access token without signing the member in again. Untick it to make members sign in again once the access token expires. |
+| Client credentials | Let the service get a token for itself, with no member. |
+
+Clients created before 4.0.0 keep the grant types they had, which include client credentials, implicit and device code.
+Handover does not support implicit, password, personal access or device code.
+The form shows them only on clients that already have them, so you can untick them but not add them.
+If a service does not use a grant type, untick it.
 
 ## Managing clients on the command line
 

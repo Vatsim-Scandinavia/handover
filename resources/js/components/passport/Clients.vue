@@ -1,22 +1,35 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import axios from 'axios';
 import { Modal } from 'bootstrap';
 
 /**
  * @typedef {Object} OAuthClient
- * @property {number|string} id
+ * @property {string} id
  * @property {string} name
- * @property {string|null} redirect
+ * @property {string[]} redirect_uris
+ * @property {string[]} grant_types
  * @property {boolean} revoked
  */
+
+const props = defineProps({
+    /** Grant types an admin can give any client, mapped to their labels. */
+    grantTypes: { type: Object, required: true },
+    /** Grant types ticked for a new client. */
+    defaultGrantTypes: { type: Array, required: true },
+});
+
+/** @param {string} grant */
+function grantLabel(grant) {
+    return props.grantTypes[grant] ?? `${grant} (legacy)`;
+}
 
 /** @type {import('vue').Ref<OAuthClient[]>} */
 const clients = ref([]);
 const loading = ref(true);
 
 /** Create/edit form state. A null id means "create". */
-const form = ref({ id: null, name: '', redirect: '' });
+const form = ref(emptyForm());
 /** @type {import('vue').Ref<Record<string, string[]>>} */
 const errors = ref({});
 const saving = ref(false);
@@ -48,24 +61,50 @@ async function fetchClients() {
     }
 }
 
+function emptyForm() {
+    return { id: null, name: '', redirectUris: [''], grantTypes: [...props.defaultGrantTypes], legacyGrantTypes: [] };
+}
+
+/** Legacy grant types appear only on clients that already hold them. */
+const grantTypeOptions = computed(() => [...Object.keys(props.grantTypes), ...form.value.legacyGrantTypes]);
+
 function openCreate() {
-    form.value = { id: null, name: '', redirect: '' };
+    form.value = emptyForm();
     errors.value = {};
     formModal.show();
 }
 
 /** @param {OAuthClient} client */
 function openEdit(client) {
-    form.value = { id: client.id, name: client.name, redirect: client.redirect ?? '' };
+    form.value = {
+        id: client.id,
+        name: client.name,
+        redirectUris: client.redirect_uris.length ? [...client.redirect_uris] : [''],
+        grantTypes: [...client.grant_types],
+        legacyGrantTypes: client.grant_types.filter((grant) => !(grant in props.grantTypes)),
+    };
     errors.value = {};
     formModal.show();
+}
+
+function addRedirectUri() {
+    form.value.redirectUris.push('');
+}
+
+/** @param {number} index */
+function removeRedirectUri(index) {
+    form.value.redirectUris.splice(index, 1);
 }
 
 async function save() {
     saving.value = true;
     errors.value = {};
     const editing = form.value.id !== null;
-    const payload = { name: form.value.name, redirect: form.value.redirect };
+    const payload = {
+        name: form.value.name,
+        redirect_uris: form.value.redirectUris,
+        grant_types: form.value.grantTypes,
+    };
 
     try {
         const { data } = editing
@@ -142,7 +181,8 @@ async function copySecret() {
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">Name</th>
-                            <th scope="col">Redirect URI</th>
+                            <th scope="col">Redirect URIs</th>
+                            <th scope="col">Grant types</th>
                             <th scope="col" class="text-end">Actions</th>
                         </tr>
                     </thead>
@@ -150,7 +190,10 @@ async function copySecret() {
                         <tr v-for="client in clients" :key="client.id">
                             <td class="text-muted">{{ client.id }}</td>
                             <td>{{ client.name }}</td>
-                            <td class="text-break"><code>{{ client.redirect }}</code></td>
+                            <td class="text-break">
+                                <div v-for="uri in client.redirect_uris" :key="uri"><code>{{ uri }}</code></div>
+                            </td>
+                            <td class="small">{{ client.grant_types.map(grantLabel).join(', ') }}</td>
                             <td class="text-end">
                                 <div class="d-flex justify-content-end gap-2">
                                     <button type="button" class="btn btn-sm btn-outline-secondary" @click="openEdit(client)">
@@ -191,18 +234,51 @@ async function copySecret() {
                         >
                         <div v-if="errors.name" class="invalid-feedback">{{ errors.name[0] }}</div>
                     </div>
-                    <div class="mb-0">
-                        <label class="form-label" for="client-redirect">Redirect URI</label>
-                        <input
-                            id="client-redirect"
-                            v-model="form.redirect"
-                            type="url"
-                            class="form-control"
-                            :class="{ 'is-invalid': errors.redirect }"
-                            placeholder="https://example.test/callback"
-                        >
-                        <div v-if="errors.redirect" class="invalid-feedback">{{ errors.redirect[0] }}</div>
-                    </div>
+                    <fieldset class="mb-3">
+                        <legend class="form-label fs-6">Redirect URIs</legend>
+                        <div v-for="(uri, index) in form.redirectUris" :key="index" class="mb-2">
+                            <div class="input-group has-validation">
+                                <input
+                                    v-model="form.redirectUris[index]"
+                                    type="url"
+                                    class="form-control"
+                                    :class="{ 'is-invalid': errors[`redirect_uris.${index}`] }"
+                                    :aria-label="`Redirect URI ${index + 1}`"
+                                    placeholder="https://example.test/callback"
+                                >
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-secondary"
+                                    :disabled="form.redirectUris.length === 1"
+                                    :aria-label="`Remove redirect URI ${index + 1}`"
+                                    @click="removeRedirectUri(index)"
+                                >
+                                    Remove
+                                </button>
+                                <div v-if="errors[`redirect_uris.${index}`]" class="invalid-feedback">
+                                    {{ errors[`redirect_uris.${index}`][0] }}
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="errors.redirect_uris" class="text-danger small mb-2">{{ errors.redirect_uris[0] }}</div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" @click="addRedirectUri">
+                            Add redirect URI
+                        </button>
+                    </fieldset>
+                    <fieldset class="mb-0">
+                        <legend class="form-label fs-6">Grant types</legend>
+                        <div v-for="grant in grantTypeOptions" :key="grant" class="form-check">
+                            <input
+                                :id="`grant-${grant}`"
+                                v-model="form.grantTypes"
+                                type="checkbox"
+                                class="form-check-input"
+                                :value="grant"
+                            >
+                            <label class="form-check-label" :for="`grant-${grant}`">{{ grantLabel(grant) }}</label>
+                        </div>
+                        <div v-if="errors.grant_types" class="text-danger small">{{ errors.grant_types[0] }}</div>
+                    </fieldset>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>

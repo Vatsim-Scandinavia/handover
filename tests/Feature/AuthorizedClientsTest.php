@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Laravel\Passport\Client;
 use Tests\TestCase;
 
 class AuthorizedClientsTest extends TestCase
@@ -13,23 +14,18 @@ class AuthorizedClientsTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * Insert an OAuth client using the application's legacy Passport schema.
+     * Create an OAuth client and return its id.
      *
      * @param  array<string, mixed>  $overrides
      */
-    private function createClient(array $overrides = []): int
+    private function createClient(array $overrides = []): string
     {
-        return DB::table('oauth_clients')->insertGetId(array_merge([
+        return Client::factory()->create([
             'user_id' => 1, // non-null owner => third-party (not first-party)
             'name' => 'vACC Norway',
-            'secret' => Str::random(40),
-            'redirect' => 'https://vacc-norway.test/callback',
-            'personal_access_client' => false,
-            'password_client' => false,
-            'revoked' => false,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ], $overrides));
+            'redirect_uris' => ['https://vacc-norway.test/callback'],
+            ...$overrides,
+        ])->id;
     }
 
     /**
@@ -37,7 +33,7 @@ class AuthorizedClientsTest extends TestCase
      *
      * @param  array<string, mixed>  $overrides
      */
-    private function createToken(User $user, int $clientId, array $overrides = []): void
+    private function createToken(User $user, string $clientId, array $overrides = []): void
     {
         DB::table('oauth_access_tokens')->insert(array_merge([
             'id' => Str::random(80),
@@ -56,7 +52,7 @@ class AuthorizedClientsTest extends TestCase
         $user = User::factory()->create();
         $clientId = $this->createClient([
             'name' => 'vACC Norway',
-            'redirect' => 'https://vacc-norway.test/callback',
+            'redirect_uris' => ['https://vacc-norway.test/callback'],
         ]);
         $this->createToken($user, $clientId);
 
@@ -82,7 +78,7 @@ class AuthorizedClientsTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $thirdParty = $this->createClient(['redirect' => 'https://third-party.test/callback']);
+        $thirdParty = $this->createClient(['redirect_uris' => ['https://third-party.test/callback']]);
         $this->createToken($user, $thirdParty, ['revoked' => true]);
         $this->createToken($user, $thirdParty, ['expires_at' => now()->subDay()]);
 
