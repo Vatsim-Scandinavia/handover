@@ -109,6 +109,7 @@ nav:
       - Decisions:
           - Token lifetimes: adr/0001-token-lifetimes-and-refresh-policy.md
           - Client ids and schema: adr/0002-client-ids-and-schema.md
+          - Signing keys and rotation: adr/0003-signing-keys-and-rotation.md
       - Contribute: contribute.md
       - Upgrading: upgrade.md
 
