@@ -21,11 +21,11 @@
     </x-card-header>
     {{-- Admins always see the full set of controls; they are disabled until the
          Edit toggle is on, so the layout never changes; only editability does.
-         The toggle defaults to ON when a submit failed validation so the errored
-         form is editable. `@disabled(!$errors->any())` sets the initial disabled
-         state server-side (no flash before Alpine); `:disabled="!editing"` then
-         keeps it in sync. Managers get no x-data, so they are always read-only. --}}
-    <div class="card-body"@if($isAdmin) x-data="{ editing: {{ $errors->any() ? 'true' : 'false' }}, parentIsAdmin: false }"@endif>
+         EditMode decides when the toggle starts on. `@disabled(!$editing)` sets
+         the initial disabled state server-side (no flash before Alpine), and
+         `:disabled="!editing"` keeps it in sync. Managers get no x-data, so they
+         are always read-only. --}}
+    <div class="card-body"@if($isAdmin) x-data="{ editing: {{ $editing ? 'true' : 'false' }}, parentIsAdmin: false }"@endif>
 
         @if($isAdmin)
         <div class="d-flex justify-content-end mb-2">
@@ -42,7 +42,7 @@
             @csrf @method('PATCH')
             {{-- A disabled <fieldset> natively disables every control inside it,
                  so _form (shared with the create page) stays untouched. --}}
-            <fieldset @disabled(!$errors->any()) :disabled="!editing">
+            <fieldset @disabled(!$editing) :disabled="!editing">
                 @include('groups._form', ['group' => $group])
                 <div class="row">
                     <div class="col-sm-9 offset-sm-3">
@@ -85,14 +85,14 @@
                 @if($isAdmin)
                 <form method="POST" action="{{ route('groups.parents.store', $group) }}" class="d-flex gap-2 align-items-start">
                     @csrf
-                    <select @disabled(!$errors->any()) :disabled="!editing" name="parent_id" class="form-select form-select-sm" required
+                    <select @disabled(!$editing) :disabled="!editing" name="parent_id" class="form-select form-select-sm" required
                             x-on:change="parentIsAdmin = $event.target.selectedOptions[0]?.dataset.admin === '1'">
                         <option value="">Add a parent group…</option>
                         @foreach($candidateParents as $candidate)
                         <option value="{{ $candidate->id }}" @if($candidate->is_admin_group) data-admin="1" @endif>{{ $candidate->name }}</option>
                         @endforeach
                     </select>
-                    <button @disabled(!$errors->any()) :disabled="!editing" class="btn btn-sm btn-outline-primary text-nowrap">Add parent</button>
+                    <button @disabled(!$editing) :disabled="!editing" class="btn btn-sm btn-outline-primary text-nowrap">Add parent</button>
                 </form>
                 <div x-show="parentIsAdmin" x-cloak class="alert alert-warning py-1 px-2 mt-2 mb-0">
                     <i class="fa-solid fa-triangle-exclamation me-1"></i>Nesting under an admin group <strong>does not grant admin</strong>. Admin access is assigned directly.
@@ -127,13 +127,13 @@
                 @if($isAdmin)
                 <form method="POST" action="{{ route('groups.children.store', $group) }}" class="d-flex gap-2 align-items-start">
                     @csrf
-                    <select @disabled(!$errors->any()) :disabled="!editing" name="child_id" class="form-select form-select-sm" required>
+                    <select @disabled(!$editing) :disabled="!editing" name="child_id" class="form-select form-select-sm" required>
                         <option value="">Add a child group…</option>
                         @foreach($candidateChildren as $candidate)
                         <option value="{{ $candidate->id }}">{{ $candidate->name }}</option>
                         @endforeach
                     </select>
-                    <button @disabled(!$errors->any()) :disabled="!editing" class="btn btn-sm btn-outline-primary text-nowrap">Add child</button>
+                    <button @disabled(!$editing) :disabled="!editing" class="btn btn-sm btn-outline-primary text-nowrap">Add child</button>
                 </form>
                 @error('child_id')<div class="text-danger mt-1">{{ $message }}</div>@enderror
                 @endif
@@ -157,7 +157,7 @@
         <hr>
         <form method="POST" action="{{ route('groups.destroy', $group) }}" onsubmit="return confirm('Delete this group? It must have no members.')">
             @csrf @method('DELETE')
-            <button @disabled(!$errors->any()) :disabled="!editing" class="btn btn-outline-danger btn-sm">Delete Group</button>
+            <button @disabled(!$editing) :disabled="!editing" class="btn btn-outline-danger btn-sm">Delete Group</button>
         </form>
         @endif
     </div>
