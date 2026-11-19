@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 use App\Models\Group;
 use App\Models\GroupAttributeDefinition;
 use App\Services\GroupManagerService;
+use App\Support\GroupSearch\GroupQuery;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
@@ -13,17 +15,54 @@ class GroupController extends Controller
 {
     public function __construct(private GroupManagerService $service) {}
 
+    /**
+     * The overview lists every group the user may see, without pagination, so
+     * results can be split into sections by an attribute. Handover holds tens
+     * of groups, not thousands.
+     */
     public function index()
     {
         $request = request();
         $isAdmin = $request->attributes->get('is_group_admin');
-        if ($isAdmin) {
-            $groups = Group::withCount('members')->with('tags')->orderBy('name')->paginate(25);
-        } else {
-            $ids = $request->attributes->get('manageable_group_ids', []);
-            $groups = Group::withCount('members')->with('tags')->whereIn('id', $ids)->orderBy('name')->paginate(25);
+
+        $visible = Group::query();
+        if (! $isAdmin) {
+            $visible->whereIn('id', $request->attributes->get('manageable_group_ids', []));
         }
-        return view('groups.index', compact('groups', 'isAdmin'));
+        $total = (clone $visible)->count();
+
+        $q = $request->query('q');
+        $query = GroupQuery::parse(is_string($q) ? $q : '');
+        $sort = $request->query('sort') === 'members' ? 'members' : 'name';
+        $groups = $query->apply($visible)
+            ->withCount('members')
+            ->with('tags', 'attributeValues.definition')
+            ->when($sort === 'members', fn ($q) => $q->orderByDesc('members_count'))
+            ->orderBy('name')
+            ->get();
+
+        $definitions = GroupAttributeDefinition::orderBy('key')->get();
+        $groupBy = $definitions->firstWhere('key', $request->query('group'));
+        $sections = $this->sections($groups, $groupBy);
+        $suggestions = $query->suggestions($groups);
+
+        return view('groups.index', compact('groups', 'total', 'query', 'sort', 'definitions', 'groupBy', 'sections', 'suggestions', 'isAdmin'));
+    }
+
+    /**
+     * Groups in sections by an attribute value, with groups that lack the
+     * attribute last. Without an attribute, one section holds them all.
+     *
+     * @param Collection<int, Group> $groups
+     * @return Collection<string, Collection<int, Group>>
+     */
+    private function sections(Collection $groups, ?GroupAttributeDefinition $by): Collection
+    {
+        if (! $by) {
+            return collect(['' => $groups]);
+        }
+        return $groups->groupBy(fn (Group $g) => $g->attributeValue($by->key) ?? '')
+            ->sortKeysUsing(fn ($a, $b) => [$a === '', $a] <=> [$b === '', $b]);
     }
 
     public function create(Request $request)

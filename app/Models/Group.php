@@ -30,6 +30,12 @@ class Group extends Model
         return $this->hasMany(GroupAttributeValue::class);
     }
 
+    /** The group's value for an attribute key, from loaded attributeValues.definition. */
+    public function attributeValue(string $key): ?string
+    {
+        return $this->attributeValues->first(fn (GroupAttributeValue $av) => $av->definition->key === $key)?->value;
+    }
+
     public function members(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'group_user')
