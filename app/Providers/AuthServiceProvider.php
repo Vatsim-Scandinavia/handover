@@ -29,9 +29,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
-        // Don't be fooled, we return ALL data from OAuthUserController.php without checking for requested tokens.
-        // We only initiate tokens here so we can use Handover as if it were Vatsim Connect and tokens are passed.
         Passport::tokensCan([
             'full_name'      => 'First and last name',
             'email'          => 'E-mail address',
