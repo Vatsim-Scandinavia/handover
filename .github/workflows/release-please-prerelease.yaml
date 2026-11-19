@@ -29,7 +29,7 @@ jobs:
     steps:
       - name: Run release-please (alpha)
         if: ${{ github.event.inputs.prerelease_type == 'alpha' }}
-        uses: googleapis/release-please-action@v4
+        uses: googleapis/release-please-action@v5
         with:
           token: ${{ secrets.VATSCA_BOT_TOKEN }}
           target-branch: ${{ github.event.inputs.target_branch }}
@@ -38,7 +38,7 @@ jobs:
 
       - name: Run release-please (beta)
         if: ${{ github.event.inputs.prerelease_type == 'beta' }}
-        uses: googleapis/release-please-action@v4
+        uses: googleapis/release-please-action@v5
         with:
           token: ${{ secrets.VATSCA_BOT_TOKEN }}
           target-branch: ${{ github.event.inputs.target_branch }}
@@ -47,7 +47,7 @@ jobs:
 
       - name: Run release-please (rc)
         if: ${{ github.event.inputs.prerelease_type == 'rc' }}
-        uses: googleapis/release-please-action@v4
+        uses: googleapis/release-please-action@v5
         with:
           token: ${{ secrets.VATSCA_BOT_TOKEN }}
           target-branch: ${{ github.event.inputs.target_branch }}
