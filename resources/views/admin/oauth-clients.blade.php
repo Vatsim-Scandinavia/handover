@@ -2,6 +2,9 @@
 
 @section('content')
     <div id="app">
-        <oauth-clients></oauth-clients>
+        <oauth-clients
+            :grant-types="@js($grantTypes)"
+            :default-grant-types="@js($defaultGrantTypes)"
+        ></oauth-clients>
     </div>
 @endsection

@@ -51,10 +51,9 @@ class AuthServiceProvider extends ServiceProvider
         Passport::refreshTokensExpireIn(CarbonInterval::days(30));
         Passport::useClientModel(Client::class);
 
-        // This application uses the legacy Passport schema where oauth_clients.id
-        // is an auto-incrementing integer. Passport 13 defaults to UUID client
-        // ids, which cannot be stored in that column, so keep integer keys.
-        Passport::$clientUuids = false;
+        // New clients get UUIDv7 ids. Clients from before 4.0.0 keep their
+        // numeric ids, stored as strings. See docs/adr/0002-client-ids-and-schema.md.
+        Passport::$clientUuids = true;
 
         // Passport 13 is headless: AuthorizationController::authorize() method-injects
         // an AuthorizationViewResponse, which is unbound by default. Without binding

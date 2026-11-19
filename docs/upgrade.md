@@ -59,7 +59,7 @@ It needs one manual step on the database: hashing the OAuth client secrets.
 
 ### Upgrade steps
 
-1. Back up the database. This is not optional for this release: hashing the secrets cannot be undone, and a [rollback](#rolling-back-to-3x) needs the backup.
+1. Back up the database. This is not optional for this release: hashing the secrets and changing the client schema cannot be undone, and a [rollback](#rolling-back-to-3x) needs the backup.
 2. Enable maintenance mode in the running 3.x container:
 
     ```sh
@@ -68,7 +68,7 @@ It needs one manual step on the database: hashing the OAuth client secrets.
 
 3. Change the image tag from `:v3` to `:v4`, pull it, and recreate the container.
    The floating `:v3` tag never moves to 4.0.0, so you must change it.
-4. Apply the database changes. This adds the `group_hierarchy` table for [nested groups](groups.md#nested-groups-transitive-membership) and shortens the lifetime of existing refresh tokens:
+4. Apply the database changes. This adds the `group_hierarchy` table for [nested groups](groups.md#nested-groups-transitive-membership), shortens the lifetime of existing refresh tokens, and moves OAuth clients to the [Passport 13 client schema](#oauth-clients-use-the-passport-13-schema):
 
     ```sh
     php artisan migrate --force
@@ -112,6 +112,11 @@ Switching the image back is not enough.
 
 The `group_hierarchy` table from 4.0.0 does no harm to 3.x if you keep it, but the restore removes it anyway.
 
+3.x cannot read the 4.0.0 client schema, so you must restore the backup.
+The restore removes every client created after the upgrade, together with its tokens.
+Clients created after the upgrade have UUID IDs, which 3.x cannot store.
+To keep such a client, create it again in 3.x and give the service its new ID and secret.
+
 ### What changed
 
 #### Client secrets are hashed
@@ -152,10 +157,24 @@ The migration updates each existing refresh token as follows:
 
 The migration never extends a refresh token's expiry.
 
-#### Client IDs stay integers
+#### OAuth clients use the Passport 13 schema
 
-Passport 13 uses UUIDs for new client IDs by default.
-Handover keeps integer IDs, so existing integrations keep their client ID.
+Client IDs are now strings.
+Existing clients keep their numeric ID, such as `5`, so existing integrations change nothing.
+New clients get a UUID as their ID.
+
+Each client now stores its redirect URIs as a list and its grant types explicitly.
+The migration fills both from the old columns:
+
+- The redirect URIs come from the old comma-separated `redirect` column.
+- The grant types are exactly the ones Passport allowed the client before the upgrade. For a client created in the admin UI, these are authorization code, refresh token, client credentials, implicit and device code.
+
+New clients get only authorization code and refresh token.
+Administrators can change the grant types and redirect URIs of any client in the admin UI.
+Editing a client in the admin UI no longer drops its extra redirect URIs.
+See [OAuth clients](concepts/oauth-clients.md#grant-types).
+
+The old `redirect`, `personal_access_client` and `password_client` columns stay in the database, but Handover no longer reads them.
 
 #### The groups API reports inherited groups
 
@@ -168,6 +187,6 @@ See the [user API](reference/api.md#groups).
 
 Passport 13 changed behaviour Handover depends on as an OAuth provider.
 It became headless, so the authorization endpoint needs a view bound, and it switched client IDs to UUIDs.
-Handover handles both in code.
+Handover handles both in code, and existing clients keep their numeric IDs.
 Hashing the client secrets cannot be handled in code, because it rewrites stored data.
 That manual step is what makes this 4.0.0 rather than a 3.x release.

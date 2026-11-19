@@ -10,13 +10,13 @@ First [create an OAuth client](../concepts/oauth-clients.md) in Handover. Then c
 | Setting | Value |
 | ------- | ----- |
 | Method | Authorization code |
-| Client ID | The ID of the client, a short number |
+| Client ID | The ID of the client: a number for older clients, a UUID for new ones |
 | Client secret | The secret shown when you created the client |
 | Authorization endpoint | `https://YOUR_HANDOVER/oauth/authorize` |
 | Token endpoint | `https://YOUR_HANDOVER/oauth/token` |
 | User information endpoint | `https://YOUR_HANDOVER/api/user` |
 
-The redirect URI in Handover must match the callback URL of the service.
+The callback URL of the service must exactly match one of the client's redirect URIs in Handover.
 
 ## Scopes
 
