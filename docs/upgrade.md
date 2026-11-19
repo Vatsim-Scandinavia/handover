@@ -51,6 +51,12 @@ It needs one manual step on the database: hashing the OAuth client secrets.
     Members cannot log in to any connected service in the meantime.
     Plan the upgrade so you run it straight after the migration.
 
+!!! warning "Access tokens now expire after one hour"
+    After the upgrade, access tokens expire after one hour and refresh tokens expire after 30 days.
+    If an integration uses an access token for more than an hour, it must use its refresh token to get a new one.
+    If an integration does not refresh within 30 days, the member must sign in again.
+    For details, see [token lifetimes are shorter](#token-lifetimes-are-shorter).
+
 ### Upgrade steps
 
 1. Back up the database. This is not optional for this release: hashing the secrets cannot be undone, and a [rollback](#rolling-back-to-3x) needs the backup.
@@ -62,7 +68,7 @@ It needs one manual step on the database: hashing the OAuth client secrets.
 
 3. Change the image tag from `:v3` to `:v4`, pull it, and recreate the container.
    The floating `:v3` tag never moves to 4.0.0, so you must change it.
-4. Apply the database changes. This adds the `group_hierarchy` table for [nested groups](groups.md#nested-groups-transitive-membership):
+4. Apply the database changes. This adds the `group_hierarchy` table for [nested groups](groups.md#nested-groups-transitive-membership) and shortens the lifetime of existing refresh tokens:
 
     ```sh
     php artisan migrate --force
@@ -126,6 +132,25 @@ See [OAuth clients](concepts/oauth-clients.md).
 Passport's JSON routes are gone: `/oauth/clients`, `/oauth/scopes`, `/oauth/tokens` and `/oauth/personal-access-tokens`.
 If you scripted against them, use the admin UI or the [artisan commands](reference/commands.md) instead.
 The routes your integrations use, `/oauth/authorize`, `/oauth/token` and `/api/user`, are unchanged.
+
+#### Token lifetimes are shorter
+
+Access tokens now expire after one hour instead of one month.
+Refresh tokens now expire after 30 days instead of 100 years.
+Each refresh returns a new refresh token that is valid for another 30 days.
+An integration that refreshes at least once every 30 days keeps its access.
+
+Each member can have one session per client.
+When a member signs in again, Handover revokes their earlier access and refresh tokens for that client.
+
+Access tokens issued before the upgrade keep their one-month expiry.
+The migration updates each existing refresh token as follows:
+
+- If its access token is revoked, the migration revokes the refresh token.
+- If its access token is missing or has no expiry, the refresh token expires 30 days after the migration runs.
+- Otherwise, the refresh token expires 30 days after its access token expires.
+
+The migration never extends a refresh token's expiry.
 
 #### Client IDs stay integers
 
