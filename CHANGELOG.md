@@ -1,5 +1,18 @@
 # Changelog
 
+## [4.0.0-beta.5](https://github.com/Vatsim-Scandinavia/handover/compare/v4.0.0-beta.4...v4.0.0-beta.5) (2026-11-19)
+
+
+### Miscellaneous Chores
+
+* **deps:** update dependency phpunit/phpunit to v12.5.45 ([#218](https://github.com/Vatsim-Scandinavia/handover/issues/218)) ([13e3cfc](https://github.com/Vatsim-Scandinavia/handover/commit/13e3cfce3430d98b57ecb29cb9d01b7ca3207d34))
+* **deps:** update dependency sentry/sentry-laravel to v4.31.0 ([#219](https://github.com/Vatsim-Scandinavia/handover/issues/219)) ([14031be](https://github.com/Vatsim-Scandinavia/handover/commit/14031be1d266f07f4562a7963c246fae6a513759))
+
+
+### Continuous Integration
+
+* build images on tag pushes again ([ad6148b](https://github.com/Vatsim-Scandinavia/handover/commit/ad6148bc593c968bc90d7e8ebbbaa8be1c2a105f))
+
 ## [4.0.0-beta.4](https://github.com/Vatsim-Scandinavia/handover/compare/v4.0.0-beta.3...v4.0.0-beta.4) (2026-11-19)
 
 
