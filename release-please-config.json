@@ -2,6 +2,7 @@
   "release-type": "php",
   "changelog-path": "CHANGELOG.md",
   "draft": false,
+  "last-release-sha": "638e35c65d7308f99e6c0e3619b9fbdb6875ac84",
   "extra-files": [
     "config/app.php"
   ],
