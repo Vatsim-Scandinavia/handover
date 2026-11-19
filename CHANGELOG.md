@@ -1,5 +1,20 @@
 # Changelog
 
+## [4.0.0-beta.3](https://github.com/Vatsim-Scandinavia/handover/compare/v4.0.0-beta.2...v4.0.0-beta.3) (2026-11-19)
+
+
+### Bug Fixes
+
+* **oauth:** redirect guests to login on /oauth/authorize ([#175](https://github.com/Vatsim-Scandinavia/handover/issues/175)) ([8f51758](https://github.com/Vatsim-Scandinavia/handover/commit/8f51758402abb30515fab5e438ac3e54f15608b1))
+
+
+### Miscellaneous Chores
+
+* Configure Renovate ([#169](https://github.com/Vatsim-Scandinavia/handover/issues/169)) ([fe9b672](https://github.com/Vatsim-Scandinavia/handover/commit/fe9b672f740f0222b56c50d0a3e8a4c6e4dabf25))
+* **deps:** update dependency axios to v1.20.0 [security] ([#172](https://github.com/Vatsim-Scandinavia/handover/issues/172)) ([5cac0cf](https://github.com/Vatsim-Scandinavia/handover/commit/5cac0cf48d1079a73125009f798c2fa244788494))
+* **deps:** update dependency laravel/framework to v13.40.0 [security] ([#173](https://github.com/Vatsim-Scandinavia/handover/issues/173)) ([b76774e](https://github.com/Vatsim-Scandinavia/handover/commit/b76774ee18ca5c4606e65af56c2cbf425560e9bd))
+* **deps:** update dependency vite to v8.2.4 [security] ([#171](https://github.com/Vatsim-Scandinavia/handover/issues/171)) ([3a01f75](https://github.com/Vatsim-Scandinavia/handover/commit/3a01f754eaad832fa25d0918b344383d2bb4e064))
+
 ## [4.0.0-beta.2](https://github.com/Vatsim-Scandinavia/handover/compare/v4.0.0-beta.1...v4.0.0-beta.2) (2026-11-19)
 
 
