@@ -1393,6 +1393,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#token-lifetimes-are-shorter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Token lifetimes are shorter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#client-ids-stay-integers" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1570,6 +1581,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#token-lifetimes-are-shorter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Token lifetimes are shorter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#client-ids-stay-integers" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1684,6 +1706,13 @@ It needs one manual step on the database: hashing the OAuth client secrets.</p>
 Members cannot log in to any connected service in the meantime.
 Plan the upgrade so you run it straight after the migration.</p>
 </div>
+<div class="admonition warning">
+<p class="admonition-title">Access tokens now expire after one hour</p>
+<p>After the upgrade, access tokens expire after one hour and refresh tokens expire after 30 days.
+If an integration uses an access token for more than an hour, it must use its refresh token to get a new one.
+If an integration does not refresh within 30 days, the member must sign in again.
+For details, see <a href="#token-lifetimes-are-shorter">token lifetimes are shorter</a>.</p>
+</div>
 <h3 id="upgrade-steps">Upgrade steps<a class="headerlink" href="#upgrade-steps" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Back up the database. This is not optional for this release: hashing the secrets cannot be undone, and a <a href="#rolling-back-to-3x">rollback</a> needs the backup.</li>
@@ -1697,7 +1726,7 @@ Plan the upgrade so you run it straight after the migration.</p>
    The floating <code>:v3</code> tag never moves to 4.0.0, so you must change it.</p>
 </li>
 <li>
-<p>Apply the database changes. This adds the <code>group_hierarchy</code> table for <a href="../groups/#nested-groups-transitive-membership">nested groups</a>:</p>
+<p>Apply the database changes. This adds the <code>group_hierarchy</code> table for <a href="../groups/#nested-groups-transitive-membership">nested groups</a> and shortens the lifetime of existing refresh tokens:</p>
 <div class="language-sh highlight"><pre><span></span><code>php<span class="w"> </span>artisan<span class="w"> </span>migrate<span class="w"> </span>--force
 </code></pre></div>
 </li>
@@ -1752,6 +1781,21 @@ See <a href="../concepts/oauth-clients/">OAuth clients</a>.</p>
 <p>Passport's JSON routes are gone: <code>/oauth/clients</code>, <code>/oauth/scopes</code>, <code>/oauth/tokens</code> and <code>/oauth/personal-access-tokens</code>.
 If you scripted against them, use the admin UI or the <a href="../reference/commands/">artisan commands</a> instead.
 The routes your integrations use, <code>/oauth/authorize</code>, <code>/oauth/token</code> and <code>/api/user</code>, are unchanged.</p>
+<h4 id="token-lifetimes-are-shorter">Token lifetimes are shorter<a class="headerlink" href="#token-lifetimes-are-shorter" title="Permanent link">&para;</a></h4>
+<p>Access tokens now expire after one hour instead of one month.
+Refresh tokens now expire after 30 days instead of 100 years.
+Each refresh returns a new refresh token that is valid for another 30 days.
+An integration that refreshes at least once every 30 days keeps its access.</p>
+<p>Each member can have one session per client.
+When a member signs in again, Handover revokes their earlier access and refresh tokens for that client.</p>
+<p>Access tokens issued before the upgrade keep their one-month expiry.
+The migration updates each existing refresh token as follows:</p>
+<ul>
+<li>If its access token is revoked, the migration revokes the refresh token.</li>
+<li>If its access token is missing or has no expiry, the refresh token expires 30 days after the migration runs.</li>
+<li>Otherwise, the refresh token expires 30 days after its access token expires.</li>
+</ul>
+<p>The migration never extends a refresh token's expiry.</p>
 <h4 id="client-ids-stay-integers">Client IDs stay integers<a class="headerlink" href="#client-ids-stay-integers" title="Permanent link">&para;</a></h4>
 <p>Passport 13 uses UUIDs for new client IDs by default.
 Handover keeps integer IDs, so existing integrations keep their client ID.</p>
@@ -1795,7 +1839,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 18, 2026 21:18:16 UTC">November 18, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 19, 2026 01:50:05 UTC">November 19, 2026</span>
   </span>
 
     
