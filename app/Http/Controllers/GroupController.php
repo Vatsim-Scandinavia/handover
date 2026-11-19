@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Group;
 use App\Models\GroupAttributeDefinition;
 use App\Services\GroupManagerService;
+use App\Support\EditMode;
 use App\Support\GroupSearch\GroupQuery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -103,6 +104,7 @@ class GroupController extends Controller
         $group->loadCount('members');
         $isAdmin = $request->attributes->get('is_group_admin');
         $grantingRules = $isAdmin ? [] : $this->service->grantingRulesFor($request->user(), $group);
+        $editing = EditMode::isOn($request);
 
         $definitions = collect();
         $candidateParents = collect();
@@ -118,7 +120,7 @@ class GroupController extends Controller
         }
 
         return view('groups.show', compact(
-            'group', 'isAdmin', 'grantingRules',
+            'group', 'isAdmin', 'grantingRules', 'editing',
             'definitions', 'candidateParents', 'candidateChildren'
         ));
     }
@@ -162,7 +164,7 @@ class GroupController extends Controller
 
         $this->service->incrementCacheVersion();
 
-        return redirect()->route('groups.show', $group)->with('success', 'Group updated.');
+        return EditMode::keep(redirect()->route('groups.show', $group)->with('success', 'Group updated.'));
     }
 
     public function destroy(Request $request, Group $group)

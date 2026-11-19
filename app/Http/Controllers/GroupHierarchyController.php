@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use App\Services\GroupManagerService;
+use App\Support\EditMode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -34,7 +35,7 @@ class GroupHierarchyController extends Controller
         ]);
         $this->service->incrementCacheVersion();
 
-        return back()->with('success', 'Parent group added.');
+        return EditMode::keep(back()->with('success', 'Parent group added.'));
     }
 
     // Remove the nesting edge (parent -> {group}).
@@ -48,7 +49,7 @@ class GroupHierarchyController extends Controller
             ->delete();
         $this->service->incrementCacheVersion();
 
-        return back()->with('success', 'Parent group removed.');
+        return EditMode::keep(back()->with('success', 'Parent group removed.'));
     }
 
     // Nest a child group INTO {group}. Edge is (parent = {group}, child = selected).
@@ -75,7 +76,7 @@ class GroupHierarchyController extends Controller
         ]);
         $this->service->incrementCacheVersion();
 
-        return back()->with('success', 'Child group added.');
+        return EditMode::keep(back()->with('success', 'Child group added.'));
     }
 
     // Remove the nesting edge ({group} -> child).
@@ -89,7 +90,7 @@ class GroupHierarchyController extends Controller
             ->delete();
         $this->service->incrementCacheVersion();
 
-        return back()->with('success', 'Child group removed.');
+        return EditMode::keep(back()->with('success', 'Child group removed.'));
     }
 
     /**
