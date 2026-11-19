@@ -41,7 +41,7 @@ jobs:
         run: cp -n .env.example .env || true
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: vendor
           key: composer-${{ matrix.php-version }}-${{ hashFiles('composer.lock') }}
