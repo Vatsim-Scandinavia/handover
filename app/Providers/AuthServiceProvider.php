@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use Carbon\CarbonInterval;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Http\Request;
 use Laravel\Passport\Passport;
 use App\Models\Passport\Client;
 use App\Models\Group;
@@ -63,6 +65,16 @@ class AuthServiceProvider extends ServiceProvider
         Passport::authorizationView(fn (array $parameters) => response(
             'This application does not require explicit authorization.'
         ));
+
+        // Passport 13 throws its own AuthenticationException at /oauth/authorize,
+        // which the auth middleware's redirectTo() never sees. Without this,
+        // guests get an empty 401 instead of the login page. Elsewhere, null
+        // keeps the framework default.
+        AuthenticationException::redirectUsing(
+            fn (Request $request) => $request->routeIs('passport.authorizations.authorize')
+                ? route('login')
+                : null
+        );
 
         Gate::define('manage-oauth-clients', fn (User $user): bool => app(GroupManagerService::class)->isAdmin($user));
 
