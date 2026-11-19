@@ -1,0 +1,102 @@
+---
+# Switches the release channel (stable, alpha, beta, rc) by opening a PR that
+# edits release-please-config.json. Once merged, the push-triggered
+# release-please workflow builds release PRs for the new channel.
+#
+# With the `prerelease` versioning strategy:
+#   stable -> beta:  4.0.0        -> 4.1.0-beta.1 (feat) / 4.0.1-beta.1 (fix)
+#   beta   -> beta:  4.1.0-beta.1 -> 4.1.0-beta.2
+#   beta   -> stable 4.1.0-beta.2 -> 4.1.0
+#   beta   -> rc:    needs a Release-As footer, which this workflow adds
+name: Release channel
+
+on:
+  workflow_dispatch:
+    inputs:
+      channel:
+        description: "Release channel to switch to"
+        required: true
+        type: choice
+        options:
+          - stable
+          - alpha
+          - beta
+          - rc
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  switch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          token: ${{ secrets.VATSCA_BOT_TOKEN }}
+
+      - name: Update release-please config
+        id: plan
+        env:
+          CHANNEL: ${{ inputs.channel }}
+        run: |
+          current=$(jq -r '."."' .release-please-manifest.json)
+          core=${current%%-*}
+          pre=""
+          [[ $current == *-* ]] && pre=${current#*-}
+          pre_type=${pre%%.*}
+
+          if [[ $CHANNEL == stable ]]; then
+            filter='.versioning = "prerelease"
+              | .packages["."].prerelease = false
+              | del(.packages["."]["prerelease-type"])'
+          else
+            filter='.versioning = "prerelease"
+              | .packages["."].prerelease = true
+              | .packages["."]["prerelease-type"] = ($ch + ".1")'
+          fi
+          jq --arg ch "$CHANNEL" "$filter" release-please-config.json > "$RUNNER_TEMP/config.json"
+          mv "$RUNNER_TEMP/config.json" release-please-config.json
+
+          # release-please only bumps the number of an existing prerelease
+          # suffix, so changing between prerelease types needs Release-As.
+          release_as=""
+          if [[ $CHANNEL != stable && -n $pre && $pre_type != "$CHANNEL" ]]; then
+            release_as="$core-$CHANNEL.1"
+          fi
+
+          echo "current=$current" >> "$GITHUB_OUTPUT"
+          echo "release_as=$release_as" >> "$GITHUB_OUTPUT"
+
+      - name: Open pull request
+        env:
+          GH_TOKEN: ${{ secrets.VATSCA_BOT_TOKEN }}
+          CHANNEL: ${{ inputs.channel }}
+          CURRENT: ${{ steps.plan.outputs.current }}
+          RELEASE_AS: ${{ steps.plan.outputs.release_as }}
+        run: |
+          if git diff --quiet && [[ -z $RELEASE_AS ]]; then
+            echo "Already on the $CHANNEL channel, nothing to do"
+            exit 0
+          fi
+
+          title="chore(release): switch to $CHANNEL channel"
+          message="$title"
+          body="Switches release-please from \`$CURRENT\` to the **$CHANNEL** channel."
+          if [[ -n $RELEASE_AS ]]; then
+            message+=$'\n\nRelease-As: '"$RELEASE_AS"
+            body+=$'\n\nThe next release is forced to `'"$RELEASE_AS"$'` by a `Release-As` footer. Keep the footer in the squash commit message when merging.'
+          fi
+
+          branch="release-channel/$CHANNEL"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git commit --allow-empty -am "$message"
+          git push --force origin "$branch"
+
+          if gh pr view "$branch" --json state --jq .state 2>/dev/null | grep -q OPEN; then
+            gh pr edit "$branch" --title "$title" --body "$body"
+          else
+            gh pr create --head "$branch" --title "$title" --body "$body"
+          fi
