@@ -37,9 +37,10 @@ See the [user API](../reference/api.md) for the data each scope returns.
 
 ## Tokens
 
-- Access tokens expire after one month.
-- Refresh tokens expire after 100 years.
-- Handover removes revoked and expired tokens daily, see [background jobs](../reference/background-jobs.md).
+- An access token expires after one hour. To get a new access token, use the refresh token.
+- A refresh token expires after 30 days. Each refresh returns a new refresh token that is valid for another 30 days. Store the new refresh token, because the old one stops working.
+- Each member can have one session per client. When a member signs in again, Handover revokes their earlier access and refresh tokens for that client.
+- Handover deletes revoked and expired tokens daily. For details, see [background jobs](../reference/background-jobs.md).
 
 ## Control Center
 

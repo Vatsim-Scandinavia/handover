@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Carbon\CarbonInterval;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Laravel\Passport\Passport;
 use App\Models\Passport\Client;
@@ -44,8 +45,10 @@ class AuthServiceProvider extends ServiceProvider
             'country'
         ]);
 
-        Passport::tokensExpireIn(now()->addMonths(1));
-        Passport::refreshTokensExpireIn(now()->addYears(100));
+        // See docs/adr/0001-token-lifetimes-and-refresh-policy.md. Each refresh
+        // issues a new refresh token, so the 30 days restart on every use.
+        Passport::tokensExpireIn(CarbonInterval::hour());
+        Passport::refreshTokensExpireIn(CarbonInterval::days(30));
         Passport::useClientModel(Client::class);
 
         // This application uses the legacy Passport schema where oauth_clients.id
