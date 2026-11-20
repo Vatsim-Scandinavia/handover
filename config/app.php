@@ -226,7 +226,8 @@ return [
          * Package Service Providers...
          */
 
-        Laravel\Passport\PassportServiceProvider::class,
+        // Replaces Laravel\Passport\PassportServiceProvider, see composer.json "dont-discover".
+        App\Providers\PassportServiceProvider::class,
 
         /*
          * Application Service Providers...

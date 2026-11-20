@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\AllowAnyOrigin;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
+        $this->mapWellKnownRoutes();
+
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
@@ -61,6 +64,19 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
              ->namespace($this->namespace)
              ->group(base_path('routes/web.php'));
+    }
+
+    /**
+     * Define the "/.well-known" routes for the application.
+     *
+     * These routes are public and stateless, and readable from any origin. They
+     * load before the web routes, whose catch-all would otherwise match them.
+     *
+     * @return void
+     */
+    protected function mapWellKnownRoutes()
+    {
+        Route::middleware(AllowAnyOrigin::class)->group(base_path('routes/well-known.php'));
     }
 
     /**

@@ -11,7 +11,7 @@ Always read the section for your target version first. Some releases need manual
 
 ## Before you upgrade
 
-- Back up the database, plus the storage volume. The volume holds the OAuth signing keys (`oauth-private.key` and `oauth-public.key`). Losing them invalidates every access token already issued.
+- Back up the database, plus the storage volume. The volume holds the OAuth [signing keys](setup/signing-keys.md) in `oauth-keys/`. In 3.x, it held them in `oauth-private.key` and `oauth-public.key`. Losing the keys invalidates every access token already issued.
 - Rehearse on staging with a copy of production data when a release has breaking changes.
 - Note the image tag you run now, and keep the backup until the new version is confirmed healthy.
 - Put Handover in maintenance mode for the duration of the upgrade. The flag lives on the storage volume, so it survives recreating the container:
@@ -45,6 +45,7 @@ If you run a [custom theme](setup/theme.md), run the theme build again, because 
 
 This release moves Handover to Laravel 13 and Laravel Passport 13, and the frontend toolchain to Vite 8 and jQuery 4.
 It needs one manual step on the database: hashing the OAuth client secrets.
+The container also moves the OAuth signing key into a key store that supports [key rotation](setup/signing-keys.md). You need to do nothing for that.
 
 !!! danger "OAuth breaks until you hash the client secrets"
     Every integration fails to get a token at `/oauth/token` until you run `php artisan passport:hash`.
@@ -59,7 +60,7 @@ It needs one manual step on the database: hashing the OAuth client secrets.
 
 ### Upgrade steps
 
-1. Back up the database. This is not optional for this release: hashing the secrets and changing the client schema cannot be undone, and a [rollback](#rolling-back-to-3x) needs the backup.
+1. Back up the database and the storage volume. This is not optional for this release: hashing the secrets, changing the client schema and moving the signing key cannot be undone, and a [rollback](#rolling-back-to-3x) needs the backup.
 2. Enable maintenance mode in the running 3.x container:
 
     ```sh
@@ -68,6 +69,7 @@ It needs one manual step on the database: hashing the OAuth client secrets.
 
 3. Change the image tag from `:v3` to `:v4`, pull it, and recreate the container.
    The floating `:v3` tag never moves to 4.0.0, so you must change it.
+   On start, the container imports `oauth-private.key` into `oauth-keys/`. For details, see [signing keys move to a key store](#signing-keys-move-to-a-key-store).
 4. Apply the database changes:
 
     ```sh
@@ -80,6 +82,8 @@ It needs one manual step on the database: hashing the OAuth client secrets.
     - Shorten the lifetime of existing refresh tokens.
     - Move OAuth clients to the [Passport 13 client schema](#oauth-clients-use-the-passport-13-schema).
     - Give every client [allowed scopes, required groups and a session setting](#client-access-settings).
+
+    If you run Handover without the container, step 3 imports nothing, and the migration imports the signing key instead.
 
 5. Hash the OAuth client secrets. Run this once per environment:
 
@@ -115,7 +119,10 @@ Switching the image back is not enough.
 
 1. Switch the image tag back to the one you noted before the upgrade, and recreate the container.
 2. Restore the database backup you took in step 1.
-3. Clear the caches with `php artisan optimize:clear`.
+3. Restore `oauth-private.key` and `oauth-public.key` from the storage volume backup you took in step 1.
+   4.0.0 moved the signing key into `oauth-keys/`, and 3.x reads only these two files.
+   If you set the key in `PASSPORT_PRIVATE_KEY` and `PASSPORT_PUBLIC_KEY` instead, set both variables again.
+4. Clear the caches with `php artisan optimize:clear`.
 
 The `group_hierarchy` table from 4.0.0 does no harm to 3.x if you keep it, but the restore removes it anyway.
 
@@ -201,6 +208,24 @@ A request for a scope the client does not allow now fails with the `invalid_scop
 In 3.x, Handover granted any known scope to any client.
 
 When you create a client in the admin UI, you must pick its allowed scopes.
+
+#### Signing keys move to a key store
+
+Handover now keeps its OAuth signing keys in `oauth-keys/` on the storage volume, and you can rotate them with artisan commands.
+See [signing keys](setup/signing-keys.md).
+
+- On the first start of 4.0.0, the container imports `oauth-private.key` as the first active key and deletes `oauth-private.key` and `oauth-public.key`. If you set `PASSPORT_PRIVATE_KEY` instead, the container imports that key.
+- Handover then ignores `PASSPORT_PRIVATE_KEY` and `PASSPORT_PUBLIC_KEY`. Remove them.
+- New access tokens carry a `kid` header that names their key. Access tokens from 3.x have none, and keep working while the imported key is published.
+- Handover publishes its public keys at `/.well-known/jwks.json`.
+- `passport:keys` no longer has any effect.
+
+Services that read `/api/user` need no changes.
+
+!!! warning "Services that check tokens with a copy of the public key"
+    Some services check access tokens themselves, with a copy of `oauth-public.key`.
+    They keep working after the upgrade, but fail once you [rotate the key](setup/signing-keys.md#rotate-the-signing-key).
+    Before you rotate, move them to the JWKS. See [verifying access tokens](integrations/clients.md#verifying-access-tokens).
 
 #### The groups API reports inherited groups
 

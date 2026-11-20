@@ -60,9 +60,6 @@ jobs:
       - name: Generate application key
         run: php artisan key:generate
 
-      - name: Generate Passport keys
-        run: php artisan passport:keys --no-interaction
-
       - name: Set up Node
         uses: actions/setup-node@v7
         with:

@@ -13,7 +13,12 @@ fi
 if [ -z "$APP_KEY" ] && [ ! -f "$SERVICE_ROOT/.env" ]; then
     cp container/default.env .env
     php artisan key:generate
-    php artisan passport:keys
 fi
+
+# Adopt the Passport signing key into storage/oauth-keys, or create the first key
+# on a fresh install. It does nothing once the store holds keys. Run as root, it
+# can read a root-owned 3.x key, and it gives the new files to the owner of the
+# storage directory so Apache can read them.
+php artisan signing-keys:import
 
 exec docker-php-entrypoint "$@"

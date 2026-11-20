@@ -36,17 +36,14 @@ Replace the name if yours differs.
 4. Configure the [environment variables](reference/environment-variables.md).
    The repository's `docker-compose.yaml` is a good starting point.
 5. Start the container with the volume bound to `/app/storage`.
-   On the first start without an `APP_KEY`, the container generates an application key and the OAuth signing keys.
+   On the first start, the container generates the OAuth [signing key](setup/signing-keys.md).
+   If `APP_KEY` is empty, it also generates an application key.
 6. Read the generated application key and set it as the `APP_KEY` environment variable.
    Without a fixed key, users must log in again each time you recreate the container.
 
     ```sh
     docker exec -it handover php artisan key:get
     ```
-
-    !!! warning "Setting `APP_KEY` before the first start"
-        The container only generates the OAuth signing keys when `APP_KEY` is empty.
-        If you set `APP_KEY` from the start, generate the keys yourself with `php artisan passport:keys`.
 
 7. Create the database tables.
 

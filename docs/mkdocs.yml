@@ -96,6 +96,7 @@ nav:
       - Setup:
           - Customising the theme: setup/theme.md
           - Data protection policy: setup/dpp.md
+          - Signing keys: setup/signing-keys.md
   - Usage:
       - OAuth clients: concepts/oauth-clients.md
       - Groups: groups.md

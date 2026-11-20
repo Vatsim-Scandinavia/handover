@@ -91,4 +91,12 @@ trait RunsOAuthFlows
     {
         return json_decode(base64_decode(strtr(explode('.', $jwt)[0], '-_', '+/')), true);
     }
+
+    /** A JSON request with the access token as a bearer token, and no guard state left from earlier requests. */
+    protected function bearerJson(string $method, string $uri, string $accessToken): TestResponse
+    {
+        $this->app['auth']->forgetGuards();
+
+        return $this->withHeaders(['Authorization' => 'Bearer '.$accessToken])->json($method, $uri);
+    }
 }
