@@ -1,5 +1,25 @@
 # Changelog
 
+## [4.0.0-beta.6](https://github.com/Vatsim-Scandinavia/handover/compare/v4.0.0-beta.5...v4.0.0-beta.6) (2026-11-20)
+
+
+### Features
+
+* add client policies for scopes, required groups and sessions ([c834088](https://github.com/Vatsim-Scandinavia/handover/commit/c834088aa1d5dd94096ab6c162ec52d03bcb6182))
+* add OpenID Connect core ([69e0c0b](https://github.com/Vatsim-Scandinavia/handover/commit/69e0c0b32c6fcadf95753575a3abacc8893dd15d))
+* add public clients, PKCE and CORS ([14d3312](https://github.com/Vatsim-Scandinavia/handover/commit/14d33121a505f522794fdb24e4337a0bf9a075f4))
+* add signing key rotation with kid and JWKS ([f82ee35](https://github.com/Vatsim-Scandinavia/handover/commit/f82ee35986bad84c5f362bb6138e7f70c5ce406f))
+
+
+### Bug Fixes
+
+* let confidential clients send Origin, allow loopback IPs ([1931bd4](https://github.com/Vatsim-Scandinavia/handover/commit/1931bd43b2572f8e90647f8e4a3d5423049417c9))
+
+
+### Miscellaneous Chores
+
+* **deps:** update dependency vue to v3.5.46 ([#226](https://github.com/Vatsim-Scandinavia/handover/issues/226)) ([357a4c4](https://github.com/Vatsim-Scandinavia/handover/commit/357a4c4c059ec5aedbf44d0e1b068fbf0307cac9))
+
 ## [4.0.0-beta.5](https://github.com/Vatsim-Scandinavia/handover/compare/v4.0.0-beta.4...v4.0.0-beta.5) (2026-11-19)
 
 
