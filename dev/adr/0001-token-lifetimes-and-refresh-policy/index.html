@@ -1462,20 +1462,25 @@
 
 
 <h1 id="token-lifetimes-and-refresh-policy">Token lifetimes and refresh policy<a class="headerlink" href="#token-lifetimes-and-refresh-policy" title="Permanent link">&para;</a></h1>
-<p>Status: Accepted, 2026-11-18. Amended 2026-11-19: the migration caps each refresh token relative to its access token.</p>
+<p>Status: Accepted, 2026-11-18.</p>
+<p>Amended:</p>
+<ul>
+<li>2026-11-19: the migration caps each refresh token relative to its access token.</li>
+<li>2026-11-19: one session per client is now the default, and the client policy can turn it off per client.</li>
+</ul>
 <h2 id="context">Context<a class="headerlink" href="#context" title="Permanent link">&para;</a></h2>
 <p>Access tokens lasted one month and refresh tokens 100 years. Each time a new access token was issued, the <code>RevokeOldTokens</code> listener revoked the user's older access tokens for that client, but left their refresh tokens valid. The refresh grant checks only the refresh token's own revoked flag, so a leaked or superseded refresh token kept working for a century.</p>
 <p>The relying parties limit what we can change. Booking and Flarum use the access token only at login, and Bookstack does not refresh. Control Center stores one token pair per user. Every night it refreshes each user whose access token has expired, even users who rarely log in, and then reads <code>/api/user</code>. If a single refresh fails, Control Center wipes that user's tokens.</p>
 <h2 id="decision">Decision<a class="headerlink" href="#decision" title="Permanent link">&para;</a></h2>
 <p>Access tokens last 1 hour. Tokens already issued keep their one-month expiry.</p>
 <p>Refresh tokens last 30 days. Each refresh issues a new refresh token, so the 30 days restart every time. There is no absolute cap.</p>
-<p>Each user keeps one session per client. <code>RevokeOldTokens</code> stays, and it now also revokes the refresh tokens that belong to the access tokens it revokes. The refresh token just issued belongs to the new access token, so it is never revoked.</p>
+<p>By default, each user keeps one session per client. A client policy with <code>single_session</code> off keeps every session instead. <code>RevokeOldTokens</code> stays, and it now also revokes the refresh tokens that belong to the access tokens it revokes. The refresh token just issued belongs to the new access token, so it is never revoked.</p>
 <p>A single migration ships with the change. It sets every live refresh token to expire 30 days after its access token expires, and revokes refresh tokens whose access token is already revoked. Old access tokens last up to a month after deploy, and Control Center only refreshes once its access token has expired, so a flat "deploy plus 30 days" cap could expire a refresh token before it is ever used.</p>
 <h2 id="consequences">Consequences<a class="headerlink" href="#consequences" title="Permanent link">&para;</a></h2>
 <p>Control Center renews each user's tokens on the first night after their old access token expires, and keeps them alive from then on, because 1-hour access tokens are always expired by the next nightly run. Any client that stops refreshing loses access within 30 days, and the daily <code>passport:purge</code> task removes the expired tokens.</p>
 <p>A new login on one device ends the user's session with the same client on another device. No current client notices, since each keeps one token pair per user on its server.</p>
 <h2 id="alternatives-considered">Alternatives considered<a class="headerlink" href="#alternatives-considered" title="Permanent link">&para;</a></h2>
-<p>Dropping <code>RevokeOldTokens</code> would allow sessions on several devices, and short-lived tokens already limit what a leak can do. We kept it because it matches today's behaviour and closes the gap directly. If public clients need sessions on several devices, we can revisit this under per-client policy.</p>
+<p>Dropping <code>RevokeOldTokens</code> would allow sessions on several devices, and short-lived tokens already limit what a leak can do. We kept it because it matches today's behaviour and closes the gap directly. The client policy now lets an administrator turn it off for a client that needs sessions on several devices.</p>
 <p>An absolute cap, such as one year, would quietly wipe Control Center tokens for users who rarely log in.</p>
 <p>Token revocation (RFC 7009) and introspection (RFC 7662) are out of scope. No relying party asked for them.</p>
 <!--
@@ -1507,7 +1512,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 18, 2026 22:01:04 UTC">November 18, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 14:52:34 UTC">November 20, 2026</span>
   </span>
 
     

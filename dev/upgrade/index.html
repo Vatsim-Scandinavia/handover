@@ -1415,6 +1415,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#client-access-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Clients limit scopes, members and sessions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#the-groups-api-reports-inherited-groups" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1603,6 +1614,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#client-access-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Clients limit scopes, members and sessions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#the-groups-api-reports-inherited-groups" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1726,9 +1748,16 @@ For details, see <a href="#token-lifetimes-are-shorter">token lifetimes are shor
    The floating <code>:v3</code> tag never moves to 4.0.0, so you must change it.</p>
 </li>
 <li>
-<p>Apply the database changes. This adds the <code>group_hierarchy</code> table for <a href="../groups/#nested-groups-transitive-membership">nested groups</a>, shortens the lifetime of existing refresh tokens, and moves OAuth clients to the <a href="#oauth-clients-use-the-passport-13-schema">Passport 13 client schema</a>:</p>
+<p>Apply the database changes:</p>
 <div class="language-sh highlight"><pre><span></span><code>php<span class="w"> </span>artisan<span class="w"> </span>migrate<span class="w"> </span>--force
 </code></pre></div>
+<p>The migrations do the following:</p>
+<ul>
+<li>Add the <code>group_hierarchy</code> table for <a href="../groups/#nested-groups-transitive-membership">nested groups</a>.</li>
+<li>Shorten the lifetime of existing refresh tokens.</li>
+<li>Move OAuth clients to the <a href="#oauth-clients-use-the-passport-13-schema">Passport 13 client schema</a>.</li>
+<li>Give every client <a href="#client-access-settings">allowed scopes, required groups and a session setting</a>.</li>
+</ul>
 </li>
 <li>
 <p>Hash the OAuth client secrets. Run this once per environment:</p>
@@ -1815,6 +1844,22 @@ Administrators can change the grant types and redirect URIs of any client in the
 Editing a client in the admin UI no longer drops its extra redirect URIs.
 See <a href="../concepts/oauth-clients/#grant-types">OAuth clients</a>.</p>
 <p>The old <code>redirect</code>, <code>personal_access_client</code> and <code>password_client</code> columns stay in the database, but Handover no longer reads them.</p>
+<h4 id="client-access-settings">Clients limit scopes, members and sessions<a class="headerlink" href="#client-access-settings" title="Permanent link">&para;</a></h4>
+<p>Each client now has three settings:</p>
+<ul>
+<li><a href="../concepts/oauth-clients/#allowed-scopes">Allowed scopes</a>: the scopes the client may request.</li>
+<li><a href="../concepts/oauth-clients/#required-groups">Required groups</a>: the groups whose members may sign in.</li>
+<li><a href="../concepts/oauth-clients/#single-session">Single session</a>: whether each member keeps one session with the client.</li>
+</ul>
+<p>The migration sets them so that every existing client keeps its behaviour. You need to do nothing:</p>
+<ul>
+<li>The client may request every scope that 3.x has: <code>full_name</code>, <code>email</code>, <code>vatsim_details</code>, <code>country</code> and <code>groups</code>.</li>
+<li>The client has no required groups, so every member may sign in.</li>
+<li>Each member keeps a single session with the client.</li>
+</ul>
+<p>A request for a scope the client does not allow now fails with the <code>invalid_scope</code> error.
+In 3.x, Handover granted any known scope to any client.</p>
+<p>When you create a client in the admin UI, you must pick its allowed scopes.</p>
 <h4 id="the-groups-api-reports-inherited-groups">The groups API reports inherited groups<a class="headerlink" href="#the-groups-api-reports-inherited-groups" title="Permanent link">&para;</a></h4>
 <p>Each entry in the <code>groups</code> array now has a <code>direct</code> field.
 Once you nest groups, the array also lists groups a member inherits.
@@ -1855,7 +1900,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 19, 2026 01:57:25 UTC">November 19, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 14:52:34 UTC">November 20, 2026</span>
   </span>
 
     

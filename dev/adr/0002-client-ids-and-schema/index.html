@@ -1462,7 +1462,12 @@
 
 
 <h1 id="client-ids-and-schema">Client ids and schema<a class="headerlink" href="#client-ids-and-schema" title="Permanent link">&para;</a></h1>
-<p>Status: Accepted, 2026-11-19. Amended 2026-11-19: legacy columns drop after a prod beta, inside 4.0.0.</p>
+<p>Status: Accepted, 2026-11-19.</p>
+<p>Amended:</p>
+<ul>
+<li>2026-11-19: legacy columns drop after a prod beta, inside 4.0.0.</li>
+<li>2026-11-20: new clients get default allowed scopes, and a missing policy row fails closed.</li>
+</ul>
 <h2 id="context">Context<a class="headerlink" href="#context" title="Permanent link">&para;</a></h2>
 <p><code>oauth_clients</code> still has the pre-13 Passport layout: integer ids, a comma-separated <code>redirect</code> column, and grant types derived at runtime from two booleans. Every admin-created client is confidential and first-party, so each one silently allows <code>implicit</code>, <code>client_credentials</code> and <code>device_code</code> as well as <code>authorization_code</code> and <code>refresh_token</code>. Live relying parties hold integer client ids in their config, and we don't know every party that relies on today's grants.</p>
 <h2 id="decision">Decision<a class="headerlink" href="#decision" title="Permanent link">&para;</a></h2>
@@ -1470,6 +1475,8 @@
 <p>Clients keep one table with a string <code>id</code>. Existing clients keep their integer ids, such as <code>"5"</code>. New clients get UUIDv7 ids (<code>Passport::$clientUuids = true</code>). Every <code>client_id</code> column becomes a string. The client model accepts digit-only keys in route binding, so admin URLs for legacy clients still resolve.</p>
 <p>Existing clients keep exactly the grant types they have today. New clients get only <code>authorization_code</code> and <code>refresh_token</code>. Admins can change a client's grant types in the admin form.</p>
 <p>Per-client settings that Passport does not know about live in <code>oauth_client_policies</code>. It has one row per client, keyed by <code>client_id</code>, with typed columns. Every client has a row: the backfill creates one for each existing client, and creating a client creates its row. Columns that have a sensible default get it in the database.</p>
+<p>Allowed scopes have no database default. The backfill allows each existing client every scope that exists before the policy: <code>full_name</code>, <code>email</code>, <code>vatsim_details</code>, <code>country</code> and <code>groups</code>. A new client starts with the default scopes, <code>full_name</code>, <code>email</code>, <code>vatsim_details</code> and <code>country</code>. These are the scopes Passport granted by default before the policy, so a client created outside the admin form, such as with <code>passport:client</code>, behaves as before. The admin form requires an administrator to choose a new client's scopes, which replace the defaults.</p>
+<p>Code treats a missing row as a fault and fails closed. The authorize endpoint refuses the sign-in, the token endpoint refuses any grant with a user, a grant without a user can get no scope, and the client keeps one session per user.</p>
 <h2 id="consequences">Consequences<a class="headerlink" href="#consequences" title="Permanent link">&para;</a></h2>
 <p>Legacy clients keep <code>client_credentials</code>, so Passport's guard against a user id equal to a client id (<code>TokenGuard.php:146</code>) still applies to them. It cannot fire in practice, because user ids are <abbr title="Virtual Air Traffic Simulation network">VATSIM</abbr> CIDs and client ids are small.</p>
 <h2 id="alternatives-considered">Alternatives considered<a class="headerlink" href="#alternatives-considered" title="Permanent link">&para;</a></h2>
@@ -1477,7 +1484,7 @@
 <p>Re-registering every client with a UUID: this breaks every live relying party for no security gain.</p>
 <p>Trimming legacy grants to authorization code and refresh: this could break unknown users of the other grants. Admins can trim them one client at a time instead.</p>
 <p>Policy columns on <code>oauth_clients</code>: a side table keeps our columns clear of future Passport schema changes.</p>
-<p>Optional policy rows, where a missing row means defaults: each client's allowed scopes live here and have no safe default, so every client needs a row.</p>
+<p>Optional policy rows, where a missing row means defaults: the safe default for a missing row is to refuse the client, and the useful default for a new client is to keep Passport's old default scopes. One fallback can't serve both, so every client has a row and a missing row is a fault.</p>
 <!--
 This is a list of abbreviations which will be automatically expanded on every content page.
 Don't add any words or abbreviations which are confusingly or rarely used.
@@ -1507,7 +1514,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 18, 2026 23:14:30 UTC">November 18, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 14:52:34 UTC">November 20, 2026</span>
   </span>
 
     

@@ -845,6 +845,39 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#allowed-scopes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Allowed scopes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#required-groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required groups
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#single-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Single session
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1438,6 +1471,39 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#allowed-scopes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Allowed scopes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#required-groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required groups
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#single-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Single session
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1496,10 +1562,10 @@ Each client gets an ID and a secret, which the service uses to talk to Handover.
 <p>Administrators manage clients. An administrator is a direct member of a group marked as an admin group, see <a href="../../groups/#access">groups</a>.</p>
 <h2 id="managing-clients-in-the-browser">Managing clients in the browser<a class="headerlink" href="#managing-clients-in-the-browser" title="Permanent link">&para;</a></h2>
 <p>Open <strong>OAuth Clients</strong> in the header of the groups pages, or go to <code>/admin/oauth-clients</code>.
-The page lists every active client with its ID, name, redirect URIs and grant types.</p>
+The page lists every active client with its ID, name, redirect URIs, grant types, allowed scopes and who may sign in.</p>
 <ul>
-<li><strong>New client</strong>: enter a descriptive name and the redirect URIs of the service. Members see the name, so make it clear.</li>
-<li><strong>Edit</strong>: change the name, redirect URIs or grant types.</li>
+<li><strong>New client</strong>: enter a descriptive name and the redirect URIs of the service, and tick the scopes it may request. Members see the name, so make it clear.</li>
+<li><strong>Edit</strong>: change the name, redirect URIs, grant types, allowed scopes, required groups or single session setting.</li>
 <li><strong>Regenerate</strong>: create a new secret. The old secret stops working at once.</li>
 <li><strong>Delete</strong>: remove the client and revoke its existing tokens.</li>
 </ul>
@@ -1543,12 +1609,39 @@ A new client gets <strong>Authorization code</strong> and <strong>Refresh token<
 Handover does not support implicit, password, personal access or device code.
 The form shows them only on clients that already have them, so you can untick them but not add them.
 If a service does not use a grant type, untick it.</p>
+<h3 id="allowed-scopes">Allowed scopes<a class="headerlink" href="#allowed-scopes" title="Permanent link">&para;</a></h3>
+<p>Allowed scopes set which <a href="../../integrations/clients/#scopes">scopes</a> a client may request.
+A new client has none ticked, so you must tick at least one.
+Tick only the scopes the service needs.</p>
+<p>If a service requests a scope that is not ticked, the sign-in fails with the <code>invalid_scope</code> error.
+If you remove a scope that a service already holds, its next token refresh fails with the <code>invalid_scope</code> error, and the member must sign in again.
+If a service requests no scopes, it gets the default scopes <code>full_name</code>, <code>email</code>, <code>vatsim_details</code> and <code>country</code>, limited to the ones that are ticked.
+If none of those are ticked, the service gets a token with no scopes.</p>
+<p>Clients created in 3.x allow every scope.</p>
+<h3 id="required-groups">Required groups<a class="headerlink" href="#required-groups" title="Permanent link">&para;</a></h3>
+<p>Required groups set who may sign in to a client.
+If you tick no groups, every member may sign in.
+If you tick one or more groups, only members of at least one of them may sign in.
+Membership includes <a href="../../groups/#nested-groups-transitive-membership">nested groups</a>: a member of a group nested in a required group may sign in too.</p>
+<p>A member outside the required groups sees an error page in Handover that names the client.
+Handover does not send them back to the service.</p>
+<p>Handover checks the groups again each time the service refreshes a token.
+If the member has left the required groups, the refresh fails with the <code>invalid_grant</code> error.
+Access tokens that Handover already issued stay valid until they expire, for up to one hour.</p>
+<p>You cannot delete a group while a client requires it.
+Remove the group from the client first.</p>
+<h3 id="single-session">Single session<a class="headerlink" href="#single-session" title="Permanent link">&para;</a></h3>
+<p>By default, <strong>Single session</strong> is ticked, and each member can have one session with the client.
+When a member signs in again, Handover revokes their earlier access and refresh tokens for that client.</p>
+<p>Untick it to let a member stay signed in to the service on several devices at once.</p>
 <h2 id="managing-clients-on-the-command-line">Managing clients on the command line<a class="headerlink" href="#managing-clients-on-the-command-line" title="Permanent link">&para;</a></h2>
 <p>You can also create a client with Passport's command:</p>
 <div class="language-sh highlight"><pre><span></span><code>php<span class="w"> </span>artisan<span class="w"> </span>passport:client
 </code></pre></div>
 <p>Answer the prompts with a descriptive name and the redirect URI of the service, and keep the client confidential.
-The command prints the client ID and secret.</p>
+The command prints the client ID and secret.
+A client created this way may request the default scopes, admits every member and keeps a single session.
+To change that, edit the client in the browser.</p>
 <p>To revoke a client and all its tokens, run the command below. It asks for the client ID.</p>
 <div class="language-sh highlight"><pre><span></span><code>php<span class="w"> </span>artisan<span class="w"> </span>passport:client:delete
 </code></pre></div>
@@ -1593,7 +1686,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 19, 2026 01:57:25 UTC">November 19, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 14:52:34 UTC">November 20, 2026</span>
   </span>
 
     
