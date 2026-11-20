@@ -2010,11 +2010,11 @@ See <a href="../concepts/oauth-clients/#client-type">OAuth clients</a> and <a hr
 A client created before 4.0.0 without a secret is now a public client:</p>
 <ul>
 <li>It must send a code challenge with the <code>S256</code> method. Handover now refuses the <code>plain</code> method.</li>
-<li>When you edit it, its redirect URIs must use <code>https</code>, or <code>http://localhost</code>, and it may keep only the authorization code and refresh token grant types.</li>
+<li>When you edit it, its redirect URIs must use <code>https</code>, or <code>http</code> on <code>localhost</code>, <code>127.0.0.1</code> or <code>[::1]</code>, and it may keep only the authorization code and refresh token grant types.</li>
 </ul>
-<p>The token and UserInfo endpoints now check the <code>Origin</code> header.
-A request with an <code>Origin</code> header that the client does not allow fails with a <code>403</code> response.
-Services that call Handover from their server send no <code>Origin</code> header, so they are not affected.</p>
+<p>The token and UserInfo endpoints now check the <code>Origin</code> header for public clients.
+A request with an <code>Origin</code> header that the public client does not allow fails with a <code>403</code> response.
+Confidential clients are not affected, even when their server sends an <code>Origin</code> header.</p>
 <h4 id="signing-keys-move-to-a-key-store">Signing keys move to a key store<a class="headerlink" href="#signing-keys-move-to-a-key-store" title="Permanent link">&para;</a></h4>
 <p>Handover now keeps its OAuth signing keys in <code>oauth-keys/</code> on the storage volume, and you can rotate them with artisan commands.
 See <a href="../setup/signing-keys/">signing keys</a>.</p>
@@ -2072,7 +2072,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 15:52:39 UTC">November 20, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 16:01:22 UTC">November 20, 2026</span>
   </span>
 
     
