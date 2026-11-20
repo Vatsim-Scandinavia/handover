@@ -3,6 +3,7 @@
 namespace App\Models\Passport;
 
 use App\Models\Group;
+use App\OAuth\Origin;
 use App\Services\GroupMembershipResolver;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,7 @@ use Illuminate\Support\Arr;
  *
  * @property string $client_id
  * @property list<string> $allowed_scopes
+ * @property list<string> $allowed_origins The origins a public client may call the token and userinfo endpoints from, as Origin::of() forms them.
  * @property bool $single_session
  */
 class ClientPolicy extends Model
@@ -34,7 +36,7 @@ class ClientPolicy extends Model
 
     public $incrementing = false;
 
-    protected $fillable = ['client_id', 'allowed_scopes', 'single_session'];
+    protected $fillable = ['client_id', 'allowed_scopes', 'allowed_origins', 'single_session'];
 
     protected $attributes = ['single_session' => true];
 
@@ -42,6 +44,7 @@ class ClientPolicy extends Model
     {
         return [
             'allowed_scopes' => 'array',
+            'allowed_origins' => 'array',
             'single_session' => 'boolean',
         ];
     }
@@ -57,14 +60,35 @@ class ClientPolicy extends Model
         return $this->belongsToMany(Group::class, 'oauth_client_required_groups', 'client_id', 'group_id');
     }
 
+    /** Whether a public client may call the token and userinfo endpoints from the origin. */
+    public function allowsOrigin(string $origin): bool
+    {
+        return in_array($origin, $this->allowed_origins, true);
+    }
+
+    /** Whether some active client allows the origin. */
+    public static function anyAllowsOrigin(string $origin): bool
+    {
+        return static::query()
+            ->whereJsonContains('allowed_origins', $origin)
+            ->whereHas('client', fn ($client) => $client->where('revoked', false))
+            ->exists();
+    }
+
     /**
      * Save the fields the admin UI sent. Fields left out keep their value.
      *
-     * @param  array{allowed_scopes?: list<string>, single_session?: bool, required_groups?: list<string>}  $fields
+     * @param  array{allowed_scopes?: list<string>, allowed_origins?: list<string>, single_session?: bool, required_groups?: list<string>}  $fields
      */
     public function updateFromAdmin(array $fields): void
     {
-        $this->update(Arr::only($fields, ['allowed_scopes', 'single_session']));
+        $this->fill(Arr::only($fields, ['allowed_scopes', 'single_session']));
+
+        if (array_key_exists('allowed_origins', $fields)) {
+            $this->allowed_origins = array_values(array_unique(array_map(Origin::of(...), $fields['allowed_origins'])));
+        }
+
+        $this->save();
 
         if (array_key_exists('required_groups', $fields)) {
             $this->requiredGroups()->sync($fields['required_groups']);
@@ -77,12 +101,13 @@ class ClientPolicy extends Model
     /**
      * The fields the admin UI shows.
      *
-     * @return array{allowed_scopes: list<string>, single_session: bool, required_groups: list<string>}
+     * @return array{allowed_scopes: list<string>, allowed_origins: list<string>, single_session: bool, required_groups: list<string>}
      */
     public function toAdminArray(): array
     {
         return [
             'allowed_scopes' => $this->allowed_scopes,
+            'allowed_origins' => $this->allowed_origins,
             'single_session' => $this->single_session,
             'required_groups' => $this->requiredGroups->pluck('id')->sort()->values()->all(),
         ];

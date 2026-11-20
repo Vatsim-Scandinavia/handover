@@ -1,7 +1,8 @@
 # OAuth clients
 
 An OAuth client is a service that lets members log in through Handover, such as Control Center or a forum.
-Each client gets an ID and a secret, which the service uses to talk to Handover.
+Each client gets an ID, which the service uses to talk to Handover.
+A confidential client also gets a secret.
 
 Administrators manage clients. An administrator is a direct member of a group marked as an admin group, see [groups](../groups.md#access).
 
@@ -10,9 +11,9 @@ Administrators manage clients. An administrator is a direct member of a group ma
 Open **OAuth Clients** in the header of the groups pages, or go to `/admin/oauth-clients`.
 The page lists every active client with its ID, name, redirect URIs, grant types, allowed scopes and who may sign in.
 
-- **New client**: enter a descriptive name and the redirect URIs of the service, and tick the scopes it may request. Members see the name, so make it clear.
-- **Edit**: change the name, redirect URIs, grant types, allowed scopes, required groups or single session setting.
-- **Regenerate**: create a new secret. The old secret stops working at once.
+- **New client**: choose the [client type](#client-type), enter a descriptive name and the redirect URIs of the service, and tick the scopes it may request. Members see the name, so make it clear.
+- **Edit**: change the name, redirect URIs, grant types, allowed scopes, allowed origins, required groups or single session setting.
+- **Regenerate**: create a new secret for a confidential client. The old secret stops working at once.
 - **Delete**: remove the client and revoke its existing tokens.
 
 !!! warning "Copy the secret right away"
@@ -20,13 +21,31 @@ The page lists every active client with its ID, name, redirect URIs, grant types
     It shows the plaintext secret once, after you create a client or regenerate its secret.
     If you lose it, regenerate the secret and update the service.
 
-Clients created here are confidential.
 A new client gets a UUID as its ID. Clients created before 4.0.0 keep their numeric ID.
+
+### Client type
+
+Choose the type when you create a client. You cannot change it later.
+
+| Type | Use |
+| ---- | --- |
+| Confidential | The service runs on a server and keeps the secret there. This is the default. |
+| Public | The service runs in the member's browser, such as a single-page app, where a secret cannot be kept. |
+
+A public client has no secret and no **Regenerate** button.
+It must prove each sign-in with PKCE, using the `S256` method, see [public clients](../integrations/oidc.md#public-clients).
+It may have only the **Authorization code** and **Refresh token** grant types.
+The list marks it as **Public**.
+
+A client created before 4.0.0 without a secret is a public client.
 
 ### Redirect URIs
 
 A client can have several redirect URIs, such as one per hostname of the service.
 The service must send one of them exactly, so `https://example.test/callback` does not match `https://example.test/callback/`.
+
+A public client's redirect URIs must use `https`.
+For development, `http://localhost` is also allowed, with any port.
 
 ### Grant types
 
@@ -44,6 +63,8 @@ Handover does not support implicit, password, personal access or device code.
 The form shows them only on clients that already have them, so you can untick them but not add them.
 If a service does not use a grant type, untick it.
 
+A public client may have only **Authorization code** and **Refresh token**.
+
 ### Allowed scopes
 
 Allowed scopes set which [scopes](../integrations/clients.md#scopes) a client may request.
@@ -57,6 +78,19 @@ If none of those are ticked, the service gets a token with no scopes.
 
 Clients created in 3.x allow every scope except `openid` and `profile`.
 Tick those when a service moves to [OpenID Connect](../integrations/oidc.md).
+
+### Allowed origins
+
+Allowed origins set where a public client may call Handover's token and UserInfo endpoints from the browser.
+Confidential clients have none.
+
+Enter each origin as a scheme, a host and an optional port, with no path, such as `https://app.example.test` or `http://localhost:5173`.
+Like a public client's redirect URIs, an origin must use `https`, or `http://localhost` for development.
+Handover stores each origin in the form a browser sends it: in lowercase, and without the default port `443` or `80`.
+
+When you create a public client, the form fills in the origins of its redirect URIs.
+Change them if the service calls Handover from another origin.
+A request from an origin that is not on the list fails, see [public clients](../integrations/oidc.md#public-clients).
 
 ### Required groups
 

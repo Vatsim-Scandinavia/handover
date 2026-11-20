@@ -34,4 +34,20 @@ class ClientPolicyMigrationTest extends TestCase
         }
         $this->assertSame(0, DB::table('oauth_client_required_groups')->count());
     }
+
+    public function test_every_existing_client_starts_with_no_allowed_origins(): void
+    {
+        $migration = require database_path('migrations/2026_11_19_300000_add_allowed_origins_to_oauth_client_policies.php');
+        $migration->down();
+        DB::table('oauth_clients')->insert([
+            'id' => '5', 'name' => 'Client 5', 'secret' => 'hashed', 'revoked' => false,
+            'redirect_uris' => '["https://client.test/callback"]', 'grant_types' => '["authorization_code"]',
+            'created_at' => now(), 'updated_at' => now(),
+        ]);
+        DB::table('oauth_client_policies')->insert(['client_id' => '5', 'allowed_scopes' => '["email"]']);
+
+        $migration->up();
+
+        $this->assertSame('[]', DB::table('oauth_client_policies')->where('client_id', '5')->value('allowed_origins'));
+    }
 }

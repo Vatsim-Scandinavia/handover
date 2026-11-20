@@ -64,6 +64,7 @@ class Kernel extends HttpKernel
         'suspended' => \App\Http\Middleware\SuspendedUser::class,
         'groups.manage' => \App\Http\Middleware\ManagesGroups::class,
         'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
+        'cors' => \App\Http\Middleware\Cors::class,
     ];
 
     /**
@@ -74,6 +75,8 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middlewarePriority = [
+        // So that responses from the middleware after it, such as a 401, are readable.
+        \App\Http\Middleware\Cors::class,
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
         \App\Http\Middleware\Authenticate::class,

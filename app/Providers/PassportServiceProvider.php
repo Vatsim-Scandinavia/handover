@@ -3,15 +3,19 @@
 namespace App\Providers;
 
 use App\OAuth\AccessToken;
+use App\OAuth\AuthCodeGrant;
 use App\OAuth\Oidc\AuthCodeRepository;
 use App\OAuth\Oidc\IdTokenResponse;
 use App\OAuth\SigningKeys\PublishedKeysValidator;
 use App\OAuth\SigningKeys\SigningKeyStore;
+use DateInterval;
 use Laravel\Passport\Bridge\AccessTokenRepository;
 use Laravel\Passport\Bridge\AuthCodeRepository as PassportAuthCodeRepository;
+use Laravel\Passport\Bridge\RefreshTokenRepository;
 use Laravel\Passport\Passport;
 use Laravel\Passport\PassportServiceProvider as BaseServiceProvider;
 use League\OAuth2\Server\CryptKey;
+use League\OAuth2\Server\Grant\AuthCodeGrant as LeagueAuthCodeGrant;
 use League\OAuth2\Server\ResourceServer;
 
 /**
@@ -48,6 +52,20 @@ class PassportServiceProvider extends BaseServiceProvider
         }
 
         return $this->app->make(SigningKeyStore::class)->active()->privateCryptKey();
+    }
+
+    /**
+     * Public clients must use PKCE with S256. See App\OAuth\AuthCodeGrant.
+     * The arguments match Passport's own buildAuthCodeGrant(), including the
+     * 10-minute auth code lifetime.
+     */
+    protected function buildAuthCodeGrant(): LeagueAuthCodeGrant
+    {
+        return new AuthCodeGrant(
+            $this->app->make(PassportAuthCodeRepository::class),
+            $this->app->make(RefreshTokenRepository::class),
+            new DateInterval('PT10M'),
+        );
     }
 
     protected function registerResourceServer(): void

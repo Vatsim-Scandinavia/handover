@@ -11,6 +11,7 @@ Clients created in 3.x do not have `openid` either.
 A request for `openid` from a client that does not allow it fails with the `invalid_scope` error.
 
 The service keeps its client ID, secret and redirect URIs.
+A service that runs in the browser needs a [public client](#public-clients).
 The [user API](../reference/api.md) keeps working for every client.
 
 ## Discovery
@@ -108,9 +109,33 @@ Authorization: Bearer ACCESS_TOKEN
 An access token without the `openid` scope gets a `403` response with the `insufficient_scope` error.
 A missing or invalid access token gets a `401` response.
 
+## Public clients
+
+A service that runs in the member's browser, such as a single-page app, cannot keep a secret.
+Register it as a [public client](../concepts/oauth-clients.md#client-type) instead.
+A public client has no secret, so it signs members in with the authorization code flow and PKCE (RFC 7636).
+
+- Send a `code_challenge` with `code_challenge_method=S256` to the authorization endpoint. Handover refuses a request without a challenge, or with the `plain` method, with the `invalid_request` error.
+- Send the matching `code_verifier` and the `client_id` to the token endpoint, but no `client_secret`.
+- A refresh needs only the `refresh_token` and the `client_id`.
+
+A public client can call the token endpoint and the UserInfo endpoint from the browser.
+Handover allows a call only from the client's [allowed origins](../concepts/oauth-clients.md#allowed-origins):
+
+- The token endpoint checks the `Origin` header against the allowed origins of the client named by `client_id`.
+- The UserInfo endpoint checks the `Origin` header against the allowed origins of the client the access token was issued to.
+- If the origin is not allowed, Handover refuses the request with a `403` response and no CORS headers.
+
+Handover answers a CORS preflight for an origin that any client allows.
+The responses never allow credentials, so do not send cookies with these calls.
+The authorization endpoint and the [user API](../reference/api.md) do not support CORS.
+
+Refresh tokens and sessions work for a public client as they do for a confidential one.
+Each refresh returns a new refresh token, and the [single session](../concepts/oauth-clients.md#single-session) setting applies.
+A public client often runs on several devices per member, so consider turning single session off for it.
+
 ## Limitations
 
 - Handover does not support logging out from the service (RP-initiated logout).
 - Handover ignores the `max_age` and `claims` request parameters.
 - Handover never shows a consent screen and ignores `prompt=consent`. `prompt=none` and `prompt=login` work as OpenID Connect defines.
-- Every client is confidential and must send its secret to the token endpoint.

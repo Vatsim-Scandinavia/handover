@@ -21,6 +21,12 @@ trait RunsOAuthFlows
 {
     protected string $redirectUri = 'https://client.test/callback';
 
+    /** A PKCE code verifier. */
+    protected const CODE_VERIFIER = 'dBjftJeZ4CVP-1J0bZXWFRbN1Tq4Wa2mH2gAuGSo1lE';
+
+    /** Authorize parameters with the S256 code challenge of CODE_VERIFIER. */
+    protected const PKCE = ['code_challenge' => 'tz_oa_ckLmqNhjB3bIgMS7oCnabfTkkDP7gluYnTWsU', 'code_challenge_method' => 'S256'];
+
     protected function makeClient(bool $confidential = true): Client
     {
         return app(ClientRepository::class)->createAuthorizationCodeGrantClient(

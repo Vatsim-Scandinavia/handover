@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import axios from 'axios';
 import { Modal } from 'bootstrap';
 
@@ -7,9 +7,11 @@ import { Modal } from 'bootstrap';
  * @typedef {Object} OAuthClient
  * @property {string} id
  * @property {string} name
+ * @property {boolean} confidential
  * @property {string[]} redirect_uris
  * @property {string[]} grant_types
  * @property {string[]} allowed_scopes
+ * @property {string[]} allowed_origins
  * @property {boolean} single_session
  * @property {string[]} required_groups
  * @property {boolean} revoked
@@ -18,7 +20,7 @@ import { Modal } from 'bootstrap';
 const props = defineProps({
     /** Grant types an admin can give any client, mapped to their labels. */
     grantTypes: { type: Object, required: true },
-    /** Grant types ticked for a new client. */
+    /** Grant types ticked for a new client, and the only ones a public client may have. */
     defaultGrantTypes: { type: Array, required: true },
     /** Every scope, mapped to its description. */
     scopes: { type: Object, required: true },
@@ -82,18 +84,68 @@ function emptyForm() {
     return {
         id: null,
         name: '',
+        confidential: true,
         redirectUris: [''],
         grantTypes: [...props.defaultGrantTypes],
         legacyGrantTypes: [],
         // Admins pick a new client's scopes by hand, so none are ticked.
         allowedScopes: [],
+        allowedOrigins: [],
+        // Until the admin edits them, a new public client's allowed origins follow its redirect URIs.
+        originsFollowRedirectUris: true,
         singleSession: true,
         requiredGroups: [],
     };
 }
 
-/** Legacy grant types appear only on clients that already hold them. */
-const grantTypeOptions = computed(() => [...Object.keys(props.grantTypes), ...form.value.legacyGrantTypes]);
+/**
+ * The grant types a client of the type may have.
+ * @param {boolean} confidential
+ * @returns {string[]}
+ */
+function grantTypesFor(confidential) {
+    return confidential ? Object.keys(props.grantTypes) : props.defaultGrantTypes;
+}
+
+/** Other grant types appear only on clients that already hold them, so an admin can untick them. */
+const grantTypeOptions = computed(() => [...grantTypesFor(form.value.confidential), ...form.value.legacyGrantTypes]);
+
+/** The first error for the grant types list or any of its entries. */
+const grantTypesError = computed(() => Object.entries(errors.value)
+    .find(([key]) => key === 'grant_types' || key.startsWith('grant_types.'))?.[1][0]);
+
+/**
+ * The origin of a URI, as the browser sends it in the Origin header.
+ * @param {string} uri
+ * @returns {string|null}
+ */
+function originOf(uri) {
+    try {
+        const { origin } = new URL(uri);
+        return origin === 'null' ? null : origin;
+    } catch {
+        return null;
+    }
+}
+
+watch(
+    () => [form.value.confidential, form.value.originsFollowRedirectUris, ...form.value.redirectUris],
+    () => {
+        if (form.value.id === null && !form.value.confidential && form.value.originsFollowRedirectUris) {
+            form.value.allowedOrigins = [...new Set(form.value.redirectUris.map(originOf).filter(Boolean))];
+        }
+    },
+);
+
+/** Switching a new client to public drops the grant types it may not have. */
+watch(
+    () => form.value.confidential,
+    (confidential) => {
+        if (!confidential) {
+            form.value.grantTypes = form.value.grantTypes.filter((grant) => props.defaultGrantTypes.includes(grant));
+        }
+    },
+);
 
 function openCreate() {
     form.value = emptyForm();
@@ -106,10 +158,13 @@ function openEdit(client) {
     form.value = {
         id: client.id,
         name: client.name,
+        confidential: client.confidential,
         redirectUris: client.redirect_uris.length ? [...client.redirect_uris] : [''],
         grantTypes: [...client.grant_types],
-        legacyGrantTypes: client.grant_types.filter((grant) => !(grant in props.grantTypes)),
+        legacyGrantTypes: client.grant_types.filter((grant) => !grantTypesFor(client.confidential).includes(grant)),
         allowedScopes: [...client.allowed_scopes],
+        allowedOrigins: [...client.allowed_origins],
+        originsFollowRedirectUris: false,
         singleSession: client.single_session,
         requiredGroups: [...client.required_groups],
     };
@@ -126,6 +181,17 @@ function removeRedirectUri(index) {
     form.value.redirectUris.splice(index, 1);
 }
 
+function addAllowedOrigin() {
+    form.value.originsFollowRedirectUris = false;
+    form.value.allowedOrigins.push('');
+}
+
+/** @param {number} index */
+function removeAllowedOrigin(index) {
+    form.value.originsFollowRedirectUris = false;
+    form.value.allowedOrigins.splice(index, 1);
+}
+
 async function save() {
     saving.value = true;
     errors.value = {};
@@ -138,6 +204,12 @@ async function save() {
         single_session: form.value.singleSession,
         required_groups: form.value.requiredGroups,
     };
+    if (!editing) {
+        payload.confidential = form.value.confidential;
+    }
+    if (!form.value.confidential) {
+        payload.allowed_origins = form.value.allowedOrigins;
+    }
 
     try {
         const { data } = editing
@@ -147,7 +219,7 @@ async function save() {
         formModal.hide();
         await fetchClients();
 
-        if (!editing) {
+        if (!editing && data.secret) {
             reveal(data.secret);
         }
     } catch (error) {
@@ -224,7 +296,10 @@ async function copySecret() {
                     <tbody>
                         <tr v-for="client in clients" :key="client.id">
                             <td class="text-muted">{{ client.id }}</td>
-                            <td>{{ client.name }}</td>
+                            <td>
+                                {{ client.name }}
+                                <span v-if="!client.confidential" class="badge text-bg-secondary ms-1">Public</span>
+                            </td>
                             <td class="text-break">
                                 <div v-for="uri in client.redirect_uris" :key="uri"><code>{{ uri }}</code></div>
                             </td>
@@ -236,7 +311,12 @@ async function copySecret() {
                                     <button type="button" class="btn btn-sm btn-outline-secondary" @click="openEdit(client)">
                                         Edit
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary" @click="regenerate(client)">
+                                    <button
+                                        v-if="client.confidential"
+                                        type="button"
+                                        class="btn btn-sm btn-outline-secondary"
+                                        @click="regenerate(client)"
+                                    >
                                         Regenerate
                                     </button>
                                     <button type="button" class="btn btn-sm btn-outline-danger" @click="destroy(client)">
@@ -271,6 +351,35 @@ async function copySecret() {
                         >
                         <div v-if="errors.name" class="invalid-feedback">{{ errors.name[0] }}</div>
                     </div>
+                    <fieldset v-if="form.id === null" class="mb-3">
+                        <legend class="form-label fs-6">Client type</legend>
+                        <div class="form-check">
+                            <input
+                                id="client-type-confidential"
+                                v-model="form.confidential"
+                                type="radio"
+                                class="form-check-input"
+                                :value="true"
+                            >
+                            <label class="form-check-label" for="client-type-confidential">Confidential</label>
+                            <div class="text-muted small">The service runs on a server and keeps a secret.</div>
+                        </div>
+                        <div class="form-check">
+                            <input
+                                id="client-type-public"
+                                v-model="form.confidential"
+                                type="radio"
+                                class="form-check-input"
+                                :value="false"
+                            >
+                            <label class="form-check-label" for="client-type-public">Public</label>
+                            <div class="text-muted small">The service runs in the browser, has no secret and must use PKCE. You cannot change the type later.</div>
+                        </div>
+                        <div v-if="errors.confidential" class="text-danger small">{{ errors.confidential[0] }}</div>
+                    </fieldset>
+                    <p v-else class="text-muted small">
+                        {{ form.confidential ? 'Confidential client' : 'Public client: no secret, PKCE required' }}
+                    </p>
                     <fieldset class="mb-3">
                         <legend class="form-label fs-6">Redirect URIs</legend>
                         <div v-for="(uri, index) in form.redirectUris" :key="index" class="mb-2">
@@ -302,6 +411,38 @@ async function copySecret() {
                             Add redirect URI
                         </button>
                     </fieldset>
+                    <fieldset v-if="!form.confidential" class="mb-3">
+                        <legend class="form-label fs-6">Allowed origins</legend>
+                        <p class="text-muted small mb-1">The origins the service may call the token and UserInfo endpoints from, such as <code>https://example.test</code>.</p>
+                        <div v-for="(origin, index) in form.allowedOrigins" :key="index" class="mb-2">
+                            <div class="input-group has-validation">
+                                <input
+                                    v-model="form.allowedOrigins[index]"
+                                    type="url"
+                                    class="form-control"
+                                    :class="{ 'is-invalid': errors[`allowed_origins.${index}`] }"
+                                    :aria-label="`Allowed origin ${index + 1}`"
+                                    placeholder="https://example.test"
+                                    @input="form.originsFollowRedirectUris = false"
+                                >
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-secondary"
+                                    :aria-label="`Remove allowed origin ${index + 1}`"
+                                    @click="removeAllowedOrigin(index)"
+                                >
+                                    Remove
+                                </button>
+                                <div v-if="errors[`allowed_origins.${index}`]" class="invalid-feedback">
+                                    {{ errors[`allowed_origins.${index}`][0] }}
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="errors.allowed_origins" class="text-danger small mb-2">{{ errors.allowed_origins[0] }}</div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" @click="addAllowedOrigin">
+                            Add allowed origin
+                        </button>
+                    </fieldset>
                     <fieldset class="mb-0">
                         <legend class="form-label fs-6">Grant types</legend>
                         <div v-for="grant in grantTypeOptions" :key="grant" class="form-check">
@@ -314,7 +455,7 @@ async function copySecret() {
                             >
                             <label class="form-check-label" :for="`grant-${grant}`">{{ grantLabel(grant) }}</label>
                         </div>
-                        <div v-if="errors.grant_types" class="text-danger small">{{ errors.grant_types[0] }}</div>
+                        <div v-if="grantTypesError" class="text-danger small">{{ grantTypesError }}</div>
                     </fieldset>
                     <fieldset class="mt-3 mb-0">
                         <legend class="form-label fs-6">Allowed scopes</legend>

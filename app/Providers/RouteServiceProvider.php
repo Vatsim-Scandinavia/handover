@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Http\Middleware\AllowAnyOrigin;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
@@ -78,7 +77,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWellKnownRoutes()
     {
-        Route::middleware(AllowAnyOrigin::class)->group(base_path('routes/well-known.php'));
+        Route::middleware('cors:any')->group(base_path('routes/well-known.php'));
     }
 
     /**

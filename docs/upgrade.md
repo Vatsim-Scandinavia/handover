@@ -83,6 +83,7 @@ The container also moves the OAuth signing key into a key store that supports [k
     - Move OAuth clients to the [Passport 13 client schema](#oauth-clients-use-the-passport-13-schema).
     - Give every client [allowed scopes, required groups and a session setting](#client-access-settings).
     - Add the columns that [OpenID Connect](#handover-supports-openid-connect) sign-ins need.
+    - Add the allowed origins of [public clients](#handover-supports-public-clients).
 
     If you run Handover without the container, step 3 imports nothing, and the migration imports the signing key instead.
 
@@ -225,6 +226,22 @@ OpenID Connect is opt-in for each client: a service can use it only after an adm
 No existing client gets `openid` or `profile`, so existing services keep working.
 
 Access tokens that hold the `groups` scope now carry a `groups` claim with the IDs of the member's groups.
+
+#### Handover supports public clients
+
+Administrators can now create public clients for services that run in the member's browser.
+A public client has no secret, must use PKCE with the `S256` method, and calls the token and UserInfo endpoints from its allowed origins.
+See [OAuth clients](concepts/oauth-clients.md#client-type) and [public clients](integrations/oidc.md#public-clients).
+
+Existing clients that have a secret do not change.
+A client created before 4.0.0 without a secret is now a public client:
+
+- It must send a code challenge with the `S256` method. Handover now refuses the `plain` method.
+- When you edit it, its redirect URIs must use `https`, or `http://localhost`, and it may keep only the authorization code and refresh token grant types.
+
+The token and UserInfo endpoints now check the `Origin` header.
+A request with an `Origin` header that the client does not allow fails with a `403` response.
+Services that call Handover from their server send no `Origin` header, so they are not affected.
 
 #### Signing keys move to a key store
 

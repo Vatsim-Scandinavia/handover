@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use App\Models\Passport\Client;
+use App\OAuth\Origin;
+use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -27,7 +29,10 @@ class OAuthClientController extends Controller
         'client_credentials' => 'Client credentials',
     ];
 
-    /** Grant types the form ticks for a new client, as createAuthorizationCodeGrantClient() sets them. */
+    /**
+     * Grant types the form ticks for a new client, as createAuthorizationCodeGrantClient()
+     * sets them. They are also the only grant types a public client may have.
+     */
     private const DEFAULT_GRANT_TYPES = ['authorization_code', 'refresh_token'];
 
     public function __construct(private ClientRepository $clients) {}
@@ -61,15 +66,26 @@ class OAuthClientController extends Controller
     }
 
     /**
-     * Create a confidential, first-party client and return its one-time
-     * plaintext secret (Passport 13 stores only the hash).
+     * Create a first-party client. A confidential client gets a secret, which
+     * the response holds once in plaintext (Passport 13 stores only the hash).
+     * A public client gets none.
      */
     public function store(Request $request): JsonResponse
     {
         $validated = $this->validateClient($request);
 
         $client = DB::transaction(function () use ($validated): Client {
-            $client = $this->clients->createAuthorizationCodeGrantClient($validated['name'], $validated['redirect_uris']);
+            $client = $this->clients->createAuthorizationCodeGrantClient(
+                $validated['name'],
+                $validated['redirect_uris'],
+                confidential: $validated['confidential'] ?? true,
+            );
+
+            // A new public client may call Handover from where it receives its
+            // codes. updateFromAdmin() reduces the URIs to their origins.
+            if (! $client->confidential() && ! isset($validated['allowed_origins'])) {
+                $validated['allowed_origins'] = $validated['redirect_uris'];
+            }
 
             if (isset($validated['grant_types'])) {
                 $client->forceFill(['grant_types' => $validated['grant_types']])->save();
@@ -110,6 +126,11 @@ class OAuthClientController extends Controller
      */
     public function regenerateSecret(Client $client): JsonResponse
     {
+        // A secret would make a public client confidential, and its type is fixed.
+        if (! $client->confidential()) {
+            return response()->json(['message' => 'A public client has no secret.'], 422);
+        }
+
         $this->clients->regenerateSecret($client);
 
         return response()->json(['secret' => $client->plainSecret]);
@@ -117,35 +138,70 @@ class OAuthClientController extends Controller
 
     /**
      * Admins pick a new client's scopes by hand, so they are required on create.
+     * A public client gets stricter redirect URIs and grant types, and may
+     * have allowed origins.
      *
-     * @return array{name: string, redirect_uris: string[], grant_types?: string[], allowed_scopes?: string[], single_session?: bool, required_groups?: string[]}
+     * @return array{name: string, confidential?: bool, redirect_uris: string[], grant_types?: string[], allowed_scopes?: string[], allowed_origins?: string[], single_session?: bool, required_groups?: string[]}
      */
     private function validateClient(Request $request, ?Client $client = null): array
     {
-        $allowedGrantTypes = [...array_keys(self::GRANT_TYPES), ...($client?->grant_types ?? [])];
+        $public = $client ? ! $client->confidential() : ! $request->boolean('confidential', true);
+        $allowedGrantTypes = $public
+            ? self::DEFAULT_GRANT_TYPES
+            : [...array_keys(self::GRANT_TYPES), ...($client?->grant_types ?? [])];
 
         return $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            // The type is fixed once the client exists.
+            'confidential' => ['sometimes', 'boolean', function (string $attribute, mixed $value, Closure $fail) use ($client): void {
+                if ($client && (bool) $value !== $client->confidential()) {
+                    $fail('A client cannot change between confidential and public.');
+                }
+            }],
             'redirect_uris' => ['required', 'list', 'min:1'],
-            'redirect_uris.*' => ['required', 'url', 'max:2048', 'distinct'],
+            'redirect_uris.*' => ['required', 'url', 'max:2048', 'distinct', ...($public ? [$this->publicClientUri()] : [])],
             'grant_types' => ['sometimes', 'list', 'min:1'],
             'grant_types.*' => ['required', 'string', 'distinct', Rule::in($allowedGrantTypes)],
             'allowed_scopes' => [$client ? 'sometimes' : 'required', 'list', 'min:1'],
             'allowed_scopes.*' => ['required', 'string', 'distinct', Rule::in(Passport::scopeIds())],
+            // Only a public client calls Handover from the browser.
+            'allowed_origins' => $public ? ['sometimes', 'list'] : ['prohibited'],
+            'allowed_origins.*' => ['required', 'string', 'max:2048', $this->allowedOrigin()],
             'single_session' => ['sometimes', 'boolean'],
             'required_groups' => ['sometimes', 'list'],
             'required_groups.*' => ['required', 'string', 'distinct', Rule::exists('groups', 'id')],
         ]);
     }
 
+    /** A public client's URIs must use https, or http on localhost for development. */
+    private function publicClientUri(): Closure
+    {
+        return function (string $attribute, mixed $value, Closure $fail): void {
+            if (is_string($value) && ! Origin::isAllowedForPublicClients($value)) {
+                $fail('The :attribute must use https, or http://localhost for development.');
+            }
+        };
+    }
+
+    /** An allowed origin is an origin alone, which a public client may use. */
+    private function allowedOrigin(): Closure
+    {
+        return function (string $attribute, mixed $value, Closure $fail): void {
+            if (is_string($value) && (Origin::normalise($value) === null || ! Origin::isAllowedForPublicClients($value))) {
+                $fail('The :attribute must be an origin such as https://example.test, with no path. Only https, or http://localhost for development, is allowed.');
+            }
+        };
+    }
+
     /**
-     * @return array{id: string, name: string, redirect_uris: string[], grant_types: string[], allowed_scopes: string[], single_session: bool, required_groups: string[], revoked: bool}
+     * @return array{id: string, name: string, confidential: bool, redirect_uris: string[], grant_types: string[], allowed_scopes: string[], allowed_origins: string[], single_session: bool, required_groups: string[], revoked: bool}
      */
     private function present(Client $client): array
     {
         return [
             'id' => $client->id,
             'name' => $client->name,
+            'confidential' => $client->confidential(),
             'redirect_uris' => $client->redirect_uris,
             'grant_types' => $client->grant_types,
             ...$client->policy->toAdminArray(),
