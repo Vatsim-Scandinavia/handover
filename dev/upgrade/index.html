@@ -914,6 +914,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../integrations/oidc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenID Connect
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../integrations/vatsim-connect/" class="md-nav__link">
         
   
@@ -1454,6 +1482,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#handover-supports-openid-connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handover supports OpenID Connect
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#signing-keys-move-to-a-key-store" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1664,6 +1703,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#handover-supports-openid-connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handover supports OpenID Connect
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#signing-keys-move-to-a-key-store" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1809,6 +1859,7 @@ For details, see <a href="#token-lifetimes-are-shorter">token lifetimes are shor
 <li>Shorten the lifetime of existing refresh tokens.</li>
 <li>Move OAuth clients to the <a href="#oauth-clients-use-the-passport-13-schema">Passport 13 client schema</a>.</li>
 <li>Give every client <a href="#client-access-settings">allowed scopes, required groups and a session setting</a>.</li>
+<li>Add the columns that <a href="#handover-supports-openid-connect">OpenID Connect</a> sign-ins need.</li>
 </ul>
 <p>If you run Handover without the container, step 3 imports nothing, and the migration imports the signing key instead.</p>
 </li>
@@ -1916,6 +1967,18 @@ See <a href="../concepts/oauth-clients/#grant-types">OAuth clients</a>.</p>
 <p>A request for a scope the client does not allow now fails with the <code>invalid_scope</code> error.
 In 3.x, Handover granted any known scope to any client.</p>
 <p>When you create a client in the admin UI, you must pick its allowed scopes.</p>
+<h4 id="handover-supports-openid-connect">Handover supports OpenID Connect<a class="headerlink" href="#handover-supports-openid-connect" title="Permanent link">&para;</a></h4>
+<p>Handover is now an OpenID Connect provider. It adds:</p>
+<ul>
+<li>Discovery at <code>/.well-known/openid-configuration</code>.</li>
+<li>ID tokens.</li>
+<li>A UserInfo endpoint at <code>/oauth/userinfo</code>.</li>
+</ul>
+<p>See <a href="../integrations/oidc/">OpenID Connect</a>.</p>
+<p>You need to do nothing.
+OpenID Connect is opt-in for each client: a service can use it only after an administrator ticks the new <code>openid</code> scope in the client's allowed scopes.
+No existing client gets <code>openid</code> or <code>profile</code>, so existing services keep working.</p>
+<p>Access tokens that hold the <code>groups</code> scope now carry a <code>groups</code> claim with the IDs of the member's groups.</p>
 <h4 id="signing-keys-move-to-a-key-store">Signing keys move to a key store<a class="headerlink" href="#signing-keys-move-to-a-key-store" title="Permanent link">&para;</a></h4>
 <p>Handover now keeps its OAuth signing keys in <code>oauth-keys/</code> on the storage volume, and you can rotate them with artisan commands.
 See <a href="../setup/signing-keys/">signing keys</a>.</p>
@@ -1973,7 +2036,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 14:57:37 UTC">November 20, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 15:49:18 UTC">November 20, 2026</span>
   </span>
 
     

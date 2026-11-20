@@ -16,7 +16,7 @@
         <link rel="prev" href="../../groups/">
       
       
-        <link rel="next" href="../vatsim-connect/">
+        <link rel="next" href="../oidc/">
       
       
         
@@ -1031,6 +1031,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../oidc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenID Connect
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vatsim-connect/" class="md-nav__link">
         
   
@@ -1520,7 +1548,8 @@
 
 <h1 id="connecting-a-client">Connecting a client<a class="headerlink" href="#connecting-a-client" title="Permanent link">&para;</a></h1>
 <p>Handover works like <abbr title="Virtual Air Traffic Simulation network">VATSIM</abbr> Connect.
-A service that supports <abbr title="Virtual Air Traffic Simulation network">VATSIM</abbr> Connect can use Handover by changing the URLs, the client ID and the secret.</p>
+A service that supports <abbr title="Virtual Air Traffic Simulation network">VATSIM</abbr> Connect can use Handover by changing the URLs, the client ID and the secret.
+A service that supports OpenID Connect can use Handover's discovery, ID token and UserInfo endpoint instead. See <a href="../oidc/">OpenID Connect</a>.</p>
 <h2 id="oauth-credentials">OAuth credentials<a class="headerlink" href="#oauth-credentials" title="Permanent link">&para;</a></h2>
 <p>First <a href="../../concepts/oauth-clients/">create an OAuth client</a> in Handover. Then configure the service with:</p>
 <table>
@@ -1596,10 +1625,18 @@ For details, see <a href="../../concepts/oauth-clients/#allowed-scopes">allowed 
 <td><code>groups</code></td>
 <td>The groups the member belongs to</td>
 </tr>
+<tr>
+<td><code>openid</code></td>
+<td>Sign in with <a href="../oidc/">OpenID Connect</a>. The user API ignores it.</td>
+</tr>
+<tr>
+<td><code>profile</code></td>
+<td>First and last name, as <a href="../oidc/#scopes-and-claims">OpenID Connect</a> claims. The user API ignores it.</td>
+</tr>
 </tbody>
 </table>
 <p>If the service requests no scopes, Handover grants <code>full_name</code>, <code>email</code>, <code>vatsim_details</code> and <code>country</code>, limited to the scopes the client allows.
-It never grants <code>groups</code> by default.</p>
+It never grants <code>groups</code>, <code>openid</code> or <code>profile</code> by default.</p>
 <p>See the <a href="../../reference/api/">user API</a> for the data each scope returns.</p>
 <h2 id="tokens">Tokens<a class="headerlink" href="#tokens" title="Permanent link">&para;</a></h2>
 <ul>
@@ -1617,6 +1654,7 @@ If the service checks access tokens itself:</p>
 <li>An access token is a JWT signed with RS256. Its <code>kid</code> header names the signing key.</li>
 <li>Pick the key by <code>kid</code> from the JWKS. When you see an unknown <code>kid</code>, fetch the JWKS again.</li>
 <li>Cache the JWKS for at most one hour.</li>
+<li>If the token holds the <code>groups</code> scope, it carries a <code>groups</code> claim with the IDs of the member's groups. See <a href="../oidc/#groups">groups</a>.</li>
 </ul>
 <h2 id="control-center">Control Center<a class="headerlink" href="#control-center" title="Permanent link">&para;</a></h2>
 <p>Control Center supports Handover out of the box.
@@ -1650,7 +1688,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 14:57:37 UTC">November 20, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 15:49:18 UTC">November 20, 2026</span>
   </span>
 
     
@@ -1736,13 +1774,13 @@ They'll be better off on the specific page in question.
         
         
           
-          <a href="../vatsim-connect/" class="md-footer__link md-footer__link--next" aria-label="Next: VATSIM Connect">
+          <a href="../oidc/" class="md-footer__link md-footer__link--next" aria-label="Next: OpenID Connect">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                VATSIM Connect
+                OpenID Connect
               </div>
             </div>
             <div class="md-footer__button md-icon">
