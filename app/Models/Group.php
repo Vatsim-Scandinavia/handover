@@ -1,7 +1,9 @@
 <?php
 namespace App\Models;
 
+use App\Models\Passport\Client;
 use App\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -40,6 +42,16 @@ class Group extends Model
     {
         return $this->belongsToMany(User::class, 'group_user')
             ->withPivot('added_by', 'created_at');
+    }
+
+    /**
+     * The OAuth clients whose policy requires this group.
+     *
+     * @return Builder<Client>
+     */
+    public function requiringClients(): Builder
+    {
+        return Client::whereHas('policy.requiredGroups', fn (Builder $query) => $query->whereKey($this->id));
     }
 
     // Groups this group nests INTO (its parents). Roll-up flows toward these.

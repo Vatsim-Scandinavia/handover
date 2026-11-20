@@ -40,12 +40,8 @@ class AuthServiceProvider extends ServiceProvider
             'groups'         => 'View the groups you are a member of',
         ]);
 
-        Passport::setDefaultScope([
-            'full_name',
-            'email',
-            'vatsim_details',
-            'country'
-        ]);
+        // No Passport default scope: a request with no scopes gets the client
+        // policy's default scopes instead. See App\OAuth\ScopeRepository.
 
         // See docs/adr/0001-token-lifetimes-and-refresh-policy.md. Each refresh
         // issues a new refresh token, so the 30 days restart on every use.

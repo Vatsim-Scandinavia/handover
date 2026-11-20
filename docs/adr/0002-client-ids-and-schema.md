@@ -1,6 +1,11 @@
 # Client ids and schema
 
-Status: Accepted, 2026-11-19. Amended 2026-11-19: legacy columns drop after a prod beta, inside 4.0.0.
+Status: Accepted, 2026-11-19.
+
+Amended:
+
+- 2026-11-19: legacy columns drop after a prod beta, inside 4.0.0.
+- 2026-11-20: new clients get default allowed scopes, and a missing policy row fails closed.
 
 ## Context
 
@@ -16,6 +21,10 @@ Existing clients keep exactly the grant types they have today. New clients get o
 
 Per-client settings that Passport does not know about live in `oauth_client_policies`. It has one row per client, keyed by `client_id`, with typed columns. Every client has a row: the backfill creates one for each existing client, and creating a client creates its row. Columns that have a sensible default get it in the database.
 
+Allowed scopes have no database default. The backfill allows each existing client every scope that exists before the policy: `full_name`, `email`, `vatsim_details`, `country` and `groups`. A new client starts with the default scopes, `full_name`, `email`, `vatsim_details` and `country`. These are the scopes Passport granted by default before the policy, so a client created outside the admin form, such as with `passport:client`, behaves as before. The admin form requires an administrator to choose a new client's scopes, which replace the defaults.
+
+Code treats a missing row as a fault and fails closed. The authorize endpoint refuses the sign-in, the token endpoint refuses any grant with a user, a grant without a user can get no scope, and the client keeps one session per user.
+
 ## Consequences
 
 Legacy clients keep `client_credentials`, so Passport's guard against a user id equal to a client id (`TokenGuard.php:146`) still applies to them. It cannot fire in practice, because user ids are VATSIM CIDs and client ids are small.
@@ -30,4 +39,4 @@ Trimming legacy grants to authorization code and refresh: this could break unkno
 
 Policy columns on `oauth_clients`: a side table keeps our columns clear of future Passport schema changes.
 
-Optional policy rows, where a missing row means defaults: each client's allowed scopes live here and have no safe default, so every client needs a row.
+Optional policy rows, where a missing row means defaults: the safe default for a missing row is to refuse the client, and the useful default for a new client is to keep Passport's old default scopes. One fallback can't serve both, so every client has a row and a missing row is a fault.

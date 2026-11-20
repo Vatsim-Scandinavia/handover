@@ -1,6 +1,11 @@
 # Token lifetimes and refresh policy
 
-Status: Accepted, 2026-11-18. Amended 2026-11-19: the migration caps each refresh token relative to its access token.
+Status: Accepted, 2026-11-18.
+
+Amended:
+
+- 2026-11-19: the migration caps each refresh token relative to its access token.
+- 2026-11-19: one session per client is now the default, and the client policy can turn it off per client.
 
 ## Context
 
@@ -14,7 +19,7 @@ Access tokens last 1 hour. Tokens already issued keep their one-month expiry.
 
 Refresh tokens last 30 days. Each refresh issues a new refresh token, so the 30 days restart every time. There is no absolute cap.
 
-Each user keeps one session per client. `RevokeOldTokens` stays, and it now also revokes the refresh tokens that belong to the access tokens it revokes. The refresh token just issued belongs to the new access token, so it is never revoked.
+By default, each user keeps one session per client. A client policy with `single_session` off keeps every session instead. `RevokeOldTokens` stays, and it now also revokes the refresh tokens that belong to the access tokens it revokes. The refresh token just issued belongs to the new access token, so it is never revoked.
 
 A single migration ships with the change. It sets every live refresh token to expire 30 days after its access token expires, and revokes refresh tokens whose access token is already revoked. Old access tokens last up to a month after deploy, and Control Center only refreshes once its access token has expired, so a flat "deploy plus 30 days" cap could expire a refresh token before it is ever used.
 
@@ -26,7 +31,7 @@ A new login on one device ends the user's session with the same client on anothe
 
 ## Alternatives considered
 
-Dropping `RevokeOldTokens` would allow sessions on several devices, and short-lived tokens already limit what a leak can do. We kept it because it matches today's behaviour and closes the gap directly. If public clients need sessions on several devices, we can revisit this under per-client policy.
+Dropping `RevokeOldTokens` would allow sessions on several devices, and short-lived tokens already limit what a leak can do. We kept it because it matches today's behaviour and closes the gap directly. The client policy now lets an administrator turn it off for a client that needs sessions on several devices.
 
 An absolute cap, such as one year, would quietly wipe Control Center tokens for users who rarely log in.
 

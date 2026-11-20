@@ -8,10 +8,10 @@ Administrators manage clients. An administrator is a direct member of a group ma
 ## Managing clients in the browser
 
 Open **OAuth Clients** in the header of the groups pages, or go to `/admin/oauth-clients`.
-The page lists every active client with its ID, name, redirect URIs and grant types.
+The page lists every active client with its ID, name, redirect URIs, grant types, allowed scopes and who may sign in.
 
-- **New client**: enter a descriptive name and the redirect URIs of the service. Members see the name, so make it clear.
-- **Edit**: change the name, redirect URIs or grant types.
+- **New client**: enter a descriptive name and the redirect URIs of the service, and tick the scopes it may request. Members see the name, so make it clear.
+- **Edit**: change the name, redirect URIs, grant types, allowed scopes, required groups or single session setting.
 - **Regenerate**: create a new secret. The old secret stops working at once.
 - **Delete**: remove the client and revoke its existing tokens.
 
@@ -44,6 +44,43 @@ Handover does not support implicit, password, personal access or device code.
 The form shows them only on clients that already have them, so you can untick them but not add them.
 If a service does not use a grant type, untick it.
 
+### Allowed scopes
+
+Allowed scopes set which [scopes](../integrations/clients.md#scopes) a client may request.
+A new client has none ticked, so you must tick at least one.
+Tick only the scopes the service needs.
+
+If a service requests a scope that is not ticked, the sign-in fails with the `invalid_scope` error.
+If you remove a scope that a service already holds, its next token refresh fails with the `invalid_scope` error, and the member must sign in again.
+If a service requests no scopes, it gets the default scopes `full_name`, `email`, `vatsim_details` and `country`, limited to the ones that are ticked.
+If none of those are ticked, the service gets a token with no scopes.
+
+Clients created in 3.x allow every scope.
+
+### Required groups
+
+Required groups set who may sign in to a client.
+If you tick no groups, every member may sign in.
+If you tick one or more groups, only members of at least one of them may sign in.
+Membership includes [nested groups](../groups.md#nested-groups-transitive-membership): a member of a group nested in a required group may sign in too.
+
+A member outside the required groups sees an error page in Handover that names the client.
+Handover does not send them back to the service.
+
+Handover checks the groups again each time the service refreshes a token.
+If the member has left the required groups, the refresh fails with the `invalid_grant` error.
+Access tokens that Handover already issued stay valid until they expire, for up to one hour.
+
+You cannot delete a group while a client requires it.
+Remove the group from the client first.
+
+### Single session
+
+By default, **Single session** is ticked, and each member can have one session with the client.
+When a member signs in again, Handover revokes their earlier access and refresh tokens for that client.
+
+Untick it to let a member stay signed in to the service on several devices at once.
+
 ## Managing clients on the command line
 
 You can also create a client with Passport's command:
@@ -54,6 +91,8 @@ php artisan passport:client
 
 Answer the prompts with a descriptive name and the redirect URI of the service, and keep the client confidential.
 The command prints the client ID and secret.
+A client created this way may request the default scopes, admits every member and keeps a single session.
+To change that, edit the client in the browser.
 
 To revoke a client and all its tokens, run the command below. It asks for the client ID.
 

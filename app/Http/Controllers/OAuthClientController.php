@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Group;
 use App\Models\Passport\Client;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Laravel\Passport\ClientRepository;
+use Laravel\Passport\Passport;
+use Laravel\Passport\Scope;
 
 class OAuthClientController extends Controller
 {
@@ -35,6 +40,8 @@ class OAuthClientController extends Controller
         return view('admin.oauth-clients', [
             'grantTypes' => self::GRANT_TYPES,
             'defaultGrantTypes' => self::DEFAULT_GRANT_TYPES,
+            'scopes' => collect(Passport::scopes())->mapWithKeys(fn (Scope $scope): array => [$scope->id => $scope->description]),
+            'groups' => Group::orderBy('name')->get(['id', 'name']),
         ]);
     }
 
@@ -44,6 +51,7 @@ class OAuthClientController extends Controller
     public function data(): JsonResponse
     {
         $clients = Client::query()
+            ->with('policy.requiredGroups')
             ->where('revoked', false)
             ->orderBy('name')
             ->get()
@@ -60,11 +68,17 @@ class OAuthClientController extends Controller
     {
         $validated = $this->validateClient($request);
 
-        $client = $this->clients->createAuthorizationCodeGrantClient($validated['name'], $validated['redirect_uris']);
+        $client = DB::transaction(function () use ($validated): Client {
+            $client = $this->clients->createAuthorizationCodeGrantClient($validated['name'], $validated['redirect_uris']);
 
-        if (isset($validated['grant_types'])) {
-            $client->forceFill(['grant_types' => $validated['grant_types']])->save();
-        }
+            if (isset($validated['grant_types'])) {
+                $client->forceFill(['grant_types' => $validated['grant_types']])->save();
+            }
+
+            $client->policy->updateFromAdmin($validated);
+
+            return $client;
+        });
 
         return response()->json([
             'client' => $this->present($client),
@@ -76,7 +90,10 @@ class OAuthClientController extends Controller
     {
         $validated = $this->validateClient($request, $client);
 
-        $client->forceFill($validated)->save();
+        DB::transaction(function () use ($client, $validated): void {
+            $client->forceFill(Arr::only($validated, ['name', 'redirect_uris', 'grant_types']))->save();
+            $client->policy->updateFromAdmin($validated);
+        });
 
         return response()->json($this->present($client));
     }
@@ -99,7 +116,9 @@ class OAuthClientController extends Controller
     }
 
     /**
-     * @return array{name: string, redirect_uris: string[], grant_types?: string[]}
+     * Admins pick a new client's scopes by hand, so they are required on create.
+     *
+     * @return array{name: string, redirect_uris: string[], grant_types?: string[], allowed_scopes?: string[], single_session?: bool, required_groups?: string[]}
      */
     private function validateClient(Request $request, ?Client $client = null): array
     {
@@ -111,11 +130,16 @@ class OAuthClientController extends Controller
             'redirect_uris.*' => ['required', 'url', 'max:2048', 'distinct'],
             'grant_types' => ['sometimes', 'list', 'min:1'],
             'grant_types.*' => ['required', 'string', 'distinct', Rule::in($allowedGrantTypes)],
+            'allowed_scopes' => [$client ? 'sometimes' : 'required', 'list', 'min:1'],
+            'allowed_scopes.*' => ['required', 'string', 'distinct', Rule::in(Passport::scopeIds())],
+            'single_session' => ['sometimes', 'boolean'],
+            'required_groups' => ['sometimes', 'list'],
+            'required_groups.*' => ['required', 'string', 'distinct', Rule::exists('groups', 'id')],
         ]);
     }
 
     /**
-     * @return array{id: string, name: string, redirect_uris: string[], grant_types: string[], revoked: bool}
+     * @return array{id: string, name: string, redirect_uris: string[], grant_types: string[], allowed_scopes: string[], single_session: bool, required_groups: string[], revoked: bool}
      */
     private function present(Client $client): array
     {
@@ -124,6 +148,7 @@ class OAuthClientController extends Controller
             'name' => $client->name,
             'redirect_uris' => $client->redirect_uris,
             'grant_types' => $client->grant_types,
+            ...$client->policy->toAdminArray(),
             'revoked' => (bool) $client->revoked,
         ];
     }

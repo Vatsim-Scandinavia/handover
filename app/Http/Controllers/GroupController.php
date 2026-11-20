@@ -170,6 +170,15 @@ class GroupController extends Controller
     public function destroy(Request $request, Group $group)
     {
         $this->requireAdmin($request);
+
+        // The foreign key blocks this too. Checking first names the clients in the error.
+        $clients = $group->requiringClients()->orderBy('name')->pluck('name');
+        if ($clients->isNotEmpty()) {
+            $subject = $clients->count() === 1 ? 'the OAuth client '.$clients->first().' requires' : 'the OAuth clients '.$clients->join(', ', ' and ').' require';
+
+            return back()->withErrors(['group' => "Cannot delete: $subject this group."]);
+        }
+
         try {
             $group->delete();
         } catch (\Illuminate\Database\QueryException) {

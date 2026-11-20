@@ -9,6 +9,9 @@ import { Modal } from 'bootstrap';
  * @property {string} name
  * @property {string[]} redirect_uris
  * @property {string[]} grant_types
+ * @property {string[]} allowed_scopes
+ * @property {boolean} single_session
+ * @property {string[]} required_groups
  * @property {boolean} revoked
  */
 
@@ -17,7 +20,21 @@ const props = defineProps({
     grantTypes: { type: Object, required: true },
     /** Grant types ticked for a new client. */
     defaultGrantTypes: { type: Array, required: true },
+    /** Every scope, mapped to its description. */
+    scopes: { type: Object, required: true },
+    /** Every group, as { id, name }, sorted by name. */
+    groups: { type: Array, required: true },
 });
+
+const groupNames = computed(() => Object.fromEntries(props.groups.map((group) => [group.id, group.name])));
+
+/** @param {OAuthClient} client */
+function requiredGroupsLabel(client) {
+    if (client.required_groups.length === 0) {
+        return 'All members';
+    }
+    return client.required_groups.map((id) => groupNames.value[id] ?? id).join(', ');
+}
 
 /** @param {string} grant */
 function grantLabel(grant) {
@@ -62,7 +79,17 @@ async function fetchClients() {
 }
 
 function emptyForm() {
-    return { id: null, name: '', redirectUris: [''], grantTypes: [...props.defaultGrantTypes], legacyGrantTypes: [] };
+    return {
+        id: null,
+        name: '',
+        redirectUris: [''],
+        grantTypes: [...props.defaultGrantTypes],
+        legacyGrantTypes: [],
+        // Admins pick a new client's scopes by hand, so none are ticked.
+        allowedScopes: [],
+        singleSession: true,
+        requiredGroups: [],
+    };
 }
 
 /** Legacy grant types appear only on clients that already hold them. */
@@ -82,6 +109,9 @@ function openEdit(client) {
         redirectUris: client.redirect_uris.length ? [...client.redirect_uris] : [''],
         grantTypes: [...client.grant_types],
         legacyGrantTypes: client.grant_types.filter((grant) => !(grant in props.grantTypes)),
+        allowedScopes: [...client.allowed_scopes],
+        singleSession: client.single_session,
+        requiredGroups: [...client.required_groups],
     };
     errors.value = {};
     formModal.show();
@@ -104,6 +134,9 @@ async function save() {
         name: form.value.name,
         redirect_uris: form.value.redirectUris,
         grant_types: form.value.grantTypes,
+        allowed_scopes: form.value.allowedScopes,
+        single_session: form.value.singleSession,
+        required_groups: form.value.requiredGroups,
     };
 
     try {
@@ -183,6 +216,8 @@ async function copySecret() {
                             <th scope="col">Name</th>
                             <th scope="col">Redirect URIs</th>
                             <th scope="col">Grant types</th>
+                            <th scope="col">Scopes</th>
+                            <th scope="col">Required groups</th>
                             <th scope="col" class="text-end">Actions</th>
                         </tr>
                     </thead>
@@ -194,6 +229,8 @@ async function copySecret() {
                                 <div v-for="uri in client.redirect_uris" :key="uri"><code>{{ uri }}</code></div>
                             </td>
                             <td class="small">{{ client.grant_types.map(grantLabel).join(', ') }}</td>
+                            <td class="small"><code>{{ client.allowed_scopes.join(' ') }}</code></td>
+                            <td class="small">{{ requiredGroupsLabel(client) }}</td>
                             <td class="text-end">
                                 <div class="d-flex justify-content-end gap-2">
                                     <button type="button" class="btn btn-sm btn-outline-secondary" @click="openEdit(client)">
@@ -279,6 +316,45 @@ async function copySecret() {
                         </div>
                         <div v-if="errors.grant_types" class="text-danger small">{{ errors.grant_types[0] }}</div>
                     </fieldset>
+                    <fieldset class="mt-3 mb-0">
+                        <legend class="form-label fs-6">Allowed scopes</legend>
+                        <div v-for="(description, scope) in scopes" :key="scope" class="form-check">
+                            <input
+                                :id="`scope-${scope}`"
+                                v-model="form.allowedScopes"
+                                type="checkbox"
+                                class="form-check-input"
+                                :value="scope"
+                            >
+                            <label class="form-check-label" :for="`scope-${scope}`">
+                                <code>{{ scope }}</code> <span class="text-muted small">{{ description }}</span>
+                            </label>
+                        </div>
+                        <div v-if="errors.allowed_scopes" class="text-danger small">{{ errors.allowed_scopes[0] }}</div>
+                    </fieldset>
+                    <fieldset class="mt-3 mb-0">
+                        <legend class="form-label fs-6">Required groups</legend>
+                        <p class="text-muted small mb-1">Only members of a ticked group may sign in. Tick none to admit every member.</p>
+                        <div class="border rounded p-2 overflow-auto" style="max-height: 12rem">
+                            <p v-if="groups.length === 0" class="text-muted small mb-0">No groups yet.</p>
+                            <div v-for="group in groups" :key="group.id" class="form-check">
+                                <input
+                                    :id="`group-${group.id}`"
+                                    v-model="form.requiredGroups"
+                                    type="checkbox"
+                                    class="form-check-input"
+                                    :value="group.id"
+                                >
+                                <label class="form-check-label" :for="`group-${group.id}`">{{ group.name }}</label>
+                            </div>
+                        </div>
+                        <div v-if="errors.required_groups" class="text-danger small">{{ errors.required_groups[0] }}</div>
+                    </fieldset>
+                    <div class="form-check mt-3">
+                        <input id="client-single-session" v-model="form.singleSession" type="checkbox" class="form-check-input">
+                        <label class="form-check-label" for="client-single-session">Single session</label>
+                        <div class="text-muted small">A new sign-in revokes the member's earlier tokens for this client. Untick it to let members stay signed in on several devices.</div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>

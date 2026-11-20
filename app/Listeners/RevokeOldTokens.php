@@ -2,31 +2,25 @@
 
 namespace App\Listeners;
 
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Models\Passport\ClientPolicy;
+use Illuminate\Support\Facades\DB;
 use Laravel\Passport\Events\AccessTokenCreated;
-use DB;
 
 class RevokeOldTokens
 {
     /**
-     * Create the event listener.
-     *
-     * @return void
+     * Keep one live token set per user for a client whose policy asks for a
+     * single session. See docs/adr/0001-token-lifetimes-and-refresh-policy.md.
      */
-    public function __construct()
+    public function handle(AccessTokenCreated $event): void
     {
-        //
-    }
+        $policy = ClientPolicy::find($event->clientId);
 
-    /**
-     * Handle the event.
-     *
-     * @param  object  $event
-     * @return void
-     */
-    public function handle(AccessTokenCreated $event)
-    {
+        // Every client has a policy. Fail closed if one is missing.
+        if ($policy !== null && ! $policy->single_session) {
+            return;
+        }
+
         $oldTokens = DB::table('oauth_access_tokens')
             ->where('id', '<>', $event->tokenId)
             ->where('user_id', $event->userId)

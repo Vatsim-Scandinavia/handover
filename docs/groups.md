@@ -55,6 +55,8 @@ See the [user API](reference/api.md#groups) for the response shape and the stabi
 
 To gate access in a client application, create a group, add members, and check `groups[*].id` in the API response. No hard-coded roles required.
 
+To stop everyone outside a group from signing in to a client at all, make the group one of the client's [required groups](concepts/oauth-clients.md#required-groups). You cannot delete a group while a client requires it.
+
 To delegate roster management without granting full admin access, create a group for the managers (e.g. "vACC Directors") and a tag-match rule granting it management of every group tagged `vacc`. Any future group with that tag is automatically covered.
 
 To manage a whole region or division uniformly, assign a shared attribute (e.g. `region = EUR`) to the relevant groups and write one attribute-match rule. The managing group gains access to all matching groups past and future.

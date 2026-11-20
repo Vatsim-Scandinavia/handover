@@ -20,11 +20,15 @@ class ClientSchemaMigrationTest extends TestCase
 
     private const MIGRATION = '2026_11_19_000002_adopt_passport_13_client_schema.php';
 
+    /** Depends on the new schema, so it rolls back first and migrates last. */
+    private const POLICY_MIGRATION = '2026_11_19_000003_create_oauth_client_policies.php';
+
     protected function setUp(): void
     {
         parent::setUp();
 
         // Run the tests against the 3.x schema, then migrate forward.
+        $this->migration(self::POLICY_MIGRATION)->down();
         $this->migration()->down();
     }
 
@@ -51,7 +55,7 @@ class ClientSchemaMigrationTest extends TestCase
             $expected[$i + 1] = [$derived->grant_types, $derived->redirect_uris];
         }
 
-        $this->migration()->up();
+        $this->migrateForward();
 
         foreach ($expected as $id => [$grantTypes, $redirectUris]) {
             $row = DB::table('oauth_clients')->find((string) $id);
@@ -73,7 +77,7 @@ class ClientSchemaMigrationTest extends TestCase
             'id' => 'code-1', 'user_id' => 1, 'client_id' => 5, 'revoked' => false, 'expires_at' => now(),
         ]);
 
-        $this->migration()->up();
+        $this->migrateForward();
 
         $this->assertSame('5', DB::table('oauth_clients')->value('id'));
         $this->assertSame('5', DB::table('oauth_access_tokens')->value('client_id'));
@@ -88,7 +92,7 @@ class ClientSchemaMigrationTest extends TestCase
     {
         $this->legacyClient(5, ['secret' => Hash::make('legacy-secret'), 'redirect' => $this->redirectUri]);
 
-        $this->migration()->up();
+        $this->migrateForward();
 
         $client = Passport::client()->newQuery()->find('5');
         $client->plainSecret = 'legacy-secret';
@@ -101,16 +105,22 @@ class ClientSchemaMigrationTest extends TestCase
     {
         $this->legacyClient(5);
 
-        $this->migration()->up();
+        $this->migrateForward();
 
         $client = $this->makeClient();
         $this->assertTrue(str($client->getKey())->isUuid());
         $this->assertSame(2, DB::table('oauth_clients')->count());
     }
 
-    private function migration(): object
+    private function migration(string $file = self::MIGRATION): object
     {
-        return require database_path('migrations/'.self::MIGRATION);
+        return require database_path('migrations/'.$file);
+    }
+
+    private function migrateForward(): void
+    {
+        $this->migration()->up();
+        $this->migration(self::POLICY_MIGRATION)->up();
     }
 
     /**

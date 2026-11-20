@@ -30,6 +30,7 @@ class OAuthClientManagementTest extends TestCase
         return $this->postJson(route('admin.oauth-clients.store'), [
             'name' => $name,
             'redirect_uris' => ['https://service.test/callback'],
+            'allowed_scopes' => ['full_name'],
         ])->json();
     }
 
@@ -60,6 +61,7 @@ class OAuthClientManagementTest extends TestCase
         $response = $this->postJson(route('admin.oauth-clients.store'), [
             'name' => 'vACC Norway',
             'redirect_uris' => ['https://vacc-norway.test/callback'],
+            'allowed_scopes' => ['full_name'],
         ]);
 
         $response->assertCreated()
@@ -118,6 +120,7 @@ class OAuthClientManagementTest extends TestCase
         $this->postJson(route('admin.oauth-clients.store'), [
             'name' => 'Machine',
             'redirect_uris' => ['https://machine.test/callback'],
+            'allowed_scopes' => ['full_name'],
             'grant_types' => ['client_credentials'],
         ])->assertCreated()
             ->assertJsonPath('client.grant_types', ['client_credentials']);
@@ -130,6 +133,7 @@ class OAuthClientManagementTest extends TestCase
         $id = $this->postJson(route('admin.oauth-clients.store'), [
             'name' => 'Many',
             'redirect_uris' => $uris,
+            'allowed_scopes' => ['full_name'],
         ])->json('client.id');
 
         $listed = collect($this->getJson(route('admin.oauth-clients.data'))->json())->firstWhere('id', $id);
@@ -169,6 +173,7 @@ class OAuthClientManagementTest extends TestCase
         $this->postJson(route('admin.oauth-clients.store'), [
             'name' => 'Bad',
             'redirect_uris' => ['https://bad.test/callback'],
+            'allowed_scopes' => ['full_name'],
             'grant_types' => ['magic'],
         ])->assertStatus(422)
             ->assertJsonValidationErrors(['grant_types.0']);
@@ -181,6 +186,7 @@ class OAuthClientManagementTest extends TestCase
         $this->postJson(route('admin.oauth-clients.store'), [
             'name' => 'New',
             'redirect_uris' => ['https://new.test/callback'],
+            'allowed_scopes' => ['full_name'],
             'grant_types' => ['authorization_code', 'implicit'],
         ])->assertStatus(422)
             ->assertJsonValidationErrors(['grant_types.1']);
@@ -231,10 +237,93 @@ class OAuthClientManagementTest extends TestCase
 
         $this->postJson(route('admin.oauth-clients.store'), ['name' => '', 'redirect_uris' => []])
             ->assertStatus(422)
-            ->assertJsonValidationErrors(['name', 'redirect_uris']);
+            ->assertJsonValidationErrors(['name', 'redirect_uris', 'allowed_scopes']);
 
-        $this->postJson(route('admin.oauth-clients.store'), ['name' => 'X', 'redirect_uris' => ['https://ok.test', 'not-a-url']])
+        $this->postJson(route('admin.oauth-clients.store'), ['name' => 'X', 'redirect_uris' => ['https://ok.test', 'not-a-url'], 'allowed_scopes' => ['email']])
             ->assertStatus(422)
             ->assertJsonValidationErrors(['redirect_uris.1']);
+    }
+
+    public function test_admin_sets_the_client_policy_when_creating_a_client(): void
+    {
+        $this->actingAsAdmin();
+        $group = Group::factory()->create();
+
+        $this->postJson(route('admin.oauth-clients.store'), [
+            'name' => 'Roster',
+            'redirect_uris' => ['https://roster.test/callback'],
+            'allowed_scopes' => ['email', 'groups'],
+            'single_session' => false,
+            'required_groups' => [$group->id],
+        ])->assertCreated()
+            ->assertJsonPath('client.allowed_scopes', ['email', 'groups'])
+            ->assertJsonPath('client.single_session', false)
+            ->assertJsonPath('client.required_groups', [$group->id]);
+    }
+
+    public function test_a_new_client_defaults_to_a_single_session_and_no_required_groups(): void
+    {
+        $this->actingAsAdmin();
+
+        $this->createClientViaApi();
+
+        $listed = $this->getJson(route('admin.oauth-clients.data'))->json(0);
+        $this->assertSame(['full_name'], $listed['allowed_scopes']);
+        $this->assertTrue($listed['single_session']);
+        $this->assertSame([], $listed['required_groups']);
+    }
+
+    public function test_admin_can_edit_the_client_policy(): void
+    {
+        $this->actingAsAdmin();
+        [$keep, $drop, $add] = Group::factory()->count(3)->create();
+        $id = $this->postJson(route('admin.oauth-clients.store'), [
+            'name' => 'Forum',
+            'redirect_uris' => ['https://forum.test/callback'],
+            'allowed_scopes' => ['full_name'],
+            'required_groups' => [$keep->id, $drop->id],
+        ])->json('client.id');
+
+        $this->putJson(route('admin.oauth-clients.update', $id), [
+            'name' => 'Forum',
+            'redirect_uris' => ['https://forum.test/callback'],
+            'allowed_scopes' => ['full_name', 'groups'],
+            'single_session' => false,
+            'required_groups' => [$keep->id, $add->id],
+        ])->assertOk()
+            ->assertJsonPath('allowed_scopes', ['full_name', 'groups'])
+            ->assertJsonPath('single_session', false)
+            ->assertJsonPath('required_groups', collect([$keep->id, $add->id])->sort()->values()->all());
+
+        $this->putJson(route('admin.oauth-clients.update', $id), [
+            'name' => 'Forum',
+            'redirect_uris' => ['https://forum.test/callback'],
+            'allowed_scopes' => ['full_name'],
+            'single_session' => true,
+            'required_groups' => [],
+        ])->assertOk()
+            ->assertJsonPath('single_session', true)
+            ->assertJsonPath('required_groups', []);
+    }
+
+    public function test_rejects_an_empty_or_unknown_scope_list_and_unknown_groups(): void
+    {
+        $this->actingAsAdmin();
+        $id = $this->createClientViaApi()['client']['id'];
+
+        $this->putJson(route('admin.oauth-clients.update', $id), [
+            'name' => 'X',
+            'redirect_uris' => ['https://x.test/callback'],
+            'allowed_scopes' => [],
+        ])->assertStatus(422)
+            ->assertJsonValidationErrors(['allowed_scopes']);
+
+        $this->putJson(route('admin.oauth-clients.update', $id), [
+            'name' => 'X',
+            'redirect_uris' => ['https://x.test/callback'],
+            'allowed_scopes' => ['email', 'magic'],
+            'required_groups' => ['0190a2d4-0000-7000-8000-000000000000'],
+        ])->assertStatus(422)
+            ->assertJsonValidationErrors(['allowed_scopes.1', 'required_groups.0']);
     }
 }

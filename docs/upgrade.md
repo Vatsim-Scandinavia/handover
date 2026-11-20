@@ -68,11 +68,18 @@ It needs one manual step on the database: hashing the OAuth client secrets.
 
 3. Change the image tag from `:v3` to `:v4`, pull it, and recreate the container.
    The floating `:v3` tag never moves to 4.0.0, so you must change it.
-4. Apply the database changes. This adds the `group_hierarchy` table for [nested groups](groups.md#nested-groups-transitive-membership), shortens the lifetime of existing refresh tokens, and moves OAuth clients to the [Passport 13 client schema](#oauth-clients-use-the-passport-13-schema):
+4. Apply the database changes:
 
     ```sh
     php artisan migrate --force
     ```
+
+    The migrations do the following:
+
+    - Add the `group_hierarchy` table for [nested groups](groups.md#nested-groups-transitive-membership).
+    - Shorten the lifetime of existing refresh tokens.
+    - Move OAuth clients to the [Passport 13 client schema](#oauth-clients-use-the-passport-13-schema).
+    - Give every client [allowed scopes, required groups and a session setting](#client-access-settings).
 
 5. Hash the OAuth client secrets. Run this once per environment:
 
@@ -175,6 +182,25 @@ Editing a client in the admin UI no longer drops its extra redirect URIs.
 See [OAuth clients](concepts/oauth-clients.md#grant-types).
 
 The old `redirect`, `personal_access_client` and `password_client` columns stay in the database, but Handover no longer reads them.
+
+#### Clients limit scopes, members and sessions { #client-access-settings }
+
+Each client now has three settings:
+
+- [Allowed scopes](concepts/oauth-clients.md#allowed-scopes): the scopes the client may request.
+- [Required groups](concepts/oauth-clients.md#required-groups): the groups whose members may sign in.
+- [Single session](concepts/oauth-clients.md#single-session): whether each member keeps one session with the client.
+
+The migration sets them so that every existing client keeps its behaviour. You need to do nothing:
+
+- The client may request every scope that 3.x has: `full_name`, `email`, `vatsim_details`, `country` and `groups`.
+- The client has no required groups, so every member may sign in.
+- Each member keeps a single session with the client.
+
+A request for a scope the client does not allow now fails with the `invalid_scope` error.
+In 3.x, Handover granted any known scope to any client.
+
+When you create a client in the admin UI, you must pick its allowed scopes.
 
 #### The groups API reports inherited groups
 
