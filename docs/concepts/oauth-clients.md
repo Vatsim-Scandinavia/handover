@@ -55,7 +55,8 @@ If you remove a scope that a service already holds, its next token refresh fails
 If a service requests no scopes, it gets the default scopes `full_name`, `email`, `vatsim_details` and `country`, limited to the ones that are ticked.
 If none of those are ticked, the service gets a token with no scopes.
 
-Clients created in 3.x allow every scope.
+Clients created in 3.x allow every scope except `openid` and `profile`.
+Tick those when a service moves to [OpenID Connect](../integrations/oidc.md).
 
 ### Required groups
 

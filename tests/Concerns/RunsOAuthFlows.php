@@ -6,6 +6,13 @@ use App\User;
 use Illuminate\Testing\TestResponse;
 use Laravel\Passport\Client;
 use Laravel\Passport\ClientRepository;
+use Lcobucci\JWT\Encoding\JoseEncoder;
+use Lcobucci\JWT\Signer\Key\InMemory;
+use Lcobucci\JWT\Signer\Rsa\Sha256;
+use Lcobucci\JWT\Token\Parser;
+use Lcobucci\JWT\Validation\Constraint\SignedWith;
+use Lcobucci\JWT\Validation\Validator;
+use phpseclib3\Crypt\PublicKeyLoader;
 
 /**
  * Drives the authorization code and refresh grants the way a relying party does.
@@ -21,6 +28,15 @@ trait RunsOAuthFlows
             [$this->redirectUri],
             confidential: $confidential,
         );
+    }
+
+    /** @param  list<string>  $scopes  The client policy's allowed scopes. */
+    protected function makeClientAllowing(array $scopes): Client
+    {
+        $client = $this->makeClient();
+        $client->policy->update(['allowed_scopes' => $scopes]);
+
+        return $client;
     }
 
     protected function authorizeRequest(User $user, Client $client, array $params = []): TestResponse
@@ -98,5 +114,22 @@ trait RunsOAuthFlows
         $this->app['auth']->forgetGuards();
 
         return $this->withHeaders(['Authorization' => 'Bearer '.$accessToken])->json($method, $uri);
+    }
+
+    /** Check a JWT's RS256 signature the way a relying party does: with the JWKS key its kid names. */
+    protected function assertJwtVerifiesAgainstTheJwks(string $jwt): void
+    {
+        $this->app['auth']->forgetGuards();
+        $kid = $this->jwtHeader($jwt)['kid'];
+        $jwk = collect($this->getJson('/.well-known/jwks.json')->json('keys'))->firstWhere('kid', $kid);
+        $this->assertNotNull($jwk, "The JWKS has no key with kid {$kid}.");
+
+        $publicKey = PublicKeyLoader::load(json_encode($jwk))->toString('PKCS8');
+        $token = (new Parser(new JoseEncoder()))->parse($jwt);
+
+        $this->assertTrue(
+            (new Validator())->validate($token, new SignedWith(new Sha256(), InMemory::plainText($publicKey))),
+            'The JWT signature does not verify against the JWKS.',
+        );
     }
 }

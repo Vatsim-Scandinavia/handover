@@ -82,6 +82,7 @@ The container also moves the OAuth signing key into a key store that supports [k
     - Shorten the lifetime of existing refresh tokens.
     - Move OAuth clients to the [Passport 13 client schema](#oauth-clients-use-the-passport-13-schema).
     - Give every client [allowed scopes, required groups and a session setting](#client-access-settings).
+    - Add the columns that [OpenID Connect](#handover-supports-openid-connect) sign-ins need.
 
     If you run Handover without the container, step 3 imports nothing, and the migration imports the signing key instead.
 
@@ -208,6 +209,22 @@ A request for a scope the client does not allow now fails with the `invalid_scop
 In 3.x, Handover granted any known scope to any client.
 
 When you create a client in the admin UI, you must pick its allowed scopes.
+
+#### Handover supports OpenID Connect
+
+Handover is now an OpenID Connect provider. It adds:
+
+- Discovery at `/.well-known/openid-configuration`.
+- ID tokens.
+- A UserInfo endpoint at `/oauth/userinfo`.
+
+See [OpenID Connect](integrations/oidc.md).
+
+You need to do nothing.
+OpenID Connect is opt-in for each client: a service can use it only after an administrator ticks the new `openid` scope in the client's allowed scopes.
+No existing client gets `openid` or `profile`, so existing services keep working.
+
+Access tokens that hold the `groups` scope now carry a `groups` claim with the IDs of the member's groups.
 
 #### Signing keys move to a key store
 

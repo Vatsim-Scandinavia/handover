@@ -2,6 +2,7 @@
 
 Handover works like VATSIM Connect.
 A service that supports VATSIM Connect can use Handover by changing the URLs, the client ID and the secret.
+A service that supports OpenID Connect can use Handover's discovery, ID token and UserInfo endpoint instead. See [OpenID Connect](oidc.md).
 
 ## OAuth credentials
 
@@ -34,9 +35,11 @@ For details, see [allowed scopes](../concepts/oauth-clients.md#allowed-scopes).
 | `vatsim_details` | Ratings, region, division and subdivision |
 | `country` | Country |
 | `groups` | The groups the member belongs to |
+| `openid` | Sign in with [OpenID Connect](oidc.md). The user API ignores it. |
+| `profile` | First and last name, as [OpenID Connect](oidc.md#scopes-and-claims) claims. The user API ignores it. |
 
 If the service requests no scopes, Handover grants `full_name`, `email`, `vatsim_details` and `country`, limited to the scopes the client allows.
-It never grants `groups` by default.
+It never grants `groups`, `openid` or `profile` by default.
 
 See the [user API](../reference/api.md) for the data each scope returns.
 
@@ -57,6 +60,7 @@ If the service checks access tokens itself:
 - An access token is a JWT signed with RS256. Its `kid` header names the signing key.
 - Pick the key by `kid` from the JWKS. When you see an unknown `kid`, fetch the JWKS again.
 - Cache the JWKS for at most one hour.
+- If the token holds the `groups` scope, it carries a `groups` claim with the IDs of the member's groups. See [groups](oidc.md#groups).
 
 ## Control Center
 

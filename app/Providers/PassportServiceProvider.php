@@ -3,9 +3,12 @@
 namespace App\Providers;
 
 use App\OAuth\AccessToken;
+use App\OAuth\Oidc\AuthCodeRepository;
+use App\OAuth\Oidc\IdTokenResponse;
 use App\OAuth\SigningKeys\PublishedKeysValidator;
 use App\OAuth\SigningKeys\SigningKeyStore;
 use Laravel\Passport\Bridge\AccessTokenRepository;
+use Laravel\Passport\Bridge\AuthCodeRepository as PassportAuthCodeRepository;
 use Laravel\Passport\Passport;
 use Laravel\Passport\PassportServiceProvider as BaseServiceProvider;
 use League\OAuth2\Server\CryptKey;
@@ -27,6 +30,11 @@ class PassportServiceProvider extends BaseServiceProvider
         $this->app->scoped(SigningKeyStore::class, fn () => new SigningKeyStore(storage_path('oauth-keys')));
 
         Passport::useAccessTokenEntity(AccessToken::class);
+
+        // OpenID Connect: store the nonce and auth_time with each auth code, and
+        // add an id_token to the token response. See docs/integrations/oidc.md.
+        $this->app->bind(PassportAuthCodeRepository::class, AuthCodeRepository::class);
+        Passport::useAuthorizationServerResponseType(new IdTokenResponse());
     }
 
     /**

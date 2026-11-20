@@ -102,6 +102,7 @@ nav:
       - Groups: groups.md
   - Integrations:
       - Connecting a client: integrations/clients.md
+      - OpenID Connect: integrations/oidc.md
       - VATSIM Connect: integrations/vatsim-connect.md
   - Reference:
       - User API: reference/api.md

@@ -45,6 +45,8 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->mapWellKnownRoutes();
 
+        $this->mapOAuthRoutes();
+
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
@@ -77,6 +79,20 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWellKnownRoutes()
     {
         Route::middleware(AllowAnyOrigin::class)->group(base_path('routes/well-known.php'));
+    }
+
+    /**
+     * Define Handover's own "/oauth" routes, such as userinfo.
+     *
+     * These routes are stateless and authenticate with a bearer token.
+     *
+     * @return void
+     */
+    protected function mapOAuthRoutes()
+    {
+        Route::prefix('oauth')
+             ->middleware('api')
+             ->group(base_path('routes/oauth.php'));
     }
 
     /**

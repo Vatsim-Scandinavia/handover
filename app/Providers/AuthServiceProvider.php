@@ -38,6 +38,9 @@ class AuthServiceProvider extends ServiceProvider
             'vatsim_details' => 'Ratings and divisions',
             'country'        => 'Country',
             'groups'         => 'View the groups you are a member of',
+            // OpenID Connect. See docs/integrations/oidc.md.
+            'openid'         => 'Sign in with OpenID Connect',
+            'profile'        => 'First and last name, for OpenID Connect',
         ]);
 
         // No Passport default scope: a request with no scopes gets the client

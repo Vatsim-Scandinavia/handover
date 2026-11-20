@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\JwksController;
+use App\Http\Controllers\OAuth\DiscoveryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,3 +14,4 @@ use App\Http\Controllers\JwksController;
 */
 
 Route::get('/.well-known/jwks.json', JwksController::class)->name('jwks');
+Route::get('/.well-known/openid-configuration', DiscoveryController::class)->name('oidc.discovery');
