@@ -852,6 +852,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#client-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Client type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#redirect-uris" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -878,6 +889,17 @@
     <span class="md-ellipsis">
       
         Allowed scopes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#allowed-origins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Allowed origins
       
     </span>
   </a>
@@ -1506,6 +1528,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#client-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Client type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#redirect-uris" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1532,6 +1565,17 @@
     <span class="md-ellipsis">
       
         Allowed scopes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#allowed-origins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Allowed origins
       
     </span>
   </a>
@@ -1614,15 +1658,16 @@
 
 <h1 id="oauth-clients">OAuth clients<a class="headerlink" href="#oauth-clients" title="Permanent link">&para;</a></h1>
 <p>An OAuth client is a service that lets members log in through Handover, such as Control Center or a forum.
-Each client gets an ID and a secret, which the service uses to talk to Handover.</p>
+Each client gets an ID, which the service uses to talk to Handover.
+A confidential client also gets a secret.</p>
 <p>Administrators manage clients. An administrator is a direct member of a group marked as an admin group, see <a href="../../groups/#access">groups</a>.</p>
 <h2 id="managing-clients-in-the-browser">Managing clients in the browser<a class="headerlink" href="#managing-clients-in-the-browser" title="Permanent link">&para;</a></h2>
 <p>Open <strong>OAuth Clients</strong> in the header of the groups pages, or go to <code>/admin/oauth-clients</code>.
 The page lists every active client with its ID, name, redirect URIs, grant types, allowed scopes and who may sign in.</p>
 <ul>
-<li><strong>New client</strong>: enter a descriptive name and the redirect URIs of the service, and tick the scopes it may request. Members see the name, so make it clear.</li>
-<li><strong>Edit</strong>: change the name, redirect URIs, grant types, allowed scopes, required groups or single session setting.</li>
-<li><strong>Regenerate</strong>: create a new secret. The old secret stops working at once.</li>
+<li><strong>New client</strong>: choose the <a href="#client-type">client type</a>, enter a descriptive name and the redirect URIs of the service, and tick the scopes it may request. Members see the name, so make it clear.</li>
+<li><strong>Edit</strong>: change the name, redirect URIs, grant types, allowed scopes, allowed origins, required groups or single session setting.</li>
+<li><strong>Regenerate</strong>: create a new secret for a confidential client. The old secret stops working at once.</li>
 <li><strong>Delete</strong>: remove the client and revoke its existing tokens.</li>
 </ul>
 <div class="admonition warning">
@@ -1631,11 +1676,37 @@ The page lists every active client with its ID, name, redirect URIs, grant types
 It shows the plaintext secret once, after you create a client or regenerate its secret.
 If you lose it, regenerate the secret and update the service.</p>
 </div>
-<p>Clients created here are confidential.
-A new client gets a UUID as its ID. Clients created before 4.0.0 keep their numeric ID.</p>
+<p>A new client gets a UUID as its ID. Clients created before 4.0.0 keep their numeric ID.</p>
+<h3 id="client-type">Client type<a class="headerlink" href="#client-type" title="Permanent link">&para;</a></h3>
+<p>Choose the type when you create a client. You cannot change it later.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Confidential</td>
+<td>The service runs on a server and keeps the secret there. This is the default.</td>
+</tr>
+<tr>
+<td>Public</td>
+<td>The service runs in the member's browser, such as a single-page app, where a secret cannot be kept.</td>
+</tr>
+</tbody>
+</table>
+<p>A public client has no secret and no <strong>Regenerate</strong> button.
+It must prove each sign-in with PKCE, using the <code>S256</code> method, see <a href="../../integrations/oidc/#public-clients">public clients</a>.
+It may have only the <strong>Authorization code</strong> and <strong>Refresh token</strong> grant types.
+The list marks it as <strong>Public</strong>.</p>
+<p>A client created before 4.0.0 without a secret is a public client.</p>
 <h3 id="redirect-uris">Redirect URIs<a class="headerlink" href="#redirect-uris" title="Permanent link">&para;</a></h3>
 <p>A client can have several redirect URIs, such as one per hostname of the service.
 The service must send one of them exactly, so <code>https://example.test/callback</code> does not match <code>https://example.test/callback/</code>.</p>
+<p>A public client's redirect URIs must use <code>https</code>.
+For development, <code>http://localhost</code> is also allowed, with any port.</p>
 <h3 id="grant-types">Grant types<a class="headerlink" href="#grant-types" title="Permanent link">&para;</a></h3>
 <p>Grant types set how a client may get tokens.
 A new client gets <strong>Authorization code</strong> and <strong>Refresh token</strong>, which is what a service that signs members in needs.</p>
@@ -1665,6 +1736,7 @@ A new client gets <strong>Authorization code</strong> and <strong>Refresh token<
 Handover does not support implicit, password, personal access or device code.
 The form shows them only on clients that already have them, so you can untick them but not add them.
 If a service does not use a grant type, untick it.</p>
+<p>A public client may have only <strong>Authorization code</strong> and <strong>Refresh token</strong>.</p>
 <h3 id="allowed-scopes">Allowed scopes<a class="headerlink" href="#allowed-scopes" title="Permanent link">&para;</a></h3>
 <p>Allowed scopes set which <a href="../../integrations/clients/#scopes">scopes</a> a client may request.
 A new client has none ticked, so you must tick at least one.
@@ -1675,6 +1747,15 @@ If a service requests no scopes, it gets the default scopes <code>full_name</cod
 If none of those are ticked, the service gets a token with no scopes.</p>
 <p>Clients created in 3.x allow every scope except <code>openid</code> and <code>profile</code>.
 Tick those when a service moves to <a href="../../integrations/oidc/">OpenID Connect</a>.</p>
+<h3 id="allowed-origins">Allowed origins<a class="headerlink" href="#allowed-origins" title="Permanent link">&para;</a></h3>
+<p>Allowed origins set where a public client may call Handover's token and UserInfo endpoints from the browser.
+Confidential clients have none.</p>
+<p>Enter each origin as a scheme, a host and an optional port, with no path, such as <code>https://app.example.test</code> or <code>http://localhost:5173</code>.
+Like a public client's redirect URIs, an origin must use <code>https</code>, or <code>http://localhost</code> for development.
+Handover stores each origin in the form a browser sends it: in lowercase, and without the default port <code>443</code> or <code>80</code>.</p>
+<p>When you create a public client, the form fills in the origins of its redirect URIs.
+Change them if the service calls Handover from another origin.
+A request from an origin that is not on the list fails, see <a href="../../integrations/oidc/#public-clients">public clients</a>.</p>
 <h3 id="required-groups">Required groups<a class="headerlink" href="#required-groups" title="Permanent link">&para;</a></h3>
 <p>Required groups set who may sign in to a client.
 If you tick no groups, every member may sign in.
@@ -1743,7 +1824,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 15:49:18 UTC">November 20, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 15:52:39 UTC">November 20, 2026</span>
   </span>
 
     

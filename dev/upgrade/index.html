@@ -1493,6 +1493,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#handover-supports-public-clients" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handover supports public clients
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#signing-keys-move-to-a-key-store" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1714,6 +1725,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#handover-supports-public-clients" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handover supports public clients
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#signing-keys-move-to-a-key-store" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1860,6 +1882,7 @@ For details, see <a href="#token-lifetimes-are-shorter">token lifetimes are shor
 <li>Move OAuth clients to the <a href="#oauth-clients-use-the-passport-13-schema">Passport 13 client schema</a>.</li>
 <li>Give every client <a href="#client-access-settings">allowed scopes, required groups and a session setting</a>.</li>
 <li>Add the columns that <a href="#handover-supports-openid-connect">OpenID Connect</a> sign-ins need.</li>
+<li>Add the allowed origins of <a href="#handover-supports-public-clients">public clients</a>.</li>
 </ul>
 <p>If you run Handover without the container, step 3 imports nothing, and the migration imports the signing key instead.</p>
 </li>
@@ -1979,6 +2002,19 @@ In 3.x, Handover granted any known scope to any client.</p>
 OpenID Connect is opt-in for each client: a service can use it only after an administrator ticks the new <code>openid</code> scope in the client's allowed scopes.
 No existing client gets <code>openid</code> or <code>profile</code>, so existing services keep working.</p>
 <p>Access tokens that hold the <code>groups</code> scope now carry a <code>groups</code> claim with the IDs of the member's groups.</p>
+<h4 id="handover-supports-public-clients">Handover supports public clients<a class="headerlink" href="#handover-supports-public-clients" title="Permanent link">&para;</a></h4>
+<p>Administrators can now create public clients for services that run in the member's browser.
+A public client has no secret, must use PKCE with the <code>S256</code> method, and calls the token and UserInfo endpoints from its allowed origins.
+See <a href="../concepts/oauth-clients/#client-type">OAuth clients</a> and <a href="../integrations/oidc/#public-clients">public clients</a>.</p>
+<p>Existing clients that have a secret do not change.
+A client created before 4.0.0 without a secret is now a public client:</p>
+<ul>
+<li>It must send a code challenge with the <code>S256</code> method. Handover now refuses the <code>plain</code> method.</li>
+<li>When you edit it, its redirect URIs must use <code>https</code>, or <code>http://localhost</code>, and it may keep only the authorization code and refresh token grant types.</li>
+</ul>
+<p>The token and UserInfo endpoints now check the <code>Origin</code> header.
+A request with an <code>Origin</code> header that the client does not allow fails with a <code>403</code> response.
+Services that call Handover from their server send no <code>Origin</code> header, so they are not affected.</p>
 <h4 id="signing-keys-move-to-a-key-store">Signing keys move to a key store<a class="headerlink" href="#signing-keys-move-to-a-key-store" title="Permanent link">&para;</a></h4>
 <p>Handover now keeps its OAuth signing keys in <code>oauth-keys/</code> on the storage volume, and you can rotate them with artisan commands.
 See <a href="../setup/signing-keys/">signing keys</a>.</p>
@@ -2036,7 +2072,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 15:49:18 UTC">November 20, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 15:52:39 UTC">November 20, 2026</span>
   </span>
 
     
