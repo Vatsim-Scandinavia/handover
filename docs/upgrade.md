@@ -237,11 +237,11 @@ Existing clients that have a secret do not change.
 A client created before 4.0.0 without a secret is now a public client:
 
 - It must send a code challenge with the `S256` method. Handover now refuses the `plain` method.
-- When you edit it, its redirect URIs must use `https`, or `http://localhost`, and it may keep only the authorization code and refresh token grant types.
+- When you edit it, its redirect URIs must use `https`, or `http` on `localhost`, `127.0.0.1` or `[::1]`, and it may keep only the authorization code and refresh token grant types.
 
-The token and UserInfo endpoints now check the `Origin` header.
-A request with an `Origin` header that the client does not allow fails with a `403` response.
-Services that call Handover from their server send no `Origin` header, so they are not affected.
+The token and UserInfo endpoints now check the `Origin` header for public clients.
+A request with an `Origin` header that the public client does not allow fails with a `403` response.
+Confidential clients are not affected, even when their server sends an `Origin` header.
 
 #### Signing keys move to a key store
 

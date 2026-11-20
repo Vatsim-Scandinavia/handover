@@ -75,17 +75,19 @@ class PublicClientManagementTest extends TestCase
             ->assertJsonValidationErrors(['grant_types.1']);
     }
 
-    public function test_a_public_client_redirects_only_to_https_or_localhost(): void
+    public function test_a_public_client_redirects_only_to_https_or_a_loopback_host(): void
     {
         $this->createPublicClient(['redirect_uris' => [
             'https://vcas-ok.test/callback',
             'http://localhost:5173/callback',
-            'http://vcas-ok.test/callback',
             'http://127.0.0.1:5173/callback',
+            'http://[::1]:5173/callback',
+            'http://vcas-ok.test/callback',
+            'http://127.0.0.2/callback',
             'com.example.app:/callback',
         ]])->assertStatus(422)
-            ->assertJsonValidationErrors(['redirect_uris.2', 'redirect_uris.3', 'redirect_uris.4'])
-            ->assertJsonMissingValidationErrors(['redirect_uris.0', 'redirect_uris.1']);
+            ->assertJsonValidationErrors(['redirect_uris.4', 'redirect_uris.5', 'redirect_uris.6'])
+            ->assertJsonMissingValidationErrors(['redirect_uris.0', 'redirect_uris.1', 'redirect_uris.2', 'redirect_uris.3']);
     }
 
     public function test_a_confidential_client_keeps_its_redirect_uri_rules(): void
@@ -121,17 +123,21 @@ class PublicClientManagementTest extends TestCase
             ->assertJsonPath('client.allowed_origins', ['https://vcas-ok.test', 'http://localhost:5173']);
     }
 
-    public function test_an_allowed_origin_is_only_an_https_or_localhost_origin(): void
+    public function test_an_allowed_origin_is_only_an_https_or_loopback_origin(): void
     {
         $this->createPublicClient(['allowed_origins' => [
             'https://vcas-ok.test',
+            'http://127.0.0.1:5173',
             'https://vcas-ok.test/app',
             'http://vcas-ok.test',
             'https://vcas-ok.test?x=1',
             'vcas-ok.test',
+            'https://vcas-ok.test?',
+            'https://user@vcas-ok.test',
+            'https://vcas-ok.test#top',
         ]])->assertStatus(422)
-            ->assertJsonValidationErrors(['allowed_origins.1', 'allowed_origins.2', 'allowed_origins.3', 'allowed_origins.4'])
-            ->assertJsonMissingValidationErrors(['allowed_origins.0']);
+            ->assertJsonValidationErrors(array_map(fn (int $i) => "allowed_origins.{$i}", range(2, 8)))
+            ->assertJsonMissingValidationErrors(['allowed_origins.0', 'allowed_origins.1']);
     }
 
     public function test_admin_can_edit_a_public_clients_allowed_origins(): void

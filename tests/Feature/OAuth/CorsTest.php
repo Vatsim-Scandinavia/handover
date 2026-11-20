@@ -149,6 +149,18 @@ class CorsTest extends TestCase
         $this->assertNoCors($this->exchangeCode($client, $this->authorizeCode(User::factory()->create(), $client))->assertOk());
     }
 
+    public function test_a_confidential_client_whose_server_sends_an_origin_is_unaffected(): void
+    {
+        $client = $this->makeClientAllowing(['openid']);
+        $user = User::factory()->create();
+
+        $exchange = $this->withHeaders(['Origin' => self::OTHER_ORIGIN])
+            ->exchangeCode($client, $this->authorizeCode($user, $client, ['scope' => 'openid']));
+        $this->assertNoCors($exchange->assertOk());
+
+        $this->assertNoCors($this->userinfoFrom(self::OTHER_ORIGIN, $exchange->json('access_token'))->assertOk());
+    }
+
     public function test_the_authorize_endpoint_and_the_user_api_get_no_cors(): void
     {
         $this->assertNoCors($this->preflight('/oauth/authorize', self::ORIGIN, 'GET'));

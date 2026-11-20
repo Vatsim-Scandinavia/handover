@@ -12,7 +12,7 @@ use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Token\Parser;
 use Lcobucci\JWT\Validation\Constraint\SignedWith;
 use Lcobucci\JWT\Validation\Validator;
-use phpseclib3\Crypt\PublicKeyLoader;
+use phpseclib4\Crypt\PublicKeyLoader;
 
 /**
  * Drives the authorization code and refresh grants the way a relying party does.

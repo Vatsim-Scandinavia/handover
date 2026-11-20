@@ -173,12 +173,12 @@ class OAuthClientController extends Controller
         ]);
     }
 
-    /** A public client's URIs must use https, or http on localhost for development. */
+    /** A public client's URIs must use https, or http on a loopback host for development. */
     private function publicClientUri(): Closure
     {
         return function (string $attribute, mixed $value, Closure $fail): void {
             if (is_string($value) && ! Origin::isAllowedForPublicClients($value)) {
-                $fail('The :attribute must use https, or http://localhost for development.');
+                $fail('The :attribute must use https, or http on localhost, 127.0.0.1 or [::1] for development.');
             }
         };
     }
@@ -188,7 +188,7 @@ class OAuthClientController extends Controller
     {
         return function (string $attribute, mixed $value, Closure $fail): void {
             if (is_string($value) && (Origin::normalise($value) === null || ! Origin::isAllowedForPublicClients($value))) {
-                $fail('The :attribute must be an origin such as https://example.test, with no path. Only https, or http://localhost for development, is allowed.');
+                $fail('The :attribute must be an origin such as https://example.test, with no path. Only https, or http on localhost, 127.0.0.1 or [::1] for development, is allowed.');
             }
         };
     }

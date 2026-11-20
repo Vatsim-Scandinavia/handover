@@ -126,6 +126,8 @@ Handover allows a call only from the client's [allowed origins](../concepts/oaut
 - The UserInfo endpoint checks the `Origin` header against the allowed origins of the client the access token was issued to.
 - If the origin is not allowed, Handover refuses the request with a `403` response and no CORS headers.
 
+Handover does not check the `Origin` header for a confidential client, and sends it no CORS headers.
+
 Handover answers a CORS preflight for an origin that any client allows.
 The responses never allow credentials, so do not send cookies with these calls.
 The authorization endpoint and the [user API](../reference/api.md) do not support CORS.

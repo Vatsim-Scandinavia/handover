@@ -45,7 +45,7 @@ A client can have several redirect URIs, such as one per hostname of the service
 The service must send one of them exactly, so `https://example.test/callback` does not match `https://example.test/callback/`.
 
 A public client's redirect URIs must use `https`.
-For development, `http://localhost` is also allowed, with any port.
+For development, `http` is also allowed on `localhost`, `127.0.0.1` and `[::1]`, with any port.
 
 ### Grant types
 
@@ -85,7 +85,7 @@ Allowed origins set where a public client may call Handover's token and UserInfo
 Confidential clients have none.
 
 Enter each origin as a scheme, a host and an optional port, with no path, such as `https://app.example.test` or `http://localhost:5173`.
-Like a public client's redirect URIs, an origin must use `https`, or `http://localhost` for development.
+Like a public client's redirect URIs, an origin must use `https`, or `http` on a loopback host for development.
 Handover stores each origin in the form a browser sends it: in lowercase, and without the default port `443` or `80`.
 
 When you create a public client, the form fills in the origins of its redirect URIs.

@@ -29,9 +29,13 @@ final class Origin
      */
     public static function normalise(string $value): ?string
     {
-        $parts = parse_url($value);
+        $uri = Uri::tryNew($value);
 
-        if ($parts === false || array_diff_key($parts, array_flip(['scheme', 'host', 'port', 'path'])) !== [] || ! in_array($parts['path'] ?? '', ['', '/'], true)) {
+        if ($uri === null
+            || $uri->getUserInfo() !== null
+            || $uri->getQuery() !== null
+            || $uri->getFragment() !== null
+            || ! in_array($uri->getPath(), ['', '/'], true)) {
             return null;
         }
 
@@ -39,14 +43,14 @@ final class Origin
     }
 
     /**
-     * Whether a public client may use the URI: https, or http on localhost
-     * for development.
+     * Whether a public client may use the URI: https, or http on a loopback
+     * host (localhost, 127.0.0.1 or [::1]) for development.
      */
     public static function isAllowedForPublicClients(string $uri): bool
     {
         $origin = self::of($uri);
 
         return $origin !== null
-            && (str_starts_with($origin, 'https://') || preg_match('#^http://localhost(:\d+)?$#', $origin) === 1);
+            && (str_starts_with($origin, 'https://') || preg_match('#^http://(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$#', $origin) === 1);
     }
 }

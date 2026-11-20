@@ -20,6 +20,17 @@ class TokenLifetimeTest extends TestCase
         $this->assertEqualsWithDelta(3600, $tokens['expires_in'], 5);
     }
 
+    // App\Providers\PassportServiceProvider::buildAuthCodeGrant() copies
+    // Passport's lifetime. This catches it drifting from Passport's.
+    public function test_auth_codes_last_ten_minutes(): void
+    {
+        $this->authorizeCode(User::factory()->create(), $this->makeClient());
+
+        $expiresAt = DB::table('oauth_auth_codes')->sole()->expires_at;
+
+        $this->assertEqualsWithDelta(now()->addMinutes(10)->timestamp, Carbon::parse($expiresAt)->timestamp, 60);
+    }
+
     public function test_a_new_sign_in_revokes_the_old_refresh_token(): void
     {
         $user = User::factory()->create();
