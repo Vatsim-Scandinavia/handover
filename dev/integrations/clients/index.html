@@ -671,6 +671,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../setup/signing-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Signing keys
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -956,6 +984,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Tokens">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#verifying-access-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verifying access tokens
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1418,6 +1463,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Tokens">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#verifying-access-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verifying access tokens
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1493,6 +1555,10 @@ A service that supports <abbr title="Virtual Air Traffic Simulation network">VAT
 <td>User information endpoint</td>
 <td><code>https://YOUR_HANDOVER/api/user</code></td>
 </tr>
+<tr>
+<td>JSON Web Key Set (JWKS)</td>
+<td><code>https://YOUR_HANDOVER/.well-known/jwks.json</code></td>
+</tr>
 </tbody>
 </table>
 <p>The callback URL of the service must exactly match one of the client's redirect URIs in Handover.</p>
@@ -1542,6 +1608,15 @@ It never grants <code>groups</code> by default.</p>
 <li>By default, each member can have one session per client. When a member signs in again, Handover revokes their earlier access and refresh tokens for that client. An administrator can turn this off per client. See <a href="../../concepts/oauth-clients/#single-session">single session</a>.</li>
 <li>If the client has <a href="../../concepts/oauth-clients/#required-groups">required groups</a>, a refresh fails with the <code>invalid_grant</code> error once the member has left them. Send the member through the sign-in again.</li>
 <li>Handover deletes revoked and expired tokens daily. For details, see <a href="../../reference/background-jobs/">background jobs</a>.</li>
+<li>Handover may replace its signing key without warning if the key leaks. Access tokens signed by that key then fail. Use the refresh token to get a new access token. See <a href="../../setup/signing-keys/#replace-a-leaked-key">signing keys</a>.</li>
+</ul>
+<h3 id="verifying-access-tokens">Verifying access tokens<a class="headerlink" href="#verifying-access-tokens" title="Permanent link">&para;</a></h3>
+<p>Most services send the access token to Handover and never read it.
+If the service checks access tokens itself:</p>
+<ul>
+<li>An access token is a JWT signed with RS256. Its <code>kid</code> header names the signing key.</li>
+<li>Pick the key by <code>kid</code> from the JWKS. When you see an unknown <code>kid</code>, fetch the JWKS again.</li>
+<li>Cache the JWKS for at most one hour.</li>
 </ul>
 <h2 id="control-center">Control Center<a class="headerlink" href="#control-center" title="Permanent link">&para;</a></h2>
 <p>Control Center supports Handover out of the box.
@@ -1575,7 +1650,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 14:52:34 UTC">November 20, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 14:57:37 UTC">November 20, 2026</span>
   </span>
 
     

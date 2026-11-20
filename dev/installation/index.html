@@ -800,6 +800,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup/signing-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Signing keys
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1550,17 +1578,13 @@ Replace the name if yours differs.</p>
    The repository's <code>docker-compose.yaml</code> is a good starting point.</p>
 </li>
 <li>Start the container with the volume bound to <code>/app/storage</code>.
-   On the first start without an <code>APP_KEY</code>, the container generates an application key and the OAuth signing keys.</li>
+   On the first start, the container generates the OAuth <a href="../setup/signing-keys/">signing key</a>.
+   If <code>APP_KEY</code> is empty, it also generates an application key.</li>
 <li>
 <p>Read the generated application key and set it as the <code>APP_KEY</code> environment variable.
    Without a fixed key, users must log in again each time you recreate the container.</p>
 <div class="language-sh highlight"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>handover<span class="w"> </span>php<span class="w"> </span>artisan<span class="w"> </span>key:get
 </code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">Setting <code>APP_KEY</code> before the first start</p>
-<p>The container only generates the OAuth signing keys when <code>APP_KEY</code> is empty.
-If you set <code>APP_KEY</code> from the start, generate the keys yourself with <code>php artisan passport:keys</code>.</p>
-</div>
 </li>
 <li>
 <p>Create the database tables.</p>
@@ -1625,7 +1649,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 18, 2026 21:18:16 UTC">November 18, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 14:57:37 UTC">November 20, 2026</span>
   </span>
 
     

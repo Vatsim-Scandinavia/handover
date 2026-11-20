@@ -671,6 +671,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../setup/signing-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Signing keys
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1125,6 +1153,89 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#signing-key-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Signing key commands
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Signing key commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#signing-keys-generate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        signing-keys:generate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#signing-keys-activate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        signing-keys:activate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#signing-keys-remove" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        signing-keys:remove
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#signing-keys-revoke" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        signing-keys:revoke
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#signing-keys-import" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        signing-keys:import
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#signing-keys-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        signing-keys:list
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#passport-commands" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1468,6 +1579,89 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#signing-key-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Signing key commands
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Signing key commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#signing-keys-generate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        signing-keys:generate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#signing-keys-activate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        signing-keys:activate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#signing-keys-remove" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        signing-keys:remove
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#signing-keys-revoke" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        signing-keys:revoke
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#signing-keys-import" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        signing-keys:import
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#signing-keys-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        signing-keys:list
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#passport-commands" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1541,6 +1735,30 @@ For example, if you're using Docker you must prefix the command with <code>docke
 <td><code>reset:acceptedprivacy</code></td>
 <td>Make every member accept the Data Protection Policy again</td>
 </tr>
+<tr>
+<td><code>signing-keys:activate KID</code></td>
+<td>Make a staged signing key the active key</td>
+</tr>
+<tr>
+<td><code>signing-keys:generate</code></td>
+<td>Create a staged signing key</td>
+</tr>
+<tr>
+<td><code>signing-keys:import</code></td>
+<td>Import the Passport signing key, or create the first key</td>
+</tr>
+<tr>
+<td><code>signing-keys:list</code></td>
+<td>List the signing keys and their states</td>
+</tr>
+<tr>
+<td><code>signing-keys:remove KID</code></td>
+<td>Remove a retired signing key</td>
+</tr>
+<tr>
+<td><code>signing-keys:revoke KID</code></td>
+<td>Remove a signing key immediately</td>
+</tr>
 </tbody>
 </table>
 <h2 id="groupsadd-admin"><code>groups:add-admin</code><a class="headerlink" href="#groupsadd-admin" title="Permanent link">&para;</a></h2>
@@ -1562,6 +1780,55 @@ You can also delete clients in the <a href="../../concepts/oauth-clients/">admin
 <h2 id="resetacceptedprivacy"><code>reset:acceptedprivacy</code><a class="headerlink" href="#resetacceptedprivacy" title="Permanent link">&para;</a></h2>
 <p>Marks every member as not having accepted the Data Protection Policy.
 See <a href="../../setup/dpp/#updating-the-policy">updating the policy</a>.</p>
+<h2 id="signing-key-commands">Signing key commands<a class="headerlink" href="#signing-key-commands" title="Permanent link">&para;</a></h2>
+<p>These commands manage the keys that sign access tokens.
+For when to run them, see <a href="../../setup/signing-keys/">signing keys</a>.</p>
+<p>The keys live in <code>/app/storage/oauth-keys</code>:</p>
+<ul>
+<li><code>&lt;kid&gt;.key</code> holds one private key. Only the user that runs Handover can read it.</li>
+<li><code>keys.json</code> records the state of each key, when it entered that state, and whether it was imported.</li>
+</ul>
+<p>The <code>kid</code> is the <a href="https://www.rfc-editor.org/rfc/rfc7638">RFC 7638</a> thumbprint of the public key.
+Keys use RS256.</p>
+<h3 id="signing-keys-generate"><code>signing-keys:generate</code><a class="headerlink" href="#signing-keys-generate" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code>php<span class="w"> </span>artisan<span class="w"> </span>signing-keys:generate
+</code></pre></div>
+<p>Creates a 2048-bit RSA key in the staged state and prints its <code>kid</code>.
+Handover publishes the key but does not sign with it.</p>
+<h3 id="signing-keys-activate"><code>signing-keys:activate</code><a class="headerlink" href="#signing-keys-activate" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code>php<span class="w"> </span>artisan<span class="w"> </span>signing-keys:activate<span class="w"> </span>KID
+</code></pre></div>
+<p>Makes a staged key the active key and retires the old active key.
+The command refuses until the key has been staged for one hour. <code>--force</code> skips the wait.</p>
+<h3 id="signing-keys-remove"><code>signing-keys:remove</code><a class="headerlink" href="#signing-keys-remove" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code>php<span class="w"> </span>artisan<span class="w"> </span>signing-keys:remove<span class="w"> </span>KID
+</code></pre></div>
+<p>Deletes a retired key and stops publishing it.
+The command refuses until the key has been retired for two hours. <code>--force</code> skips the wait.</p>
+<h3 id="signing-keys-revoke"><code>signing-keys:revoke</code><a class="headerlink" href="#signing-keys-revoke" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code>php<span class="w"> </span>artisan<span class="w"> </span>signing-keys:revoke<span class="w"> </span>KID
+</code></pre></div>
+<p>Deletes a key in any state, immediately. Tokens it signed stop working.
+If the key was active, the command creates and activates a new key, with no staging.</p>
+<h3 id="signing-keys-import"><code>signing-keys:import</code><a class="headerlink" href="#signing-keys-import" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code>php<span class="w"> </span>artisan<span class="w"> </span>signing-keys:import
+</code></pre></div>
+<p>Creates or imports the first key.
+The container runs it on every start, and a migration runs it once.
+If the key store already holds keys, the command does nothing.
+Otherwise it does one of the following:</p>
+<ul>
+<li>If <code>PASSPORT_PRIVATE_KEY</code> is set, it imports that key as the active key.</li>
+<li>If <code>/app/storage/oauth-private.key</code> exists, it imports that key as the active key, then deletes <code>oauth-private.key</code> and <code>oauth-public.key</code>.</li>
+<li>Otherwise, it creates a new key and activates it.</li>
+</ul>
+<p>An imported key keeps its size.
+Handover ignores <code>PASSPORT_PRIVATE_KEY</code> and <code>PASSPORT_PUBLIC_KEY</code> after the import.
+The command prints a warning while <code>PASSPORT_PRIVATE_KEY</code> is still set.</p>
+<h3 id="signing-keys-list"><code>signing-keys:list</code><a class="headerlink" href="#signing-keys-list" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code>php<span class="w"> </span>artisan<span class="w"> </span>signing-keys:list
+</code></pre></div>
+<p>Lists each key with its <code>kid</code>, its state, the time it entered that state, and whether it was imported.</p>
 <h2 id="passport-commands">Passport commands<a class="headerlink" href="#passport-commands" title="Permanent link">&para;</a></h2>
 <p>Laravel Passport provides these commands. Handover uses them as follows.</p>
 <table>
@@ -1578,7 +1845,7 @@ See <a href="../../setup/dpp/#updating-the-policy">updating the policy</a>.</p>
 </tr>
 <tr>
 <td><code>passport:keys</code></td>
-<td>Create the OAuth signing keys. The container runs it on first start</td>
+<td>Not used. Handover ignores the keys it creates. Use the <a href="#signing-key-commands">signing key commands</a> instead</td>
 </tr>
 <tr>
 <td><code>passport:hash</code></td>
@@ -1619,7 +1886,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 18, 2026 21:18:16 UTC">November 18, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 14:57:37 UTC">November 20, 2026</span>
   </span>
 
     

@@ -669,6 +669,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup/signing-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Signing keys
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1426,6 +1454,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#signing-keys-move-to-a-key-store" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Signing keys move to a key store
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#the-groups-api-reports-inherited-groups" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1625,6 +1664,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#signing-keys-move-to-a-key-store" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Signing keys move to a key store
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#the-groups-api-reports-inherited-groups" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1694,7 +1744,7 @@ For example, if you're using Docker you must prefix the command with <code>docke
 </details>
 <h2 id="before-you-upgrade">Before you upgrade<a class="headerlink" href="#before-you-upgrade" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Back up the database, plus the storage volume. The volume holds the OAuth signing keys (<code>oauth-private.key</code> and <code>oauth-public.key</code>). Losing them invalidates every access token already issued.</li>
+<li>Back up the database, plus the storage volume. The volume holds the OAuth <a href="../setup/signing-keys/">signing keys</a> in <code>oauth-keys/</code>. In 3.x, it held them in <code>oauth-private.key</code> and <code>oauth-public.key</code>. Losing the keys invalidates every access token already issued.</li>
 <li>Rehearse on staging with a copy of production data when a release has breaking changes.</li>
 <li>Note the image tag you run now, and keep the backup until the new version is confirmed healthy.</li>
 <li>
@@ -1721,7 +1771,8 @@ Without an interactive terminal it answers no and does nothing.
 </div>
 <h2 id="upgrading-to-400">Upgrading from 3.x to 4.0.0<a class="headerlink" href="#upgrading-to-400" title="Permanent link">&para;</a></h2>
 <p>This release moves Handover to Laravel 13 and Laravel Passport 13, and the frontend toolchain to Vite 8 and jQuery 4.
-It needs one manual step on the database: hashing the OAuth client secrets.</p>
+It needs one manual step on the database: hashing the OAuth client secrets.
+The container also moves the OAuth signing key into a key store that supports <a href="../setup/signing-keys/">key rotation</a>. You need to do nothing for that.</p>
 <div class="admonition danger">
 <p class="admonition-title">OAuth breaks until you hash the client secrets</p>
 <p>Every integration fails to get a token at <code>/oauth/token</code> until you run <code>php artisan passport:hash</code>.
@@ -1737,7 +1788,7 @@ For details, see <a href="#token-lifetimes-are-shorter">token lifetimes are shor
 </div>
 <h3 id="upgrade-steps">Upgrade steps<a class="headerlink" href="#upgrade-steps" title="Permanent link">&para;</a></h3>
 <ol>
-<li>Back up the database. This is not optional for this release: hashing the secrets and changing the client schema cannot be undone, and a <a href="#rolling-back-to-3x">rollback</a> needs the backup.</li>
+<li>Back up the database and the storage volume. This is not optional for this release: hashing the secrets, changing the client schema and moving the signing key cannot be undone, and a <a href="#rolling-back-to-3x">rollback</a> needs the backup.</li>
 <li>
 <p>Enable maintenance mode in the running 3.x container:</p>
 <div class="language-sh highlight"><pre><span></span><code>php<span class="w"> </span>artisan<span class="w"> </span>down
@@ -1745,7 +1796,8 @@ For details, see <a href="#token-lifetimes-are-shorter">token lifetimes are shor
 </li>
 <li>
 <p>Change the image tag from <code>:v3</code> to <code>:v4</code>, pull it, and recreate the container.
-   The floating <code>:v3</code> tag never moves to 4.0.0, so you must change it.</p>
+   The floating <code>:v3</code> tag never moves to 4.0.0, so you must change it.
+   On start, the container imports <code>oauth-private.key</code> into <code>oauth-keys/</code>. For details, see <a href="#signing-keys-move-to-a-key-store">signing keys move to a key store</a>.</p>
 </li>
 <li>
 <p>Apply the database changes:</p>
@@ -1758,6 +1810,7 @@ For details, see <a href="#token-lifetimes-are-shorter">token lifetimes are shor
 <li>Move OAuth clients to the <a href="#oauth-clients-use-the-passport-13-schema">Passport 13 client schema</a>.</li>
 <li>Give every client <a href="#client-access-settings">allowed scopes, required groups and a session setting</a>.</li>
 </ul>
+<p>If you run Handover without the container, step 3 imports nothing, and the migration imports the signing key instead.</p>
 </li>
 <li>
 <p>Hash the OAuth client secrets. Run this once per environment:</p>
@@ -1793,6 +1846,9 @@ Switching the image back is not enough.</p>
 <ol>
 <li>Switch the image tag back to the one you noted before the upgrade, and recreate the container.</li>
 <li>Restore the database backup you took in step 1.</li>
+<li>Restore <code>oauth-private.key</code> and <code>oauth-public.key</code> from the storage volume backup you took in step 1.
+   4.0.0 moved the signing key into <code>oauth-keys/</code>, and 3.x reads only these two files.
+   If you set the key in <code>PASSPORT_PRIVATE_KEY</code> and <code>PASSPORT_PUBLIC_KEY</code> instead, set both variables again.</li>
 <li>Clear the caches with <code>php artisan optimize:clear</code>.</li>
 </ol>
 <p>The <code>group_hierarchy</code> table from 4.0.0 does no harm to 3.x if you keep it, but the restore removes it anyway.</p>
@@ -1860,6 +1916,23 @@ See <a href="../concepts/oauth-clients/#grant-types">OAuth clients</a>.</p>
 <p>A request for a scope the client does not allow now fails with the <code>invalid_scope</code> error.
 In 3.x, Handover granted any known scope to any client.</p>
 <p>When you create a client in the admin UI, you must pick its allowed scopes.</p>
+<h4 id="signing-keys-move-to-a-key-store">Signing keys move to a key store<a class="headerlink" href="#signing-keys-move-to-a-key-store" title="Permanent link">&para;</a></h4>
+<p>Handover now keeps its OAuth signing keys in <code>oauth-keys/</code> on the storage volume, and you can rotate them with artisan commands.
+See <a href="../setup/signing-keys/">signing keys</a>.</p>
+<ul>
+<li>On the first start of 4.0.0, the container imports <code>oauth-private.key</code> as the first active key and deletes <code>oauth-private.key</code> and <code>oauth-public.key</code>. If you set <code>PASSPORT_PRIVATE_KEY</code> instead, the container imports that key.</li>
+<li>Handover then ignores <code>PASSPORT_PRIVATE_KEY</code> and <code>PASSPORT_PUBLIC_KEY</code>. Remove them.</li>
+<li>New access tokens carry a <code>kid</code> header that names their key. Access tokens from 3.x have none, and keep working while the imported key is published.</li>
+<li>Handover publishes its public keys at <code>/.well-known/jwks.json</code>.</li>
+<li><code>passport:keys</code> no longer has any effect.</li>
+</ul>
+<p>Services that read <code>/api/user</code> need no changes.</p>
+<div class="admonition warning">
+<p class="admonition-title">Services that check tokens with a copy of the public key</p>
+<p>Some services check access tokens themselves, with a copy of <code>oauth-public.key</code>.
+They keep working after the upgrade, but fail once you <a href="../setup/signing-keys/#rotate-the-signing-key">rotate the key</a>.
+Before you rotate, move them to the JWKS. See <a href="../integrations/clients/#verifying-access-tokens">verifying access tokens</a>.</p>
+</div>
 <h4 id="the-groups-api-reports-inherited-groups">The groups API reports inherited groups<a class="headerlink" href="#the-groups-api-reports-inherited-groups" title="Permanent link">&para;</a></h4>
 <p>Each entry in the <code>groups</code> array now has a <code>direct</code> field.
 Once you nest groups, the array also lists groups a member inherits.
@@ -1900,7 +1973,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 14:52:34 UTC">November 20, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 14:57:37 UTC">November 20, 2026</span>
   </span>
 
     

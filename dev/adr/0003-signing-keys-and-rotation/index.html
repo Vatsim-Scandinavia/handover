@@ -671,6 +671,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../setup/signing-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Signing keys
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1462,21 +1490,27 @@
 
 
 <h1 id="signing-keys-and-rotation">Signing keys and rotation<a class="headerlink" href="#signing-keys-and-rotation" title="Permanent link">&para;</a></h1>
-<p>Status: Accepted, 2026-11-19</p>
+<p>Status: Accepted, 2026-11-19.</p>
+<p>Amended:</p>
+<ul>
+<li>2026-11-20: a manifest records every key's state, the commands are named <code>signing-keys:*</code>, and the import removes Passport's key files.</li>
+</ul>
 <h2 id="context">Context<a class="headerlink" href="#context" title="Permanent link">&para;</a></h2>
 <p>Handover signs access tokens with one RSA keypair. The entrypoint creates it on first boot in the storage volume. Access tokens carry no <code>kid</code>, and nothing can rotate the key. OIDC adds id_tokens and a JWKS. vcas-ok will check access tokens against that JWKS. Other vACCs run the same image with only a volume and env vars, and have no secret store.</p>
 <h2 id="decision">Decision<a class="headerlink" href="#decision" title="Permanent link">&para;</a></h2>
-<p>Keys are files in the storage volume, one per key, named by <code>kid</code>, plus a marker for the active key. The <code>kid</code> is the RFC 7638 thumbprint. Keys are RS256 only. New keys are RSA 2048.</p>
+<p>Keys are files in <code>storage/oauth-keys</code>, one private key per file, named <code>&lt;kid&gt;.key</code>. A manifest, <code>keys.json</code>, records each key's state, when it entered that state, and whether it was imported. One atomic write of the manifest moves a key between states, so a reader never sees two active keys. The <code>kid</code> is the RFC 7638 thumbprint. Keys are RS256 only. New keys are RSA 2048.</p>
 <p>One active key signs both access tokens and id_tokens, and both carry a <code>kid</code>. Passport's access token entity is subclassed to add the header. Passport's resource server validator is replaced by one that picks the key by <code>kid</code> from every published key.</p>
-<p>Rotation is manual, run with artisan commands. A key moves through four states: staged (published, not signing), then active, then retired (published, not signing), then removed. Activation waits until the key has been staged for 1h, the JWKS cache time. Removal waits until the key has been retired for 2h. <code>--force</code> overrides both waits. An emergency revoke drops a key at once and, if it was active, activates a fresh one with no staging.</p>
-<p>The existing key is imported as the first active key. Tokens with no <code>kid</code> are checked against it while it is still published.</p>
+<p>Rotation is manual, run with the <code>signing-keys:*</code> artisan commands. A key moves through four states: staged (published, not signing), then active, then retired (published, not signing), then removed. Activation waits until the key has been staged for 1h, the JWKS cache time. Removal waits until the key has been retired for 2h. <code>--force</code> overrides both waits. An emergency revoke drops a key at once and, if it was active, activates a fresh one with no staging.</p>
+<p><code>signing-keys:import</code> fills an empty store. It imports <code>PASSPORT_PRIVATE_KEY</code> if set, and warns that the variable is now ignored. Otherwise it imports <code>oauth-private.key</code> and deletes Passport's key files. On a fresh install it creates and activates a key with no staging. The container entrypoint runs it on every start, and a migration runs it once. It imports nothing once the store holds keys. Tokens with no <code>kid</code> are checked against the imported key while it is still published.</p>
 <h2 id="consequences">Consequences<a class="headerlink" href="#consequences" title="Permanent link">&para;</a></h2>
 <p>Rotating the RSA key never touches refresh tokens or auth codes, which are encrypted with <code>APP_KEY</code>. A revoked key fails its live tokens at once, and relying parties recover by refreshing. An <code>id_token_hint</code> signed by a removed key can't be verified.</p>
+<p>Passport no longer reads <code>oauth-private.key</code>, <code>oauth-public.key</code> or the <code>PASSPORT_*_KEY</code> variables. Once the import deletes Passport's key files, rolling back to 3.x needs the storage volume backup.</p>
 <h2 id="alternatives-considered">Alternatives considered<a class="headerlink" href="#alternatives-considered" title="Permanent link">&para;</a></h2>
 <p>Keys in a DB table encrypted with <code>APP_KEY</code>: losing or rotating <code>APP_KEY</code> would lose the signing keys too.</p>
 <p>Keys in env vars or a secret store: a changing set of keys needs a redeploy, and other vACCs have no secret store.</p>
 <p>A separate rotating key for id_tokens, with access tokens left on the Passport key: the Passport key could then never rotate, and access tokens would still lack a <code>kid</code>. Many JWKS clients reject those.</p>
 <p>Scheduled rotation: more moving parts for a small org, and it breaks relying parties that pin a key by hand.</p>
+<p>Commands named <code>keys:*</code>: <code>keys:generate</code> is one letter from Laravel's <code>key:generate</code>, which replaces <code>APP_KEY</code>. A <code>passport:keys:*</code> prefix would sit next to Passport's own <code>passport:keys</code>, which writes the key files Handover no longer reads.</p>
 <!--
 This is a list of abbreviations which will be automatically expanded on every content page.
 Don't add any words or abbreviations which are confusingly or rarely used.
@@ -1506,7 +1540,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 18, 2026 23:48:21 UTC">November 18, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 14:57:37 UTC">November 20, 2026</span>
   </span>
 
     
