@@ -9,8 +9,15 @@
 @use "@fortawesome/fontawesome-free/scss/regular";
 @use "@fortawesome/fontawesome-free/scss/brands";
 
+// Theme CSS Variables
+@import "themes/light";
+@import "themes/dark";
+
 // Variables
 @import 'variables';
+
+// Instance theme override (see themes/_custom.scss.example).
+@import 'themes/custom';
 
 // 3rd Party
 @import '~bootstrap/scss/bootstrap';
@@ -24,20 +31,20 @@ html,body {
 
 h1{
 	font-size: 2.5rem;
-	color: #011328;
+	color: var(--color-tertiary);
 }
 
 h2{
 	font-size: 1.5rem;
-	color: #011328;
+	color: var(--color-tertiary);
 }
 
 p, .pp-bullet {
 	font-size: 0.9rem;
-	color: #011328;
+	color: var(--color-tertiary);
 
 	a {
-		color: $primary !important;
+		color: var(--color-primary-text) !important;
 		text-decoration: underline;
 
 		&:hover{
@@ -48,11 +55,11 @@ p, .pp-bullet {
 }
 
 .bt{
-	border-top: 1px solid lightgray;
+	border-top: 1px solid var(--border-color);
 }
 
 .bm{
-	border-bottom: 1px solid lightgray;
+	border-bottom: 1px solid var(--border-color);
 }
 
 .fill {
@@ -64,13 +71,13 @@ p, .pp-bullet {
 	.pp-bullet{
 		font-weight: 200;
 		margin-bottom: 10px;
-		color: #6c757d;
+		color: var(--color-text-muted);
 	}
 
 	.pp-bullet i{
 		width: 15px;
 		margin-right: 5px;
-		color: #333;
+		color: var(--color-text-dark);
 	}
 }
 
@@ -83,6 +90,16 @@ p, .pp-bullet {
 	}
 }
 
+// Shared with Control Center's _global.scss, so forms read the same in both.
+form {
+    input, select {
+        border-color: var(--color-gray-400) !important;
+    }
+}
+
 // Alpine: hide x-cloak elements until Alpine initialises, so editing
 // controls don't flash before the toggle state is applied.
 [x-cloak] { display: none !important; }
+
+// Apply CSS variables to override Bootstrap
+@import "theme-overrides";

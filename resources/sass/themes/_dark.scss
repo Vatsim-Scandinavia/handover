@@ -1,0 +1,118 @@
+// Dark Theme CSS Variables
+// This theme provides a dark mode alternative
+
+[data-theme="dark"] {
+    // Primary Colors (adjusted for dark mode)
+    // Brightened from light's #1a475f so it reads as a foreground accent on
+    // dark surfaces, but kept dark enough that text on primary fills (see
+    // --color-on-primary) keeps a comfortable contrast margin.
+    --color-primary: #2c6285;
+    --color-secondary: #6c757d;
+    --color-tertiary: #e8eaed;
+
+    // Foreground used for text/icons on top of --color-primary fills.
+    // Softened from pure white; kept >=4.5:1 against the primary fill.
+    --color-on-primary: #ececec;
+
+    // Brighter "interactive" primary used by filled buttons, so they read on
+    // --bg-body while surfaces keep the deeper --color-primary. White text is
+    // AA on this (4.56:1).
+    --color-primary-emphasis: #3a7ca5;
+
+    // Outline buttons brighten their resting text/border one step further
+    // (4.16:1 on --bg-body); on hover they fill with --color-primary-emphasis.
+    --color-primary-outline: #4288b0;
+
+    // Primary used as *foreground text* on surfaces (e.g.
+    // .text-primary-emphasis headings). Purpose-built for text, so it's
+    // brightened past the fill ramp to clear AA while keeping the brand
+    // hue/saturation for --bg-card, --bg-card-header and --bg-body.8:1).
+    --color-primary-text: #56a3cc;
+
+    // Status Colors (slightly brighter for visibility)
+    --color-info: #4a9cc5;
+    --color-success: #40896e;
+    --color-warning: #ffb347;
+    --color-danger: #e57373;
+
+    // Note: --color-white and --color-black are NOT overridden in dark theme
+    // They remain literal white (#fff) and black (#000) for consistency
+    // Use --bg-* and --color-text-* variables for themed surfaces instead
+
+    // Named Colors (adjusted for dark mode)
+    --color-darkblue: #e8eaed;
+    --color-blue: #4a9cc5;
+    --color-indigo: #9d7ff2;
+    --color-purple: #b794f6;
+    --color-pink: #f48fb1;
+    --color-red: #e57373;
+    --color-orange: #ffb74d;
+    --color-yellow: #ffb347;
+    --color-green: #5dbd9a;
+    --color-teal: #4dd0e1;
+    --color-cyan: #80deea;
+
+    // Gray Scale (inverted for dark mode)
+    // The low end is used for elevation above --bg-card (#2a2a2a):
+    // table striping/hover, active and disabled states. These must stay
+    // distinct from the card surface, so they step lighter than it rather
+    // than landing on it.
+    --color-gray-100: #323232;
+    --color-gray-200: #3a3a3a;
+    --color-gray-300: #424242;
+    --color-gray-400: #4a4a4a;
+    --color-gray-500: #666666;
+    --color-gray-600: #999999;
+    --color-gray-700: #b0b0b0;
+    --color-gray-800: #cccccc;
+    --color-gray-900: #e0e0e0;
+
+    // Text Colors
+    --color-body: #e8eaed;
+    --color-text-primary: #f5f5f5;
+    --color-text-secondary: #b0b0b0;
+    --color-text-muted: #aaaaaa;
+    --color-text-light: #b0b0b0;
+    --color-text-dark: #f5f5f5;
+
+    // Background Colors
+    --bg-body: #1b2128;
+    --bg-card: #2a2a2a;
+    --bg-card-header: #333333;
+    --bg-sidebar: #0f1419;
+    --bg-topbar: #101419;
+    --bg-light: #333333;
+    --bg-dark: #0a0a0a;
+
+    // Special Colors (context-specific, always same in all themes)
+    --color-sidebar-text: #fff;  // Sidebar is always dark, text always white
+
+    // Border
+    --border-color: #3d3d3d;
+    --border-radius: 2px;
+
+    // Shadows (darker shadows for dark mode)
+    --shadow-sm: 0 0.125rem 0.25rem 0 rgba(0, 0, 0, 0.5);
+    --shadow: 0 0.15rem 1.75rem 0 rgba(0, 0, 0, 0.6);
+
+    // Link Colors
+    --link-color: #4a9cc5;
+    --link-hover-color: #6bb6d9;
+
+    // Component-specific Colors
+    --bg-lightorange: #5a4320;
+    --btn-light-bg: #1c2128;
+    --btn-light-color: #fff;
+
+    // Transient highlight used by `.flash-highlight`. Muted amber so the field
+    // still reads as attention-grabbing without blowing out the dark surface,
+    // and so --color-text-primary stays legible on top of it.
+    --flash-highlight-bg: #5a4320;
+
+    // Table row elevation. On dark surfaces we darken the card (rather than the
+    // lighter gray scale) so links stay legible on striped/hover rows: base
+    // #2a2a2a -> stripe (-30%, ~5.5:1) -> hover (-50%, ~6:1).
+    --table-striped-bg: color-mix(in srgb, var(--bg-card), #000 30%);
+    --table-hover-bg: color-mix(in srgb, var(--bg-card), #000 50%);
+}
+
