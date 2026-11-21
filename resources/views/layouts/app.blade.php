@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" @auth data-user-id="{{ Auth::id() }}" data-user-theme="{{ Auth::user()->setting_theme ?? 'system' }}" @endauth>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,10 +11,11 @@
 
     <!-- Styles -->
     <link rel="icon" href="{{ URL::asset('/favicon.ico') }}" type="image/x-icon"/>
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @include('layouts.theme-head')
+    @vite(['resources/js/theme.js', 'resources/sass/app.scss', 'resources/js/app.js'])
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     @stack('head')
 </head>
@@ -37,7 +38,7 @@
                             @yield('content')
                         </div>
                     </div>
-                    @auth <p class="text-white" style="font-size: 10px; padding-top: 5px;">Logged in as {{ Auth::user()->first_name }} {{ Auth::user()->last_name}}, {{ Auth::user()->id }}</p> @endauth
+                    @auth <p class="text-white" style="font-size: 10px; padding-top: 5px;">Logged in as {{ Auth::user()->first_name }} {{ Auth::user()->last_name}}, {{ Auth::user()->id }} <span class="ms-1" style="font-size: 12px;">@include('layouts.theme-toggle')</span></p> @endauth
                 </div>
             </div>
         </div>

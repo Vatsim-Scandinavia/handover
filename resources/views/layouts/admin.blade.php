@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" @auth data-user-id="{{ Auth::id() }}" data-user-theme="{{ Auth::user()->setting_theme ?? 'system' }}" @endauth>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,8 +7,9 @@
     <meta name="robots" content="noindex">
     <title>{{ config('app.name', 'Handover') }} — Groups</title>
     <link rel="icon" href="{{ URL::asset('/favicon.ico') }}" type="image/x-icon"/>
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    @include('layouts.theme-head')
+    @vite(['resources/js/theme.js', 'resources/sass/app.scss', 'resources/js/app.js'])
+    <link href="https://fonts.googleapis.com/css?family=Roboto:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 </head>
 <body>
     <div class="bg-primary min-vh-100 pb-4">
@@ -29,6 +30,7 @@
                             {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
                             <span class="d-none d-sm-inline">({{ Auth::user()->id }})</span>
                             &mdash; <a href="{{ route('logout') }}" class="text-white">Logout</a>
+                            <span class="ms-2">@include('layouts.theme-toggle')</span>
                         </div>
                     </div>
 

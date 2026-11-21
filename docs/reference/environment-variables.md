@@ -8,7 +8,7 @@ Override a variable when its default does not fit.
 
 | Variable | Default value | Explanation |
 | -------- | ------------- | ----------- |
-| `APP_NAME` | `Handover` | Name shown in the page title and admin header |
+| `APP_NAME` | `Handover` | Name shown in the page title, the admin header and the front page heading |
 | `APP_OWNER` | `VATSIM` | Full name of your division |
 | `APP_OWNER_SHORT` | `SCA` | Short name of your division, usually 3 letters, shown to banned users |
 | `APP_OWNER_CONTACT` | `webmaster@vatsim.net` | E-mail address banned users contact to dispute a ban |
@@ -36,14 +36,7 @@ See [customising the theme](../setup/theme.md) for how to apply these.
 | Variable | Default value | Explanation |
 | -------- | ------------- | ----------- |
 | `APP_LOGO` | `vatsca.svg` | File name of your logo in `/app/public/images/logos` |
-| `VITE_THEME_PRIMARY` | `#1a475f` | Primary colour |
-| `VITE_THEME_SECONDARY` | `#484b4c` | Secondary colour |
-| `VITE_THEME_TERTIARY` | `#011328` | Tertiary colour |
-| `VITE_THEME_INFO` | `#17a2b8` | Info colour |
-| `VITE_THEME_SUCCESS` | `#41826e` | Success colour |
-| `VITE_THEME_WARNING` | `#ff9800` | Warning colour |
-| `VITE_THEME_DANGER` | `#b63f3f` | Danger colour |
-| `VITE_THEME_BORDER_RADIUS` | `2px` | Border radius |
+| `APP_TAGLINE` | `Centralised Login Service` | Short description shown beneath the name on the front page |
 
 ## Optional: Extras
 

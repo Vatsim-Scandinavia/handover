@@ -1,4 +1,4 @@
 <div class="header">
-    <h1>Handover</h1>
-    <p>Centralised Login Service</p>
+    <h1>{{ config('app.name') }}</h1>
+    <p>{{ config('app.tagline') }}</p>
 </div>

@@ -1,27 +1,29 @@
 // Groups overview: tag and attribute chips, and the results table that
 // stacks into small grids on phones and becomes a table from md up.
 
-$group-ink: $gray-900;
-$group-muted: $gray-700;
-$group-line: $gray-300;
+// Colours come from the theme's CSS custom properties (themes/_light.scss,
+// themes/_dark.scss), so the overview follows the active theme.
+$group-ink: var(--color-gray-900);
+$group-muted: var(--color-gray-700);
+$group-line: var(--color-gray-300);
 
 .group-tag {
     display: inline-flex;
     align-items: center;
     padding: .05rem .45rem;
     border-radius: $border-radius;
-    background: rgba($primary, .12);
-    color: $primary;
+    background: color-mix(in srgb, var(--color-primary-text) 12%, transparent);
+    color: var(--color-primary-text);
     font-size: .8125rem;
     line-height: 1.5;
     text-decoration: none;
     white-space: nowrap;
 }
-a.group-tag:hover { background: rgba($primary, .22); color: $primary; }
+a.group-tag:hover { background: color-mix(in srgb, var(--color-primary-text) 22%, transparent); color: var(--color-primary-text); }
 
 .group-attr {
     display: inline-flex;
-    border: 1px solid $tertiary;
+    border: 1px solid var(--color-tertiary);
     border-radius: $border-radius;
     overflow: hidden;
     font-size: .8125rem;
@@ -29,10 +31,10 @@ a.group-tag:hover { background: rgba($primary, .22); color: $primary; }
     text-decoration: none;
     white-space: nowrap;
 
-    .k { background: $tertiary; color: $white; padding: 0 .35rem; }
-    .v { background: $white; color: $tertiary; padding: 0 .4rem; font-weight: 500; }
+    .k { background: var(--color-tertiary); color: var(--bg-card); padding: 0 .35rem; }
+    .v { background: var(--bg-card); color: var(--color-tertiary); padding: 0 .4rem; font-weight: 500; }
 }
-a.group-attr:hover .v { background: $snow; }
+a.group-attr:hover .v { background: var(--bg-light); }
 
 .group-chip-x { margin-left: .2rem; opacity: .7; }
 .group-chip-x::before { content: "\00d7"; }
@@ -48,7 +50,7 @@ a.group-attr:hover .v { background: $snow; }
     .search .form-control { font-size: 1rem; color: $group-ink; }
 
     .terms { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin-top: .6rem; font-size: .875rem; color: $group-muted; }
-    .terms .group-tag.word { background: $white; border: 1px solid $group-line; color: $group-ink; }
+    .terms .group-tag.word { background: var(--bg-card); border: 1px solid $group-line; color: $group-ink; }
 
     // Suggestions scroll sideways on phones instead of wrapping into a wall.
     .suggestions { margin-top: .75rem; flex-wrap: nowrap; overflow-x: auto; padding-bottom: .25rem; scrollbar-width: thin; }
@@ -59,17 +61,17 @@ a.group-attr:hover .v { background: $snow; }
     // dark hover would hide the icon.
     .search-help-toggle {
         --bs-btn-color: #{$group-muted};
-        --bs-btn-border-color: #{$gray-400};
-        --bs-btn-hover-color: #{$tertiary};
-        --bs-btn-hover-bg: #{$snow};
-        --bs-btn-hover-border-color: #{$gray-400};
-        --bs-btn-active-color: #{$tertiary};
-        --bs-btn-active-bg: #{$snow};
-        --bs-btn-active-border-color: #{$gray-400};
+        --bs-btn-border-color: var(--color-gray-400);
+        --bs-btn-hover-color: var(--color-tertiary);
+        --bs-btn-hover-bg: var(--bg-light);
+        --bs-btn-hover-border-color: var(--color-gray-400);
+        --bs-btn-active-color: var(--color-tertiary);
+        --bs-btn-active-bg: var(--bg-light);
+        --bs-btn-active-border-color: var(--color-gray-400);
     }
     .search-help { width: min(22rem, calc(100vw - 2rem)); padding: .75rem 1rem; font-size: .8125rem; color: $group-ink; }
     .search-help dl { display: grid; grid-template-columns: auto 1fr; gap: .35rem .75rem; margin: 0; }
-    .search-help dt { font-weight: 500; color: $tertiary; white-space: nowrap; }
+    .search-help dt { font-weight: 500; color: var(--color-tertiary); white-space: nowrap; }
     .search-help dd { margin: 0; }
 
     .tools { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: .5rem; margin-top: .75rem; font-size: .8125rem; }
@@ -86,20 +88,20 @@ a.group-attr:hover .v { background: $snow; }
     tbody { display: block; }
 
     tr.section { display: flex; align-items: center; gap: .5rem; padding: 1.25rem 0 .25rem; }
-    tr.section th { font-size: 1rem; font-weight: 500; color: $tertiary; padding: 0; border: 0; }
+    tr.section th { font-size: 1rem; font-weight: 500; color: var(--color-tertiary); padding: 0; border: 0; }
     tr.section .count { color: $group-muted; font-weight: 400; font-size: .8125rem; margin-left: .5rem; }
 
     tr.group { display: grid; grid-template-columns: 1fr auto; gap: .35rem .75rem; padding: .75rem 0; border-top: 1px solid $group-line; position: relative; }
-    tr.group:hover { background: rgba($snow, .45); }
+    tr.group:hover { background: var(--table-hover-bg); }
     td { display: block; padding: 0; border: 0; }
     td.members { grid-column: 2; grid-row: 1; text-align: right; color: $group-muted; font-size: .875rem; font-variant-numeric: tabular-nums; }
     td.tags, td.attributes { grid-column: 1 / -1; }
     td.is-empty { display: none; }
 
-    .name { color: $tertiary; font-weight: 500; text-decoration: none; }
+    .name { color: var(--color-tertiary); font-weight: 500; text-decoration: none; }
     .name:hover { text-decoration: underline; }
     .slug { color: $group-muted; font-size: .8125rem; }
-    .admin { background: $danger; color: $white; font-size: .6875rem; font-weight: 500; padding: .1rem .35rem; border-radius: $border-radius; vertical-align: .1em; }
+    .admin { background: var(--color-danger); color: var(--bg-card); font-size: .6875rem; font-weight: 500; padding: .1rem .35rem; border-radius: $border-radius; vertical-align: .1em; }
     // Chips sit above the row's stretched link so they stay clickable.
     .group-tag, .group-attr { position: relative; z-index: 2; }
 
@@ -110,13 +112,13 @@ a.group-attr:hover .v { background: $snow; }
         thead { position: static; width: auto; height: auto; overflow: visible; clip-path: none; display: table-header-group; }
         thead th { font-weight: 500; color: $group-muted; font-size: .8125rem; padding: .5rem .75rem .5rem 0; border-bottom: 1px solid $group-line; white-space: nowrap; }
         thead th a { color: inherit; text-decoration: none; }
-        thead th a[aria-sort] { color: $tertiary; }
+        thead th a[aria-sort] { color: var(--color-tertiary); }
         thead th.name-col { width: 32%; }
         thead th.members { text-align: right; padding-right: 0; }
 
         tbody { display: table-row-group; }
         tr.section { display: table-row; }
-        tr.section th { padding: 1.25rem 0 .35rem; border-bottom: 1px solid $tertiary; }
+        tr.section th { padding: 1.25rem 0 .35rem; border-bottom: 1px solid var(--color-tertiary); }
         tr.group { display: table-row; }
         td { display: table-cell; padding: .65rem .75rem .65rem 0; border-bottom: 1px solid $group-line; vertical-align: top; }
         td.is-empty { display: table-cell; }
