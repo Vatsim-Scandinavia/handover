@@ -34,7 +34,7 @@ php artisan migrate --force
 php artisan optimize:clear
 ```
 
-If you run a [custom theme](setup/theme.md), run the theme build again, because recreating the container resets it.
+If you run a [custom theme](setup/theme.md), rebuild your [custom image](setup/custom.md) on the new version.
 
 !!! info "Why `--force`"
     In production, `migrate` asks for confirmation.
@@ -84,6 +84,7 @@ The container also moves the OAuth signing key into a key store that supports [k
     - Give every client [allowed scopes, required groups and a session setting](#client-access-settings).
     - Add the columns that [OpenID Connect](#handover-supports-openid-connect) sign-ins need.
     - Add the allowed origins of [public clients](#handover-supports-public-clients).
+    - Add the `setting_theme` column to `users`, which stores each member's [theme](#theme-system).
 
     If you run Handover without the container, step 3 imports nothing, and the migration imports the signing key instead.
 
@@ -102,7 +103,7 @@ The container also moves the OAuth signing key into a key store that supports [k
     php artisan optimize:clear
     ```
 
-7. If you run a [custom theme](setup/theme.md), run the theme build again.
+7. Remove any `VITE_THEME_*` colour variables. They are no longer used. If you had custom colours, see [theme system](#theme-system).
 8. Lift maintenance mode:
 
     ```sh
@@ -267,6 +268,21 @@ Each entry in the `groups` array now has a `direct` field.
 Once you nest groups, the array also lists groups a member inherits.
 Clients that only want direct memberships should filter on `direct: true`.
 See the [user API](reference/api.md#groups).
+
+#### Theme system
+
+Themes were redesigned to support light and dark modes and a per-user preference.
+The colours you used to set with `VITE_THEME_*` in `.env` have moved into SCSS files
+under `resources/sass/themes/`, and each user now picks their own theme, stored in
+the database. The 4.0.0 betas still read `VITE_THEME_*`, so this applies to them too.
+
+If you had custom colours in `.env`, move them into a custom theme file: copy
+`_custom.scss.example` to `_custom.scss`, port your colours across using `_light.scss`
+and `_dark.scss` as a reference, and rebuild. See [Themes](setup/theme.md) for the
+full walkthrough, including how to bake a custom theme into a container image.
+
+The front page heading now shows `APP_NAME` instead of the fixed word "Handover", with the new `APP_TAGLINE` underneath.
+See [front page heading](setup/theme.md#front-page-heading).
 
 #### Why this is a major release
 
