@@ -7,6 +7,7 @@ use App\Http\Controllers\GroupHierarchyController;
 use App\Http\Controllers\GroupManagerRuleController;
 use App\Http\Controllers\GroupMemberController;
 use App\Http\Controllers\OAuthClientController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +69,11 @@ Route::middleware(['auth', 'groups.manage'])->prefix('groups')->name('groups.')-
 
 Route::middleware('auth')->get('/account/authorized-clients', AuthorizedClientController::class)
     ->name('account.authorized-clients');
+
+// Users
+Route::middleware('auth')->controller(UserController::class)->group(function () {
+    Route::post('/settings/theme', 'settings_update_theme')->name('user.settings.theme');
+});
 
 Route::middleware(['auth', 'admin'])->prefix('admin/oauth-clients')->name('admin.oauth-clients.')->group(function () {
     Route::get('/', [OAuthClientController::class, 'index'])->name('index');
