@@ -39,7 +39,7 @@ export default () => {
                 input: [
                     "/resources/sass/app.scss",
                     "/resources/js/app.js",
-                    "/resources/js/theme.js",
+                    "/resources/js/theme.ts",
                 ],
                 refresh: true,
             }),

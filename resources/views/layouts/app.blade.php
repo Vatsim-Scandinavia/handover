@@ -12,7 +12,7 @@
     <!-- Styles -->
     <link rel="icon" href="{{ URL::asset('/favicon.ico') }}" type="image/x-icon"/>
     @include('layouts.theme-head')
-    @vite(['resources/js/theme.js', 'resources/sass/app.scss', 'resources/js/app.js'])
+    @vite(['resources/js/theme.ts', 'resources/sass/app.scss', 'resources/js/app.js'])
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">

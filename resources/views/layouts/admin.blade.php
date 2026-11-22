@@ -8,7 +8,7 @@
     <title>@hasSection('title')@yield('title') | @endif{{ config('app.name') }}</title>
     <link rel="icon" href="{{ URL::asset('/favicon.ico') }}" type="image/x-icon"/>
     @include('layouts.theme-head')
-    @vite(['resources/js/theme.js', 'resources/sass/app.scss', 'resources/js/app.js'])
+    @vite(['resources/js/theme.ts', 'resources/sass/app.scss', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>

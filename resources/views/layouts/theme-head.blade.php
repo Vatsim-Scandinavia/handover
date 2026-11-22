@@ -1,4 +1,4 @@
-{{-- Applies the stored theme before the page paints. theme.js handles the rest. --}}
+{{-- Applies the stored theme before the page paints. theme.ts handles the rest. --}}
 <script>
 (function () {
     var preference = null;

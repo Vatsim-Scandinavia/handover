@@ -6,46 +6,50 @@
  * script in layouts/theme-head.blade.php applies it before the page paints.
  */
 
+type Preference = 'system' | 'light' | 'dark';
+type Theme = Exclude<Preference, 'system'>;
+
 const STORAGE_KEY = 'theme_preference';
 
-// Insertion order is the toggle's click cycle: system -> light -> dark.
+// Order is the toggle's click cycle: system -> light -> dark.
 const PREFERENCES = {
     system: { icon: 'fa-desktop', label: 'System' },
     light: { icon: 'fa-sun', label: 'Light' },
     dark: { icon: 'fa-moon', label: 'Dark' },
-};
-const ORDER = Object.keys(PREFERENCES);
+} as const satisfies Record<Preference, { icon: string; label: string }>;
+const ORDER = Object.keys(PREFERENCES) as Preference[];
 const ICONS = ORDER.map((preference) => PREFERENCES[preference].icon);
 
 const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-/** @returns {'system'|'light'|'dark'} */
-function readPreference() {
-    let stored = null;
+function isPreference(value: string | null): value is Preference {
+    return value !== null && Object.hasOwn(PREFERENCES, value);
+}
+
+function readPreference(): Preference {
+    let stored: string | null = null;
     try {
         stored = localStorage.getItem(STORAGE_KEY);
-    } catch (e) { /* storage blocked */ }
+    } catch { /* storage blocked */ }
 
-    return Object.hasOwn(PREFERENCES, stored) ? stored : 'system';
+    return isPreference(stored) ? stored : 'system';
 }
 
 // Kept in memory too, so the toggle still cycles when storage is blocked.
 let current = readPreference();
 
-/** @param {'system'|'light'|'dark'} preference */
-function storePreference(preference) {
+function storePreference(preference: Preference): void {
     try {
         if (preference === 'system') {
             localStorage.removeItem(STORAGE_KEY);
         } else {
             localStorage.setItem(STORAGE_KEY, preference);
         }
-    } catch (e) { /* the theme still applies to this page */ }
+    } catch { /* the theme still applies to this page */ }
 }
 
-/** @param {'system'|'light'|'dark'} preference */
-function apply(preference) {
-    const theme = preference === 'system' ? (darkQuery.matches ? 'dark' : 'light') : preference;
+function apply(preference: Preference): void {
+    const theme: Theme = preference === 'system' ? (darkQuery.matches ? 'dark' : 'light') : preference;
 
     // data-bs-theme mirrors data-theme so Bootstrap's dark cascade applies.
     document.documentElement.setAttribute('data-theme', theme);
@@ -61,7 +65,7 @@ function apply(preference) {
     }
 }
 
-function setup() {
+function setup(): void {
     apply(current);
 
     document.getElementById('theme-toggle')?.addEventListener('click', () => {
