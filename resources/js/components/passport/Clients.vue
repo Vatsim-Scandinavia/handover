@@ -49,6 +49,14 @@ function grantLabel(grant) {
 const clients = ref([]);
 const loading = ref(true);
 
+/** Which clients have their details row open, by id. @type {import('vue').Ref<Record<string, boolean>>} */
+const expanded = ref({});
+
+/** @param {OAuthClient} client */
+function toggleDetails(client) {
+    expanded.value[client.id] = !expanded.value[client.id];
+}
+
 /** Create/edit form state. A null id means "create". */
 const form = ref(emptyForm());
 /** @type {import('vue').Ref<Record<string, string[]>>} */
@@ -208,22 +216,23 @@ async function save() {
             reveal(data.secret);
         }
     } catch (error) {
+        // Any other failure is shown as a toast (see server-errors.js).
         if (error.response?.status === 422) {
             errors.value = error.response.data.errors;
-        } else {
-            throw error;
         }
     } finally {
         saving.value = false;
     }
 }
 
-/** @param {OAuthClient} client */
-async function destroy(client) {
-    if (!window.confirm(`Delete OAuth client "${client.name}"? Existing tokens will be revoked.`)) {
+/** Deletes the client open in the edit modal, once the admin confirms. */
+async function destroyEditing() {
+    const client = clients.value.find((c) => c.id === form.value.id);
+    if (!client || !window.confirm(`Delete OAuth client "${client.name}"? Existing tokens will be revoked.`)) {
         return;
     }
     await axios.delete(`/admin/oauth-clients/${client.id}`);
+    formModal.hide();
     await fetchClients();
 }
 
@@ -251,63 +260,99 @@ async function copySecret() {
 
 <template>
     <div class="card">
-        <div class="card-header d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
-            <span class="fw-semibold">OAuth Clients</span>
-            <button type="button" class="btn btn-sm btn-primary" @click="openCreate">
-                New client
-            </button>
-        </div>
+        <!-- Same markup as the x-page-header Blade component. -->
+        <header class="page-header">
+            <div class="page-header-row">
+                <div class="page-title">
+                    <h1>OAuth clients</h1>
+                </div>
+                <div class="page-actions">
+                    <button type="button" class="btn btn-sm btn-primary" @click="openCreate">
+                        New client
+                    </button>
+                </div>
+            </div>
+            <p class="page-lead">The services members sign in to with Handover.</p>
+        </header>
 
         <div class="card-body">
-            <p v-if="loading" class="text-muted mb-0">Loading…</p>
+            <p v-if="loading" class="text-muted mb-0" role="status">Loading…</p>
 
-            <p v-else-if="clients.length === 0" class="text-muted mb-0">
+            <p v-else-if="clients.length === 0" class="empty-state">
                 No OAuth clients yet.
             </p>
 
-            <div v-else class="table-responsive">
-                <table class="table table-sm align-middle mb-0">
+            <div v-else class="table-scroll" tabindex="0" role="region" aria-label="OAuth clients">
+                <table class="data-table">
                     <thead>
                         <tr>
-                            <th scope="col">ID</th>
                             <th scope="col">Name</th>
-                            <th scope="col">Redirect URIs</th>
-                            <th scope="col">Grant types</th>
-                            <th scope="col">Scopes</th>
-                            <th scope="col">Required groups</th>
-                            <th scope="col" class="text-end">Actions</th>
+                            <th scope="col">Client ID</th>
+                            <th scope="col">Who can sign in</th>
+                            <th scope="col" class="actions"><span class="visually-hidden">Actions</span></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr v-for="client in clients" :key="client.id">
-                            <td class="text-muted">{{ client.id }}</td>
+                    <!-- One tbody per client, so its details row stays with it. -->
+                    <tbody v-for="client in clients" :key="client.id">
+                        <tr :class="{ 'is-open': expanded[client.id] }">
                             <td>
-                                {{ client.name }}
-                                <span v-if="!client.confidential" class="badge text-bg-secondary ms-1">Public</span>
+                                <button
+                                    type="button"
+                                    class="row-toggle"
+                                    :aria-expanded="expanded[client.id] ? 'true' : 'false'"
+                                    :aria-controls="`client-details-${client.id}`"
+                                    @click="toggleDetails(client)"
+                                >
+                                    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                                    <span class="row-toggle-name">{{ client.name }}</span>
+                                </button>
+                                <span v-if="!client.confidential" class="badge text-bg-secondary ms-2">Public</span>
                             </td>
-                            <td class="text-break">
-                                <div v-for="uri in client.redirect_uris" :key="uri"><code>{{ uri }}</code></div>
+                            <td class="id"><code>{{ client.id }}</code></td>
+                            <td>{{ requiredGroupsLabel(client) }}</td>
+                            <td class="actions">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" @click="openEdit(client)">
+                                    Edit<span class="visually-hidden"> {{ client.name }}</span>
+                                </button>
                             </td>
-                            <td class="small">{{ client.grant_types.map(grantLabel).join(', ') }}</td>
-                            <td class="small"><code>{{ client.allowed_scopes.join(' ') }}</code></td>
-                            <td class="small">{{ requiredGroupsLabel(client) }}</td>
-                            <td class="text-end">
-                                <div class="d-flex justify-content-end gap-2">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary" @click="openEdit(client)">
-                                        Edit
-                                    </button>
-                                    <button
-                                        v-if="client.confidential"
-                                        type="button"
-                                        class="btn btn-sm btn-outline-secondary"
-                                        @click="regenerate(client)"
-                                    >
-                                        Regenerate
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger" @click="destroy(client)">
-                                        Delete
-                                    </button>
-                                </div>
+                        </tr>
+                        <tr v-show="expanded[client.id]" :id="`client-details-${client.id}`" class="detail-row">
+                            <td colspan="4">
+                                <dl class="detail-list">
+                                    <dt>Type</dt>
+                                    <dd>{{ client.confidential ? 'Confidential: keeps a secret' : 'Public: no secret, PKCE required' }}</dd>
+                                    <dt>Redirect URIs</dt>
+                                    <dd><div v-for="uri in client.redirect_uris" :key="uri"><code>{{ uri }}</code></div></dd>
+                                    <dt>Post-logout redirect URIs</dt>
+                                    <dd>
+                                        <div v-for="uri in client.post_logout_redirect_uris" :key="uri"><code>{{ uri }}</code></div>
+                                        <span v-if="client.post_logout_redirect_uris.length === 0">None</span>
+                                    </dd>
+                                    <template v-if="!client.confidential">
+                                        <dt>Allowed origins</dt>
+                                        <dd>
+                                            <div v-for="origin in client.allowed_origins" :key="origin"><code>{{ origin }}</code></div>
+                                            <span v-if="client.allowed_origins.length === 0">None</span>
+                                        </dd>
+                                    </template>
+                                    <dt>Grant types</dt>
+                                    <dd>{{ client.grant_types.map(grantLabel).join(', ') }}</dd>
+                                    <dt>Scopes</dt>
+                                    <dd>
+                                        <code v-if="client.allowed_scopes.length">{{ client.allowed_scopes.join(' ') }}</code>
+                                        <span v-else>None</span>
+                                    </dd>
+                                    <dt>Sessions</dt>
+                                    <dd>{{ client.single_session ? 'One at a time. A new sign-in revokes earlier tokens.' : 'Several devices at once' }}</dd>
+                                    <template v-if="client.confidential">
+                                        <dt>Secret</dt>
+                                        <dd>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary" @click="regenerate(client)">
+                                                Regenerate secret<span class="visually-hidden"> for {{ client.name }}</span>
+                                            </button>
+                                        </dd>
+                                    </template>
+                                </dl>
                             </td>
                         </tr>
                     </tbody>
@@ -317,11 +362,11 @@ async function copySecret() {
     </div>
 
     <!-- Create / edit modal -->
-    <div ref="formModalEl" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div ref="formModalEl" class="modal fade" tabindex="-1" aria-hidden="true" aria-labelledby="client-form-title">
         <div class="modal-dialog">
             <form class="modal-content" @submit.prevent="save">
                 <div class="modal-header">
-                    <h5 class="modal-title">{{ form.id === null ? 'New OAuth client' : 'Edit OAuth client' }}</h5>
+                    <h2 id="client-form-title" class="modal-title fs-5">{{ form.id === null ? 'New OAuth client' : 'Edit OAuth client' }}</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -360,7 +405,7 @@ async function copySecret() {
                             <label class="form-check-label" for="client-type-public">Public</label>
                             <div class="text-muted small">The service runs in the browser, has no secret and must use PKCE. You cannot change the type later.</div>
                         </div>
-                        <div v-if="errors.confidential" class="text-danger small">{{ errors.confidential[0] }}</div>
+                        <div v-if="errors.confidential" class="text-danger small" role="alert">{{ errors.confidential[0] }}</div>
                     </fieldset>
                     <p v-else class="text-muted small">
                         {{ form.confidential ? 'Confidential client' : 'Public client: no secret, PKCE required' }}
@@ -454,6 +499,15 @@ async function copySecret() {
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <!-- Delete sits apart on the left, away from Save. -->
+                    <button
+                        v-if="form.id !== null"
+                        type="button"
+                        class="btn btn-outline-danger me-auto"
+                        @click="destroyEditing"
+                    >
+                        <i class="fa-solid fa-trash-can me-1" aria-hidden="true"></i>Delete client
+                    </button>
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary" :disabled="saving">Save</button>
                 </div>
@@ -462,23 +516,31 @@ async function copySecret() {
     </div>
 
     <!-- One-time secret modal -->
-    <div ref="secretModalEl" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div ref="secretModalEl" class="modal fade" tabindex="-1" aria-hidden="true" aria-labelledby="client-secret-title">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Client secret</h5>
+                    <h2 id="client-secret-title" class="modal-title fs-5">Client secret</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="text-muted small">
-                        Copy this secret now — it is shown only once and cannot be retrieved later.
+                    <p id="client-secret-help" class="text-muted small">
+                        Copy this secret now. It is shown only once and cannot be retrieved later.
                     </p>
                     <div class="input-group">
-                        <input type="text" class="form-control font-monospace" :value="revealedSecret" readonly>
+                        <input
+                            type="text"
+                            class="form-control font-monospace"
+                            :value="revealedSecret"
+                            readonly
+                            aria-label="Client secret"
+                            aria-describedby="client-secret-help"
+                        >
                         <button type="button" class="btn btn-outline-secondary" @click="copySecret">
-                            {{ copied ? 'Copied' : 'Copy' }}
+                            Copy
                         </button>
                     </div>
+                    <p class="small mt-2 mb-0" role="status">{{ copied ? 'Copied to the clipboard.' : '' }}</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Done</button>

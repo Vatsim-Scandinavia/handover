@@ -1,4 +1,5 @@
 @extends('layouts.admin')
+@section('title', 'Groups')
 @use('App\Support\GroupSearch\Term')
 @use('App\Support\GroupSearch\TermKind')
 @section('content')
@@ -12,12 +13,11 @@
     $n = $groups->count();
 @endphp
 <div class="card groups-overview">
-    <x-card-header>
-        <strong>Groups</strong>
+    <x-page-header title="Groups">
         @if($isAdmin)
-            <span class="badge bg-danger ms-2">System administrator</span>
+            <span class="badge bg-danger">System administrator</span>
         @else
-            <span class="badge bg-secondary ms-2">Group manager</span>
+            <span class="badge bg-secondary">Group manager</span>
         @endif
         <x-slot:actions>
             @if($isAdmin)
@@ -26,10 +26,10 @@
             <a href="{{ route('groups.create') }}" class="btn btn-sm btn-primary">New group</a>
             @endif
         </x-slot:actions>
-    </x-card-header>
+    </x-page-header>
     <div class="card-body">
         @if($total === 0)
-            <p class="empty">No groups yet.@if($isAdmin) <a href="{{ route('groups.create') }}">Create the first group</a>.@endif</p>
+            <p class="empty-state">No groups yet.@if($isAdmin) <a href="{{ route('groups.create') }}">Create the first group</a>.@endif</p>
         @else
         <form method="GET" action="{{ route('groups.index') }}" role="search">
             <div class="search d-flex gap-2">
@@ -72,7 +72,7 @@
             </div>
 
             @if($suggestions->isNotEmpty())
-            <div class="group-chips suggestions" aria-label="Narrow down">
+            <div class="group-chips suggestions" role="group" aria-label="Narrow down">
                 @foreach($suggestions as ['term' => $term, 'count' => $count])
                     @if($term->kind === TermKind::Tag)
                         <x-group-tag :tag="$term->value" :href="$withTerm($term)">{{ $term->value }}<span class="count">{{ $count }}</span></x-group-tag>
@@ -104,15 +104,15 @@
         </form>
 
         @if($n === 0)
-            <p class="empty">No groups match <strong>{{ $query->toString() }}</strong>. Remove a term above, or <a href="{{ $link(['q' => null]) }}">clear the search</a>.</p>
+            <p class="empty-state">No groups match <strong>{{ $query->toString() }}</strong>. Remove a term above, or <a href="{{ $link(['q' => null]) }}">clear the search</a>.</p>
         @else
         <table class="groups-table">
             <thead>
                 <tr>
-                    <th class="name-col"><a href="{{ $link(['sort' => null]) }}" @if($sort === 'name') aria-sort="ascending" @endif>Name{{ $sort === 'name' ? ' ↑' : '' }}</a></th>
-                    <th>Tags</th>
-                    <th>Attributes</th>
-                    <th class="members"><a href="{{ $link(['sort' => 'members']) }}" @if($sort === 'members') aria-sort="descending" @endif>Members{{ $sort === 'members' ? ' ↓' : '' }}</a></th>
+                    <th scope="col" class="name-col" @if($sort === 'name') aria-sort="ascending" @endif><a href="{{ $link(['sort' => null]) }}">Name<span aria-hidden="true">{{ $sort === 'name' ? ' ↑' : '' }}</span></a></th>
+                    <th scope="col">Tags</th>
+                    <th scope="col">Attributes</th>
+                    <th scope="col" class="members" @if($sort === 'members') aria-sort="descending" @endif><a href="{{ $link(['sort' => 'members']) }}">Members<span aria-hidden="true">{{ $sort === 'members' ? ' ↓' : '' }}</span></a></th>
                 </tr>
             </thead>
             @foreach($sections as $value => $sectionGroups)

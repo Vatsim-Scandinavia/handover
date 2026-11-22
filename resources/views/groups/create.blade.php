@@ -1,19 +1,15 @@
 @extends('layouts.admin')
+@section('title', 'New group')
 @section('content')
 <div class="card">
-    <x-card-header>
-        <strong>New Group</strong>
-        <x-slot:actions>
-            <a href="{{ route('groups.index') }}" class="btn btn-sm btn-outline-secondary">← Groups</a>
-        </x-slot:actions>
-    </x-card-header>
+    <x-page-header title="New group" :crumbs="[['Groups', route('groups.index')]]" />
     <div class="card-body">
         <form method="POST" action="{{ route('groups.store') }}">
             @csrf
             @include('groups._form', ['group' => null])
             <div class="row">
                 <div class="col-sm-9 offset-sm-3">
-                    <button class="btn btn-primary">Create Group</button>
+                    <button class="btn btn-primary">Create group</button>
                 </div>
             </div>
         </form>

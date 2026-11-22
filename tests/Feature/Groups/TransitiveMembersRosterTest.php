@@ -103,7 +103,7 @@ class TransitiveMembersRosterTest extends TestCase
             ->assertSee('Bo')                                           // inherited member listed
             ->assertSee('<span class="badge bg-success">Direct</span>', false)  // direct source badge
             ->assertSee('via Norway Trainees')                          // inherited source badge
-            ->assertDontSee('Add Member')                               // read-only: no add form
+            ->assertDontSee('Add member')                               // read-only: no add form
             ->assertDontSee('Remove');                                  // read-only: no per-row remove
     }
 
@@ -142,7 +142,7 @@ class TransitiveMembersRosterTest extends TestCase
             ->assertOk()
             ->assertSee('<td>Ada Directly</td>', false)
             ->assertDontSee('<td>Bo Inherited</td>', false)  // inherited member not on the direct view
-            ->assertSee('Add Member');   // direct view keeps management controls
+            ->assertSee('Add member');   // direct view keeps management controls
     }
 
     public function test_all_members_search_filters_the_roster(): void

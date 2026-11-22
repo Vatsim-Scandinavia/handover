@@ -1,21 +1,19 @@
 @extends('layouts.admin')
+@section('title', 'Manager rules')
 @section('content')
 <div class="card">
-    <x-card-header>
-        <strong>Manager Rules</strong>
-        <x-slot:actions>
-            <a href="{{ route('groups.index') }}" class="btn btn-sm btn-outline-secondary">← Groups</a>
-        </x-slot:actions>
-    </x-card-header>
-    <div class="card-body p-0">
-        <div class="table-responsive">
-        <table class="table table-sm mb-0">
+    <x-page-header title="Manager rules" :crumbs="[['Groups', route('groups.index')]]">
+        <x-slot:lead>Each rule lets the members of one group manage other groups.</x-slot:lead>
+    </x-page-header>
+    <div class="card-body">
+        <div class="table-scroll">
+        <table class="data-table">
             <thead>
                 <tr>
-                    <th>Manager Group</th>
-                    <th>Type</th>
-                    <th>Grants management of</th>
-                    <th></th>
+                    <th scope="col">Manager group</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Grants management of</th>
+                    <th scope="col" class="actions"><span class="visually-hidden">Actions</span></th>
                 </tr>
             </thead>
             <tbody>
@@ -40,21 +38,21 @@
                             Groups where <code>{{ $rule->target_attribute_key }}</code> = <code>{{ $rule->target_attribute_value }}</code>
                         @endif
                     </td>
-                    <td class="text-end">
+                    <td class="actions">
                         @if($entry['type'] === 'group')
-                            <a href="{{ route('groups.rules.index', $rule->targetGroup) }}" class="btn btn-sm btn-outline-secondary me-1">Rules page</a>
+                            <a href="{{ route('groups.rules.index', $rule->targetGroup) }}" class="btn btn-sm btn-outline-secondary">Group rules<span class="visually-hidden"> for {{ $rule->targetGroup->name }}</span></a>
                         @endif
                         <form method="POST"
                             action="{{ route('groups.rules.overview.destroy', [$entry['type'], $rule->id]) }}"
                             onsubmit="return confirm('Remove this rule?')"
                             class="d-inline">
                             @csrf @method('DELETE')
-                            <button class="btn btn-sm btn-outline-danger">Remove</button>
+                            <button class="btn btn-sm btn-outline-danger">Remove<span class="visually-hidden"> rule for {{ $entry['manager']->name }}</span></button>
                         </form>
                     </td>
                 </tr>
                 @empty
-                <tr><td colspan="4" class="text-muted p-3">No manager rules defined yet.</td></tr>
+                <tr><td colspan="4" class="empty">No manager rules yet. Add one from a group's manager rules page.</td></tr>
                 @endforelse
             </tbody>
         </table>
