@@ -172,6 +172,12 @@ class OAuthClientController extends Controller
             'single_session' => ['sometimes', 'boolean'],
             'required_groups' => ['sometimes', 'list'],
             'required_groups.*' => ['required', 'string', 'distinct', Rule::exists('groups', 'id')],
+        ], [
+            'redirect_uris.required' => 'Add at least one redirect URI.',
+            'redirect_uris.min' => 'Add at least one redirect URI.',
+            'redirect_uris.*.required' => 'Enter a redirect URI.',
+        ], [
+            'redirect_uris.*' => 'redirect URI',
         ]);
     }
 

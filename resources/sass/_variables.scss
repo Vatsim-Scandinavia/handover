@@ -78,6 +78,15 @@ $sidebar-base-width: 14rem;
 // Change below variable to change the width of the sidenav when collapsed
 $sidebar-collapsed-width: 6.5rem;
 
+// Buttons and pagination are square at every size. Bootstrap's -sm and -lg
+// radii otherwise fall back to its own .25rem and .5rem.
+$btn-border-radius: 0;
+$btn-border-radius-sm: 0;
+$btn-border-radius-lg: 0;
+$pagination-border-radius: 0;
+$pagination-border-radius-sm: 0;
+$pagination-border-radius-lg: 0;
+
 // Card
 $card-cap-bg: $gray-100;
 $card-border-color: $border-color;

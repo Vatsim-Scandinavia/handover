@@ -270,12 +270,12 @@ class GroupHierarchyTest extends TestCase
         $this->actingAs($this->admin())
             ->get(route('groups.show', $group))
             ->assertOk()
-            ->assertSee('Save Changes')          // core-field form
+            ->assertSee('Save changes')          // core-field form
             ->assertSee('Add a parent group')    // parent add control
             ->assertSee('Add a child group')     // child add control
             ->assertSee('does not grant admin')  // admin-group hint (now the dynamic warning)
             ->assertSee('remove')                // per-row remove control on populated parent/child lists
-            ->assertSee('Delete Group')          // danger zone
+            ->assertSee('Delete group')          // danger zone
             ->assertSee('x-data="{ editing:', false)     // Alpine edit toggle wired
             ->assertSee('editing = !editing', false)     // toggle button flips edit mode
             ->assertSee(':disabled="!editing"', false)   // controls disabled until editing, not hidden
@@ -305,8 +305,8 @@ class GroupHierarchyTest extends TestCase
             ->assertSee('A read-only overview')  // overview renders
             ->assertSee($parent->name)           // parent/child lists still render
             ->assertSee($child->name)
-            ->assertDontSee('Save Changes')      // no editing form
-            ->assertDontSee('Delete Group')      // no danger zone
+            ->assertDontSee('Save changes')      // no editing form
+            ->assertDontSee('Delete group')      // no danger zone
             ->assertDontSee('Add a parent group')
             ->assertDontSee('Add a child group')
             ->assertDontSee('remove')            // no per-row remove control on populated lists

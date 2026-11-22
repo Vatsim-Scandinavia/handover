@@ -5,17 +5,19 @@
 @endif
 
 @if($group->tags->isNotEmpty())
-<p><strong>Tags:</strong>
+<h2 class="section-title">Tags</h2>
+<div class="group-chips mb-3">
     @foreach($group->tags as $tag)
-    <span class="badge bg-secondary">{{ $tag->tag }}</span>
+    <x-group-tag :tag="$tag->tag" />
     @endforeach
-</p>
+</div>
 @endif
 
 @if($group->attributeValues->isNotEmpty())
-<div class="table-responsive">
-    <table class="table table-sm w-auto">
-        <thead><tr><th>Attribute</th><th>Value</th></tr></thead>
+<h2 class="section-title">Attributes</h2>
+<div class="table-scroll mb-3">
+    <table class="data-table w-auto">
+        <thead><tr><th scope="col">Key</th><th scope="col">Value</th></tr></thead>
         <tbody>
             @foreach($group->attributeValues as $av)
             <tr>
