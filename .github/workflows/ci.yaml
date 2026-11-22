@@ -69,6 +69,7 @@ jobs:
       - name: Build front-end assets
         run: |
           npm ci
+          npm run typecheck
           npm run build
 
       - name: Execute unit and feature tests via PHPUnit
