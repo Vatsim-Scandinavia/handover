@@ -1504,6 +1504,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#logging-out-asks-for-confirmation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logging out asks for confirmation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#signing-keys-move-to-a-key-store" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1736,6 +1747,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#logging-out-asks-for-confirmation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logging out asks for confirmation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#signing-keys-move-to-a-key-store" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1883,6 +1905,7 @@ For details, see <a href="#token-lifetimes-are-shorter">token lifetimes are shor
 <li>Give every client <a href="#client-access-settings">allowed scopes, required groups and a session setting</a>.</li>
 <li>Add the columns that <a href="#handover-supports-openid-connect">OpenID Connect</a> sign-ins need.</li>
 <li>Add the allowed origins of <a href="#handover-supports-public-clients">public clients</a>.</li>
+<li>Add post-logout redirect URIs for <a href="#logging-out-asks-for-confirmation">logout</a>.</li>
 </ul>
 <p>If you run Handover without the container, step 3 imports nothing, and the migration imports the signing key instead.</p>
 </li>
@@ -2015,6 +2038,17 @@ A client created before 4.0.0 without a secret is now a public client:</p>
 <p>The token and UserInfo endpoints now check the <code>Origin</code> header for public clients.
 A request with an <code>Origin</code> header that the public client does not allow fails with a <code>403</code> response.
 Confidential clients are not affected, even when their server sends an <code>Origin</code> header.</p>
+<h4 id="logging-out-asks-for-confirmation">Logging out asks for confirmation<a class="headerlink" href="#logging-out-asks-for-confirmation" title="Permanent link">&para;</a></h4>
+<p>Handover's logout button now sends a form to the new end session endpoint, <code>/oauth/logout</code>.
+Logout now also ends the whole Handover session and renews its CSRF token.</p>
+<p>Links to the old <code>/logout</code> path still work, but they no longer log the member out at once.
+Handover now asks "Log out of Handover?", and the member must confirm.
+If a service links to <code>/logout</code>, members need one more click.
+To log members out without asking, the service can use <a href="../integrations/oidc/#logout">RP-initiated logout</a> instead.</p>
+<p>Services can now log members out of Handover through OpenID Connect.
+The migration gives every existing client an empty list of post-logout redirect URIs, so you need to do nothing.
+To let a service send members back after logout, add its post-logout redirect URIs in the admin UI.
+See <a href="../concepts/oauth-clients/#post-logout-redirect-uris">post-logout redirect URIs</a>.</p>
 <h4 id="signing-keys-move-to-a-key-store">Signing keys move to a key store<a class="headerlink" href="#signing-keys-move-to-a-key-store" title="Permanent link">&para;</a></h4>
 <p>Handover now keeps its OAuth signing keys in <code>oauth-keys/</code> on the storage volume, and you can rotate them with artisan commands.
 See <a href="../setup/signing-keys/">signing keys</a>.</p>
@@ -2072,7 +2106,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 16:01:22 UTC">November 20, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 22, 2026 00:05:14 UTC">November 22, 2026</span>
   </span>
 
     

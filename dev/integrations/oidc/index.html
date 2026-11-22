@@ -1060,6 +1060,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#logout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#limitations" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1565,6 +1576,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#logout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#limitations" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1646,6 +1668,10 @@ Services compare the issuer exactly, so set <code>APP_URL</code> to the public U
 <tr>
 <td>JSON Web Key Set (JWKS)</td>
 <td><code>https://YOUR_HANDOVER/.well-known/jwks.json</code></td>
+</tr>
+<tr>
+<td>End session endpoint</td>
+<td><code>https://YOUR_HANDOVER/oauth/logout</code></td>
 </tr>
 <tr>
 <td>Response type</td>
@@ -1784,9 +1810,60 @@ The authorization endpoint and the <a href="../../reference/api/">user API</a> d
 <p>Refresh tokens and sessions work for a public client as they do for a confidential one.
 Each refresh returns a new refresh token, and the <a href="../../concepts/oauth-clients/#single-session">single session</a> setting applies.
 A public client often runs on several devices per member, so consider turning single session off for it.</p>
+<h2 id="logout">Logout<a class="headerlink" href="#logout" title="Permanent link">&para;</a></h2>
+<p>A service can log the member out of Handover when they log out of the service (OpenID Connect RP-Initiated Logout 1.0).
+Send the member's browser to the end session endpoint, <code>/oauth/logout</code>, with <code>GET</code> or a form <code>POST</code>:</p>
+<div class="language-http highlight"><pre><span></span><code><span class="err">GET /oauth/logout?id_token_hint=ID_TOKEN&amp;post_logout_redirect_uri=https%3A%2F%2Fservice.example.org%2Flogged-out&amp;state=STATE</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_token_hint</code></td>
+<td>Optional. An ID token Handover issued to the service for the member. An expired ID token works.</td>
+</tr>
+<tr>
+<td><code>client_id</code></td>
+<td>Optional. The client ID. Send it when you send no <code>id_token_hint</code>.</td>
+</tr>
+<tr>
+<td><code>post_logout_redirect_uri</code></td>
+<td>Optional. Where Handover sends the member after logout. It must exactly match one of the client's <a href="../../concepts/oauth-clients/#post-logout-redirect-uris">post-logout redirect URIs</a>.</td>
+</tr>
+<tr>
+<td><code>state</code></td>
+<td>Optional. Handover adds it to the <code>post_logout_redirect_uri</code> unchanged.</td>
+</tr>
+</tbody>
+</table>
+<p>Handover ignores <code>ui_locales</code> and <code>logout_hint</code>.</p>
+<p>Handover answers a <code>POST</code> with a redirect to the same endpoint with <code>GET</code>, because the browser does not send Handover's session cookie with a <code>POST</code> from another site.
+The parameters, including the <code>id_token_hint</code>, then appear in the URL.</p>
+<p>Handover checks the <code>id_token_hint</code> signature against its published keys, and checks its <code>iss</code>.
+It does not check <code>exp</code>.
+If Handover cannot verify the hint, it treats the request as if it had no hint.</p>
+<p>Handover takes the client from the <code>aud</code> of the hint, or from <code>client_id</code>.
+If both are present and name different clients, Handover shows an error page and does not redirect.
+If the <code>post_logout_redirect_uri</code> is not registered for that client, or Handover cannot tell the client, Handover shows an error page and does not redirect.</p>
+<p>What happens next depends on who is signed in to Handover:</p>
+<ul>
+<li>If the hint names the member who is signed in, Handover logs them out without asking.</li>
+<li>If someone else is signed in, or the request has no valid hint, Handover asks the member to confirm the logout. If they confirm, Handover logs them out.</li>
+<li>If nobody is signed in, Handover does not ask.</li>
+</ul>
+<p>After logout, Handover sends the member to the <code>post_logout_redirect_uri</code>, with <code>state</code> if you sent one.
+Without a <code>post_logout_redirect_uri</code>, Handover shows a page that says the member is logged out.</p>
+<p>Logout ends the member's session in Handover only.
+Handover revokes no access or refresh tokens, and the member stays signed in to <abbr title="Virtual Air Traffic Simulation network">VATSIM</abbr> and to other services.
+End the member's session in the service before you send them to Handover.</p>
 <h2 id="limitations">Limitations<a class="headerlink" href="#limitations" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Handover does not support logging out from the service (RP-initiated logout).</li>
+<li>Handover does not support back-channel or front-channel logout, so it does not tell other services when a member logs out.</li>
 <li>Handover ignores the <code>max_age</code> and <code>claims</code> request parameters.</li>
 <li>Handover never shows a consent screen and ignores <code>prompt=consent</code>. <code>prompt=none</code> and <code>prompt=login</code> work as OpenID Connect defines.</li>
 </ul>
@@ -1819,7 +1896,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 20, 2026 16:01:22 UTC">November 20, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 22, 2026 00:05:14 UTC">November 22, 2026</span>
   </span>
 
     
