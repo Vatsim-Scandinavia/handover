@@ -1,0 +1,2 @@
+# A local theme override must not end up in the published image.
+resources/sass/themes/_custom.scss

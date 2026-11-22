@@ -12,7 +12,6 @@ services:
     environment:
       # See https://docs.vatsca.org/handover/latest/reference/environment-variables/ for all variables
       # You need to adjust this file to your needs
-      - APP_NAME=Handover
       - APP_OWNER=Your VACC Name
       - APP_OWNER_SHORT=SCA
       - APP_OWNER_CONTACT="director@yourvacc.com"

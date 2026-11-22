@@ -34,7 +34,7 @@ php artisan migrate --force
 php artisan optimize:clear
 ```
 
-If you run a [custom theme](setup/theme.md), run the theme build again, because recreating the container resets it.
+If you run a [custom theme](setup/theme.md), rebuild your [custom image](setup/custom.md) on the new version.
 
 !!! info "Why `--force`"
     In production, `migrate` asks for confirmation.
@@ -103,7 +103,7 @@ The container also moves the OAuth signing key into a key store that supports [k
     php artisan optimize:clear
     ```
 
-7. If you run a [custom theme](setup/theme.md), run the theme build again.
+7. Remove any `VITE_THEME_*` variables. They are no longer used. If you had custom colours, see [light and dark themes](#light-and-dark-themes).
 8. Lift maintenance mode:
 
     ```sh
@@ -283,6 +283,25 @@ Each entry in the `groups` array now has a `direct` field.
 Once you nest groups, the array also lists groups a member inherits.
 Clients that only want direct memberships should filter on `direct: true`.
 See the [user API](reference/api.md#groups).
+
+#### Light and dark themes
+
+Handover now has a light and a dark theme, and follows the operating system by default.
+Signed-in members can switch between system, light and dark with the toggle next to their name.
+The choice is kept in the browser.
+
+The `VITE_THEME_*` variables are gone, including `VITE_THEME_BORDER_RADIUS`.
+The 4.0.0 betas still read them, so this applies to them too.
+If you set custom colours with them, copy `resources/sass/themes/_custom.scss.example` to `_custom.scss`, move your colours into it, and rebuild.
+Use `_light.scss` and `_dark.scss` as a reference.
+See [customising the theme](setup/theme.md#colours), which also covers how to bake a custom theme into a container image.
+
+`APP_NAME` no longer changes the name Handover shows.
+Page titles and headings always say Handover.
+Set the new `APP_TAGLINE` to describe your instance beneath the front page heading.
+Leave `APP_NAME` as it is: it still names the session cookie, so changing or removing it signs every member out once.
+A footer on every page says who runs your Handover and credits Handover to VATSIM Scandinavia.
+See [front page heading](setup/theme.md#front-page-heading).
 
 #### Why this is a major release
 

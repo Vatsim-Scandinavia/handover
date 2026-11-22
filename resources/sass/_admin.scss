@@ -1,9 +1,11 @@
 // Management pages: the page header every page opens with, section titles,
 // and the data table shared by every list.
 
-$admin-ink: $gray-900;
-$admin-muted: $gray-700;
-$admin-line: $gray-300;
+// Colours come from the theme's CSS custom properties, so management pages
+// follow the active theme.
+$admin-ink: var(--color-gray-900);
+$admin-muted: var(--color-gray-700);
+$admin-line: var(--color-gray-300);
 
 // Column headings, shared with the groups table so all lists read alike.
 @mixin admin-table-head {
@@ -36,7 +38,7 @@ $admin-line: $gray-300;
     padding: 1rem $card-spacer-x .875rem;
     border-bottom: 1px solid $admin-line;
 
-    h1 { margin: 0; font-size: 1.25rem; font-weight: 500; line-height: 1.3; color: $tertiary; }
+    h1 { margin: 0; font-size: 1.25rem; font-weight: 500; line-height: 1.3; color: var(--color-tertiary); }
 }
 
 .page-crumbs {
@@ -48,8 +50,8 @@ $admin-line: $gray-300;
     font-size: .8125rem;
 
     a { color: $admin-muted; text-decoration: none; }
-    a:hover { color: $tertiary; text-decoration: underline; }
-    li + li::before { content: "/"; content: "/" / ""; padding: 0 .4rem; color: $gray-500; }
+    a:hover { color: var(--color-tertiary); text-decoration: underline; }
+    li + li::before { content: "/"; content: "/" / ""; padding: 0 .4rem; color: var(--color-gray-500); }
 }
 
 .page-header-row {
@@ -66,7 +68,7 @@ $admin-line: $gray-300;
 .page-lead { max-width: 65ch; margin: .5rem 0 0; font-size: .875rem; color: $admin-muted; }
 
 // Headings for the parts of a page, below the page's h1.
-.section-title { margin: 0 0 .5rem; font-size: 1rem; font-weight: 500; color: $tertiary; }
+.section-title { margin: 0 0 .5rem; font-size: 1rem; font-weight: 500; color: var(--color-tertiary); }
 * + .section-title { margin-top: 1.5rem; }
 
 .data-table {
@@ -93,7 +95,7 @@ $admin-line: $gray-300;
     padding: 0;
     border: 0;
     background: none;
-    color: $tertiary;
+    color: var(--color-tertiary);
     font-weight: 500;
     text-align: left;
 
@@ -101,7 +103,7 @@ $admin-line: $gray-300;
     &[aria-expanded="true"] .fa-chevron-right { transform: rotate(90deg); }
     // Underline the name only: an underline on the chevron would rotate with it.
     &:hover .row-toggle-name { text-decoration: underline; }
-    &:focus-visible { outline: 2px solid $primary; outline-offset: 2px; }
+    &:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
 
     @media (prefers-reduced-motion: reduce) {
         .fa-chevron-right { transition: none; }
@@ -134,4 +136,4 @@ $admin-line: $gray-300;
 
 // A wide table scrolls sideways. It takes focus so keyboard users can scroll it.
 .table-scroll { overflow-x: auto; }
-.table-scroll:focus-visible { outline: 2px solid $primary; outline-offset: 2px; }
+.table-scroll:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
