@@ -191,7 +191,8 @@ Administrators can change the grant types and redirect URIs of any client in the
 Editing a client in the admin UI no longer drops its extra redirect URIs.
 See [OAuth clients](concepts/oauth-clients.md#grant-types).
 
-The old `redirect`, `personal_access_client` and `password_client` columns stay in the database, but Handover no longer reads them.
+After the backfill, the migration drops the old `user_id`, `redirect`, `personal_access_client` and `password_client` columns, and the `oauth_personal_access_clients` table.
+You take no action. To undo the change, restore your backup as described in [rolling back to 3.x](#rolling-back-to-3x).
 
 #### Clients limit scopes, members and sessions { #client-access-settings }
 

@@ -28,6 +28,7 @@ class ClientSchemaMigrationTest extends TestCase
         parent::setUp();
 
         // Run the tests against the 3.x schema, then migrate forward.
+        $this->migration('2026_11_19_900000_drop_legacy_oauth_client_columns.php')->down();
         $this->migration(self::POLICY_MIGRATION)->down();
         $this->migration()->down();
     }
