@@ -141,7 +141,7 @@ class OAuthClientController extends Controller
      * A public client gets stricter redirect URIs and grant types, and may
      * have allowed origins.
      *
-     * @return array{name: string, confidential?: bool, redirect_uris: string[], grant_types?: string[], allowed_scopes?: string[], allowed_origins?: string[], single_session?: bool, required_groups?: string[]}
+     * @return array{name: string, confidential?: bool, redirect_uris: string[], grant_types?: string[], allowed_scopes?: string[], allowed_origins?: string[], post_logout_redirect_uris?: string[], single_session?: bool, required_groups?: string[]}
      */
     private function validateClient(Request $request, ?Client $client = null): array
     {
@@ -159,7 +159,7 @@ class OAuthClientController extends Controller
                 }
             }],
             'redirect_uris' => ['required', 'list', 'min:1'],
-            'redirect_uris.*' => ['required', 'url', 'max:2048', 'distinct', ...($public ? [$this->publicClientUri()] : [])],
+            'redirect_uris.*' => $this->redirectUriRules($public),
             'grant_types' => ['sometimes', 'list', 'min:1'],
             'grant_types.*' => ['required', 'string', 'distinct', Rule::in($allowedGrantTypes)],
             'allowed_scopes' => [$client ? 'sometimes' : 'required', 'list', 'min:1'],
@@ -167,10 +167,23 @@ class OAuthClientController extends Controller
             // Only a public client calls Handover from the browser.
             'allowed_origins' => $public ? ['sometimes', 'list'] : ['prohibited'],
             'allowed_origins.*' => ['required', 'string', 'max:2048', $this->allowedOrigin()],
+            'post_logout_redirect_uris' => ['sometimes', 'list'],
+            'post_logout_redirect_uris.*' => $this->redirectUriRules($public),
             'single_session' => ['sometimes', 'boolean'],
             'required_groups' => ['sometimes', 'list'],
             'required_groups.*' => ['required', 'string', 'distinct', Rule::exists('groups', 'id')],
         ]);
+    }
+
+    /**
+     * The rules for one redirect URI or post-logout redirect URI. Both follow
+     * the same rules for each client type.
+     *
+     * @return list<mixed>
+     */
+    private function redirectUriRules(bool $public): array
+    {
+        return ['required', 'url', 'max:2048', 'distinct', ...($public ? [$this->publicClientUri()] : [])];
     }
 
     /** A public client's URIs must use https, or http on a loopback host for development. */
@@ -194,7 +207,7 @@ class OAuthClientController extends Controller
     }
 
     /**
-     * @return array{id: string, name: string, confidential: bool, redirect_uris: string[], grant_types: string[], allowed_scopes: string[], allowed_origins: string[], single_session: bool, required_groups: string[], revoked: bool}
+     * @return array{id: string, name: string, confidential: bool, redirect_uris: string[], grant_types: string[], allowed_scopes: string[], allowed_origins: string[], post_logout_redirect_uris: string[], single_session: bool, required_groups: string[], revoked: bool}
      */
     private function present(Client $client): array
     {

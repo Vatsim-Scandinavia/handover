@@ -19,6 +19,8 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
+        // LogoutController checks the token itself, and shows the logout
+        // confirmation when it does not match.
+        'oauth/logout',
     ];
 }

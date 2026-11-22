@@ -23,6 +23,7 @@ class DiscoveryController extends Controller
             'token_endpoint' => Issuer::route('passport.token'),
             'userinfo_endpoint' => Issuer::route('oidc.userinfo'),
             'jwks_uri' => Issuer::route('jwks'),
+            'end_session_endpoint' => Issuer::route('oidc.logout'),
             'scopes_supported' => Passport::scopeIds(),
             'claims_supported' => [
                 'iss', 'sub', 'aud', 'exp', 'iat', 'auth_time', 'nonce', 'at_hash',

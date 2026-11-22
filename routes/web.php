@@ -6,7 +6,9 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GroupHierarchyController;
 use App\Http\Controllers\GroupManagerRuleController;
 use App\Http\Controllers\GroupMemberController;
+use App\Http\Controllers\OAuth\LogoutController;
 use App\Http\Controllers\OAuthClientController;
+use App\Http\Middleware\RedirectLogoutPostToGet;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,8 +24,15 @@ use App\Http\Controllers\OAuthClientController;
 Route::namespace('Auth')->group(function () {
     Route::get('/login', 'LoginController@login')->middleware('guest')->name('login');
     Route::get('/validate', 'LoginController@validateLogin')->middleware('guest');
-    Route::get('/logout', 'LoginController@logout')->middleware('auth')->name('logout');
 });
+
+// The end session endpoint, next to Passport's /oauth routes. It needs the session, so it lives here.
+Route::match(['get', 'post'], 'oauth/logout', LogoutController::class)
+    ->middleware(RedirectLogoutPostToGet::class)
+    ->name('oidc.logout');
+
+// /logout handles a logout request like /oauth/logout. Without parameters, it asks for confirmation.
+Route::get('/logout', LogoutController::class);
 
 Route::middleware(['auth', 'groups.manage'])->prefix('groups')->name('groups.')->group(function () {
     // Fixed segments first — must come before {group} wildcard

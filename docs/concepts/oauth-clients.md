@@ -12,7 +12,7 @@ Open **OAuth Clients** in the header of the groups pages, or go to `/admin/oauth
 The page lists every active client with its ID, name, redirect URIs, grant types, allowed scopes and who may sign in.
 
 - **New client**: choose the [client type](#client-type), enter a descriptive name and the redirect URIs of the service, and tick the scopes it may request. Members see the name, so make it clear.
-- **Edit**: change the name, redirect URIs, grant types, allowed scopes, allowed origins, required groups or single session setting.
+- **Edit**: change the name, redirect URIs, post-logout redirect URIs, grant types, allowed scopes, allowed origins, required groups or single session setting.
 - **Regenerate**: create a new secret for a confidential client. The old secret stops working at once.
 - **Delete**: remove the client and revoke its existing tokens.
 
@@ -46,6 +46,15 @@ The service must send one of them exactly, so `https://example.test/callback` do
 
 A public client's redirect URIs must use `https`.
 For development, `http` is also allowed on `localhost`, `127.0.0.1` and `[::1]`, with any port.
+
+### Post-logout redirect URIs
+
+Post-logout redirect URIs set where Handover may send a member after the service logs them out of Handover, see [logout](../integrations/oidc.md#logout).
+A client has none until you add them, and the form does not fill them in from the redirect URIs.
+Add them only for a service that logs members out through Handover.
+
+They follow the same rules as the client's [redirect URIs](#redirect-uris).
+The service must send one of them exactly.
 
 ### Grant types
 

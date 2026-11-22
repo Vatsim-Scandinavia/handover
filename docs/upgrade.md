@@ -84,6 +84,7 @@ The container also moves the OAuth signing key into a key store that supports [k
     - Give every client [allowed scopes, required groups and a session setting](#client-access-settings).
     - Add the columns that [OpenID Connect](#handover-supports-openid-connect) sign-ins need.
     - Add the allowed origins of [public clients](#handover-supports-public-clients).
+    - Add post-logout redirect URIs for [logout](#logging-out-asks-for-confirmation).
 
     If you run Handover without the container, step 3 imports nothing, and the migration imports the signing key instead.
 
@@ -242,6 +243,21 @@ A client created before 4.0.0 without a secret is now a public client:
 The token and UserInfo endpoints now check the `Origin` header for public clients.
 A request with an `Origin` header that the public client does not allow fails with a `403` response.
 Confidential clients are not affected, even when their server sends an `Origin` header.
+
+#### Logging out asks for confirmation
+
+Handover's logout button now sends a form to the new end session endpoint, `/oauth/logout`.
+Logout now also ends the whole Handover session and renews its CSRF token.
+
+Links to the old `/logout` path still work, but they no longer log the member out at once.
+Handover now asks "Log out of Handover?", and the member must confirm.
+If a service links to `/logout`, members need one more click.
+To log members out without asking, the service can use [RP-initiated logout](integrations/oidc.md#logout) instead.
+
+Services can now log members out of Handover through OpenID Connect.
+The migration gives every existing client an empty list of post-logout redirect URIs, so you need to do nothing.
+To let a service send members back after logout, add its post-logout redirect URIs in the admin UI.
+See [post-logout redirect URIs](concepts/oauth-clients.md#post-logout-redirect-uris).
 
 #### Signing keys move to a key store
 

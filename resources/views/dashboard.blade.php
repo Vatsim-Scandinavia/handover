@@ -11,7 +11,7 @@
     </div>
 
     <div class="d-flex flex-column justify-content-center align-items-center gap-3">
-        <a href="{{route('logout')}}" class="btn btn btn-primary">Logout</a>
+        <x-logout-button class="btn btn-primary" />
 
         @if($groups->isNotEmpty())
         <div class="card w-100">

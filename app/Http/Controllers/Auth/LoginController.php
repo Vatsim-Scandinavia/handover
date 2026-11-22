@@ -142,11 +142,4 @@ class LoginController extends Controller
         $intended = Session::pull('url.intended', route('landing'));
         return redirect($intended);
     }
-
-    public function logout()
-    {
-        if (! Auth::check()) return redirect()->back();
-        Auth::logout();
-        return redirect()->to('/')->withSuccess('You have been successfully logged out.');
-    }
 }

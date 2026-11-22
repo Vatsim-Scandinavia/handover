@@ -35,6 +35,7 @@ If the service cannot read discovery, configure it with these settings instead:
 | Token endpoint | `https://YOUR_HANDOVER/oauth/token` |
 | UserInfo endpoint | `https://YOUR_HANDOVER/oauth/userinfo` |
 | JSON Web Key Set (JWKS) | `https://YOUR_HANDOVER/.well-known/jwks.json` |
+| End session endpoint | `https://YOUR_HANDOVER/oauth/logout` |
 | Response type | `code` |
 | Signing algorithm | `RS256` |
 
@@ -136,8 +137,50 @@ Refresh tokens and sessions work for a public client as they do for a confidenti
 Each refresh returns a new refresh token, and the [single session](../concepts/oauth-clients.md#single-session) setting applies.
 A public client often runs on several devices per member, so consider turning single session off for it.
 
+## Logout
+
+A service can log the member out of Handover when they log out of the service (OpenID Connect RP-Initiated Logout 1.0).
+Send the member's browser to the end session endpoint, `/oauth/logout`, with `GET` or a form `POST`:
+
+```http
+GET /oauth/logout?id_token_hint=ID_TOKEN&post_logout_redirect_uri=https%3A%2F%2Fservice.example.org%2Flogged-out&state=STATE
+```
+
+| Parameter | Use |
+| --------- | --- |
+| `id_token_hint` | Optional. An ID token Handover issued to the service for the member. An expired ID token works. |
+| `client_id` | Optional. The client ID. Send it when you send no `id_token_hint`. |
+| `post_logout_redirect_uri` | Optional. Where Handover sends the member after logout. It must exactly match one of the client's [post-logout redirect URIs](../concepts/oauth-clients.md#post-logout-redirect-uris). |
+| `state` | Optional. Handover adds it to the `post_logout_redirect_uri` unchanged. |
+
+Handover ignores `ui_locales` and `logout_hint`.
+
+Handover answers a `POST` with a redirect to the same endpoint with `GET`, because the browser does not send Handover's session cookie with a `POST` from another site.
+The parameters, including the `id_token_hint`, then appear in the URL.
+
+Handover checks the `id_token_hint` signature against its published keys, and checks its `iss`.
+It does not check `exp`.
+If Handover cannot verify the hint, it treats the request as if it had no hint.
+
+Handover takes the client from the `aud` of the hint, or from `client_id`.
+If both are present and name different clients, Handover shows an error page and does not redirect.
+If the `post_logout_redirect_uri` is not registered for that client, or Handover cannot tell the client, Handover shows an error page and does not redirect.
+
+What happens next depends on who is signed in to Handover:
+
+- If the hint names the member who is signed in, Handover logs them out without asking.
+- If someone else is signed in, or the request has no valid hint, Handover asks the member to confirm the logout. If they confirm, Handover logs them out.
+- If nobody is signed in, Handover does not ask.
+
+After logout, Handover sends the member to the `post_logout_redirect_uri`, with `state` if you sent one.
+Without a `post_logout_redirect_uri`, Handover shows a page that says the member is logged out.
+
+Logout ends the member's session in Handover only.
+Handover revokes no access or refresh tokens, and the member stays signed in to VATSIM and to other services.
+End the member's session in the service before you send them to Handover.
+
 ## Limitations
 
-- Handover does not support logging out from the service (RP-initiated logout).
+- Handover does not support back-channel or front-channel logout, so it does not tell other services when a member logs out.
 - Handover ignores the `max_age` and `claims` request parameters.
 - Handover never shows a consent screen and ignores `prompt=consent`. `prompt=none` and `prompt=login` work as OpenID Connect defines.

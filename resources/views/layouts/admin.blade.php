@@ -28,7 +28,8 @@
                         <div class="text-white" style="font-size: 12px;">
                             {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
                             <span class="d-none d-sm-inline">({{ Auth::user()->id }})</span>
-                            &mdash; <a href="{{ route('logout') }}" class="text-white">Logout</a>
+                            &mdash;
+                            <x-logout-button inline class="btn btn-link p-0 align-baseline text-white" style="font-size: inherit;" />
                         </div>
                     </div>
 

@@ -176,4 +176,23 @@ class PublicClientManagementTest extends TestCase
 
         $this->assertNull(DB::table('oauth_clients')->where('id', $id)->value('secret'));
     }
+
+    public function test_a_public_clients_post_logout_redirect_uris_follow_its_redirect_uri_rules(): void
+    {
+        $this->createPublicClient(['post_logout_redirect_uris' => [
+            'https://vcas-ok.test/logged-out',
+            'http://localhost:5173/logged-out',
+            'http://vcas-ok.test/logged-out',
+            'not-a-url',
+        ]])->assertStatus(422)
+            ->assertJsonValidationErrors(['post_logout_redirect_uris.2', 'post_logout_redirect_uris.3'])
+            ->assertJsonMissingValidationErrors(['post_logout_redirect_uris.0', 'post_logout_redirect_uris.1']);
+    }
+
+    public function test_post_logout_redirect_uris_are_not_prefilled(): void
+    {
+        $this->createPublicClient()
+            ->assertCreated()
+            ->assertJsonPath('client.post_logout_redirect_uris', []);
+    }
 }

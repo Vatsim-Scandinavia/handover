@@ -18,6 +18,7 @@ use Illuminate\Support\Arr;
  * @property string $client_id
  * @property list<string> $allowed_scopes
  * @property list<string> $allowed_origins The origins a public client may call the token and userinfo endpoints from, as Origin::of() forms them.
+ * @property list<string> $post_logout_redirect_uris The URIs Handover may send the member back to after logout. See CONTEXT.md.
  * @property bool $single_session
  */
 class ClientPolicy extends Model
@@ -36,7 +37,7 @@ class ClientPolicy extends Model
 
     public $incrementing = false;
 
-    protected $fillable = ['client_id', 'allowed_scopes', 'allowed_origins', 'single_session'];
+    protected $fillable = ['client_id', 'allowed_scopes', 'allowed_origins', 'post_logout_redirect_uris', 'single_session'];
 
     protected $attributes = ['single_session' => true];
 
@@ -45,6 +46,7 @@ class ClientPolicy extends Model
         return [
             'allowed_scopes' => 'array',
             'allowed_origins' => 'array',
+            'post_logout_redirect_uris' => 'array',
             'single_session' => 'boolean',
         ];
     }
@@ -66,6 +68,12 @@ class ClientPolicy extends Model
         return in_array($origin, $this->allowed_origins, true);
     }
 
+    /** Whether Handover may send the member to the URI after logout. The URI must match exactly. */
+    public function allowsPostLogoutRedirectUri(string $uri): bool
+    {
+        return in_array($uri, $this->post_logout_redirect_uris, true);
+    }
+
     /** Whether some active client allows the origin. */
     public static function anyAllowsOrigin(string $origin): bool
     {
@@ -78,11 +86,11 @@ class ClientPolicy extends Model
     /**
      * Save the fields the admin UI sent. Fields left out keep their value.
      *
-     * @param  array{allowed_scopes?: list<string>, allowed_origins?: list<string>, single_session?: bool, required_groups?: list<string>}  $fields
+     * @param  array{allowed_scopes?: list<string>, allowed_origins?: list<string>, post_logout_redirect_uris?: list<string>, single_session?: bool, required_groups?: list<string>}  $fields
      */
     public function updateFromAdmin(array $fields): void
     {
-        $this->fill(Arr::only($fields, ['allowed_scopes', 'single_session']));
+        $this->fill(Arr::only($fields, ['allowed_scopes', 'post_logout_redirect_uris', 'single_session']));
 
         if (array_key_exists('allowed_origins', $fields)) {
             $this->allowed_origins = array_values(array_unique(array_map(Origin::of(...), $fields['allowed_origins'])));
@@ -101,13 +109,14 @@ class ClientPolicy extends Model
     /**
      * The fields the admin UI shows.
      *
-     * @return array{allowed_scopes: list<string>, allowed_origins: list<string>, single_session: bool, required_groups: list<string>}
+     * @return array{allowed_scopes: list<string>, allowed_origins: list<string>, post_logout_redirect_uris: list<string>, single_session: bool, required_groups: list<string>}
      */
     public function toAdminArray(): array
     {
         return [
             'allowed_scopes' => $this->allowed_scopes,
             'allowed_origins' => $this->allowed_origins,
+            'post_logout_redirect_uris' => $this->post_logout_redirect_uris,
             'single_session' => $this->single_session,
             'required_groups' => $this->requiredGroups->pluck('id')->sort()->values()->all(),
         ];

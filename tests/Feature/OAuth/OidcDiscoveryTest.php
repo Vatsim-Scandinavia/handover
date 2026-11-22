@@ -24,6 +24,7 @@ class OidcDiscoveryTest extends TestCase
                 'token_endpoint' => $issuer.'/oauth/token',
                 'userinfo_endpoint' => $issuer.'/oauth/userinfo',
                 'jwks_uri' => $issuer.'/.well-known/jwks.json',
+                'end_session_endpoint' => $issuer.'/oauth/logout',
                 'claims_supported' => [
                     'iss', 'sub', 'aud', 'exp', 'iat', 'auth_time', 'nonce', 'at_hash',
                     'name', 'given_name', 'family_name', 'email', 'groups',

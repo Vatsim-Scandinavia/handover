@@ -3,7 +3,7 @@
 @section('slickNav')
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-            <a class="nav-link" href="{{route('logout')}}">Logout</a>
+            <x-logout-button class="nav-link btn btn-link" />
         </li>
     </ul>
 @endsection

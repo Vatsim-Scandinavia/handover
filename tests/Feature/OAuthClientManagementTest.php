@@ -326,4 +326,31 @@ class OAuthClientManagementTest extends TestCase
         ])->assertStatus(422)
             ->assertJsonValidationErrors(['allowed_scopes.1', 'required_groups.0']);
     }
+
+    public function test_admin_can_set_and_edit_post_logout_redirect_uris(): void
+    {
+        $this->actingAsAdmin();
+        $id = $this->postJson(route('admin.oauth-clients.store'), [
+            'name' => 'Forum',
+            'redirect_uris' => ['https://forum.test/callback'],
+            'allowed_scopes' => ['openid'],
+            'post_logout_redirect_uris' => ['http://forum.test/logged-out', 'https://forum.test/'],
+        ])->assertCreated()
+            ->assertJsonPath('client.post_logout_redirect_uris', ['http://forum.test/logged-out', 'https://forum.test/'])
+            ->json('client.id');
+
+        $this->putJson(route('admin.oauth-clients.update', $id), [
+            'name' => 'Forum',
+            'redirect_uris' => ['https://forum.test/callback'],
+            'post_logout_redirect_uris' => ['https://forum.test/', 'not-a-url', 'https://forum.test/'],
+        ])->assertStatus(422)
+            ->assertJsonValidationErrors(['post_logout_redirect_uris.1', 'post_logout_redirect_uris.2']);
+
+        $this->putJson(route('admin.oauth-clients.update', $id), [
+            'name' => 'Forum',
+            'redirect_uris' => ['https://forum.test/callback'],
+            'post_logout_redirect_uris' => [],
+        ])->assertOk()
+            ->assertJsonPath('post_logout_redirect_uris', []);
+    }
 }

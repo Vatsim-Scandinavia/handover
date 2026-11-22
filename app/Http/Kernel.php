@@ -77,6 +77,8 @@ class Kernel extends HttpKernel
     protected $middlewarePriority = [
         // So that responses from the middleware after it, such as a 401, are readable.
         \App\Http\Middleware\Cors::class,
+        // Turns a cross-site logout POST into a GET before the session starts.
+        \App\Http\Middleware\RedirectLogoutPostToGet::class,
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
         \App\Http\Middleware\Authenticate::class,

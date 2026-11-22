@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import axios from 'axios';
 import { Modal } from 'bootstrap';
+import UriListField from './UriListField.vue';
 
 /**
  * @typedef {Object} OAuthClient
@@ -12,6 +13,7 @@ import { Modal } from 'bootstrap';
  * @property {string[]} grant_types
  * @property {string[]} allowed_scopes
  * @property {string[]} allowed_origins
+ * @property {string[]} post_logout_redirect_uris
  * @property {boolean} single_session
  * @property {string[]} required_groups
  * @property {boolean} revoked
@@ -93,6 +95,7 @@ function emptyForm() {
         allowedOrigins: [],
         // Until the admin edits them, a new public client's allowed origins follow its redirect URIs.
         originsFollowRedirectUris: true,
+        postLogoutRedirectUris: [],
         singleSession: true,
         requiredGroups: [],
     };
@@ -165,31 +168,12 @@ function openEdit(client) {
         allowedScopes: [...client.allowed_scopes],
         allowedOrigins: [...client.allowed_origins],
         originsFollowRedirectUris: false,
+        postLogoutRedirectUris: [...client.post_logout_redirect_uris],
         singleSession: client.single_session,
         requiredGroups: [...client.required_groups],
     };
     errors.value = {};
     formModal.show();
-}
-
-function addRedirectUri() {
-    form.value.redirectUris.push('');
-}
-
-/** @param {number} index */
-function removeRedirectUri(index) {
-    form.value.redirectUris.splice(index, 1);
-}
-
-function addAllowedOrigin() {
-    form.value.originsFollowRedirectUris = false;
-    form.value.allowedOrigins.push('');
-}
-
-/** @param {number} index */
-function removeAllowedOrigin(index) {
-    form.value.originsFollowRedirectUris = false;
-    form.value.allowedOrigins.splice(index, 1);
 }
 
 async function save() {
@@ -201,6 +185,7 @@ async function save() {
         redirect_uris: form.value.redirectUris,
         grant_types: form.value.grantTypes,
         allowed_scopes: form.value.allowedScopes,
+        post_logout_redirect_uris: form.value.postLogoutRedirectUris,
         single_session: form.value.singleSession,
         required_groups: form.value.requiredGroups,
     };
@@ -380,69 +365,40 @@ async function copySecret() {
                     <p v-else class="text-muted small">
                         {{ form.confidential ? 'Confidential client' : 'Public client: no secret, PKCE required' }}
                     </p>
-                    <fieldset class="mb-3">
-                        <legend class="form-label fs-6">Redirect URIs</legend>
-                        <div v-for="(uri, index) in form.redirectUris" :key="index" class="mb-2">
-                            <div class="input-group has-validation">
-                                <input
-                                    v-model="form.redirectUris[index]"
-                                    type="url"
-                                    class="form-control"
-                                    :class="{ 'is-invalid': errors[`redirect_uris.${index}`] }"
-                                    :aria-label="`Redirect URI ${index + 1}`"
-                                    placeholder="https://example.test/callback"
-                                >
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-secondary"
-                                    :disabled="form.redirectUris.length === 1"
-                                    :aria-label="`Remove redirect URI ${index + 1}`"
-                                    @click="removeRedirectUri(index)"
-                                >
-                                    Remove
-                                </button>
-                                <div v-if="errors[`redirect_uris.${index}`]" class="invalid-feedback">
-                                    {{ errors[`redirect_uris.${index}`][0] }}
-                                </div>
-                            </div>
-                        </div>
-                        <div v-if="errors.redirect_uris" class="text-danger small mb-2">{{ errors.redirect_uris[0] }}</div>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" @click="addRedirectUri">
-                            Add redirect URI
-                        </button>
-                    </fieldset>
-                    <fieldset v-if="!form.confidential" class="mb-3">
-                        <legend class="form-label fs-6">Allowed origins</legend>
+                    <UriListField
+                        v-model="form.redirectUris"
+                        class="mb-3"
+                        legend="Redirect URIs"
+                        item-label="Redirect URI"
+                        placeholder="https://example.test/callback"
+                        :errors="errors"
+                        error-key="redirect_uris"
+                        :min-items="1"
+                    />
+                    <UriListField
+                        v-model="form.postLogoutRedirectUris"
+                        class="mb-3"
+                        legend="Post-logout redirect URIs"
+                        item-label="Post-logout redirect URI"
+                        placeholder="https://example.test/logged-out"
+                        :errors="errors"
+                        error-key="post_logout_redirect_uris"
+                    >
+                        <p class="text-muted small mb-1">Where the service may send members after it logs them out of Handover. Leave empty if the service does not log members out through Handover.</p>
+                    </UriListField>
+                    <UriListField
+                        v-if="!form.confidential"
+                        v-model="form.allowedOrigins"
+                        class="mb-3"
+                        legend="Allowed origins"
+                        item-label="Allowed origin"
+                        placeholder="https://example.test"
+                        :errors="errors"
+                        error-key="allowed_origins"
+                        @change="form.originsFollowRedirectUris = false"
+                    >
                         <p class="text-muted small mb-1">The origins the service may call the token and UserInfo endpoints from, such as <code>https://example.test</code>.</p>
-                        <div v-for="(origin, index) in form.allowedOrigins" :key="index" class="mb-2">
-                            <div class="input-group has-validation">
-                                <input
-                                    v-model="form.allowedOrigins[index]"
-                                    type="url"
-                                    class="form-control"
-                                    :class="{ 'is-invalid': errors[`allowed_origins.${index}`] }"
-                                    :aria-label="`Allowed origin ${index + 1}`"
-                                    placeholder="https://example.test"
-                                    @input="form.originsFollowRedirectUris = false"
-                                >
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-secondary"
-                                    :aria-label="`Remove allowed origin ${index + 1}`"
-                                    @click="removeAllowedOrigin(index)"
-                                >
-                                    Remove
-                                </button>
-                                <div v-if="errors[`allowed_origins.${index}`]" class="invalid-feedback">
-                                    {{ errors[`allowed_origins.${index}`][0] }}
-                                </div>
-                            </div>
-                        </div>
-                        <div v-if="errors.allowed_origins" class="text-danger small mb-2">{{ errors.allowed_origins[0] }}</div>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" @click="addAllowedOrigin">
-                            Add allowed origin
-                        </button>
-                    </fieldset>
+                    </UriListField>
                     <fieldset class="mb-0">
                         <legend class="form-label fs-6">Grant types</legend>
                         <div v-for="grant in grantTypeOptions" :key="grant" class="form-check">
