@@ -469,12 +469,6 @@ parameters:
 			path: app/Http/Controllers/Auth/LoginController.php
 
 		-
-			message: '#^Parameter \#1 \$user of static method Illuminate\\Support\\Facades\\Auth\:\:login\(\) expects Illuminate\\Contracts\\Auth\\Authenticatable, App\\User\|null given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
 			message: '#^Parameter \#1 \$user of method App\\Services\\AuthorizedClients\:\:for\(\) expects App\\User, App\\User\|null given\.$#'
 			identifier: argument.type
 			count: 1
