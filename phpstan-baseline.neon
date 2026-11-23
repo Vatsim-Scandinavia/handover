@@ -415,25 +415,7 @@ parameters:
 			path: app/Http/Controllers/Api/OAuthUserController.php
 
 		-
-			message: '#^Access to an undefined property App\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\User\>\:\:\$accepted_privacy\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Access to an undefined property App\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\User\>\:\:\$banned\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Access to an undefined property App\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\User\>\:\:\$id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Access to an undefined property object\:\:\$oauth\.$#'
+			message: '#^Access to an undefined property App\\User\:\:\$banned\.$#'
 			identifier: property.notFound
 			count: 1
 			path: app/Http/Controllers/Auth/LoginController.php
@@ -445,140 +427,8 @@ parameters:
 			path: app/Http/Controllers/Auth/LoginController.php
 
 		-
-			message: '#^Cannot access property \$cid on mixed\.$#'
-			identifier: property.nonObject
-			count: 3
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot access property \$country on mixed\.$#'
-			identifier: property.nonObject
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot access property \$data on mixed\.$#'
-			identifier: property.nonObject
-			count: 16
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot access property \$division on mixed\.$#'
-			identifier: property.nonObject
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot access property \$email on mixed\.$#'
-			identifier: property.nonObject
-			count: 2
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot access property \$id on mixed\.$#'
-			identifier: property.nonObject
-			count: 8
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot access property \$long on mixed\.$#'
-			identifier: property.nonObject
-			count: 2
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot access property \$name_first on mixed\.$#'
-			identifier: property.nonObject
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot access property \$name_last on mixed\.$#'
-			identifier: property.nonObject
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot access property \$personal on mixed\.$#'
-			identifier: property.nonObject
-			count: 4
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot access property \$pilotrating on mixed\.$#'
-			identifier: property.nonObject
-			count: 3
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot access property \$rating on mixed\.$#'
-			identifier: property.nonObject
-			count: 5
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
 			message: '#^Cannot access property \$reason on mixed\.$#'
 			identifier: property.nonObject
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot access property \$region on mixed\.$#'
-			identifier: property.nonObject
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot access property \$short on mixed\.$#'
-			identifier: property.nonObject
-			count: 2
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot access property \$subdivision on mixed\.$#'
-			identifier: property.nonObject
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot access property \$token_valid on mixed\.$#'
-			identifier: property.nonObject
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot access property \$vatsim on mixed\.$#'
-			identifier: property.nonObject
-			count: 9
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot call method getExpires\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot call method getRefreshToken\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot call method getToken\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Method App\\Http\\Controllers\\Auth\\LoginController\:\:completeLogin\(\) has parameter \$resourceOwner with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Method App\\Http\\Controllers\\Auth\\LoginController\:\:completeLogin\(\) has parameter \$token with no type specified\.$#'
-			identifier: missingType.parameter
 			count: 1
 			path: app/Http/Controllers/Auth/LoginController.php
 
@@ -601,7 +451,7 @@ parameters:
 			path: app/Http/Controllers/Auth/LoginController.php
 
 		-
-			message: '#^Only booleans are allowed in &&, App\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\User\>\|null given on the left side\.$#'
+			message: '#^Only booleans are allowed in &&, App\\User\|null given on the left side\.$#'
 			identifier: booleanAnd.leftNotBoolean
 			count: 2
 			path: app/Http/Controllers/Auth/LoginController.php
@@ -613,37 +463,13 @@ parameters:
 			path: app/Http/Controllers/Auth/LoginController.php
 
 		-
-			message: '#^Only booleans are allowed in a negated boolean, mixed given\.$#'
-			identifier: booleanNot.exprNotBoolean
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Parameter \#1 \$string of function mb_convert_encoding expects array\|string, mixed given\.$#'
-			identifier: argument.type
-			count: 2
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Parameter \#1 \$string of function ucfirst expects string, array\|string given\.$#'
-			identifier: argument.type
-			count: 2
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
 			message: '#^Parameter \#1 \$to of function redirect expects string\|null, mixed given\.$#'
 			identifier: argument.type
 			count: 1
 			path: app/Http/Controllers/Auth/LoginController.php
 
 		-
-			message: '#^Parameter \#1 \$user of static method Illuminate\\Support\\Facades\\Auth\:\:login\(\) expects Illuminate\\Contracts\\Auth\\Authenticatable, App\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\User\>\|null given\.$#'
+			message: '#^Parameter \#1 \$user of static method Illuminate\\Support\\Facades\\Auth\:\:login\(\) expects Illuminate\\Contracts\\Auth\\Authenticatable, App\\User\|null given\.$#'
 			identifier: argument.type
 			count: 1
 			path: app/Http/Controllers/Auth/LoginController.php

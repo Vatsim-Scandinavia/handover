@@ -6,6 +6,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Vatsim\IncompleteConsent;
+use App\Vatsim\Member;
 use App\Vatsim\VatsimConnect;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -15,6 +17,7 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
+use League\OAuth2\Client\Token\AccessToken;
 use Session;
 
 class LoginController extends Controller
@@ -50,76 +53,65 @@ class LoginController extends Controller
             return redirect()->to('/')->withError('Authentication error: '.$e->getMessage());
         }
 
-        $resourceOwner = json_decode(json_encode($this->vatsim->resourceOwner($accessToken)));
-
-        if (
-            ! isset($resourceOwner->data) ||
-            ! isset($resourceOwner->data->cid) ||
-            ! isset($resourceOwner->data->personal) ||
-            ! isset($resourceOwner->data->vatsim) ||
-            ! isset($resourceOwner->data->personal->email) ||
-            $resourceOwner->data->oauth->token_valid !== 'true'
-        ) {
+        try {
+            $member = $this->vatsim->member($accessToken);
+        } catch (IncompleteConsent) {
             return redirect()->to('/')->withError('Please grant us your full name, email address, VATSIM details, country and continious access to access our services. You will be presented with our Data Protection Policy before the data will get stored with us.');
         }
 
-        if ($resourceOwner->data->vatsim->rating->id === 0) {
+        if ($member->isSuspended()) {
             return to_route('landing')->withError('<b>Login denied.</b><br>Login was denied because you are suspended from VATSIM.');
         }
 
-        if ($resourceOwner->data->vatsim->rating->id === -1) {
+        if ($member->isInactive()) {
             return to_route('landing')->withError('<b>Login denied.</b><br>Login was denied because your account is inactive.');
         }
 
-        $user = User::find($resourceOwner->data->cid);
+        $user = User::find($member->cid);
 
-        // Check if user is banned
         if ($user && $user->banned) {
             return to_route('landing')->withError('<br>Login denied</br><br>User '.$user->id.' has been banned in '.\Config::get('app.owner_short').' for the following reason: <i>'.$user->banned->reason.'</i><br><br>For inquires contact '.\Config::get('app.owner_contact').'');
         }
 
-        // Check if user exists and accepted privacy policy
         if ($user && $user->accepted_privacy) {
-            return $this->completeLogin($resourceOwner, $accessToken);
+            return $this->completeLogin($member, $accessToken);
         }
-        session(['resourceOwner' => $resourceOwner, 'accessToken' => $accessToken]);
+        // Store nothing until the member accepts the privacy policy.
+        session(['vatsimMember' => $member, 'accessToken' => $accessToken]);
 
-        // Store CERT data temporarily
         return to_route('dpp');
     }
 
     public function validatePrivacy(Request $get)
     {
 
-        $resourceOwner = session('resourceOwner');
-        $accessToken = session('accessToken');
-        session()->forget('resourceOwner');
-        session()->forget('accessToken');
+        $member = session()->pull('vatsimMember');
+        $accessToken = session()->pull('accessToken');
 
-        if (! $resourceOwner) {
+        if (! $member instanceof Member || ! $accessToken instanceof AccessToken) {
             return to_route('landing')->withError('You need to authenticate yourself before accepting privacy policy');
         }
 
-        return $this->completeLogin($resourceOwner, $accessToken);
+        return $this->completeLogin($member, $accessToken);
     }
 
-    protected function completeLogin($resourceOwner, $token): Redirector|RedirectResponse
+    protected function completeLogin(Member $member, AccessToken $token): Redirector|RedirectResponse
     {
         User::updateOrCreate(
-            ['id' => $resourceOwner->data->cid],
-            ['email' => $resourceOwner->data->personal->email,
-                'first_name' => ucfirst(mb_convert_encoding($resourceOwner->data->personal->name_first, 'UTF-8')),
-                'last_name' => ucfirst(mb_convert_encoding($resourceOwner->data->personal->name_last, 'UTF-8')),
-                'rating' => $resourceOwner->data->vatsim->rating->id,
-                'rating_short' => $resourceOwner->data->vatsim->rating->short,
-                'rating_long' => $resourceOwner->data->vatsim->rating->long,
-                'pilot_rating' => $resourceOwner->data->vatsim->pilotrating->id,
-                'pilot_rating_short' => $resourceOwner->data->vatsim->pilotrating->short,
-                'pilot_rating_long' => $resourceOwner->data->vatsim->pilotrating->long,
-                'country' => $resourceOwner->data->personal->country->id,
-                'region' => $resourceOwner->data->vatsim->region->id,
-                'division' => $resourceOwner->data->vatsim->division->id,
-                'subdivision' => $resourceOwner->data->vatsim->subdivision->id,
+            ['id' => $member->cid],
+            ['email' => $member->email,
+                'first_name' => $member->firstName,
+                'last_name' => $member->lastName,
+                'rating' => $member->rating,
+                'rating_short' => $member->ratingShort,
+                'rating_long' => $member->ratingLong,
+                'pilot_rating' => $member->pilotRating,
+                'pilot_rating_short' => $member->pilotRatingShort,
+                'pilot_rating_long' => $member->pilotRatingLong,
+                'country' => $member->country,
+                'region' => $member->region,
+                'division' => $member->division,
+                'subdivision' => $member->subdivision,
                 'accepted_privacy' => 1,
                 'last_login' => Carbon::now(),
                 'access_token' => $token->getToken(),
@@ -129,7 +121,7 @@ class LoginController extends Controller
         );
 
         // Complete login and redirect to intended url
-        Auth::login(User::find($resourceOwner->data->cid), false);
+        Auth::login(User::find($member->cid), false);
 
         $intended = Session::pull('url.intended', route('landing'));
 
