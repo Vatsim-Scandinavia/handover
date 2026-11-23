@@ -1,0 +1,4993 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Only booleans are allowed in &&, App\\Models\\Group\|null given on the left side\.$#'
+			identifier: booleanAnd.leftNotBoolean
+			count: 1
+			path: app/Console/Commands/AddGroupAdmin.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, App\\User\|null given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: app/Console/Commands/AddGroupAdmin.php
+
+		-
+			message: '#^Cannot access property \$name on App\\Models\\Passport\\Client\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\Passport\\Client\>\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Console/Commands/DeleteClient.php
+
+		-
+			message: '#^Cannot access property \$tokens on App\\Models\\Passport\\Client\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\Passport\\Client\>\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Console/Commands/DeleteClient.php
+
+		-
+			message: '#^Cannot call method revokeRefreshTokensByAccessTokenId\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Console/Commands/DeleteClient.php
+
+		-
+			message: '#^Cannot call method update\(\) on App\\Models\\Passport\\Client\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\Passport\\Client\>\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Console/Commands/DeleteClient.php
+
+		-
+			message: '#^Parameter \#1 \$string of method Illuminate\\Console\\Command\:\:info\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Console/Commands/KeyGet.php
+
+		-
+			message: '#^Parameter \#1 \$privateKeyPem of method App\\OAuth\\SigningKeys\\SigningKeyStore\:\:import\(\) expects string, \(array\<string\>\|string\) given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Console/Commands/SigningKeysImport.php
+
+		-
+			message: '#^Parameter \#3 \$subject of function str_replace expects array\<string\>\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Console/Commands/SigningKeysImport.php
+
+		-
+			message: '#^Cannot access property \$access_token on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Cannot access property \$country on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Cannot access property \$data on mixed\.$#'
+			identifier: property.nonObject
+			count: 13
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Cannot access property \$division on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Cannot access property \$email on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Cannot access property \$expires_in on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Cannot access property \$id on mixed\.$#'
+			identifier: property.nonObject
+			count: 6
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Cannot access property \$long on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Cannot access property \$name_first on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Cannot access property \$name_last on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Cannot access property \$personal on mixed\.$#'
+			identifier: property.nonObject
+			count: 4
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Cannot access property \$pilotrating on mixed\.$#'
+			identifier: property.nonObject
+			count: 3
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Cannot access property \$rating on mixed\.$#'
+			identifier: property.nonObject
+			count: 3
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Cannot access property \$refresh_token on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Cannot access property \$region on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Cannot access property \$short on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Cannot access property \$subdivision on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Cannot access property \$vatsim on mixed\.$#'
+			identifier: property.nonObject
+			count: 9
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Cannot call method fetchUser\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Cannot call method refreshToken\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, mixed given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Parameter \#1 \$string of function mb_convert_encoding expects array\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Parameter \#1 \$string of function ucfirst expects string, array\|string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Parameter \#1 \$value of function collect expects Illuminate\\Contracts\\Support\\Arrayable\<\(int\|string\), mixed\>\|iterable\<\(int\|string\), mixed\>\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Parameter \#1 \$value of method Carbon\\Carbon\:\:addSeconds\(\) expects float\|int, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Property App\\Console\\Commands\\UpdateMemberData\:\:\$connectHelper has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Property App\\Console\\Commands\\UpdateMemberData\:\:\$controller has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Property App\\User\:\:\$access_token \(string\|null\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Property App\\User\:\:\$country \(string\|null\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Property App\\User\:\:\$division \(string\|null\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Property App\\User\:\:\$email \(string\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Property App\\User\:\:\$pilot_rating \(string\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Property App\\User\:\:\$pilot_rating_long \(string\|null\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Property App\\User\:\:\$pilot_rating_short \(string\|null\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Property App\\User\:\:\$rating \(int\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Property App\\User\:\:\$rating_long \(string\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Property App\\User\:\:\$rating_short \(string\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Property App\\User\:\:\$refresh_token \(string\|null\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Property App\\User\:\:\$region \(string\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Property App\\User\:\:\$subdivision \(string\|null\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Property App\\User\:\:\$token_expires \(int\<0, max\>\|null\) does not accept float\|int\|string\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Unable to resolve the template type TKey in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Console/Commands/UpdateMemberData.php
+
+		-
+			message: '#^Property App\\Console\\Kernel\:\:\$commands type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Console/Kernel.php
+
+		-
+			message: '#^PHPDoc type array of property App\\Exceptions\\Handler\:\:\$dontFlash is not the same as PHPDoc type array\<int, string\> of overridden property Illuminate\\Foundation\\Exceptions\\Handler\:\:\$dontFlash\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Exceptions/Handler.php
+
+		-
+			message: '#^PHPDoc type array of property App\\Exceptions\\Handler\:\:\$dontReport is not the same as PHPDoc type array\<int, class\-string\<Throwable\>\> of overridden property Illuminate\\Foundation\\Exceptions\\Handler\:\:\$dontReport\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Exceptions/Handler.php
+
+		-
+			message: '#^Property App\\Exceptions\\Handler\:\:\$dontFlash type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Exceptions/Handler.php
+
+		-
+			message: '#^Property App\\Exceptions\\Handler\:\:\$dontReport type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Exceptions/Handler.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''/api/user'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: app/Helpers/ConnectHelper.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''/oauth/token'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: app/Helpers/ConnectHelper.php
+
+		-
+			message: '#^Cannot call method get\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Helpers/ConnectHelper.php
+
+		-
+			message: '#^Cannot call method getBody\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: app/Helpers/ConnectHelper.php
+
+		-
+			message: '#^Cannot call method getStatusCode\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Helpers/ConnectHelper.php
+
+		-
+			message: '#^Cannot call method post\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Helpers/ConnectHelper.php
+
+		-
+			message: '#^Method App\\Helpers\\ConnectHelper\:\:fetchUser\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Helpers/ConnectHelper.php
+
+		-
+			message: '#^Method App\\Helpers\\ConnectHelper\:\:refreshToken\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Helpers/ConnectHelper.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Helpers/ConnectHelper.php
+
+		-
+			message: '#^Parameter \#3 \$subject of function str_replace expects array\<string\>\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Helpers/ConnectHelper.php
+
+		-
+			message: '#^Property App\\Helpers\\ConnectHelper\:\:\$baseUrl has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: app/Helpers/ConnectHelper.php
+
+		-
+			message: '#^Property App\\Helpers\\ConnectHelper\:\:\$client has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: app/Helpers/ConnectHelper.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Api\\OAuthUserController\:\:view\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Api/OAuthUserController.php
+
+		-
+			message: '#^Access to an undefined property App\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\User\>\:\:\$accepted_privacy\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Access to an undefined property App\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\User\>\:\:\$banned\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Access to an undefined property App\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\User\>\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$oauth\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 3
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot access property \$cid on mixed\.$#'
+			identifier: property.nonObject
+			count: 3
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot access property \$country on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot access property \$data on mixed\.$#'
+			identifier: property.nonObject
+			count: 16
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot access property \$division on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot access property \$email on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot access property \$id on mixed\.$#'
+			identifier: property.nonObject
+			count: 8
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot access property \$long on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot access property \$name_first on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot access property \$name_last on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot access property \$personal on mixed\.$#'
+			identifier: property.nonObject
+			count: 4
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot access property \$pilotrating on mixed\.$#'
+			identifier: property.nonObject
+			count: 3
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot access property \$rating on mixed\.$#'
+			identifier: property.nonObject
+			count: 5
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot access property \$reason on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot access property \$region on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot access property \$short on mixed\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot access property \$subdivision on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot access property \$token_valid on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot access property \$vatsim on mixed\.$#'
+			identifier: property.nonObject
+			count: 9
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot call method getAccessToken\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot call method getAuthorizationUrl\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot call method getExpires\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot call method getRefreshToken\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot call method getResourceOwner\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot call method getState\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot call method getToken\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Cannot call method toArray\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Auth\\LoginController\:\:completeLogin\(\) has parameter \$resourceOwner with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Auth\\LoginController\:\:completeLogin\(\) has parameter \$token with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Auth\\LoginController\:\:login\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Auth\\LoginController\:\:validatePrivacy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Auth\\LoginController\:\:verifyLogin\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Only booleans are allowed in &&, App\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\User\>\|null given on the left side\.$#'
+			identifier: booleanAnd.leftNotBoolean
+			count: 2
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Only booleans are allowed in &&, int given on the right side\.$#'
+			identifier: booleanAnd.rightNotBoolean
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, mixed given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Parameter \#1 \$path of method Illuminate\\Routing\\Redirector\:\:away\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Parameter \#1 \$string of function mb_convert_encoding expects array\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Parameter \#1 \$string of function ucfirst expects string, array\|string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Parameter \#1 \$to of function redirect expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Parameter \#1 \$user of static method Illuminate\\Support\\Facades\\Auth\:\:login\(\) expects Illuminate\\Contracts\\Auth\\Authenticatable, App\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\User\>\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Parameter \#2 \$array of function implode expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Property App\\Http\\Controllers\\Auth\\LoginController\:\:\$provider has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: app/Http/Controllers/Auth/LoginController.php
+
+		-
+			message: '#^Parameter \#1 \$user of method App\\Services\\AuthorizedClients\:\:for\(\) expects App\\User, App\\User\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Controller.php
+
+		-
+			message: '#^Parameter \#1 \$user of method App\\Services\\GroupMembershipResolver\:\:effectiveMembership\(\) expects App\\User, App\\User\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Controller.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/GroupAttributeDefinitionController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\GroupAttributeDefinitionController\:\:destroy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/GroupAttributeDefinitionController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\GroupAttributeDefinitionController\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/GroupAttributeDefinitionController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\GroupAttributeDefinitionController\:\:update\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/GroupAttributeDefinitionController.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, mixed given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: app/Http/Controllers/GroupAttributeDefinitionController.php
+
+		-
+			message: '#^Parameter \#1 \$attributes of method Illuminate\\Database\\Eloquent\\Model\:\:update\(\) expects array\<string, mixed\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/GroupAttributeDefinitionController.php
+
+		-
+			message: '#^Parameter \#1 \$attributes of static method Illuminate\\Database\\Eloquent\\Builder\<App\\Models\\GroupAttributeDefinition\>\:\:create\(\) expects array\<string, mixed\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/GroupAttributeDefinitionController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\GroupAttributeDefinition\:\:\$key\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Binary operation "\." between ''the OAuth client '' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Binary operation "\." between ''the OAuth clients '' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Call to function array_filter\(\) requires parameter \#2 to be passed to avoid loose comparison semantics\.$#'
+			identifier: arrayFilter.strict
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Cannot access property \$id on App\\User\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\GroupController\:\:destroy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\GroupController\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\GroupController\:\:syncAttributeValues\(\) has parameter \$attributes with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\GroupController\:\:syncTags\(\) has parameter \$tags with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\GroupController\:\:update\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\GroupController\:\:validateGroup\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\GroupController\:\:validateGroup\(\) should return array but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, mixed given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 3
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Only booleans are allowed in a ternary operator condition, mixed given\.$#'
+			identifier: ternary.condNotBoolean
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Only booleans are allowed in a ternary operator condition, string\|null given\.$#'
+			identifier: ternary.condNotBoolean
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, mixed given\.$#'
+			identifier: if.condNotBoolean
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_unique expects an array of values castable to string, array\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Parameter \#1 \$groups of method App\\Http\\Controllers\\GroupController\:\:sections\(\) expects Illuminate\\Support\\Collection\<int, App\\Models\\Group\>, Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Parameter \#1 \$groups of method App\\Support\\GroupSearch\\GroupQuery\:\:suggestions\(\) expects Illuminate\\Support\\Collection\<int, App\\Models\\Group\>, Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Parameter \#1 \$key of method App\\Models\\Group\:\:attributeValue\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Parameter \#1 \$user of method App\\Services\\GroupManagerService\:\:canManage\(\) expects App\\User, App\\User\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Parameter \#1 \$user of method App\\Services\\GroupManagerService\:\:grantingRulesFor\(\) expects App\\User, App\\User\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Parameter \#2 \$attributes of method App\\Http\\Controllers\\GroupController\:\:syncAttributeValues\(\) expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Parameter \#2 \$tags of method App\\Http\\Controllers\\GroupController\:\:syncTags\(\) expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Http/Controllers/GroupController.php
+
+		-
+			message: '#^Cannot access offset ''child_id'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: app/Http/Controllers/GroupHierarchyController.php
+
+		-
+			message: '#^Cannot access offset ''parent_id'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: app/Http/Controllers/GroupHierarchyController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\GroupHierarchyController\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/GroupHierarchyController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\GroupHierarchyController\:\:storeChild\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/GroupHierarchyController.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, mixed given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: app/Http/Controllers/GroupHierarchyController.php
+
+		-
+			message: '#^Parameter \$childId of method App\\Http\\Controllers\\GroupHierarchyController\:\:wouldCreateCycle\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/GroupHierarchyController.php
+
+		-
+			message: '#^Parameter \$parentId of method App\\Http\\Controllers\\GroupHierarchyController\:\:wouldCreateCycle\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/GroupHierarchyController.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 4
+			path: app/Http/Controllers/GroupHierarchyController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\GroupManagerRuleByAttribute\:\:\$target_attribute_key\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/GroupManagerRuleController.php
+
+		-
+			message: '#^Cannot access offset ''manager'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: app/Http/Controllers/GroupManagerRuleController.php
+
+		-
+			message: '#^Cannot access offset ''manager_group_id'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 3
+			path: app/Http/Controllers/GroupManagerRuleController.php
+
+		-
+			message: '#^Cannot access offset ''target_attribute_key'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: app/Http/Controllers/GroupManagerRuleController.php
+
+		-
+			message: '#^Cannot access offset ''target_attribute_value'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: app/Http/Controllers/GroupManagerRuleController.php
+
+		-
+			message: '#^Cannot access offset ''target_tag'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: app/Http/Controllers/GroupManagerRuleController.php
+
+		-
+			message: '#^Cannot access offset ''type'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: app/Http/Controllers/GroupManagerRuleController.php
+
+		-
+			message: '#^Match expression does not handle remaining value\: mixed$#'
+			identifier: match.unhandled
+			count: 1
+			path: app/Http/Controllers/GroupManagerRuleController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\GroupManagerRuleController\:\:destroy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/GroupManagerRuleController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\GroupManagerRuleController\:\:destroyFromOverview\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/GroupManagerRuleController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\GroupManagerRuleController\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/GroupManagerRuleController.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, mixed given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: app/Http/Controllers/GroupManagerRuleController.php
+
+		-
+			message: '#^Access to an undefined property App\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\User\>\:\:\$first_name\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/GroupMemberController.php
+
+		-
+			message: '#^Access to an undefined property App\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\User\>\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/GroupMemberController.php
+
+		-
+			message: '#^Access to an undefined property App\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\User\>\:\:\$last_name\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/GroupMemberController.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''%%'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 4
+			path: app/Http/Controllers/GroupMemberController.php
+
+		-
+			message: '#^Cannot access property \$id on App\\User\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Controllers/GroupMemberController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\GroupMemberController\:\:destroy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/GroupMemberController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\GroupMemberController\:\:store\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Http/Controllers/GroupMemberController.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, App\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\User\>\|null given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: app/Http/Controllers/GroupMemberController.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, mixed given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 2
+			path: app/Http/Controllers/GroupMemberController.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, mixed given\.$#'
+			identifier: if.condNotBoolean
+			count: 2
+			path: app/Http/Controllers/GroupMemberController.php
+
+		-
+			message: '#^Parameter \#1 \$user of method App\\Services\\GroupManagerService\:\:canManage\(\) expects App\\User, App\\User\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/GroupMemberController.php
+
+		-
+			message: '#^Part \$request\-\>cid \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: app/Http/Controllers/GroupMemberController.php
+
+		-
+			message: '#^Cannot access property \$policy on Laravel\\Passport\\Client\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Controllers/OAuth/AuthorizationController.php
+
+		-
+			message: '#^Cannot call method admits\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Controllers/OAuth/AuthorizationController.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, mixed given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: app/Http/Controllers/OAuth/AuthorizationController.php
+
+		-
+			message: '#^Parameter \#1 \$payload of method League\\OAuth2\\Server\\Exception\\OAuthServerException\:\:setPayload\(\) expects array\<string, string\>, array\<string, string\|null\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/OAuth/AuthorizationController.php
+
+		-
+			message: '#^Parameter \#2 \$policy of method App\\OAuth\\ScopeRepository\:\:allowedScopes\(\) expects App\\Models\\Passport\\ClientPolicy\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/OAuth/AuthorizationController.php
+
+		-
+			message: '#^Cannot call method allowsPostLogoutRedirectUri\(\) on App\\Models\\Passport\\ClientPolicy\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Controllers/OAuth/LogoutController.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, bool\|null given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 1
+			path: app/Http/Controllers/OAuth/LogoutController.php
+
+		-
+			message: '#^Parameter \#1 \$haystack of function str_contains expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/OAuth/LogoutController.php
+
+		-
+			message: '#^Cannot access property \$oauth_scopes on Laravel\\Passport\\Contracts\\ScopeAuthorizable\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Controllers/OAuth/UserinfoController.php
+
+		-
+			message: '#^Cannot call method can\(\) on Laravel\\Passport\\Contracts\\ScopeAuthorizable\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Controllers/OAuth/UserinfoController.php
+
+		-
+			message: '#^Cannot call method getKey\(\) on App\\User\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Controllers/OAuth/UserinfoController.php
+
+		-
+			message: '#^Cannot call method token\(\) on App\\User\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Controllers/OAuth/UserinfoController.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: app/Http/Controllers/OAuth/UserinfoController.php
+
+		-
+			message: '#^Parameter \#1 \$user of method App\\OAuth\\Oidc\\UserClaims\:\:forScopes\(\) expects App\\User, App\\User\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/OAuth/UserinfoController.php
+
+		-
+			message: '#^Parameter \#2 \$scopes of method App\\OAuth\\Oidc\\UserClaims\:\:forScopes\(\) expects list\<string\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/OAuth/UserinfoController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Passport\\Client\:\:\$grant_types\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/OAuthClientController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Passport\\Client\:\:\$redirect_uris\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/OAuthClientController.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Passport\\Client\:\:\$policy\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/OAuthClientController.php
+
+		-
+			message: '#^Anonymous function should return App\\Models\\Passport\\Client but returns Laravel\\Passport\\Client\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/OAuthClientController.php
+
+		-
+			message: '#^Cannot call method toAdminArray\(\) on App\\Models\\Passport\\ClientPolicy\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Controllers/OAuthClientController.php
+
+		-
+			message: '#^Cannot call method updateFromAdmin\(\) on App\\Models\\Passport\\ClientPolicy\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Controllers/OAuthClientController.php
+
+		-
+			message: '#^Cannot call method updateFromAdmin\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Controllers/OAuthClientController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\OAuthClientController\:\:allowedOrigin\(\) return type has no signature specified for Closure\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: app/Http/Controllers/OAuthClientController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\OAuthClientController\:\:present\(\) should return array\{id\: string, name\: string, confidential\: bool, redirect_uris\: array\<string\>, grant_types\: array\<string\>, allowed_scopes\: array\<string\>, allowed_origins\: array\<string\>, post_logout_redirect_uris\: array\<string\>, \.\.\.\} but returns array\{id\: string, name\: string, confidential\: bool, redirect_uris\: mixed, grant_types\: mixed, allowed_scopes\: list\<string\>, allowed_origins\: list\<string\>, post_logout_redirect_uris\: list\<string\>, \.\.\.\}\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/OAuthClientController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\OAuthClientController\:\:publicClientUri\(\) return type has no signature specified for Closure\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: app/Http/Controllers/OAuthClientController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\OAuthClientController\:\:validateClient\(\) should return array\{name\: string, confidential\?\: bool, redirect_uris\: array\<string\>, grant_types\?\: array\<string\>, allowed_scopes\?\: array\<string\>, allowed_origins\?\: array\<string\>, post_logout_redirect_uris\?\: array\<string\>, single_session\?\: bool, \.\.\.\} but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/OAuthClientController.php
+
+		-
+			message: '#^Only iterables can be unpacked, mixed given\.$#'
+			identifier: arrayUnpacking.nonIterable
+			count: 1
+			path: app/Http/Controllers/OAuthClientController.php
+
+		-
+			message: '#^Parameter \#1 \$attributes of method Illuminate\\Database\\Eloquent\\Model\:\:forceFill\(\) expects array\<string, mixed\>, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/OAuthClientController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>grant_types" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/OAuthClientController.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''/api/user'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: app/Http/Controllers/VatsimOAuthController.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''/oauth/authorize'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: app/Http/Controllers/VatsimOAuthController.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''/oauth/token'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: app/Http/Controllers/VatsimOAuthController.php
+
+		-
+			message: '#^Call to method getRefreshToken\(\) on an unknown class League\\OAuth2\\Client\\Token\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Http/Controllers/VatsimOAuthController.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\VatsimOAuthController\:\:updateToken\(\) should return null but returns League\\OAuth2\\Client\\Token\\AccessTokenInterface\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/VatsimOAuthController.php
+
+		-
+			message: '#^Parameter \$token of method App\\Http\\Controllers\\VatsimOAuthController\:\:updateToken\(\) has invalid type League\\OAuth2\\Client\\Token\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Http/Controllers/VatsimOAuthController.php
+
+		-
+			message: '#^PHPDoc type array of property App\\Http\\Kernel\:\:\$middleware is not the same as PHPDoc type array\<int, string\> of overridden property Illuminate\\Foundation\\Http\\Kernel\:\:\$middleware\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Http/Kernel.php
+
+		-
+			message: '#^PHPDoc type array of property App\\Http\\Kernel\:\:\$middlewareAliases is not the same as PHPDoc type array\<string, string\> of overridden property Illuminate\\Foundation\\Http\\Kernel\:\:\$middlewareAliases\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Http/Kernel.php
+
+		-
+			message: '#^PHPDoc type array of property App\\Http\\Kernel\:\:\$middlewareGroups is not the same as PHPDoc type array\<string, array\<int, string\>\> of overridden property Illuminate\\Foundation\\Http\\Kernel\:\:\$middlewareGroups\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Http/Kernel.php
+
+		-
+			message: '#^PHPDoc type array of property App\\Http\\Kernel\:\:\$middlewarePriority is not the same as PHPDoc type array\<string\> of overridden property Illuminate\\Foundation\\Http\\Kernel\:\:\$middlewarePriority\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Http/Kernel.php
+
+		-
+			message: '#^Property App\\Http\\Kernel\:\:\$middleware type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Kernel.php
+
+		-
+			message: '#^Property App\\Http\\Kernel\:\:\$middlewareAliases type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Kernel.php
+
+		-
+			message: '#^Property App\\Http\\Kernel\:\:\$middlewareGroups type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Kernel.php
+
+		-
+			message: '#^Property App\\Http\\Kernel\:\:\$middlewarePriority type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Kernel.php
+
+		-
+			message: '#^PHPDoc type array of property App\\Http\\Middleware\\CheckForMaintenanceMode\:\:\$except is not the same as PHPDoc type array\<int, string\> of overridden property Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance\:\:\$except\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Http/Middleware/CheckForMaintenanceMode.php
+
+		-
+			message: '#^Property App\\Http\\Middleware\\CheckForMaintenanceMode\:\:\$except type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Middleware/CheckForMaintenanceMode.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Passport\\Contracts\\ScopeAuthorizable\:\:\$oauth_client_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Middleware/Cors.php
+
+		-
+			message: '#^Cannot call method setVary\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Middleware/Cors.php
+
+		-
+			message: '#^Method App\\Http\\Middleware\\Cors\:\:forClient\(\) has parameter \$next with no signature specified for Closure\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: app/Http/Middleware/Cors.php
+
+		-
+			message: '#^Method App\\Http\\Middleware\\Cors\:\:forClient\(\) should return Symfony\\Component\\HttpFoundation\\Response but returns mixed\.$#'
+			identifier: return.type
+			count: 3
+			path: app/Http/Middleware/Cors.php
+
+		-
+			message: '#^Method App\\Http\\Middleware\\Cors\:\:handle\(\) has parameter \$next with no signature specified for Closure\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: app/Http/Middleware/Cors.php
+
+		-
+			message: '#^Method App\\Http\\Middleware\\Cors\:\:handle\(\) should return Symfony\\Component\\HttpFoundation\\Response but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Middleware/Cors.php
+
+		-
+			message: '#^Only booleans are allowed in an if condition, bool\|null given\.$#'
+			identifier: if.condNotBoolean
+			count: 2
+			path: app/Http/Middleware/Cors.php
+
+		-
+			message: '#^Parameter \#1 \$response of method Fruitcake\\Cors\\CorsService\:\:addActualRequestHeaders\(\) expects Symfony\\Component\\HttpFoundation\\Response, mixed given\.$#'
+			identifier: argument.type
+			count: 4
+			path: app/Http/Middleware/Cors.php
+
+		-
+			message: '#^PHPDoc type array of property App\\Http\\Middleware\\EncryptCookies\:\:\$except is not the same as PHPDoc type array\<int, string\> of overridden property Illuminate\\Cookie\\Middleware\\EncryptCookies\:\:\$except\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Http/Middleware/EncryptCookies.php
+
+		-
+			message: '#^Property App\\Http\\Middleware\\EncryptCookies\:\:\$except type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Middleware/EncryptCookies.php
+
+		-
+			message: '#^Method App\\Http\\Middleware\\EnsureUserIsAdmin\:\:handle\(\) has parameter \$next with no signature specified for Closure\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: app/Http/Middleware/EnsureUserIsAdmin.php
+
+		-
+			message: '#^Parameter \#1 \$user of method App\\Services\\GroupManagerService\:\:isAdmin\(\) expects App\\User, App\\User\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Middleware/EnsureUserIsAdmin.php
+
+		-
+			message: '#^Method App\\Http\\Middleware\\ManagesGroups\:\:handle\(\) has parameter \$next with no signature specified for Closure\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: app/Http/Middleware/ManagesGroups.php
+
+		-
+			message: '#^Parameter \#1 \$user of method App\\Services\\GroupManagerService\:\:isAdmin\(\) expects App\\User, App\\User\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Middleware/ManagesGroups.php
+
+		-
+			message: '#^Parameter \#1 \$user of method App\\Services\\GroupManagerService\:\:manageableGroupIds\(\) expects App\\User, App\\User\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Middleware/ManagesGroups.php
+
+		-
+			message: '#^Method App\\Http\\Middleware\\RedirectIfAuthenticated\:\:handle\(\) has parameter \$next with no signature specified for Closure\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: app/Http/Middleware/RedirectIfAuthenticated.php
+
+		-
+			message: '#^Method App\\Http\\Middleware\\RedirectLogoutPostToGet\:\:handle\(\) has parameter \$next with no signature specified for Closure\.$#'
+			identifier: missingType.callable
+			count: 1
+			path: app/Http/Middleware/RedirectLogoutPostToGet.php
+
+		-
+			message: '#^Method App\\Http\\Middleware\\RedirectLogoutPostToGet\:\:handle\(\) should return Symfony\\Component\\HttpFoundation\\Response but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Middleware/RedirectLogoutPostToGet.php
+
+		-
+			message: '#^Parameter \#1 \$key of method Symfony\\Component\\HttpFoundation\\ParameterBag\:\:has\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Middleware/RedirectLogoutPostToGet.php
+
+		-
+			message: '#^Cannot access property \$rating on Illuminate\\Contracts\\Auth\\Authenticatable\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Middleware/SuspendedUser.php
+
+		-
+			message: '#^PHPDoc type array of property App\\Http\\Middleware\\TrimStrings\:\:\$except is not the same as PHPDoc type array\<int, string\> of overridden property Illuminate\\Foundation\\Http\\Middleware\\TrimStrings\:\:\$except\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Http/Middleware/TrimStrings.php
+
+		-
+			message: '#^Property App\\Http\\Middleware\\TrimStrings\:\:\$except type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Middleware/TrimStrings.php
+
+		-
+			message: '#^PHPDoc type array\|string of property App\\Http\\Middleware\\TrustProxies\:\:\$proxies is not the same as PHPDoc type array\<int, string\>\|string\|null of overridden property Illuminate\\Http\\Middleware\\TrustProxies\:\:\$proxies\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Http/Middleware/TrustProxies.php
+
+		-
+			message: '#^Property App\\Http\\Middleware\\TrustProxies\:\:\$proxies type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Middleware/TrustProxies.php
+
+		-
+			message: '#^PHPDoc type array of property App\\Http\\Middleware\\VerifyCsrfToken\:\:\$except is not the same as PHPDoc type array\<int, string\> of overridden property Illuminate\\Foundation\\Http\\Middleware\\PreventRequestForgery\:\:\$except\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Http/Middleware/VerifyCsrfToken.php
+
+		-
+			message: '#^Property App\\Http\\Middleware\\VerifyCsrfToken\:\:\$except type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Middleware/VerifyCsrfToken.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\GroupResource\:\:\$attributeValues\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/GroupResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\GroupResource\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/GroupResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\GroupResource\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/GroupResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\GroupResource\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/GroupResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\GroupResource\:\:\$tags\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/GroupResource.php
+
+		-
+			message: '#^Cannot access property \$definition on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Resources/GroupResource.php
+
+		-
+			message: '#^Cannot access property \$key on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Resources/GroupResource.php
+
+		-
+			message: '#^Cannot access property \$value on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Resources/GroupResource.php
+
+		-
+			message: '#^Cannot call method mapWithKeys\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Resources/GroupResource.php
+
+		-
+			message: '#^Cannot call method pluck\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Resources/GroupResource.php
+
+		-
+			message: '#^Cannot call method toArray\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: app/Http/Resources/GroupResource.php
+
+		-
+			message: '#^Cannot call method values\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Resources/GroupResource.php
+
+		-
+			message: '#^Method App\\Http\\Resources\\GroupResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Resources/GroupResource.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: array.invalidKey
+			count: 1
+			path: app/Http/Resources/GroupResource.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserCollection\:\:\$country\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserCollection\:\:\$division\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserCollection\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserCollection\:\:\$first_name\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserCollection\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserCollection\:\:\$last_name\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserCollection\:\:\$pilot_rating\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserCollection\:\:\$pilot_rating_long\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserCollection\:\:\$pilot_rating_short\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserCollection\:\:\$rating\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserCollection\:\:\$rating_long\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserCollection\:\:\$rating_short\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserCollection\:\:\$region\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Http\\Resources\\UserCollection\:\:\$subdivision\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Call to an undefined method App\\Http\\Resources\\UserCollection\:\:tokenCan\(\)\.$#'
+			identifier: method.notFound
+			count: 16
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Method App\\Http\\Resources\\UserCollection\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Parameter \#1 \$condition of method Illuminate\\Http\\Resources\\Json\\JsonResource\:\:when\(\) expects bool, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Parameter \#1 \$user of method App\\Services\\GroupMembershipResolver\:\:effectiveMembership\(\) expects App\\User, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Part \$this\-\>first_name \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 2
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Part \$this\-\>id \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Part \$this\-\>last_name \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 2
+			path: app/Http/Resources/UserCollection.php
+
+		-
+			message: '#^Cannot access property \$key on App\\Models\\GroupAttributeDefinition\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Models/Group.php
+
+		-
+			message: '#^Class App\\Models\\Group uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/Group.php
+
+		-
+			message: '#^Class App\\Models\\GroupAttributeDefinition uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Models/GroupAttributeDefinition.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: app/Models/Passport/Client.php
+
+		-
+			message: '#^Parameter \#2 \$scopes \(array\<int, string\>\) of method App\\Models\\Passport\\Client\:\:skipsAuthorization\(\) should be compatible with parameter \$scopes \(array\<Laravel\\Passport\\Scope\>\) of method Laravel\\Passport\\Client\:\:skipsAuthorization\(\)$#'
+			identifier: method.childParameterType
+			count: 1
+			path: app/Models/Passport/Client.php
+
+		-
+			message: '#^Method App\\Models\\Passport\\ClientPolicy\:\:toAdminArray\(\) should return array\{allowed_scopes\: list\<string\>, allowed_origins\: list\<string\>, post_logout_redirect_uris\: list\<string\>, single_session\: bool, required_groups\: list\<string\>\} but returns array\{allowed_scopes\: list\<string\>, allowed_origins\: list\<string\>, post_logout_redirect_uris\: list\<string\>, single_session\: bool, required_groups\: array\<int, mixed\>\}\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/Passport/ClientPolicy.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_intersect expects an array of values castable to string, array\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Models/Passport/ClientPolicy.php
+
+		-
+			message: '#^Parameter \#1 \$attributes of method Illuminate\\Database\\Eloquent\\Model\:\:fill\(\) expects array\<string, mixed\>, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Models/Passport/ClientPolicy.php
+
+		-
+			message: '#^Property App\\Models\\Passport\\ClientPolicy\:\:\$allowed_origins \(list\<string\>\) does not accept list\<string\|null\>\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Models/Passport/ClientPolicy.php
+
+		-
+			message: '#^Parameter \#1 \$array of function reset expects array\|object, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/OAuth/Oidc/IdTokenHint.php
+
+		-
+			message: '#^Parameter \#1 \$contents of static method Lcobucci\\JWT\\Signer\\Key\\InMemory\:\:plainText\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/OAuth/Oidc/IdTokenHint.php
+
+		-
+			message: '#^Parameter \#1 \$jwt of method Lcobucci\\JWT\\Token\\Parser\:\:parse\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/OAuth/Oidc/IdTokenHint.php
+
+		-
+			message: '#^Parameter \#1 \$value of function count expects array\|Countable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/OAuth/Oidc/IdTokenHint.php
+
+		-
+			message: '#^Parameter \#1 \.\.\.\$issuers of class Lcobucci\\JWT\\Validation\\Constraint\\IssuedBy constructor expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/OAuth/Oidc/IdTokenHint.php
+
+		-
+			message: '#^Cannot access property \$auth_code_id on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/OAuth/Oidc/IdTokenResponse.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: app/OAuth/Oidc/IdTokenResponse.php
+
+		-
+			message: '#^Method App\\OAuth\\Oidc\\IdTokenResponse\:\:redeemedAuthCodeId\(\) should return string\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: app/OAuth/Oidc/IdTokenResponse.php
+
+		-
+			message: '#^Parameter \#1 \$issuer of method Lcobucci\\JWT\\Builder\:\:issuedBy\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/OAuth/Oidc/IdTokenResponse.php
+
+		-
+			message: '#^Parameter \#1 \$name of method Lcobucci\\JWT\\Builder\:\:withClaim\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/OAuth/Oidc/IdTokenResponse.php
+
+		-
+			message: '#^Parameter \#1 \$subject of method Lcobucci\\JWT\\Builder\:\:relatedTo\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/OAuth/Oidc/IdTokenResponse.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: app/OAuth/Oidc/Issuer.php
+
+		-
+			message: '#^Short ternary operator is not allowed\. Use null coalesce operator if applicable or consider using long ternary\.$#'
+			identifier: ternary.shortNotAllowed
+			count: 1
+			path: app/OAuth/Oidc/UserClaims.php
+
+		-
+			message: '#^Cannot call method getOrigin\(\) on League\\Uri\\Uri\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/OAuth/Origin.php
+
+		-
+			message: '#^Parameter \#1 \$contents of static method Lcobucci\\JWT\\Signer\\Key\\InMemory\:\:plainText\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/OAuth/SigningKeys/ActiveKeySigner.php
+
+		-
+			message: '#^Cannot access offset ''e'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: app/OAuth/SigningKeys/Jwk.php
+
+		-
+			message: '#^Cannot access offset ''n'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: app/OAuth/SigningKeys/Jwk.php
+
+		-
+			message: '#^Parameter \#1 \$data of method Lcobucci\\JWT\\Encoding\\JoseEncoder\:\:base64UrlEncode\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/OAuth/SigningKeys/Jwk.php
+
+		-
+			message: '#^Cannot access offset ''key'' on array\|false\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: app/OAuth/SigningKeys/SigningKey.php
+
+		-
+			message: '#^Method App\\OAuth\\SigningKeys\\SigningKey\:\:publicKeyPem\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: app/OAuth/SigningKeys/SigningKey.php
+
+		-
+			message: '#^Parameter \#1 \$key of function openssl_pkey_get_details expects OpenSSLAsymmetricKey, OpenSSLAsymmetricKey\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/OAuth/SigningKeys/SigningKey.php
+
+		-
+			message: '#^Method App\\OAuth\\SigningKeys\\SigningKeyStore\:\:readManifest\(\) should return array\<string, App\\OAuth\\SigningKeys\\ManifestEntry\> but returns array\<App\\OAuth\\SigningKeys\\ManifestEntry\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/OAuth/SigningKeys/SigningKeyStore.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function array_map expects \(callable\(mixed\)\: mixed\)\|null, Closure\(array\{state\: string, since\: string, imported\: bool\}\)\: App\\OAuth\\SigningKeys\\ManifestEntry given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/OAuth/SigningKeys/SigningKeyStore.php
+
+		-
+			message: '#^Parameter \#1 \$privateKeyPem of static method App\\OAuth\\SigningKeys\\Jwk\:\:fromPrivateKey\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/OAuth/SigningKeys/SigningKeyStore.php
+
+		-
+			message: '#^Parameter \#2 \$group of function chgrp expects int\|string, int\<0, max\>\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/OAuth/SigningKeys/SigningKeyStore.php
+
+		-
+			message: '#^Parameter \#2 \$pem of method App\\OAuth\\SigningKeys\\SigningKeyStore\:\:writeKeyFile\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/OAuth/SigningKeys/SigningKeyStore.php
+
+		-
+			message: '#^Parameter \#2 \$user of function chown expects int\|string, int\<0, max\>\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/OAuth/SigningKeys/SigningKeyStore.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 1
+			path: app/Policies/GroupPolicy.php
+
+		-
+			message: '#^Parameter \#1 \$name of static method Illuminate\\Support\\Facades\\Auth\:\:guard\(\) expects string\|UnitEnum\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Providers/AppServiceProvider.php
+
+		-
+			message: '#^PHPDoc type array of property App\\Providers\\AuthServiceProvider\:\:\$policies is not the same as PHPDoc type array\<class\-string, class\-string\> of overridden property Illuminate\\Foundation\\Support\\Providers\\AuthServiceProvider\:\:\$policies\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Providers/AuthServiceProvider.php
+
+		-
+			message: '#^Property App\\Providers\\AuthServiceProvider\:\:\$policies type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Providers/AuthServiceProvider.php
+
+		-
+			message: '#^PHPDoc type array of property App\\Providers\\EventServiceProvider\:\:\$listen is not the same as PHPDoc type array\<string, array\<int, string\>\> of overridden property Illuminate\\Foundation\\Support\\Providers\\EventServiceProvider\:\:\$listen\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Providers/EventServiceProvider.php
+
+		-
+			message: '#^Property App\\Providers\\EventServiceProvider\:\:\$listen type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Providers/EventServiceProvider.php
+
+		-
+			message: '#^Cannot call method active\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Providers/PassportServiceProvider.php
+
+		-
+			message: '#^Cannot call method make\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: app/Providers/PassportServiceProvider.php
+
+		-
+			message: '#^Cannot call method publicCryptKey\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Providers/PassportServiceProvider.php
+
+		-
+			message: '#^Parameter \#1 \$accessTokenRepository of class League\\OAuth2\\Server\\ResourceServer constructor expects League\\OAuth2\\Server\\Repositories\\AccessTokenRepositoryInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Providers/PassportServiceProvider.php
+
+		-
+			message: '#^Parameter \#1 \$accessTokens of class App\\OAuth\\SigningKeys\\PublishedKeysValidator constructor expects League\\OAuth2\\Server\\Repositories\\AccessTokenRepositoryInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Providers/PassportServiceProvider.php
+
+		-
+			message: '#^Parameter \#2 \$keys of class App\\OAuth\\SigningKeys\\PublishedKeysValidator constructor expects App\\OAuth\\SigningKeys\\SigningKeyStore, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Providers/PassportServiceProvider.php
+
+		-
+			message: '#^Parameter \#2 \$publicKey of class League\\OAuth2\\Server\\ResourceServer constructor expects League\\OAuth2\\Server\\CryptKeyInterface\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Providers/PassportServiceProvider.php
+
+		-
+			message: '#^PHPDoc type string of property App\\Providers\\RouteServiceProvider\:\:\$namespace is not the same as PHPDoc type string\|null of overridden property Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider\:\:\$namespace\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: app/Providers/RouteServiceProvider.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Passport\\Client\:\:\$redirect_uris\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/AuthorizedClients.php
+
+		-
+			message: '#^Cannot access offset 0 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: app/Services/AuthorizedClients.php
+
+		-
+			message: '#^Parameter \#1 \$uri of method App\\Services\\AuthorizedClients\:\:origin\(\) expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/AuthorizedClients.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\GroupManagerRuleByAttribute\:\:\$target_attribute_key\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Services/GroupManagerService.php
+
+		-
+			message: '#^Binary operation "\." between '' \(inherited via "'' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: app/Services/GroupManagerService.php
+
+		-
+			message: '#^Cannot access property \$key on App\\Models\\GroupAttributeDefinition\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Services/GroupManagerService.php
+
+		-
+			message: '#^Cannot access property \$name on App\\Models\\Group\|null\.$#'
+			identifier: property.nonObject
+			count: 3
+			path: app/Services/GroupManagerService.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 2
+			path: app/Services/GroupManagerService.php
+
+		-
+			message: '#^Method App\\Services\\GroupManagerService\:\:grantingRulesFor\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Services/GroupManagerService.php
+
+		-
+			message: '#^Method App\\Services\\GroupManagerService\:\:manageableGroupIds\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Services/GroupManagerService.php
+
+		-
+			message: '#^Method App\\Services\\GroupManagerService\:\:resolveManageableGroupIds\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Services/GroupManagerService.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_unique expects an array of values castable to string, array\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/GroupManagerService.php
+
+		-
+			message: '#^Part \$r\-\>target_attribute_key \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: app/Services/GroupManagerService.php
+
+		-
+			message: '#^Part \$version \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: app/Services/GroupManagerService.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: array.invalidKey
+			count: 1
+			path: app/Services/GroupManagerService.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 1
+			path: app/Services/GroupManagerService.php
+
+		-
+			message: '#^Method App\\Services\\GroupMembershipResolver\:\:effectiveMembership\(\) should return array\<string, string\|null\> but returns array\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Services/GroupMembershipResolver.php
+
+		-
+			message: '#^Method App\\Services\\GroupMembershipResolver\:\:transitiveMembers\(\) should return array\<int, list\<string\>\> but returns array\<non\-empty\-list\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Services/GroupMembershipResolver.php
+
+		-
+			message: '#^Parameter \#1 \$key of function array_key_exists expects int\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Services/GroupMembershipResolver.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 8
+			path: app/Services/GroupMembershipResolver.php
+
+		-
+			message: '#^Only booleans are allowed in \|\|, mixed given on the right side\.$#'
+			identifier: booleanOr.rightNotBoolean
+			count: 1
+			path: app/Support/EditMode.php
+
+		-
+			message: '#^Cannot access property \$key on App\\Models\\GroupAttributeDefinition\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Support/GroupSearch/GroupQuery.php
+
+		-
+			message: '#^Method App\\Support\\GroupSearch\\GroupQuery\:\:apply\(\) has parameter \$groups with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Support/GroupSearch/GroupQuery.php
+
+		-
+			message: '#^Method App\\Support\\GroupSearch\\GroupQuery\:\:apply\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Support/GroupSearch/GroupQuery.php
+
+		-
+			message: '#^Method App\\Support\\GroupSearch\\GroupQuery\:\:suggestions\(\) should return Illuminate\\Support\\Collection\<int, array\{term\: App\\Support\\GroupSearch\\Term, count\: int\}\> but returns Illuminate\\Support\\Collection\<int, array\{term\: App\\Support\\GroupSearch\\Term\|null, count\: int\}\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Support/GroupSearch/GroupQuery.php
+
+		-
+			message: '#^Parameter \#1 \$key of static method App\\Support\\GroupSearch\\Term\:\:attribute\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Support/GroupSearch/GroupQuery.php
+
+		-
+			message: '#^Parameter \#1 \$term of method App\\Support\\GroupSearch\\GroupQuery\:\:has\(\) expects App\\Support\\GroupSearch\\Term, App\\Support\\GroupSearch\\Term\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Support/GroupSearch/GroupQuery.php
+
+		-
+			message: '#^Method App\\Support\\GroupSearch\\Term\:\:apply\(\) has parameter \$groups with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Support/GroupSearch/Term.php
+
+		-
+			message: '#^Only booleans are allowed in &&, int\|false given on the left side\.$#'
+			identifier: booleanAnd.leftNotBoolean
+			count: 2
+			path: app/Support/GroupSearch/Term.php
+
+		-
+			message: '#^Only booleans are allowed in a ternary operator condition, int\|false given\.$#'
+			identifier: ternary.condNotBoolean
+			count: 1
+			path: app/Support/GroupSearch/Term.php
+
+		-
+			message: '#^Call to static method updateToken\(\) on an unknown class App\\OAuthController\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/User.php
+
+		-
+			message: '#^Cannot call method getExpires\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/User.php
+
+		-
+			message: '#^Cannot call method getRefreshToken\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/User.php
+
+		-
+			message: '#^Cannot call method getToken\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/User.php
+
+		-
+			message: '#^Class App\\User uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/User.php
+
+		-
+			message: '#^Method App\\User\:\:banned\(\) should return App\\BannedUser but returns Illuminate\\Database\\Eloquent\\Relations\\HasOne\<App\\BannedUser, \$this\(App\\User\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/User.php
+
+		-
+			message: '#^Method App\\User\:\:getTokenAttribute\(\) should return null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: app/User.php
+
+		-
+			message: '#^Parameter \#1 \$basePath of class Illuminate\\Foundation\\Application constructor expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: bootstrap/app.php
+
+		-
+			message: '#^Short ternary operator is not allowed\. Use null coalesce operator if applicable or consider using long ternary\.$#'
+			identifier: ternary.shortNotAllowed
+			count: 1
+			path: config/app.php
+
+		-
+			message: '#^Parameter \#1 \$title of static method Illuminate\\Support\\Str\:\:slug\(\) expects string, bool\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: config/cache.php
+
+		-
+			message: '#^Call to function array_filter\(\) requires parameter \#2 to be passed to avoid loose comparison semantics\.$#'
+			identifier: arrayFilter.strict
+			count: 1
+			path: config/database.php
+
+		-
+			message: '#^Parameter \#1 \$title of static method Illuminate\\Support\\Str\:\:slug\(\) expects string, bool\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: config/database.php
+
+		-
+			message: '#^Parameter \#1 \$title of static method Illuminate\\Support\\Str\:\:slug\(\) expects string, bool\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: config/session.php
+
+		-
+			message: '#^Parameter \#2 \$string of function explode expects string, bool\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: config/vatsim_auth.php
+
+		-
+			message: '#^Cannot call method after\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: database/migrations/2022_04_24_192019_delete_visiting_column.php
+
+		-
+			message: '#^Cannot call method dropColumn\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: database/migrations/2022_04_24_192019_delete_visiting_column.php
+
+		-
+			message: '#^Cannot call method tinyInteger\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: database/migrations/2022_04_24_192019_delete_visiting_column.php
+
+		-
+			message: '#^Cannot call method dropColumn\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: database/migrations/2022_04_24_193339_add_passport_guards.php
+
+		-
+			message: '#^Parameter \#1 \$time of static method Carbon\\Carbon\:\:parse\(\) expects Carbon\\Month\|Carbon\\WeekDay\|DateTimeInterface\|float\|int\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: database/migrations/2026_11_19_000001_cap_refresh_token_lifetimes.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$password_client\.$#'
+			identifier: property.notFound
+			count: 1
+			path: database/migrations/2026_11_19_000002_adopt_passport_13_client_schema.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$personal_access_client\.$#'
+			identifier: property.notFound
+			count: 1
+			path: database/migrations/2026_11_19_000002_adopt_passport_13_client_schema.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: database/migrations/2026_11_19_000002_adopt_passport_13_client_schema.php
+
+		-
+			message: '#^Construct empty\(\) is not allowed\. Use more strict comparison\.$#'
+			identifier: empty.notAllowed
+			count: 3
+			path: database/migrations/2026_11_19_000002_adopt_passport_13_client_schema.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: database/migrations/2026_11_19_000002_adopt_passport_13_client_schema.php
+
+		-
+			message: '#^Parameter \#2 \$array of function implode expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: database/migrations/2026_11_19_000002_adopt_passport_13_client_schema.php
+
+		-
+			message: '#^Parameter \#2 \$haystack of function in_array expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: database/migrations/2026_11_19_000002_adopt_passport_13_client_schema.php
+
+		-
+			message: '#^Parameter \#2 \$string of function explode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: database/migrations/2026_11_19_000002_adopt_passport_13_client_schema.php
+
+		-
+			message: '#^Cannot access property \$id on mixed\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: routes/channels.php
+
+		-
+			message: '#^Cannot cast mixed to int\.$#'
+			identifier: cast.int
+			count: 2
+			path: routes/channels.php
+
+		-
+			message: '#^Cannot call method middleware\(\) on Illuminate\\Routing\\Route\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: routes/oauth.php
+
+		-
+			message: '#^Method Tests\\Feature\\AuthorizedClientsTest\:\:authorizedClients\(\) should return list\<array\{name\: string, url\: string\|null\}\> but returns array\<int, array\{name\: string, url\: string\|null\}\>\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/AuthorizedClientsTest.php
+
+		-
+			message: '#^Cannot call method assertExitCode\(\) on Illuminate\\Testing\\PendingCommand\|int\.$#'
+			identifier: method.nonObject
+			count: 5
+			path: tests/Feature/Groups/AddGroupAdminCommandTest.php
+
+		-
+			message: '#^Cannot access offset ''attributes'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Feature/Groups/ApiGroupsScopeTest.php
+
+		-
+			message: '#^Cannot access offset ''tags'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Feature/Groups/ApiGroupsScopeTest.php
+
+		-
+			message: '#^Cannot access offset 0 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: tests/Feature/Groups/ApiGroupsScopeTest.php
+
+		-
+			message: '#^Class Tests\\Feature\\Groups\\GroupManagerServiceTest has an uninitialized property \$service\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: tests/Feature/Groups/GroupManagerServiceTest.php
+
+		-
+			message: '#^Parameter \#2 \$haystack of method PHPUnit\\Framework\\Assert\:\:assertStringContainsString\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/Groups/GroupManagerServiceTest.php
+
+		-
+			message: '#^Part \$version \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: tests/Feature/Groups/GroupManagerServiceTest.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Relations\\Pivot\:\:\$added_by\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Feature/Groups/GroupMemberTest.php
+
+		-
+			message: '#^Cannot access property \$pivot on \(App\\User&object\{pivot\: Illuminate\\Database\\Eloquent\\Relations\\Pivot\}\)\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/Groups/GroupMemberTest.php
+
+		-
+			message: '#^Class Tests\\Feature\\Groups\\GroupMembershipResolverTest has an uninitialized property \$resolver\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: tests/Feature/Groups/GroupMembershipResolverTest.php
+
+		-
+			message: '#^Cannot access property \$attributeValues on App\\Models\\Group\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/Groups/GroupModelTest.php
+
+		-
+			message: '#^Cannot access property \$groups on App\\User\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/Groups/GroupModelTest.php
+
+		-
+			message: '#^Cannot access property \$members on App\\Models\\Group\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/Groups/GroupModelTest.php
+
+		-
+			message: '#^Cannot access property \$tag on App\\Models\\GroupTag\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/Groups/GroupModelTest.php
+
+		-
+			message: '#^Cannot access property \$tags on App\\Models\\Group\|null\.$#'
+			identifier: property.nonObject
+			count: 2
+			path: tests/Feature/Groups/GroupModelTest.php
+
+		-
+			message: '#^Parameter \#2 \$haystack of method PHPUnit\\Framework\\Assert\:\:assertStringNotContainsString\(\) expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/Groups/GroupOverviewTest.php
+
+		-
+			message: '#^Parameter \#2 \$subject of function preg_match expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/Groups/GroupOverviewTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\Groups\\TransitiveMembersRosterTest\:\:transitiveMembers\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/Groups/TransitiveMembersRosterTest.php
+
+		-
+			message: '#^Parameter \#1 \$haystack of function substr_count expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/Groups/TransitiveMembersRosterTest.php
+
+		-
+			message: '#^Parameter \#2 \$haystack of method PHPUnit\\Framework\\Assert\:\:assertContains\(\) expects iterable, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/Groups/TransitiveMembersRosterTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\Groups\\TransitiveMembershipTest\:\:groupsBySlug\(\) has parameter \$groups with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/Groups/TransitiveMembershipTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\Groups\\TransitiveMembershipTest\:\:groupsBySlug\(\) should return array\<string, array\<string, mixed\>\> but returns array\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/Groups/TransitiveMembershipTest.php
+
+		-
+			message: '#^Parameter \#1 \$groups of method Tests\\Feature\\Groups\\TransitiveMembershipTest\:\:groupsBySlug\(\) expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/Groups/TransitiveMembershipTest.php
+
+		-
+			message: '#^Binary operation "\." between ''images/logos/'' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: tests/Feature/LayoutTest.php
+
+		-
+			message: '#^Binary operation "\." between ''mailto\:'' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: tests/Feature/LayoutTest.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Passport\\Client\:\:\$policy\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Cannot call method assertSuccessful\(\) on Illuminate\\Testing\\PendingCommand\|int\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Cannot call method update\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 5
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:authorizeCode\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:authorizeCode\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:authorizeRequest\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:authorizeRequest\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:bearerJson\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:callApi\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:exchangeCode\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:exchangeCode\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:jwtHeader\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:jwtPayload\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:redirectQuery\(\) has parameter \$response with generic class Illuminate\\Testing\\TestResponse but does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:redirectQuery\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:refresh\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:refresh\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:signIn\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:signIn\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:signIn\(\) should return array but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Parameter \#1 \$accessToken of method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:callApi\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 5
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Parameter \#1 \$contents of static method Lcobucci\\JWT\\Signer\\Key\\InMemory\:\:plainText\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Parameter \#1 \$id of method Lcobucci\\JWT\\Builder\:\:identifiedBy\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Parameter \#1 \$identifier of class Laravel\\Passport\\Bridge\\Client constructor expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Parameter \#1 \$jwt of method Lcobucci\\JWT\\Token\\Parser\:\:parse\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Parameter \#1 \$jwt of method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:jwtHeader\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Parameter \#1 \$key of static method phpseclib4\\Crypt\\PublicKeyLoader\:\:load\(\) expects array\|string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Parameter \#1 \$string of function parse_str expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Parameter \#1 \$subject of method Lcobucci\\JWT\\Builder\:\:relatedTo\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Parameter \#1 \$url of function parse_url expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Parameter \#1 \$userIdentifier of class App\\OAuth\\AccessToken constructor expects non\-empty\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Parameter \#1 \$userIdentifier of class Laravel\\Passport\\Bridge\\AccessToken constructor expects non\-empty\-string\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of function collect expects Illuminate\\Contracts\\Support\\Arrayable\<\(int\|string\), mixed\>\|iterable\<\(int\|string\), mixed\>\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Parameter \#1 \.\.\.\$audiences of method Lcobucci\\JWT\\Builder\:\:permittedFor\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Parameter \#2 \$refreshToken of method Tests\\Feature\\OAuth\\AccessTokenSigningTest\:\:refresh\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Part \$kid \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Unable to resolve the template type TKey in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuth/AccessTokenSigningTest.php
+
+		-
+			message: '#^Cannot access offset ''country'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Feature/OAuth/ApiV1AliasTest.php
+
+		-
+			message: '#^Cannot access offset ''data'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: tests/Feature/OAuth/ApiV1AliasTest.php
+
+		-
+			message: '#^Cannot access offset ''name'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Feature/OAuth/ApiV1AliasTest.php
+
+		-
+			message: '#^Cannot access offset ''oauth'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Feature/OAuth/ApiV1AliasTest.php
+
+		-
+			message: '#^Cannot access offset ''personal'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Feature/OAuth/ApiV1AliasTest.php
+
+		-
+			message: '#^Cannot access offset ''token_valid'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Feature/OAuth/ApiV1AliasTest.php
+
+		-
+			message: '#^Cannot access property \$expires_at on array\<mixed\>\|object\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/OAuth/CapRefreshTokensMigrationTest.php
+
+		-
+			message: '#^Cannot access property \$revoked on array\<mixed\>\|object\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/OAuth/CapRefreshTokensMigrationTest.php
+
+		-
+			message: '#^Cannot call method up\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/Feature/OAuth/CapRefreshTokensMigrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$time of static method Carbon\\Carbon\:\:parse\(\) expects Carbon\\Month\|Carbon\\WeekDay\|DateTimeInterface\|float\|int\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/CapRefreshTokensMigrationTest.php
+
+		-
+			message: '#^Cannot call method down\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: tests/Feature/OAuth/ClientPolicyMigrationTest.php
+
+		-
+			message: '#^Cannot call method up\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: tests/Feature/OAuth/ClientPolicyMigrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyMigrationTest.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Passport\\ClientPolicy\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\Passport\\ClientPolicy\>\:\:\$requiredGroups\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Passport\\ClientPolicy\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\Passport\\ClientPolicy\>\:\:\$single_session\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Passport\\Client\:\:\$policy\.$#'
+			identifier: property.notFound
+			count: 7
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Cannot call method attach\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Cannot call method requiredGroups\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Cannot call method update\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 6
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientPolicyTest\:\:authorizeCode\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientPolicyTest\:\:authorizeCode\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientPolicyTest\:\:authorizeRequest\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientPolicyTest\:\:authorizeRequest\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientPolicyTest\:\:bearerJson\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientPolicyTest\:\:clientRequiring\(\) should return App\\Models\\Passport\\Client but returns Laravel\\Passport\\Client\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientPolicyTest\:\:exchangeCode\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientPolicyTest\:\:exchangeCode\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientPolicyTest\:\:jwtHeader\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientPolicyTest\:\:jwtPayload\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientPolicyTest\:\:redirectQuery\(\) has parameter \$response with generic class Illuminate\\Testing\\TestResponse but does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientPolicyTest\:\:redirectQuery\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientPolicyTest\:\:refresh\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientPolicyTest\:\:refresh\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientPolicyTest\:\:signIn\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientPolicyTest\:\:signIn\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientPolicyTest\:\:signIn\(\) should return array but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Parameter \#1 \$contents of static method Lcobucci\\JWT\\Signer\\Key\\InMemory\:\:plainText\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Parameter \#1 \$jwt of method Lcobucci\\JWT\\Token\\Parser\:\:parse\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Parameter \#1 \$jwt of method Tests\\Feature\\OAuth\\ClientPolicyTest\:\:jwtPayload\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Parameter \#1 \$key of static method phpseclib4\\Crypt\\PublicKeyLoader\:\:load\(\) expects array\|string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Parameter \#1 \$prefix of method PHPUnit\\Framework\\Assert\:\:assertStringStartsWith\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Parameter \#1 \$string of function parse_str expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Parameter \#1 \$url of function parse_url expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of function collect expects Illuminate\\Contracts\\Support\\Arrayable\<\(int\|string\), mixed\>\|iterable\<\(int\|string\), mixed\>\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Parameter \#2 \$refreshToken of method Tests\\Feature\\OAuth\\ClientPolicyTest\:\:refresh\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 6
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Parameter \#2 \$string of method PHPUnit\\Framework\\Assert\:\:assertStringStartsWith\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Part \$kid \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Unable to resolve the template type TKey in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuth/ClientPolicyTest.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Passport\\Client\:\:\$grant_types\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Passport\\Client\:\:\$policy\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Passport\\Client\:\:\$redirect_uris\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Call to an undefined method object\:\:down\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Call to an undefined method object\:\:up\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Cannot access property \$grant_types on array\<mixed\>\|object\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Cannot access property \$owner_id on array\<mixed\>\|object\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Cannot access property \$owner_type on array\<mixed\>\|object\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Cannot access property \$plainSecret on Laravel\\Passport\\Client\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Cannot access property \$redirect_uris on array\<mixed\>\|object\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Cannot call method update\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:authorizeCode\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:authorizeCode\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:authorizeRequest\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:authorizeRequest\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:bearerJson\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:exchangeCode\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:exchangeCode\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:jwtHeader\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:jwtPayload\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:migration\(\) should return object but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:redirectQuery\(\) has parameter \$response with generic class Illuminate\\Testing\\TestResponse but does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:redirectQuery\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:refresh\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:refresh\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:signIn\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:signIn\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:signIn\(\) should return array but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$client of method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:refresh\(\) expects Laravel\\Passport\\Client, Laravel\\Passport\\Client\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$contents of static method Lcobucci\\JWT\\Signer\\Key\\InMemory\:\:plainText\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$jwt of method Lcobucci\\JWT\\Token\\Parser\:\:parse\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$key of static method phpseclib4\\Crypt\\PublicKeyLoader\:\:load\(\) expects array\|string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$string of function parse_str expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$string of function str expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$url of function parse_url expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of function collect expects Illuminate\\Contracts\\Support\\Arrayable\<\(int\|string\), mixed\>\|iterable\<\(int\|string\), mixed\>\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Parameter \#2 \$client of method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:signIn\(\) expects Laravel\\Passport\\Client, Laravel\\Passport\\Client\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Parameter \#2 \$refreshToken of method Tests\\Feature\\OAuth\\ClientSchemaMigrationTest\:\:refresh\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Part \$kid \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Unable to resolve the template type TKey in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuth/ClientSchemaMigrationTest.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Passport\\Client\:\:\$policy\.$#'
+			identifier: property.notFound
+			count: 2
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Cannot call method update\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Class Tests\\Feature\\OAuth\\CorsTest has an uninitialized property \$client\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:accessToken\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:assertNoCors\(\) has parameter \$response with generic class Illuminate\\Testing\\TestResponse but does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:authorizeCode\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:authorizeCode\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:authorizeRequest\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:authorizeRequest\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:bearerJson\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:exchangeCode\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:exchangeCode\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:exchangeFrom\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:jwtHeader\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:jwtPayload\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:preflight\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:redirectQuery\(\) has parameter \$response with generic class Illuminate\\Testing\\TestResponse but does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:redirectQuery\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:refresh\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:refresh\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:signIn\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:signIn\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:signIn\(\) should return array but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\CorsTest\:\:userinfoFrom\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Parameter \#1 \$contents of static method Lcobucci\\JWT\\Signer\\Key\\InMemory\:\:plainText\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Parameter \#1 \$jwt of method Lcobucci\\JWT\\Token\\Parser\:\:parse\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Parameter \#1 \$key of static method phpseclib4\\Crypt\\PublicKeyLoader\:\:load\(\) expects array\|string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Parameter \#1 \$string of function parse_str expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Parameter \#1 \$url of function parse_url expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of function collect expects Illuminate\\Contracts\\Support\\Arrayable\<\(int\|string\), mixed\>\|iterable\<\(int\|string\), mixed\>\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Parameter \#2 \$accessToken of method Tests\\Feature\\OAuth\\CorsTest\:\:userinfoFrom\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Part \$kid \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Unable to resolve the template type TKey in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuth/CorsTest.php
+
+		-
+			message: '#^Call to an undefined method object\:\:down\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/Feature/OAuth/DropLegacyClientColumnsMigrationTest.php
+
+		-
+			message: '#^Call to an undefined method object\:\:up\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Feature/OAuth/DropLegacyClientColumnsMigrationTest.php
+
+		-
+			message: '#^Cannot access property \$grant_types on array\<mixed\>\|object\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/OAuth/DropLegacyClientColumnsMigrationTest.php
+
+		-
+			message: '#^Cannot access property \$name on array\<mixed\>\|object\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/OAuth/DropLegacyClientColumnsMigrationTest.php
+
+		-
+			message: '#^Cannot access property \$redirect_uris on array\<mixed\>\|object\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/OAuth/DropLegacyClientColumnsMigrationTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\DropLegacyClientColumnsMigrationTest\:\:migration\(\) should return object but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/DropLegacyClientColumnsMigrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$cookieName of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertCookieMissing\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/JwksTest.php
+
+		-
+			message: '#^Cannot access offset ''scopes_supported'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Feature/OAuth/OidcDiscoveryTest.php
+
+		-
+			message: '#^Parameter \#1 \$array of static method Illuminate\\Support\\Arr\:\:except\(\) expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcDiscoveryTest.php
+
+		-
+			message: '#^Parameter \#1 \$cookieName of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertCookieMissing\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcDiscoveryTest.php
+
+		-
+			message: '#^Parameter \#1 \$string of function rtrim expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcDiscoveryTest.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$arrays of function array_diff expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcDiscoveryTest.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Passport\\Client\:\:\$policy\.$#'
+			identifier: property.notFound
+			count: 2
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Cannot call method update\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcSignInTest\:\:authorizeCode\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcSignInTest\:\:authorizeCode\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcSignInTest\:\:authorizeRequest\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcSignInTest\:\:authorizeRequest\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcSignInTest\:\:bearerJson\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcSignInTest\:\:exchangeCode\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcSignInTest\:\:exchangeCode\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcSignInTest\:\:jwtHeader\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcSignInTest\:\:jwtPayload\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcSignInTest\:\:redirectQuery\(\) has parameter \$response with generic class Illuminate\\Testing\\TestResponse but does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcSignInTest\:\:redirectQuery\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcSignInTest\:\:refresh\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcSignInTest\:\:refresh\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcSignInTest\:\:signIn\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcSignInTest\:\:signIn\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcSignInTest\:\:signIn\(\) should return array but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$accessToken of method Tests\\Feature\\OAuth\\OidcSignInTest\:\:atHash\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$contents of static method Lcobucci\\JWT\\Signer\\Key\\InMemory\:\:plainText\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$jwt of method Lcobucci\\JWT\\Token\\Parser\:\:parse\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$jwt of method Tests\\Feature\\OAuth\\OidcSignInTest\:\:assertJwtVerifiesAgainstTheJwks\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$jwt of method Tests\\Feature\\OAuth\\OidcSignInTest\:\:jwtHeader\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$jwt of method Tests\\Feature\\OAuth\\OidcSignInTest\:\:jwtPayload\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 9
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$key of static method phpseclib4\\Crypt\\PublicKeyLoader\:\:load\(\) expects array\|string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$string of function parse_str expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$string of function rtrim expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$url of function parse_url expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of function collect expects Illuminate\\Contracts\\Support\\Arrayable\<\(int\|string\), mixed\>\|iterable\<\(int\|string\), mixed\>\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Parameter \#2 \$array of method PHPUnit\\Framework\\Assert\:\:assertArrayHasKey\(\) expects array\<mixed\>\|ArrayAccess\<\(int\|string\), covariant mixed\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Parameter \#2 \$array of method PHPUnit\\Framework\\Assert\:\:assertArrayNotHasKey\(\) expects array\<mixed\>\|ArrayAccess\<\(int\|string\), covariant mixed\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Parameter \#2 \$refreshToken of method Tests\\Feature\\OAuth\\OidcSignInTest\:\:refresh\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Parameter \#3 \$accessToken of method Tests\\Feature\\OAuth\\OidcSignInTest\:\:bearerJson\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Part \$kid \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Unable to resolve the template type TKey in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuth/OidcSignInTest.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Passport\\Client\:\:\$policy\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Cannot call method update\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcUserinfoTest\:\:authorizeCode\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcUserinfoTest\:\:authorizeCode\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcUserinfoTest\:\:authorizeRequest\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcUserinfoTest\:\:authorizeRequest\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcUserinfoTest\:\:bearerJson\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcUserinfoTest\:\:exchangeCode\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcUserinfoTest\:\:exchangeCode\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcUserinfoTest\:\:jwtHeader\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcUserinfoTest\:\:jwtPayload\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcUserinfoTest\:\:redirectQuery\(\) has parameter \$response with generic class Illuminate\\Testing\\TestResponse but does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcUserinfoTest\:\:redirectQuery\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcUserinfoTest\:\:refresh\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcUserinfoTest\:\:refresh\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcUserinfoTest\:\:signIn\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcUserinfoTest\:\:signIn\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\OidcUserinfoTest\:\:signIn\(\) should return array but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Parameter \#1 \$contents of static method Lcobucci\\JWT\\Signer\\Key\\InMemory\:\:plainText\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Parameter \#1 \$jwt of method Lcobucci\\JWT\\Token\\Parser\:\:parse\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Parameter \#1 \$jwt of method Tests\\Feature\\OAuth\\OidcUserinfoTest\:\:jwtPayload\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Parameter \#1 \$key of static method phpseclib4\\Crypt\\PublicKeyLoader\:\:load\(\) expects array\|string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Parameter \#1 \$string of function parse_str expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Parameter \#1 \$url of function parse_url expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of function collect expects Illuminate\\Contracts\\Support\\Arrayable\<\(int\|string\), mixed\>\|iterable\<\(int\|string\), mixed\>\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Parameter \#3 \$accessToken of method Tests\\Feature\\OAuth\\OidcUserinfoTest\:\:bearerJson\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 4
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Part \$kid \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Unable to resolve the template type TKey in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuth/OidcUserinfoTest.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Passport\\Client\:\:\$policy\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Cannot access offset ''refresh_token'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 5
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Cannot call method update\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\PublicClientSignInTest\:\:authorizeCode\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\PublicClientSignInTest\:\:authorizeCode\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\PublicClientSignInTest\:\:authorizeRequest\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\PublicClientSignInTest\:\:authorizeRequest\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\PublicClientSignInTest\:\:bearerJson\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\PublicClientSignInTest\:\:exchangeCode\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\PublicClientSignInTest\:\:exchangeCode\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\PublicClientSignInTest\:\:jwtHeader\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\PublicClientSignInTest\:\:jwtPayload\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\PublicClientSignInTest\:\:redirectQuery\(\) has parameter \$response with generic class Illuminate\\Testing\\TestResponse but does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\PublicClientSignInTest\:\:redirectQuery\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\PublicClientSignInTest\:\:refresh\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\PublicClientSignInTest\:\:refresh\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\PublicClientSignInTest\:\:signIn\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\PublicClientSignInTest\:\:signIn\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\PublicClientSignInTest\:\:signIn\(\) should return array but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$contents of static method Lcobucci\\JWT\\Signer\\Key\\InMemory\:\:plainText\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$date of method Carbon\\Carbon\:\:diffInSeconds\(\) expects DateTimeInterface\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$jwt of method Lcobucci\\JWT\\Token\\Parser\:\:parse\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$key of static method phpseclib4\\Crypt\\PublicKeyLoader\:\:load\(\) expects array\|string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$string of function parse_str expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$url of function parse_url expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of function collect expects Illuminate\\Contracts\\Support\\Arrayable\<\(int\|string\), mixed\>\|iterable\<\(int\|string\), mixed\>\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Parameter \#2 \$refreshToken of method Tests\\Feature\\OAuth\\PublicClientSignInTest\:\:refresh\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Part \$kid \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Unable to resolve the template type TKey in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuth/PublicClientSignInTest.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Passport\\Client\:\:\$policy\.$#'
+			identifier: property.notFound
+			count: 4
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Binary operation "\." between ''name\="client_id"…'' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Cannot call method update\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 4
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 2
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Class Tests\\Feature\\OAuth\\RpInitiatedLogoutTest has an uninitialized property \$client\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Class Tests\\Feature\\OAuth\\RpInitiatedLogoutTest has an uninitialized property \$user\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\RpInitiatedLogoutTest\:\:authorizeCode\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\RpInitiatedLogoutTest\:\:authorizeCode\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\RpInitiatedLogoutTest\:\:authorizeRequest\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\RpInitiatedLogoutTest\:\:authorizeRequest\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\RpInitiatedLogoutTest\:\:bearerJson\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\RpInitiatedLogoutTest\:\:exchangeCode\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\RpInitiatedLogoutTest\:\:exchangeCode\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\RpInitiatedLogoutTest\:\:jwtHeader\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\RpInitiatedLogoutTest\:\:jwtPayload\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\RpInitiatedLogoutTest\:\:logout\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\RpInitiatedLogoutTest\:\:postFromHandover\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\RpInitiatedLogoutTest\:\:redirectQuery\(\) has parameter \$response with generic class Illuminate\\Testing\\TestResponse but does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\RpInitiatedLogoutTest\:\:redirectQuery\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\RpInitiatedLogoutTest\:\:refresh\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\RpInitiatedLogoutTest\:\:refresh\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\RpInitiatedLogoutTest\:\:signIn\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\RpInitiatedLogoutTest\:\:signIn\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\RpInitiatedLogoutTest\:\:signIn\(\) should return array but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Parameter \#1 \$contents of static method Lcobucci\\JWT\\Signer\\Key\\InMemory\:\:plainText\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Parameter \#1 \$cookieName of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:assertCookieMissing\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Parameter \#1 \$data of method Tests\\Feature\\OAuth\\RpInitiatedLogoutTest\:\:postFromHandover\(\) expects array\<string, string\>, array\<string, mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Parameter \#1 \$issuer of method Lcobucci\\JWT\\Builder\:\:issuedBy\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Parameter \#1 \$jwt of method Lcobucci\\JWT\\Token\\Parser\:\:parse\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Parameter \#1 \$key of static method phpseclib4\\Crypt\\PublicKeyLoader\:\:load\(\) expects array\|string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Parameter \#1 \$name of method Illuminate\\Foundation\\Testing\\TestCase\:\:withCookie\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Parameter \#1 \$string of function parse_str expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Parameter \#1 \$subject of method Lcobucci\\JWT\\Builder\:\:relatedTo\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Parameter \#1 \$url of function parse_url expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of function collect expects Illuminate\\Contracts\\Support\\Arrayable\<\(int\|string\), mixed\>\|iterable\<\(int\|string\), mixed\>\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Parameter \#1 \.\.\.\$audiences of method Lcobucci\\JWT\\Builder\:\:permittedFor\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Part \$kid \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Unable to resolve the template type TKey in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuth/RpInitiatedLogoutTest.php
+
+		-
+			message: '#^Cannot access offset ''bits'' on array\|false\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Feature/OAuth/SigningKeyImportTest.php
+
+		-
+			message: '#^Cannot access property \$state on App\\OAuth\\SigningKeys\\SigningKey\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/OAuth/SigningKeyImportTest.php
+
+		-
+			message: '#^Cannot call method assertSuccessful\(\) on Illuminate\\Testing\\PendingCommand\|int\.$#'
+			identifier: method.nonObject
+			count: 6
+			path: tests/Feature/OAuth/SigningKeyImportTest.php
+
+		-
+			message: '#^Cannot call method expectsOutputToContain\(\) on Illuminate\\Testing\\PendingCommand\|int\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: tests/Feature/OAuth/SigningKeyImportTest.php
+
+		-
+			message: '#^Cannot call method up\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/Feature/OAuth/SigningKeyImportTest.php
+
+		-
+			message: '#^Parameter \#1 \$key of function openssl_pkey_get_details expects OpenSSLAsymmetricKey, OpenSSLAsymmetricKey\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/SigningKeyImportTest.php
+
+		-
+			message: '#^Cannot access offset ''bits'' on array\|false\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Feature/OAuth/SigningKeyRotationTest.php
+
+		-
+			message: '#^Cannot access property \$privateKeyPem on App\\OAuth\\SigningKeys\\SigningKey\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/OAuth/SigningKeyRotationTest.php
+
+		-
+			message: '#^Cannot access property \$state on App\\OAuth\\SigningKeys\\SigningKey\|null\.$#'
+			identifier: property.nonObject
+			count: 3
+			path: tests/Feature/OAuth/SigningKeyRotationTest.php
+
+		-
+			message: '#^Cannot call method assertFailed\(\) on Illuminate\\Testing\\PendingCommand\|int\.$#'
+			identifier: method.nonObject
+			count: 8
+			path: tests/Feature/OAuth/SigningKeyRotationTest.php
+
+		-
+			message: '#^Cannot call method assertSuccessful\(\) on Illuminate\\Testing\\PendingCommand\|int\.$#'
+			identifier: method.nonObject
+			count: 8
+			path: tests/Feature/OAuth/SigningKeyRotationTest.php
+
+		-
+			message: '#^Cannot call method expectsTable\(\) on Illuminate\\Testing\\PendingCommand\|int\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/Feature/OAuth/SigningKeyRotationTest.php
+
+		-
+			message: '#^Parameter \#1 \$key of function openssl_pkey_get_details expects OpenSSLAsymmetricKey, OpenSSLAsymmetricKey\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/SigningKeyRotationTest.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Passport\\Client\:\:\$policy\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Cannot access offset ''refresh_token'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Cannot call method update\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\TokenLifetimeTest\:\:authorizeCode\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\TokenLifetimeTest\:\:authorizeCode\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\TokenLifetimeTest\:\:authorizeRequest\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\TokenLifetimeTest\:\:authorizeRequest\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\TokenLifetimeTest\:\:bearerJson\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\TokenLifetimeTest\:\:exchangeCode\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\TokenLifetimeTest\:\:exchangeCode\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\TokenLifetimeTest\:\:jwtHeader\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\TokenLifetimeTest\:\:jwtPayload\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\TokenLifetimeTest\:\:redirectQuery\(\) has parameter \$response with generic class Illuminate\\Testing\\TestResponse but does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\TokenLifetimeTest\:\:redirectQuery\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\TokenLifetimeTest\:\:refresh\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\TokenLifetimeTest\:\:refresh\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\TokenLifetimeTest\:\:signIn\(\) has parameter \$params with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\TokenLifetimeTest\:\:signIn\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuth\\TokenLifetimeTest\:\:signIn\(\) should return array but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Parameter \#1 \$contents of static method Lcobucci\\JWT\\Signer\\Key\\InMemory\:\:plainText\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Parameter \#1 \$jwt of method Lcobucci\\JWT\\Token\\Parser\:\:parse\(\) expects non\-empty\-string, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Parameter \#1 \$key of static method phpseclib4\\Crypt\\PublicKeyLoader\:\:load\(\) expects array\|string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Parameter \#1 \$string of function parse_str expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Parameter \#1 \$time of static method Carbon\\Carbon\:\:parse\(\) expects Carbon\\Month\|Carbon\\WeekDay\|DateTimeInterface\|float\|int\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Parameter \#1 \$url of function parse_url expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of function collect expects Illuminate\\Contracts\\Support\\Arrayable\<\(int\|string\), mixed\>\|iterable\<\(int\|string\), mixed\>\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Parameter \#2 \$refreshToken of method Tests\\Feature\\OAuth\\TokenLifetimeTest\:\:refresh\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Part \$kid \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Unable to resolve the template type TKey in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuth/TokenLifetimeTest.php
+
+		-
+			message: '#^Cannot access offset ''allowed_scopes'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Cannot access offset ''grant_types'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Cannot access offset ''id'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 4
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Cannot access offset ''redirect_uris'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Cannot access offset ''required_groups'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Cannot access offset ''single_session'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Cannot access offset 0 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Cannot access property \$id on App\\Models\\Group\|null\.$#'
+			identifier: property.nonObject
+			count: 6
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Cannot access property \$redirect_uris on Illuminate\\Database\\Eloquent\\Collection\<int, Laravel\\Passport\\Client\>\|Laravel\\Passport\\Client\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuthClientManagementTest\:\:createClientViaApi\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\OAuthClientManagementTest\:\:createClientViaApi\(\) should return array but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_column expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Parameter \#1 \$key of method Illuminate\\Testing\\TestResponse\<Symfony\\Component\\HttpFoundation\\Response\>\:\:json\(\) expects string\|null, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of function collect expects Illuminate\\Contracts\\Support\\Arrayable\<\(int\|string\), mixed\>\|iterable\<\(int\|string\), mixed\>\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of static method Illuminate\\Support\\Facades\\Hash\:\:check\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Parameter \#2 \$array of method PHPUnit\\Framework\\Assert\:\:assertArrayNotHasKey\(\) expects array\<mixed\>\|ArrayAccess\<\(int\|string\), covariant mixed\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Parameter \#2 \$hashedValue of static method Illuminate\\Support\\Facades\\Hash\:\:check\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Parameter \#2 \$haystack of method PHPUnit\\Framework\\Assert\:\:assertCount\(\) expects Countable\|iterable, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Unable to resolve the template type TKey in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/Feature/OAuthClientManagementTest.php
+
+		-
+			message: '#^Cannot access property \$grant_types on Laravel\\Passport\\Client\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/Passport/ClientCreationTest.php
+
+		-
+			message: '#^Cannot access property \$owner_id on Laravel\\Passport\\Client\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/Passport/ClientCreationTest.php
+
+		-
+			message: '#^Cannot access property \$redirect_uris on Laravel\\Passport\\Client\|null\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: tests/Feature/Passport/ClientCreationTest.php
+
+		-
+			message: '#^Binary operation "\." between ''Bearer '' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: tests/Feature/Passport/OAuthFlowTest.php
+
+		-
+			message: '#^Parameter \#1 \$string of function parse_str expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/Passport/OAuthFlowTest.php
+
+		-
+			message: '#^Parameter \#1 \$url of function parse_url expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Feature/Passport/OAuthFlowTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\PublicClientManagementTest\:\:createPublicClient\(\) has parameter \$fields with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/PublicClientManagementTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\PublicClientManagementTest\:\:createPublicClient\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/PublicClientManagementTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\PublicClientManagementTest\:\:updateClient\(\) has parameter \$fields with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Feature/PublicClientManagementTest.php
+
+		-
+			message: '#^Method Tests\\Feature\\PublicClientManagementTest\:\:updateClient\(\) return type with generic class Illuminate\\Testing\\TestResponse does not specify its types\: TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Feature/PublicClientManagementTest.php
+
+		-
+			message: '#^Parameter \#1 \$id of method Tests\\Feature\\PublicClientManagementTest\:\:updateClient\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 4
+			path: tests/Feature/PublicClientManagementTest.php
+
+		-
+			message: '#^Cannot access offset ''key'' on array\|false\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Cannot call method assertSuccessful\(\) on Illuminate\\Testing\\PendingCommand\|int\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: tests/TestCase.php
+
+		-
+			message: '#^Cannot call method bootstrap\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Cannot call method make\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Class Tests\\TestCase has an uninitialized property \$keyDirectory\. Give it default value or assign it in the constructor\.$#'
+			identifier: property.uninitialized
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Method Tests\\TestCase\:\:bootApplication\(\) should return Illuminate\\Foundation\\Application but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Method Tests\\TestCase\:\:jwksKids\(\) should return list\<string\> but returns list\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Method Tests\\TestCase\:\:newPrivateKey\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_column expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Parameter \#1 \$key of function openssl_pkey_export expects array\|OpenSSLAsymmetricKey\|OpenSSLCertificate\|string, OpenSSLAsymmetricKey\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Parameter \#1 \$key of function openssl_pkey_get_details expects OpenSSLAsymmetricKey, OpenSSLAsymmetricKey\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Parameter \#2 \$contents of static method Illuminate\\Support\\Facades\\File\:\:put\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertTrue\(\) with true will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/Unit/ExampleTest.php
