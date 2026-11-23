@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\OAuth\SigningKeys;
 
 use Carbon\CarbonImmutable;
@@ -14,8 +16,7 @@ final readonly class ManifestEntry
         public KeyState $state,
         public CarbonImmutable $since,
         public bool $imported = false,
-    ) {
-    }
+    ) {}
 
     /** An entry for a key entering $state now. */
     public static function now(KeyState $state, bool $imported = false): self

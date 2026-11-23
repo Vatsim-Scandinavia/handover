@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -65,8 +67,8 @@ return new class extends Migration
 
             DB::table('oauth_clients')->where('id', $client->id)->update([
                 'redirect' => implode(',', json_decode($client->redirect_uris, true)),
-                'personal_access_client' => in_array('personal_access', $grantTypes),
-                'password_client' => in_array('password', $grantTypes),
+                'personal_access_client' => in_array('personal_access', $grantTypes, true),
+                'password_client' => in_array('password', $grantTypes, true),
             ]);
         }
 

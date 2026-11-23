@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use League\OAuth2\Client\Token;
-use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
+use League\OAuth2\Client\Provider\GenericProvider;
+use League\OAuth2\Client\Token;
 
 class VatsimOAuthController extends GenericProvider
 {
@@ -14,20 +16,21 @@ class VatsimOAuthController extends GenericProvider
     public function __construct()
     {
         parent::__construct([
-            'clientId'                => config('vatsim_auth.id'),    // The client ID assigned to you by the provider
-            'clientSecret'            => config('vatsim_auth.secret'),   // The client password assigned to you by the provider
-            'redirectUri'             => route('login'),
-            'urlAuthorize'            => config('vatsim_auth.base').'/oauth/authorize',
-            'urlAccessToken'          => config('vatsim_auth.base').'/oauth/token',
+            'clientId' => config('vatsim_auth.id'),    // The client ID assigned to you by the provider
+            'clientSecret' => config('vatsim_auth.secret'),   // The client password assigned to you by the provider
+            'redirectUri' => route('login'),
+            'urlAuthorize' => config('vatsim_auth.base').'/oauth/authorize',
+            'urlAccessToken' => config('vatsim_auth.base').'/oauth/token',
             'urlResourceOwnerDetails' => config('vatsim_auth.base').'/api/user',
-            'scopes'                  => config('vatsim_auth.scopes'),
-            'scopeSeparator'          => ' '
+            'scopes' => config('vatsim_auth.scopes'),
+            'scopeSeparator' => ' ',
         ]);
     }
 
     /**
      * Gets an (updated) user token
-     * @param Token $token
+     *
+     * @param  Token  $token
      * @return Token
      * @return null
      */
@@ -36,7 +39,7 @@ class VatsimOAuthController extends GenericProvider
         $controller = new VatsimOAuthController;
         try {
             return $controller->getAccessToken('refresh_token', [
-                'refresh_token' => $token->getRefreshToken()
+                'refresh_token' => $token->getRefreshToken(),
             ]);
         } catch (IdentityProviderException) {
             return null;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -12,7 +14,7 @@
 */
 
 Route::group([
-    'middleware' => 'auth:api'
+    'middleware' => 'auth:api',
 ], function (): void {
     Route::get('user')->uses('Api\OAuthUserController@view');
     Route::get('v1/user')->uses('Api\OAuthUserController@view');

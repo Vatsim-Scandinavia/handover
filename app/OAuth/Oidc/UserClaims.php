@@ -16,9 +16,7 @@ class UserClaims
     /** Every claim this class can release, in the order discovery lists them. */
     public const SUPPORTED = ['name', 'given_name', 'family_name', 'email', 'groups'];
 
-    public function __construct(private readonly GroupMembershipResolver $memberships)
-    {
-    }
+    public function __construct(private readonly GroupMembershipResolver $memberships) {}
 
     /**
      * The claims for the granted scopes, except sub. Claims with no value are left out.

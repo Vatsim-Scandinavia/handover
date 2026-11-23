@@ -1,10 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\RedirectResponse;
 use App\Models\Group;
 use App\Services\GroupManagerService;
 use App\Support\EditMode;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -32,7 +35,7 @@ class GroupHierarchyController extends Controller
         // Idempotent: primary key (parent_id, child_id) makes a duplicate a no-op.
         DB::table('group_hierarchy')->insertOrIgnore([
             'parent_id' => $parentId,
-            'child_id'  => $group->id,
+            'child_id' => $group->id,
         ]);
         $this->service->incrementCacheVersion();
 
@@ -73,7 +76,7 @@ class GroupHierarchyController extends Controller
         // Idempotent: primary key (parent_id, child_id) makes a duplicate a no-op.
         DB::table('group_hierarchy')->insertOrIgnore([
             'parent_id' => $group->id,
-            'child_id'  => $childId,
+            'child_id' => $childId,
         ]);
         $this->service->incrementCacheVersion();
 
@@ -113,7 +116,7 @@ class GroupHierarchyController extends Controller
                 return true;
             }
             foreach ($parentsOf[$node] ?? [] as $up) {
-                if (!isset($seen[$up])) {
+                if (! isset($seen[$up])) {
                     $seen[$up] = true;
                     $queue[] = $up;
                 }
@@ -125,7 +128,7 @@ class GroupHierarchyController extends Controller
 
     private function requireAdmin(Request $request): void
     {
-        if (!$request->attributes->get('is_group_admin')) {
+        if (! $request->attributes->get('is_group_admin')) {
             abort(403);
         }
     }

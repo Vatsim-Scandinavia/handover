@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\OAuth;
 
 use App\OAuth\Oidc\UserClaims;
@@ -29,7 +31,7 @@ class AccessToken extends PassportAccessToken
 
     private function sign(): string
     {
-        $now = new DateTimeImmutable();
+        $now = new DateTimeImmutable;
         $groups = $this->groupIds();
 
         return app(ActiveKeySigner::class)->sign(function (Builder $builder) use ($now, $groups): Builder {

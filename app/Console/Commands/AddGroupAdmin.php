@@ -1,10 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
-use Illuminate\Console\Attributes\Description;
-use Illuminate\Console\Attributes\Signature;
 use App\Models\Group;
 use App\User;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
 #[Description('Add a user to the System Administrators group, creating it if necessary')]
@@ -16,15 +19,17 @@ class AddGroupAdmin extends Command
         $cid = (int) $this->argument('cid');
         $user = User::find($cid);
 
-        if (!$user) {
+        if (! $user) {
             $this->error("No user found with CID {$cid}.");
+
             return self::FAILURE;
         }
 
         $existing = Group::where('slug', 'system-administrators')->first();
 
-        if ($existing && !$existing->is_admin_group) {
+        if ($existing && ! $existing->is_admin_group) {
             $this->error("A group with slug 'system-administrators' already exists but is not an admin group. Resolve this manually.");
+
             return self::FAILURE;
         }
 
@@ -36,12 +41,14 @@ class AddGroupAdmin extends Command
 
         if ($group->members()->where('user_id', $user->id)->exists()) {
             $this->info("{$user->first_name} {$user->last_name} (CID: {$cid}) is already a member of '{$group->name}' (UUID: {$group->id}, slug: {$group->slug}).");
+
             return self::SUCCESS;
         }
 
         $group->members()->attach($user->id, ['created_at' => now()]);
 
         $this->info("Added {$user->first_name} {$user->last_name} (CID: {$cid}) to '{$group->name}' (UUID: {$group->id}, slug: {$group->slug}).");
+
         return self::SUCCESS;
     }
 }

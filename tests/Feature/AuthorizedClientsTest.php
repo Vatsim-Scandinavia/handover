@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use App\Services\AuthorizedClients;
@@ -85,8 +87,8 @@ class AuthorizedClientsTest extends TestCase
         $this->createToken($user, $clientId);
 
         $this->assertSame([
-                ['name' => 'vACC Norway', 'url' => 'https://vacc-norway.test'],
-            ], $this->authorizedClients($user));
+            ['name' => 'vACC Norway', 'url' => 'https://vacc-norway.test'],
+        ], $this->authorizedClients($user));
     }
 
     public function test_leaves_out_the_url_when_the_redirect_uri_is_not_a_web_address(): void
@@ -146,8 +148,8 @@ class AuthorizedClientsTest extends TestCase
         $this->createRefreshToken($tokenId);
 
         $this->assertSame([
-                ['name' => 'vACC Norway', 'url' => 'https://vacc-norway.test'],
-            ], $this->authorizedClients($user));
+            ['name' => 'vACC Norway', 'url' => 'https://vacc-norway.test'],
+        ], $this->authorizedClients($user));
     }
 
     public function test_excludes_client_whose_refresh_token_is_revoked_or_expired(): void

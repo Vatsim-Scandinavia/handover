@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
+use App\OAuth\SigningKeys\SigningKeyStore;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
-use App\OAuth\SigningKeys\SigningKeyStore;
 
 #[Description('Delete a retired signing key and stop publishing it')]
 #[Signature('signing-keys:remove

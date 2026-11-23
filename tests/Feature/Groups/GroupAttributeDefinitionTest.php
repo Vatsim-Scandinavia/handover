@@ -1,10 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Tests\Feature\Groups;
 
-use App\Models\GroupManagerRuleByGroup;
-use App\Models\GroupAttributeValue;
 use App\Models\Group;
 use App\Models\GroupAttributeDefinition;
+use App\Models\GroupAttributeValue;
+use App\Models\GroupManagerRuleByGroup;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -24,6 +27,7 @@ class GroupAttributeDefinitionTest extends TestCase
         $user = User::factory()->create();
         $adminGroup = Group::factory()->admin()->create();
         $adminGroup->members()->attach($user->id, ['created_at' => now()]);
+
         return $user;
     }
 

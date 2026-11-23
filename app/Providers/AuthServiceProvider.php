@@ -1,20 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Http\Response;
-use Carbon\CarbonInterval;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Http\Request;
-use Laravel\Passport\Passport;
-use App\Models\Passport\Client;
 use App\Models\Group;
+use App\Models\Passport\Client;
 use App\Policies\GroupPolicy;
 use App\Services\GroupManagerService;
 use App\User;
+use Carbon\CarbonInterval;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -33,14 +35,14 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Passport::tokensCan([
-            'full_name'      => 'First and last name',
-            'email'          => 'E-mail address',
+            'full_name' => 'First and last name',
+            'email' => 'E-mail address',
             'vatsim_details' => 'Ratings and divisions',
-            'country'        => 'Country',
-            'groups'         => 'View the groups you are a member of',
+            'country' => 'Country',
+            'groups' => 'View the groups you are a member of',
             // OpenID Connect. See docs/integrations/oidc.md.
-            'openid'         => 'Sign in with OpenID Connect',
-            'profile'        => 'First and last name, for OpenID Connect',
+            'openid' => 'Sign in with OpenID Connect',
+            'profile' => 'First and last name, for OpenID Connect',
         ]);
 
         // No Passport default scope: a request with no scopes gets the client
@@ -61,7 +63,7 @@ class AuthServiceProvider extends ServiceProvider
         // it, every /oauth/authorize request fails with "not instantiable". All of
         // this app's clients auto-approve (Client::skipsAuthorization), so the consent
         // screen is never rendered, but the binding must exist for the route to resolve.
-        Passport::authorizationView(fn (array $parameters): ResponseFactory|Response => response(
+        Passport::authorizationView(fn (array $parameters): Response|ResponseFactory => response(
             'This application does not require explicit authorization.'
         ));
 

@@ -1,10 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
+use App\Models\GroupAttributeDefinition;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\QueryException;
-use App\Models\GroupAttributeDefinition;
 use Illuminate\Http\Request;
 
 class GroupAttributeDefinitionController extends Controller
@@ -13,6 +16,7 @@ class GroupAttributeDefinitionController extends Controller
     {
         $this->requireAdmin(request());
         $definitions = GroupAttributeDefinition::orderBy('key')->get();
+
         return view('groups.attributes', ['definitions' => $definitions]);
     }
 
@@ -20,10 +24,11 @@ class GroupAttributeDefinitionController extends Controller
     {
         $this->requireAdmin($request);
         $data = $request->validate([
-            'key'   => ['required', 'regex:/^[a-z0-9_-]+$/', 'max:32', 'unique:group_attribute_definitions,key'],
+            'key' => ['required', 'regex:/^[a-z0-9_-]+$/', 'max:32', 'unique:group_attribute_definitions,key'],
             'label' => ['required', 'string', 'max:255'],
         ]);
         GroupAttributeDefinition::create($data);
+
         return to_route('groups.attributes.index')->with('success', 'Attribute definition created.');
     }
 
@@ -34,6 +39,7 @@ class GroupAttributeDefinitionController extends Controller
             'label' => ['required', 'string', 'max:255'],
         ]);
         $definition->update($data);
+
         return to_route('groups.attributes.index')->with('success', 'Attribute definition updated.');
     }
 
@@ -45,12 +51,13 @@ class GroupAttributeDefinitionController extends Controller
         } catch (QueryException) {
             return back()->withErrors(['definition' => 'Cannot delete: referenced by existing values or rules.']);
         }
+
         return to_route('groups.attributes.index')->with('success', 'Attribute definition deleted.');
     }
 
     private function requireAdmin(Request $request): void
     {
-        if (!$request->attributes->get('is_group_admin')) {
+        if (! $request->attributes->get('is_group_admin')) {
             abort(403);
         }
     }

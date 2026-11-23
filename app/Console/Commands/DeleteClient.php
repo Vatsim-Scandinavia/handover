@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
+use App\Models\Passport\Client;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use App\Models\Passport\Client;
 
 #[Description('Delete a client by id')]
 #[Signature('passport:client:delete')]
@@ -19,12 +21,12 @@ class DeleteClient extends Command
         $clientId = $this->ask('Which client id do you want to revoke?');
         $client = Client::find($clientId);
 
-        if ($this->confirm('Are you sure you want to delete the client \'' . $client->name . '\'?')) {
+        if ($this->confirm('Are you sure you want to delete the client \''.$client->name.'\'?')) {
             $clientAccessTokens = $client->tokens;
 
             $refreshTokenRepository = app('Laravel\Passport\RefreshTokenRepository');
 
-            foreach($clientAccessTokens as $clientAccessToken) {
+            foreach ($clientAccessTokens as $clientAccessToken) {
                 // Revoke the refresh token
                 $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($clientAccessToken->id);
 
@@ -38,8 +40,6 @@ class DeleteClient extends Command
         } else {
             $this->warn('Client revoke aborted.');
         }
-
-        
 
     }
 }

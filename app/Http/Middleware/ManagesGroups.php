@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Http\Middleware;
 
 use App\Services\GroupManagerService;
@@ -15,7 +18,7 @@ class ManagesGroups
         $isAdmin = $this->service->isAdmin($user);
         $manageableIds = $this->service->manageableGroupIds($user);
 
-        if (!$isAdmin && $manageableIds === []) {
+        if (! $isAdmin && $manageableIds === []) {
             abort(403, 'You do not have access to group management.');
         }
 

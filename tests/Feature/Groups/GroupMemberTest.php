@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Tests\Feature\Groups;
 
 use App\Models\Group;
@@ -21,6 +24,7 @@ class GroupMemberTest extends TestCase
     {
         $user = User::factory()->create();
         Group::factory()->admin()->create()->members()->attach($user->id, ['created_at' => now()]);
+
         return $user;
     }
 
@@ -152,7 +156,7 @@ class GroupMemberTest extends TestCase
         $group->members()->attach($bob->id, ['created_at' => now()]);
 
         $this->actingAs($this->adminUser())
-            ->get(route('groups.members.index', $group) . '?search=Zar')
+            ->get(route('groups.members.index', $group).'?search=Zar')
             ->assertSee('<td>Zara Smith</td>', false)
             ->assertDontSee('<td>Bob Jones</td>', false);
     }

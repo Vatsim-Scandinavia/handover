@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use App\OAuth\AccessToken;
@@ -38,7 +40,7 @@ class PassportServiceProvider extends BaseServiceProvider
         // OpenID Connect: store the nonce and auth_time with each auth code, and
         // add an id_token to the token response. See docs/integrations/oidc.md.
         $this->app->bind(PassportAuthCodeRepository::class, AuthCodeRepository::class);
-        Passport::useAuthorizationServerResponseType(new IdTokenResponse());
+        Passport::useAuthorizationServerResponseType(new IdTokenResponse);
     }
 
     /**

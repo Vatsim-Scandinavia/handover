@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
@@ -10,16 +12,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function($table): void {
+        Schema::table('users', function ($table): void {
             $table->dropColumn('visiting_controller');
         });
     }
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('users', function($table): void {
+        Schema::table('users', function ($table): void {
             $table->tinyInteger('visiting_controller')->after('atc_active');
         });
     }

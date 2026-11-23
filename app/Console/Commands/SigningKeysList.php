@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Attributes\Description;
-use Illuminate\Console\Attributes\Signature;
 use App\OAuth\SigningKeys\SigningKey;
 use App\OAuth\SigningKeys\SigningKeyStore;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 
 #[Description('List the published signing keys and their states')]
 #[Signature('signing-keys:list')]

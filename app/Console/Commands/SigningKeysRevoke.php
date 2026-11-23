@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
-use Illuminate\Console\Attributes\Description;
-use Illuminate\Console\Attributes\Signature;
 use App\OAuth\SigningKeys\SigningKey;
 use App\OAuth\SigningKeys\SigningKeyStore;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 
 #[Description('Delete a signing key at once, and replace it if it was active')]
 #[Signature('signing-keys:revoke {kid : The kid of the key to drop}')]

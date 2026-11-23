@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Models\Group;
@@ -11,8 +14,8 @@ class GroupMembershipResolver
      * A user's effective group memberships, rolled up the nesting DAG.
      *
      * @return array<string, ?string> groupId => viaGroupId. A null value means the
-     *   user is a DIRECT member; a non-null value is one child group the membership
-     *   rolled up through (the first parent reached during BFS).
+     *                                user is a DIRECT member; a non-null value is one child group the membership
+     *                                rolled up through (the first parent reached during BFS).
      */
     public function effectiveMembership(User $user): array
     {
@@ -37,7 +40,7 @@ class GroupMembershipResolver
         while ($queue !== []) {
             $current = array_shift($queue);
             foreach ($parentsOf[$current] ?? [] as $parent) {
-                if (!array_key_exists($parent, $map)) {
+                if (! array_key_exists($parent, $map)) {
                     $map[$parent] = $current;
                     $queue[] = $parent;
                 }
@@ -60,10 +63,10 @@ class GroupMembershipResolver
      * collect the direct members of every group in that closure.
      *
      * @return array<int, list<string>> userId => the group ids, within
-     *   $group's downward closure (the group itself plus its descendants),
-     *   where that user is a DIRECT member, i.e. the enrolment source(s) of
-     *   their membership here. A source equal to $group->id means direct;
-     *   any other id is a descendant they roll up through.
+     *                                  $group's downward closure (the group itself plus its descendants),
+     *                                  where that user is a DIRECT member, i.e. the enrolment source(s) of
+     *                                  their membership here. A source equal to $group->id means direct;
+     *                                  any other id is a descendant they roll up through.
      */
     public function transitiveMembers(Group $group): array
     {
@@ -81,7 +84,7 @@ class GroupMembershipResolver
         while ($queue !== []) {
             $current = array_shift($queue);
             foreach ($childrenOf[$current] ?? [] as $child) {
-                if (!array_key_exists($child, $closure)) {
+                if (! array_key_exists($child, $closure)) {
                     $closure[$child] = true;
                     $queue[] = $child;
                 }
@@ -91,8 +94,7 @@ class GroupMembershipResolver
         // One pass over the direct memberships of every group in the closure.
         $map = [];
         foreach (
-            DB::table('group_user')->whereIn('group_id', array_keys($closure))->get(['user_id', 'group_id'])
-            as $row
+            DB::table('group_user')->whereIn('group_id', array_keys($closure))->get(['user_id', 'group_id']) as $row
         ) {
             $map[$row->user_id][] = $row->group_id;
         }

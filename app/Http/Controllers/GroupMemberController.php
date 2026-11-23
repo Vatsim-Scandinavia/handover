@@ -1,12 +1,15 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use App\Models\Group;
 use App\Services\GroupManagerService;
 use App\Services\GroupMembershipResolver;
 use App\User;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class GroupMemberController extends Controller
@@ -26,14 +29,15 @@ class GroupMemberController extends Controller
 
         if ($search) {
             $query->where(function ($q) use ($search): void {
-                $q->where('first_name', 'like', $search . '%')
-                  ->orWhere('last_name', 'like', $search . '%')
-                  ->orWhere('users.id', $search);
+                $q->where('first_name', 'like', $search.'%')
+                    ->orWhere('last_name', 'like', $search.'%')
+                    ->orWhere('users.id', $search);
             });
         }
 
         $members = $query->paginate(25)->withQueryString();
         $transitive = false;
+
         return view('groups.members', ['group' => $group, 'members' => $members, 'search' => $search, 'transitive' => $transitive]);
     }
 
@@ -54,9 +58,9 @@ class GroupMemberController extends Controller
 
         if ($search) {
             $query->where(function ($q) use ($search): void {
-                $q->where('first_name', 'like', $search . '%')
-                  ->orWhere('last_name', 'like', $search . '%')
-                  ->orWhere('users.id', $search);
+                $q->where('first_name', 'like', $search.'%')
+                    ->orWhere('last_name', 'like', $search.'%')
+                    ->orWhere('users.id', $search);
             });
         }
 
@@ -68,15 +72,16 @@ class GroupMemberController extends Controller
         $viaNames = Group::whereIn('id', $viaIds)->pluck('name', 'id');
 
         // userId => ['direct' => bool, 'via' => list<string names>]
-        $memberSources = collect($sourceMap)->map(fn($sources): array => [
+        $memberSources = collect($sourceMap)->map(fn ($sources): array => [
             'direct' => in_array($group->id, $sources, true),
-            'via'    => collect($sources)
+            'via' => collect($sources)
                 ->reject(fn ($id): bool => $id === $group->id)
                 ->map(fn ($id) => $viaNames[$id] ?? 'unknown')
                 ->values()->all(),
         ])->all();
 
         $transitive = true;
+
         return view('groups.members', ['group' => $group, 'members' => $members, 'search' => $search, 'transitive' => $transitive, 'memberSources' => $memberSources]);
     }
 
@@ -84,14 +89,14 @@ class GroupMemberController extends Controller
     {
         $this->requireAccess($request, $group);
 
-        if ($group->is_admin_group && !$request->attributes->get('is_group_admin')) {
+        if ($group->is_admin_group && ! $request->attributes->get('is_group_admin')) {
             return back()->withErrors(['member' => 'Only admins can add members to an admin group.']);
         }
 
         $request->validate(['cid' => ['required', 'integer']]);
 
         $user = User::find($request->cid);
-        if (!$user) {
+        if (! $user) {
             abort(404, "No user found with CID {$request->cid}.");
         }
 
@@ -100,7 +105,7 @@ class GroupMemberController extends Controller
         }
 
         $group->members()->attach($user->id, [
-            'added_by'   => $request->user()->id,
+            'added_by' => $request->user()->id,
             'created_at' => now(),
         ]);
         $this->service->incrementCacheVersion();
@@ -112,7 +117,7 @@ class GroupMemberController extends Controller
     {
         $this->requireAccess($request, $group);
 
-        if (!$group->members()->where('user_id', $user->id)->exists()) {
+        if (! $group->members()->where('user_id', $user->id)->exists()) {
             return back()->with('info', "{$user->first_name} {$user->last_name} is not a member. No action taken.");
         }
 
@@ -128,7 +133,7 @@ class GroupMemberController extends Controller
 
     private function requireAccess(Request $request, Group $group): void
     {
-        if (!$request->attributes->get('is_group_admin') && !$this->service->canManage($request->user(), $group)) {
+        if (! $request->attributes->get('is_group_admin') && ! $this->service->canManage($request->user(), $group)) {
             abort(403);
         }
     }

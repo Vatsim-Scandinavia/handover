@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\OAuth;
 
 use App\OAuth\ScopeRepository;
@@ -41,7 +43,7 @@ class AuthorizationController extends PassportAuthorizationController
         Request $request,
         ResponseInterface $psrResponse,
         AuthorizationViewResponse $viewResponse
-    ): Response|AuthorizationViewResponse {
+    ): AuthorizationViewResponse|Response {
         if ($request->has('prompt')) {
             $request->merge(['prompt' => $request->string('prompt')->explode(' ')->reject(fn (string $value): bool => $value === 'consent')->join(' ')]);
         }

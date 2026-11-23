@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exceptions;
 
-use League\OAuth2\Server\Exception\OAuthServerException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
@@ -33,7 +35,7 @@ class Handler extends ExceptionHandler
      * Report or log an exception.
      *
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function report(Throwable $exception): void
     {
@@ -50,7 +52,7 @@ class Handler extends ExceptionHandler
      * @param  Request  $request
      * @return Response
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function render($request, Throwable $exception)
     {

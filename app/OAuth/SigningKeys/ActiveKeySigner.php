@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\OAuth\SigningKeys;
 
 use Closure;
@@ -17,9 +19,7 @@ use Lcobucci\JWT\UnencryptedToken;
  */
 class ActiveKeySigner
 {
-    public function __construct(private readonly SigningKeyStore $keys)
-    {
-    }
+    public function __construct(private readonly SigningKeyStore $keys) {}
 
     /**
      * @param  Closure(Builder): Builder  $claims  Adds the claims to the builder.
@@ -27,8 +27,8 @@ class ActiveKeySigner
     public function sign(Closure $claims): UnencryptedToken
     {
         $key = $this->keys->active();
-        $builder = TokenBuilder::new(new JoseEncoder(), ChainedFormatter::default())->withHeader('kid', $key->kid);
+        $builder = TokenBuilder::new(new JoseEncoder, ChainedFormatter::default())->withHeader('kid', $key->kid);
 
-        return $claims($builder)->getToken(new Sha256(), InMemory::plainText($key->privateKeyPem));
+        return $claims($builder)->getToken(new Sha256, InMemory::plainText($key->privateKeyPem));
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\OAuth\Oidc;
 
 use App\OAuth\ScopeIds;
@@ -36,7 +38,7 @@ class IdTokenResponse extends BearerTokenResponse
 
     private function idToken(AccessTokenEntityInterface $accessToken, User $user, string $codeId): string
     {
-        $claims = array_filter(app(AuthCodeRepository::class)->signInParameters($codeId), fn (string|int|null $value): bool => $value !== null)
+        $claims = array_filter(app(AuthCodeRepository::class)->signInParameters($codeId), fn (int|string|null $value): bool => $value !== null)
             + ['at_hash' => $this->atHash($accessToken->toString())]
             + app(UserClaims::class)->forScopes($user, ScopeIds::of($accessToken->getScopes()));
 
@@ -45,7 +47,7 @@ class IdTokenResponse extends BearerTokenResponse
                 ->issuedBy(Issuer::url())
                 ->permittedFor($accessToken->getClient()->getIdentifier())
                 ->relatedTo((string) $user->getKey())
-                ->issuedAt($this->wholeSeconds(new DateTimeImmutable()))
+                ->issuedAt($this->wholeSeconds(new DateTimeImmutable))
                 ->expiresAt($this->wholeSeconds($accessToken->getExpiryDateTime()));
 
             foreach ($claims as $name => $value) {
@@ -75,7 +77,7 @@ class IdTokenResponse extends BearerTokenResponse
     /** The left half of the SHA-256 of the access token, base64url-encoded (OpenID Connect Core 1.0, section 3.1.3.6). */
     private function atHash(string $accessToken): string
     {
-        return (new JoseEncoder())->base64UrlEncode(substr(hash('sha256', $accessToken, true), 0, 16));
+        return (new JoseEncoder)->base64UrlEncode(substr(hash('sha256', $accessToken, true), 0, 16));
     }
 
     /** Some relying parties reject the fractional NumericDate values lcobucci writes for microseconds. */

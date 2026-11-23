@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Tests\Feature\Groups;
 
 use App\Models\Group;
@@ -17,7 +20,7 @@ class GroupMembershipResolverTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->resolver = new GroupMembershipResolver();
+        $this->resolver = new GroupMembershipResolver;
     }
 
     private function nest(Group $child, Group $parent): void

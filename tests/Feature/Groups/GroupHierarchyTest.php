@@ -1,12 +1,15 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Tests\Feature\Groups;
 
-use App\Models\GroupManagerRuleByGroup;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use App\Models\Group;
+use App\Models\GroupManagerRuleByGroup;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Tests\TestCase;
 
 class GroupHierarchyTest extends TestCase
@@ -17,6 +20,7 @@ class GroupHierarchyTest extends TestCase
     {
         $admin = User::factory()->create();
         Group::factory()->admin()->create()->members()->attach($admin->id, ['created_at' => now()]);
+
         return $admin;
     }
 
@@ -129,7 +133,7 @@ class GroupHierarchyTest extends TestCase
         $managerGroup->members()->attach($manager->id, ['created_at' => now()]);
         GroupManagerRuleByGroup::create([
             'manager_group_id' => $managerGroup->id,
-            'target_group_id'  => $child->id,
+            'target_group_id' => $child->id,
         ]);
 
         $this->actingAs($manager)
@@ -231,7 +235,7 @@ class GroupHierarchyTest extends TestCase
         $managerGroup->members()->attach($manager->id, ['created_at' => now()]);
         GroupManagerRuleByGroup::create([
             'manager_group_id' => $managerGroup->id,
-            'target_group_id'  => $group->id,
+            'target_group_id' => $group->id,
         ]);
 
         $this->actingAs($manager)
@@ -248,7 +252,7 @@ class GroupHierarchyTest extends TestCase
         $managerGroup->members()->attach($manager->id, ['created_at' => now()]);
         GroupManagerRuleByGroup::create([
             'manager_group_id' => $managerGroup->id,
-            'target_group_id'  => $group->id,
+            'target_group_id' => $group->id,
         ]);
         DB::table('group_hierarchy')->insert(['parent_id' => $group->id, 'child_id' => $child->id]);
 
@@ -298,7 +302,7 @@ class GroupHierarchyTest extends TestCase
         $managerGroup->members()->attach($manager->id, ['created_at' => now()]);
         GroupManagerRuleByGroup::create([
             'manager_group_id' => $managerGroup->id,
-            'target_group_id'  => $group->id,
+            'target_group_id' => $group->id,
         ]);
 
         $this->actingAs($manager)

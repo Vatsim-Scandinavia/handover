@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Tests\Feature\Groups;
 
 use App\Models\Group;
@@ -15,6 +18,7 @@ class GroupEditModeTest extends TestCase
     use RefreshDatabase;
 
     private const string EDITING = 'x-data="{ editing: true';
+
     private const string READ_ONLY = 'x-data="{ editing: false';
 
     protected function setUp(): void
@@ -27,6 +31,7 @@ class GroupEditModeTest extends TestCase
     {
         $admin = User::factory()->create();
         Group::factory()->admin()->create()->members()->attach($admin->id, ['created_at' => now()]);
+
         return $admin;
     }
 

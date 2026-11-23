@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | Broadcast Channels
@@ -11,4 +13,4 @@
 |
 */
 
-Broadcast::channel('App.User.{id}', fn($user, $id): bool => (int) $user->id === (int) $id);
+Broadcast::channel('App.User.{id}', fn ($user, $id): bool => (int) $user->id === (int) $id);

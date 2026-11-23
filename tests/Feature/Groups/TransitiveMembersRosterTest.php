@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Tests\Feature\Groups;
 
 use App\Models\Group;
@@ -17,6 +20,7 @@ class TransitiveMembersRosterTest extends TestCase
     {
         $admin = User::factory()->create();
         Group::factory()->admin()->create()->members()->attach($admin->id, ['created_at' => now()]);
+
         return $admin;
     }
 
@@ -28,6 +32,7 @@ class TransitiveMembersRosterTest extends TestCase
     private function enrol(Group $group, User $user): User
     {
         $group->members()->attach($user->id, ['created_at' => now()]);
+
         return $user;
     }
 

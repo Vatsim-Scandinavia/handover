@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\OAuth;
 
 use App\OAuth\Oidc\Issuer;
@@ -286,7 +288,7 @@ class RpInitiatedLogoutTest extends TestCase
     }
 
     /**
-     * @param array<string, mixed> $params
+     * @param  array<string, mixed>  $params
      */
     private function logout(array $params = []): TestResponse
     {
@@ -303,14 +305,14 @@ class RpInitiatedLogoutTest extends TestCase
     {
         $key = $this->signingKeys()->active();
 
-        return Builder::new(new JoseEncoder(), ChainedFormatter::default())
+        return Builder::new(new JoseEncoder, ChainedFormatter::default())
             ->withHeader('kid', $key->kid)
             ->issuedBy($claims['iss'] ?? Issuer::url())
             ->permittedFor(...$claims['aud'] ?? [(string) $this->client->getKey()])
             ->relatedTo($claims['sub'] ?? (string) $this->user->id)
             ->issuedAt(new DateTimeImmutable('-2 days'))
             ->expiresAt($claims['exp'] ?? new DateTimeImmutable('+1 hour'))
-            ->getToken(new Sha256(), InMemory::plainText($privateKey ?? $key->privateKeyPem))
+            ->getToken(new Sha256, InMemory::plainText($privateKey ?? $key->privateKeyPem))
             ->toString();
     }
 }

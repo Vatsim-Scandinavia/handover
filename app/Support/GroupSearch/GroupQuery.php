@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Support\GroupSearch;
 
 use App\Models\Group;
@@ -17,6 +20,7 @@ class GroupQuery
     public static function parse(string $q): self
     {
         preg_match_all('/(?:[^\s"]+|"[^"]*")+/', $q, $matches);
+
         return new self(array_values(array_filter(array_map(Term::parse(...), $matches[0]))));
     }
 
@@ -33,6 +37,7 @@ class GroupQuery
                 return true;
             }
         }
+
         return false;
     }
 
@@ -58,6 +63,7 @@ class GroupQuery
         foreach ($this->terms as $term) {
             $term->apply($groups);
         }
+
         return $groups;
     }
 
@@ -65,7 +71,7 @@ class GroupQuery
      * Tag and attribute terms that would narrow these results without
      * emptying them, most common first.
      *
-     * @param Collection<int, Group> $groups
+     * @param  Collection<int, Group>  $groups
      * @return Collection<int, array{term: Term, count: int}>
      */
     public function suggestions(Collection $groups, int $limit = 10): Collection

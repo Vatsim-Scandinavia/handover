@@ -1,13 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Tests\Feature\Groups;
 
-use Illuminate\Support\Facades\DB;
 use App\Models\Group;
-use App\Models\GroupTag;
 use App\Models\GroupAttributeDefinition;
 use App\Models\GroupAttributeValue;
+use App\Models\GroupTag;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class GroupModelTest extends TestCase
@@ -66,7 +69,7 @@ class GroupModelTest extends TestCase
 
         DB::table('group_hierarchy')->insert([
             'parent_id' => $parent->id,
-            'child_id'  => $child->id,
+            'child_id' => $child->id,
         ]);
 
         $this->assertTrue($child->parents->contains($parent));

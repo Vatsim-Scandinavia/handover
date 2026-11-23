@@ -1,15 +1,18 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Contracts\Database\Query\Builder;
 use App\Models\Group;
 use App\Models\GroupAttributeDefinition;
 use App\Models\GroupManagerRuleByAttribute;
 use App\Models\GroupManagerRuleByGroup;
 use App\Models\GroupManagerRuleByTag;
 use App\Services\GroupManagerService;
+use Illuminate\Contracts\Database\Query\Builder;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class GroupManagerRuleController extends Controller
@@ -21,13 +24,14 @@ class GroupManagerRuleController extends Controller
         $this->requireAdmin($request);
 
         match ($type) {
-            'group'     => GroupManagerRuleByGroup::findOrFail($rule)->delete(),
-            'tag'       => GroupManagerRuleByTag::findOrFail($rule)->delete(),
+            'group' => GroupManagerRuleByGroup::findOrFail($rule)->delete(),
+            'tag' => GroupManagerRuleByTag::findOrFail($rule)->delete(),
             'attribute' => GroupManagerRuleByAttribute::findOrFail($rule)->delete(),
-            default     => abort(404),
+            default => abort(404),
         };
 
         $this->service->incrementCacheVersion();
+
         return back()->with('success', 'Rule removed.');
     }
 
@@ -37,14 +41,14 @@ class GroupManagerRuleController extends Controller
         $this->requireAdmin($request);
 
         $groupRules = GroupManagerRuleByGroup::with(['managerGroup', 'targetGroup'])->get();
-        $tagRules   = GroupManagerRuleByTag::with('managerGroup')->get();
-        $attrRules  = GroupManagerRuleByAttribute::with('managerGroup')->get();
+        $tagRules = GroupManagerRuleByTag::with('managerGroup')->get();
+        $attrRules = GroupManagerRuleByAttribute::with('managerGroup')->get();
 
         $rules = collect()
-            ->merge($groupRules->map(fn($r): array => ['manager' => $r->managerGroup, 'type' => 'group',     'rule' => $r]))
-            ->merge($tagRules->map(fn($r): array   => ['manager' => $r->managerGroup, 'type' => 'tag',       'rule' => $r]))
-            ->merge($attrRules->map(fn($r): array  => ['manager' => $r->managerGroup, 'type' => 'attribute', 'rule' => $r]))
-            ->filter(fn($e): bool => $e['manager'] !== null)
+            ->merge($groupRules->map(fn ($r): array => ['manager' => $r->managerGroup, 'type' => 'group',     'rule' => $r]))
+            ->merge($tagRules->map(fn ($r): array => ['manager' => $r->managerGroup, 'type' => 'tag',       'rule' => $r]))
+            ->merge($attrRules->map(fn ($r): array => ['manager' => $r->managerGroup, 'type' => 'attribute', 'rule' => $r]))
+            ->filter(fn ($e): bool => $e['manager'] !== null)
             ->sortBy('manager.name')
             ->values();
 
@@ -86,12 +90,13 @@ class GroupManagerRuleController extends Controller
         $type = $request->validate(['type' => ['required', 'in:group,tag,attribute']])['type'];
 
         match ($type) {
-            'group'     => $this->storeGroupRule($request, $group),
-            'tag'       => $this->storeTagRule($request),
+            'group' => $this->storeGroupRule($request, $group),
+            'tag' => $this->storeTagRule($request),
             'attribute' => $this->storeAttributeRule($request),
         };
 
         $this->service->incrementCacheVersion();
+
         return back()->with('success', 'Rule added.');
     }
 
@@ -120,6 +125,7 @@ class GroupManagerRuleController extends Controller
         };
 
         $this->service->incrementCacheVersion();
+
         return back()->with('success', 'Rule removed.');
     }
 
@@ -130,7 +136,7 @@ class GroupManagerRuleController extends Controller
         ]);
         GroupManagerRuleByGroup::firstOrCreate([
             'manager_group_id' => $data['manager_group_id'],
-            'target_group_id'  => $group->id,
+            'target_group_id' => $group->id,
         ]);
     }
 
@@ -138,31 +144,31 @@ class GroupManagerRuleController extends Controller
     {
         $data = $request->validate([
             'manager_group_id' => ['required', 'uuid', 'exists:groups,id'],
-            'target_tag'       => ['required', 'regex:/^[a-z0-9-]+$/', 'max:32'],
+            'target_tag' => ['required', 'regex:/^[a-z0-9-]+$/', 'max:32'],
         ]);
         GroupManagerRuleByTag::firstOrCreate([
             'manager_group_id' => $data['manager_group_id'],
-            'target_tag'       => $data['target_tag'],
+            'target_tag' => $data['target_tag'],
         ]);
     }
 
     private function storeAttributeRule(Request $request): void
     {
         $data = $request->validate([
-            'manager_group_id'       => ['required', 'uuid', 'exists:groups,id'],
-            'target_attribute_key'   => ['required', 'exists:group_attribute_definitions,key'],
+            'manager_group_id' => ['required', 'uuid', 'exists:groups,id'],
+            'target_attribute_key' => ['required', 'exists:group_attribute_definitions,key'],
             'target_attribute_value' => ['required', 'string', 'max:255'],
         ]);
         GroupManagerRuleByAttribute::firstOrCreate([
-            'manager_group_id'       => $data['manager_group_id'],
-            'target_attribute_key'   => $data['target_attribute_key'],
+            'manager_group_id' => $data['manager_group_id'],
+            'target_attribute_key' => $data['target_attribute_key'],
             'target_attribute_value' => $data['target_attribute_value'],
         ]);
     }
 
     private function requireAdmin(Request $request): void
     {
-        if (!$request->attributes->get('is_group_admin')) {
+        if (! $request->attributes->get('is_group_admin')) {
             abort(403);
         }
     }
