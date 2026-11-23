@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\GenericProvider;
-use League\OAuth2\Client\Token;
 
 class VatsimOAuthController extends GenericProvider
 {
@@ -25,24 +23,5 @@ class VatsimOAuthController extends GenericProvider
             'scopes' => config('vatsim_auth.scopes'),
             'scopeSeparator' => ' ',
         ]);
-    }
-
-    /**
-     * Gets an (updated) user token
-     *
-     * @param  Token  $token
-     * @return Token
-     * @return null
-     */
-    public static function updateToken($token)
-    {
-        $controller = new VatsimOAuthController;
-        try {
-            return $controller->getAccessToken('refresh_token', [
-                'refresh_token' => $token->getRefreshToken(),
-            ]);
-        } catch (IdentityProviderException) {
-            return null;
-        }
     }
 }
