@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Vatsim;
 
+use Exception;
 use League\OAuth2\Client\Provider\AbstractProvider;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
 
 /**
@@ -37,6 +39,23 @@ final readonly class VatsimConnect
     {
         /** @var AccessToken */
         return $this->provider->getAccessToken('authorization_code', ['code' => $code]);
+    }
+
+    /**
+     * @return AccessToken|null null when the refresh fails
+     */
+    public function refresh(AccessToken $token): ?AccessToken
+    {
+        try {
+            /** @var AccessToken */
+            return $this->provider->getAccessToken('refresh_token', ['refresh_token' => $token->getRefreshToken()]);
+        } catch (IdentityProviderException) {
+            return null;
+        } catch (Exception $exception) {
+            report($exception);
+
+            return null;
+        }
     }
 
     /**
