@@ -12,7 +12,11 @@
         @if($group->is_admin_group)
             <span class="badge bg-danger">Admin</span>
         @endif
-        <x-slot:meta><code>{{ $group->slug }}</code></x-slot:meta>
+        <x-slot:meta>
+            <code>{{ $group->slug }}</code>
+            <x-copy-button class="group-id" :value="$group->id" label="Group ID"
+                hint="Sent to OIDC clients in the groups claim. Click to copy.">ID</x-copy-button>
+        </x-slot:meta>
         <x-slot:actions>
             <a href="{{ route('groups.members.index', $group) }}" class="btn btn-sm btn-outline-primary">Members ({{ $group->members_count }})</a>
             @if($isAdmin)

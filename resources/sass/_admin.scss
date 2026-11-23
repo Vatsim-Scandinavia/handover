@@ -69,6 +69,19 @@ $admin-line: var(--color-gray-300);
 .page-title { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; min-width: 0; }
 .page-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
 .page-meta { margin-top: .15rem; font-size: .8125rem; color: $admin-muted; }
+.copy-button {
+    display: inline-flex;
+    align-items: center;
+    gap: .25rem;
+    padding: 0 .25rem;
+    border: 0;
+    background: none;
+    color: inherit;
+    font-size: inherit;
+    &:hover, &:focus-visible { color: var(--bs-link-color); }
+}
+.page-meta .group-id { opacity: .6; }
+.page-meta .group-id:hover, .page-meta .group-id:focus-visible { opacity: 1; }
 .page-lead { max-width: 65ch; margin: .5rem 0 0; font-size: .875rem; color: $admin-muted; }
 
 // Headings for the parts of a page, below the page's h1.

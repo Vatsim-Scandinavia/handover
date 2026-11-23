@@ -98,7 +98,15 @@ a.group-attr:hover .v { background: var(--bg-light); }
     .slug { color: $admin-muted; font-size: .8125rem; }
     .admin { background: var(--color-danger); color: var(--bg-card); font-size: .6875rem; font-weight: 500; padding: .1rem .35rem; border-radius: $border-radius; vertical-align: .1em; }
     // Chips sit above the row's stretched link so they stay clickable.
-    .group-tag, .group-attr { position: relative; z-index: 2; }
+    .group-tag, .group-attr, .group-id { position: relative; z-index: 2; }
+    // The ID is for wiring up connected apps, so it stays faint, and on
+    // devices that can hover it only shows on the row's hover or focus.
+    .group-id { opacity: .6; transition: opacity .15s; }
+    @media (hover: hover) {
+        .group-id { opacity: 0; }
+        tr.group:hover .group-id, tr.group:focus-within .group-id { opacity: .6; }
+        .group-id:hover, .group-id:focus-visible { opacity: 1; }
+    }
 
     @include media-breakpoint-up(md) {
         display: table;
