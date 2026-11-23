@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App;
 
 use App\Models\Group;
+use App\Vatsim\AsVatsimToken;
+use App\Vatsim\Member;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\WithoutIncrementing;
@@ -15,7 +17,11 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\HasApiTokens;
+use League\OAuth2\Client\Token\AccessToken;
 
+/**
+ * @property AccessToken|null $vatsim_token
+ */
 #[Fillable([
     'id', 'email', 'first_name', 'last_name', 'rating', 'rating_short', 'rating_long', 'rating_grp', 'pilot_rating', 'pilot_rating_short', 'pilot_rating_long', 'country', 'region', 'division', 'subdivision', 'atc_active', 'accepted_privacy', 'reg_date', 'last_login', 'access_token', 'refresh_token', 'token_expires',
 ])]
@@ -34,6 +40,35 @@ class User extends Authenticatable implements OAuthenticatable
      * @var string
      */
     protected $primaryKey = 'id';
+
+    protected function casts(): array
+    {
+        return [
+            'vatsim_token' => AsVatsimToken::class,
+        ];
+    }
+
+    /**
+     * Copies the member's VATSIM data onto the user. Does not save.
+     */
+    public function fillFromVatsim(Member $member): static
+    {
+        return $this->fill([
+            'email' => $member->email,
+            'first_name' => $member->firstName,
+            'last_name' => $member->lastName,
+            'rating' => $member->rating,
+            'rating_short' => $member->ratingShort,
+            'rating_long' => $member->ratingLong,
+            'pilot_rating' => $member->pilotRating,
+            'pilot_rating_short' => $member->pilotRatingShort,
+            'pilot_rating_long' => $member->pilotRatingLong,
+            'country' => $member->country,
+            'region' => $member->region,
+            'division' => $member->division,
+            'subdivision' => $member->subdivision,
+        ]);
+    }
 
     /**
      * Return ban data if user is banned

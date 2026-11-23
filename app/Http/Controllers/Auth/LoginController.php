@@ -97,31 +97,13 @@ class LoginController extends Controller
 
     protected function completeLogin(Member $member, AccessToken $token): Redirector|RedirectResponse
     {
-        User::updateOrCreate(
-            ['id' => $member->cid],
-            ['email' => $member->email,
-                'first_name' => $member->firstName,
-                'last_name' => $member->lastName,
-                'rating' => $member->rating,
-                'rating_short' => $member->ratingShort,
-                'rating_long' => $member->ratingLong,
-                'pilot_rating' => $member->pilotRating,
-                'pilot_rating_short' => $member->pilotRatingShort,
-                'pilot_rating_long' => $member->pilotRatingLong,
-                'country' => $member->country,
-                'region' => $member->region,
-                'division' => $member->division,
-                'subdivision' => $member->subdivision,
-                'accepted_privacy' => 1,
-                'last_login' => Carbon::now(),
-                'access_token' => $token->getToken(),
-                'refresh_token' => $token->getRefreshToken(),
-                'token_expires' => $token->getExpires(),
-            ]
-        );
+        $user = User::firstOrNew(['id' => $member->cid])
+            ->fillFromVatsim($member)
+            ->fill(['accepted_privacy' => 1, 'last_login' => Carbon::now()]);
+        $user->vatsim_token = $token;
+        $user->save();
 
-        // Complete login and redirect to intended url
-        Auth::login(User::find($member->cid), false);
+        Auth::login($user, false);
 
         $intended = Session::pull('url.intended', route('landing'));
 
