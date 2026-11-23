@@ -2,6 +2,7 @@
 
 ## [4.0.0-beta.6](https://github.com/Vatsim-Scandinavia/handover/compare/v4.0.0-beta.5...v4.0.0-beta.6) (2026-11-23)
 
+This update features a new, slightly cleaner, less centered, look for Handover which improves on error pages, next steps, group overview, apps, and customiztion options.
 
 ### Features
 
