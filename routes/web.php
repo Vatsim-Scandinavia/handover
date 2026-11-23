@@ -20,7 +20,7 @@ use App\Http\Middleware\RedirectLogoutPostToGet;
 |
 */
 
-Route::namespace('Auth')->group(function () {
+Route::namespace('Auth')->group(function (): void {
     Route::get('/login', 'LoginController@login')->middleware('guest')->name('login');
     Route::get('/validate', 'LoginController@validateLogin')->middleware('guest');
 });
@@ -33,7 +33,7 @@ Route::match(['get', 'post'], 'oauth/logout', LogoutController::class)
 // /logout handles a logout request like /oauth/logout. Without parameters, it asks for confirmation.
 Route::get('/logout', LogoutController::class);
 
-Route::middleware(['auth', 'groups.manage'])->prefix('groups')->name('groups.')->group(function () {
+Route::middleware(['auth', 'groups.manage'])->prefix('groups')->name('groups.')->group(function (): void {
     // Fixed segments first — must come before {group} wildcard
     Route::get('attributes', [GroupAttributeDefinitionController::class, 'index'])->name('attributes.index');
     Route::post('attributes', [GroupAttributeDefinitionController::class, 'store'])->name('attributes.store');
@@ -74,7 +74,7 @@ Route::middleware(['auth', 'groups.manage'])->prefix('groups')->name('groups.')-
         ->where('rule', '[0-9]+');
 });
 
-Route::middleware(['auth', 'admin'])->prefix('admin/oauth-clients')->name('admin.oauth-clients.')->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('admin/oauth-clients')->name('admin.oauth-clients.')->group(function (): void {
     Route::get('/', [OAuthClientController::class, 'index'])->name('index');
     Route::get('data', [OAuthClientController::class, 'data'])->name('data');
     Route::post('/', [OAuthClientController::class, 'store'])->name('store');
@@ -83,7 +83,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin/oauth-clients')->name('admin
     Route::post('{client}/secret', [OAuthClientController::class, 'regenerateSecret'])->name('secret');
 });
 
-Route::middleware(['suspended'])->group(function () {
+Route::middleware(['suspended'])->group(function (): void {
     Route::get('/validate/dpp', 'Controller@privacy')->name('dpp');
     Route::post('/validate/dpp', 'Auth\LoginController@validatePrivacy')->name('dpp.accept');
 

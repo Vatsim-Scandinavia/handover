@@ -36,7 +36,7 @@ class AuthorizedClients
                     ->where('oauth_refresh_tokens.expires_at', '>', now())))
             ->get()
             ->map(fn (Token $token): ?Client => $token->client)
-            ->filter(fn (?Client $client): bool => $client !== null && ! $client->revoked
+            ->filter(fn (?Client $client): bool => $client instanceof Client && ! $client->revoked
                 && ! $client->hasGrantType('personal_access') && ! $client->hasGrantType('password'))
             ->unique('id')
             ->map(fn (Client $client): array => [

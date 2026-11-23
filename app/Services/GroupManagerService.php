@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use Illuminate\Contracts\Database\Query\Builder;
 use App\Models\Group;
 use App\Models\GroupManagerRuleByAttribute;
 use App\Models\GroupManagerRuleByGroup;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 class GroupManagerService
 {
     public function __construct(
-        private GroupMembershipResolver $resolver = new GroupMembershipResolver()
+        private readonly GroupMembershipResolver $resolver = new GroupMembershipResolver()
     ) {}
 
     public function isAdmin(User $user): bool
@@ -34,7 +35,7 @@ class GroupManagerService
         return Cache::remember(
             "user:{$user->id}:manageable_groups:v{$version}",
             300,
-            fn () => $this->resolveManageableGroupIds($user)
+            fn (): array => $this->resolveManageableGroupIds($user)
         );
     }
 
@@ -47,12 +48,12 @@ class GroupManagerService
     {
         $membership = $this->resolver->effectiveMembership($user);
         $userGroupIds = array_keys($membership);
-        if (empty($userGroupIds)) {
+        if ($userGroupIds === []) {
             return [];
         }
 
         // Name lookup for the "inherited via X" suffix.
-        $viaNames = Group::whereIn('id', array_values(array_filter($membership, fn ($v) => $v !== null)))
+        $viaNames = Group::whereIn('id', array_values(array_filter($membership, fn (?string $v): bool => $v !== null)))
             ->pluck('name', 'id');
         $inheritedSuffix = function (string $managerGroupId) use ($membership, $viaNames): string {
             $viaId = $membership[$managerGroupId] ?? null;
@@ -69,7 +70,7 @@ class GroupManagerService
             ->where('target_group_id', $group->id)
             ->with('managerGroup')
             ->get()
-            ->each(function ($r) use (&$rules, $inheritedSuffix) {
+            ->each(function ($r) use (&$rules, $inheritedSuffix): void {
                 $rules[] = "Member of \"{$r->managerGroup->name}\"" . $inheritedSuffix($r->manager_group_id);
             });
 
@@ -79,20 +80,20 @@ class GroupManagerService
                 ->whereIn('target_tag', $groupTags)
                 ->with('managerGroup')
                 ->get()
-                ->each(function ($r) use (&$rules, $inheritedSuffix) {
+                ->each(function ($r) use (&$rules, $inheritedSuffix): void {
                     $rules[] = "Member of \"{$r->managerGroup->name}\" (via tag \"{$r->target_tag}\")" . $inheritedSuffix($r->manager_group_id);
                 });
         }
 
         $group->loadMissing('attributeValues.definition');
-        $groupAttrPairs = $group->attributeValues->mapWithKeys(fn ($av) => [
+        $groupAttrPairs = $group->attributeValues->mapWithKeys(fn ($av): array => [
             $av->definition->key => $av->value
         ])->all();
 
         GroupManagerRuleByAttribute::whereIn('manager_group_id', $userGroupIds)
             ->with('managerGroup')
             ->get()
-            ->each(function ($r) use ($groupAttrPairs, &$rules, $inheritedSuffix) {
+            ->each(function ($r) use ($groupAttrPairs, &$rules, $inheritedSuffix): void {
                 if (($groupAttrPairs[$r->target_attribute_key] ?? null) === $r->target_attribute_value) {
                     $rules[] = "Member of \"{$r->managerGroup->name}\" (via {$r->target_attribute_key}={$r->target_attribute_value})" . $inheritedSuffix($r->manager_group_id);
                 }
@@ -104,7 +105,7 @@ class GroupManagerService
     private function resolveManageableGroupIds(User $user): array
     {
         $userGroupIds = $this->resolver->effectiveGroupIds($user);
-        if (empty($userGroupIds)) {
+        if ($userGroupIds === []) {
             return [];
         }
 
@@ -115,7 +116,7 @@ class GroupManagerService
         $tags = GroupManagerRuleByTag::whereIn('manager_group_id', $userGroupIds)
             ->pluck('target_tag')
             ->toArray();
-        $byTag = empty($tags) ? [] : Group::whereHas('tags', fn ($q) => $q->whereIn('tag', $tags))
+        $byTag = empty($tags) ? [] : Group::whereHas('tags', fn (Builder $q) => $q->whereIn('tag', $tags))
             ->pluck('id')
             ->toArray();
 
@@ -124,9 +125,9 @@ class GroupManagerService
         if ($attrRules->isNotEmpty()) {
             $byAttribute = DB::table('group_attribute_values')
                 ->join('group_attribute_definitions', 'group_attribute_definitions.id', '=', 'group_attribute_values.attribute_definition_id')
-                ->where(function ($q) use ($attrRules) {
+                ->where(function (Builder $q) use ($attrRules): void {
                     foreach ($attrRules as $rule) {
-                        $q->orWhere(fn ($w) => $w
+                        $q->orWhere(fn (Builder $w) => $w
                             ->where('group_attribute_definitions.key', $rule->target_attribute_key)
                             ->where('group_attribute_values.value', $rule->target_attribute_value));
                     }

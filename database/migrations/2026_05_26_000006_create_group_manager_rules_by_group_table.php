@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('group_manager_rules_by_group', function (Blueprint $table) {
+        Schema::create('group_manager_rules_by_group', function (Blueprint $table): void {
             $table->id();
             $table->uuid('manager_group_id');
             $table->uuid('target_group_id');

@@ -10,7 +10,7 @@ class ClientPolicyMigrationTest extends TestCase
 {
     use RefreshDatabase;
 
-    private const MIGRATION = '2026_11_19_000003_create_oauth_client_policies.php';
+    private const string MIGRATION = '2026_11_19_000003_create_oauth_client_policies.php';
 
     public function test_backfills_a_policy_that_keeps_todays_behaviour_for_every_client(): void
     {

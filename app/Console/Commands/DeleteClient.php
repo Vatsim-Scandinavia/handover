@@ -2,29 +2,19 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use App\Models\Passport\Client;
 
+#[Description('Delete a client by id')]
+#[Signature('passport:client:delete')]
 class DeleteClient extends Command
 {
     /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'passport:client:delete';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Delete a client by id';
-
-    /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $clientId = $this->ask('Which client id do you want to revoke?');
         $client = Client::find($clientId);

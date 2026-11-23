@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class EnsureUserIsAdmin
 {
-    public function __construct(private GroupManagerService $service) {}
+    public function __construct(private readonly GroupManagerService $service) {}
 
     public function handle(Request $request, Closure $next): mixed
     {

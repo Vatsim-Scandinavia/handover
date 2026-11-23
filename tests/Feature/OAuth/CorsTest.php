@@ -14,9 +14,9 @@ class CorsTest extends TestCase
 {
     use RefreshDatabase, RunsOAuthFlows;
 
-    private const ORIGIN = 'https://vcas-ok.test';
+    private const string ORIGIN = 'https://vcas-ok.test';
 
-    private const OTHER_ORIGIN = 'https://other.test';
+    private const string OTHER_ORIGIN = 'https://other.test';
 
     private Client $client;
 

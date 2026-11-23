@@ -28,7 +28,7 @@ return new class extends Migration
             ->leftJoin('oauth_access_tokens as a', 'a.id', '=', 'r.access_token_id')
             ->where('r.revoked', false)
             ->select('r.id', 'r.expires_at', 'a.expires_at as access_expires_at')
-            ->chunkById(1000, function ($rows) {
+            ->chunkById(1000, function ($rows): void {
                 foreach ($rows as $row) {
                     $cap = $row->access_expires_at === null
                         ? now()->addDays(30)

@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
  */
 class EditMode
 {
-    private const KEY = 'editing';
+    private const string KEY = 'editing';
 
     public static function keep(RedirectResponse $redirect): RedirectResponse
     {

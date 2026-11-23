@@ -13,7 +13,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('oauth_client_policies', function (Blueprint $table) {
+        Schema::table('oauth_client_policies', function (Blueprint $table): void {
             // MySQL takes a JSON default only as an expression. SQLite can't
             // add a column with an expression default, but takes a literal.
             $table->json('post_logout_redirect_uris')
@@ -24,7 +24,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('oauth_client_policies', function (Blueprint $table) {
+        Schema::table('oauth_client_policies', function (Blueprint $table): void {
             $table->dropColumn('post_logout_redirect_uris');
         });
     }

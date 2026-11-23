@@ -1,15 +1,16 @@
 <?php
 namespace App\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use App\Models\Group;
 use App\User;
 use Illuminate\Console\Command;
 
+#[Description('Add a user to the System Administrators group, creating it if necessary')]
+#[Signature('groups:add-admin {cid : VATSIM CID to add as system admin}')]
 class AddGroupAdmin extends Command
 {
-    protected $signature = 'groups:add-admin {cid : VATSIM CID to add as system admin}';
-    protected $description = 'Add a user to the System Administrators group, creating it if necessary';
-
     public function handle(): int
     {
         $cid = (int) $this->argument('cid');

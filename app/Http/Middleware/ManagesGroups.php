@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class ManagesGroups
 {
-    public function __construct(private GroupManagerService $service) {}
+    public function __construct(private readonly GroupManagerService $service) {}
 
     public function handle(Request $request, Closure $next): mixed
     {
@@ -15,7 +15,7 @@ class ManagesGroups
         $isAdmin = $this->service->isAdmin($user);
         $manageableIds = $this->service->manageableGroupIds($user);
 
-        if (!$isAdmin && empty($manageableIds)) {
+        if (!$isAdmin && $manageableIds === []) {
             abort(403, 'You do not have access to group management.');
         }
 

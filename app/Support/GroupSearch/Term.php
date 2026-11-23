@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
  * One term in a group search: "tag:atc", "area=norway", "is:admin" or a
  * word. Double quotes keep spaces in a value, as in area="north sea".
  */
-final class Term
+final readonly class Term
 {
     /**
      * @param string $raw The term as the user wrote it.
@@ -15,10 +15,10 @@ final class Term
      * @param string $key The attribute key.
      */
     private function __construct(
-        public readonly TermKind $kind,
-        public readonly string $raw,
-        public readonly string $value = '',
-        public readonly string $key = '',
+        public TermKind $kind,
+        public string $raw,
+        public string $value = '',
+        public string $key = '',
     ) {}
 
     public static function parse(string $raw): ?self
@@ -59,7 +59,7 @@ final class Term
     public function apply(Builder $groups): void
     {
         match ($this->kind) {
-            TermKind::Word => $groups->where(function (Builder $q) {
+            TermKind::Word => $groups->where(function (Builder $q): void {
                 $like = '%'.addcslashes($this->value, '%_\\').'%';
                 $q->where('name', 'like', $like)
                     ->orWhere('slug', 'like', $like)

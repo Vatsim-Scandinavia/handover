@@ -1,6 +1,9 @@
 <?php
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Routing\Redirector;
+use Illuminate\Http\RedirectResponse;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -23,8 +26,6 @@ class LoginController extends Controller
 
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -35,15 +36,15 @@ class LoginController extends Controller
     {
         if (! $request->has('code') || ! $request->has('state')) {
             $authorizationUrl = $this->provider->getAuthorizationUrl([
-                'required_scopes' => join(' ', config('vatsim_auth.scopes')),
+                'required_scopes' => implode(' ', config('vatsim_auth.scopes')),
             ]);
             $request->session()->put('oauthstate', $this->provider->getState());
             return redirect()->away($authorizationUrl);
-        } else if ($request->input('state') !== session()->pull('oauthstate')) {
-            return redirect()->to('/')->withError("Login state mismatch error. Please try again. If this persists, please contact technical department.");
-        } else {
-            return $this->verifyLogin($request);
         }
+        if ($request->input('state') !== session()->pull('oauthstate')) {
+            return redirect()->to('/')->withError("Login state mismatch error. Please try again. If this persists, please contact technical department.");
+        }
+        return $this->verifyLogin($request);
     }
 
     protected function verifyLogin(Request $request)
@@ -55,7 +56,7 @@ class LoginController extends Controller
         } catch (IdentityProviderException $e) {
             return redirect()->to('/')->withError("Authentication error: ".$e->getMessage());
         } catch (\Exception $e) {
-            Log::error('OAuth token exchange failed: '.get_class($e).' '.$e->getMessage());
+            Log::error('OAuth token exchange failed: '.$e::class.' '.$e->getMessage());
             return redirect()->to('/')->withError("Authentication error: ".$e->getMessage());
         }
 
@@ -73,27 +74,27 @@ class LoginController extends Controller
         }
 
         if ($resourceOwner->data->vatsim->rating->id == 0) {
-            return redirect()->route('landing')->withError('<b>Login denied.</b><br>Login was denied because you are suspended from VATSIM.');
+            return to_route('landing')->withError('<b>Login denied.</b><br>Login was denied because you are suspended from VATSIM.');
         }
 
         if ($resourceOwner->data->vatsim->rating->id == -1) {
-            return redirect()->route('landing')->withError('<b>Login denied.</b><br>Login was denied because your account is inactive.');
+            return to_route('landing')->withError('<b>Login denied.</b><br>Login was denied because your account is inactive.');
         }
 
         $user = User::find($resourceOwner->data->cid);
 
         // Check if user is banned
         if($user && $user->banned){
-            return redirect()->route('landing')->withError('<br>Login denied</br><br>User '.$user->id.' has been banned in '.\Config::get('app.owner_short').' for the following reason: <i>'.$user->banned->reason.'</i><br><br>For inquires contact '.\Config::get('app.owner_contact').'');
+            return to_route('landing')->withError('<br>Login denied</br><br>User '.$user->id.' has been banned in '.\Config::get('app.owner_short').' for the following reason: <i>'.$user->banned->reason.'</i><br><br>For inquires contact '.\Config::get('app.owner_contact').'');
         }
 
         // Check if user exists and accepted privacy policy
         if($user && $user->accepted_privacy){
             return $this->completeLogin($resourceOwner, $accessToken);
-        } else {
-            session(['resourceOwner' => $resourceOwner, 'accessToken' => $accessToken]); // Store CERT data temporarily
-            return redirect()->route('dpp');
         }
+        session(['resourceOwner' => $resourceOwner, 'accessToken' => $accessToken]);
+        // Store CERT data temporarily
+        return to_route('dpp');
     }
 
     public function validatePrivacy(Request $get){
@@ -104,16 +105,16 @@ class LoginController extends Controller
         session()->forget('accessToken');
 
         if(!$resourceOwner){
-            return redirect()->route('landing')->withError("You need to authenticate yourself before accepting privacy policy");
+            return to_route('landing')->withError("You need to authenticate yourself before accepting privacy policy");
         }
 
         return $this->completeLogin($resourceOwner, $accessToken);
     }
 
 
-    protected function completeLogin($resourceOwner, $token)
+    protected function completeLogin($resourceOwner, $token): Redirector|RedirectResponse
     {
-        $account = User::updateOrCreate(
+        User::updateOrCreate(
             ['id' => $resourceOwner->data->cid],
             ['email' => $resourceOwner->data->personal->email,
             'first_name' => ucfirst(mb_convert_encoding($resourceOwner->data->personal->name_first, "UTF-8")),
@@ -129,7 +130,7 @@ class LoginController extends Controller
             'division' => $resourceOwner->data->vatsim->division->id,
             'subdivision' => $resourceOwner->data->vatsim->subdivision->id,
             'accepted_privacy' => 1,
-            'last_login' => \Carbon\Carbon::now(),
+            'last_login' => Carbon::now(),
             'access_token' => $token->getToken(),
             'refresh_token' => $token->getRefreshToken(),
             'token_expires' => $token->getExpires()

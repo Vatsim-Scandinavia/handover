@@ -74,6 +74,6 @@ class ScopeRepository extends PassportScopeRepository
         $user = User::find($userIdentifier);
 
         // Every client has a policy. Fail closed if one is missing.
-        return $policy !== null && $user !== null && $policy->admits($user);
+        return $policy instanceof ClientPolicy && $user !== null && $policy->admits($user);
     }
 }

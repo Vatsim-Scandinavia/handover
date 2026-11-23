@@ -1,16 +1,19 @@
 <?php
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\QueryException;
 use App\Models\GroupAttributeDefinition;
 use Illuminate\Http\Request;
 
 class GroupAttributeDefinitionController extends Controller
 {
-    public function index()
+    public function index(): Factory|View
     {
         $this->requireAdmin(request());
         $definitions = GroupAttributeDefinition::orderBy('key')->get();
-        return view('groups.attributes', compact('definitions'));
+        return view('groups.attributes', ['definitions' => $definitions]);
     }
 
     public function store(Request $request)
@@ -21,7 +24,7 @@ class GroupAttributeDefinitionController extends Controller
             'label' => ['required', 'string', 'max:255'],
         ]);
         GroupAttributeDefinition::create($data);
-        return redirect()->route('groups.attributes.index')->with('success', 'Attribute definition created.');
+        return to_route('groups.attributes.index')->with('success', 'Attribute definition created.');
     }
 
     public function update(Request $request, GroupAttributeDefinition $definition)
@@ -31,7 +34,7 @@ class GroupAttributeDefinitionController extends Controller
             'label' => ['required', 'string', 'max:255'],
         ]);
         $definition->update($data);
-        return redirect()->route('groups.attributes.index')->with('success', 'Attribute definition updated.');
+        return to_route('groups.attributes.index')->with('success', 'Attribute definition updated.');
     }
 
     public function destroy(Request $request, GroupAttributeDefinition $definition)
@@ -39,10 +42,10 @@ class GroupAttributeDefinitionController extends Controller
         $this->requireAdmin($request);
         try {
             $definition->delete();
-        } catch (\Illuminate\Database\QueryException) {
+        } catch (QueryException) {
             return back()->withErrors(['definition' => 'Cannot delete: referenced by existing values or rules.']);
         }
-        return redirect()->route('groups.attributes.index')->with('success', 'Attribute definition deleted.');
+        return to_route('groups.attributes.index')->with('success', 'Attribute definition deleted.');
     }
 
     private function requireAdmin(Request $request): void

@@ -36,17 +36,17 @@ class IdTokenResponse extends BearerTokenResponse
 
     private function idToken(AccessTokenEntityInterface $accessToken, User $user, string $codeId): string
     {
-        $claims = array_filter(app(AuthCodeRepository::class)->signInParameters($codeId), fn ($value) => $value !== null)
-            + ['at_hash' => self::atHash($accessToken->toString())]
+        $claims = array_filter(app(AuthCodeRepository::class)->signInParameters($codeId), fn (string|int|null $value): bool => $value !== null)
+            + ['at_hash' => $this->atHash($accessToken->toString())]
             + app(UserClaims::class)->forScopes($user, ScopeIds::of($accessToken->getScopes()));
 
-        return app(ActiveKeySigner::class)->sign(function (Builder $builder) use ($accessToken, $user, $claims) {
+        return app(ActiveKeySigner::class)->sign(function (Builder $builder) use ($accessToken, $user, $claims): Builder {
             $builder = $builder
                 ->issuedBy(Issuer::url())
                 ->permittedFor($accessToken->getClient()->getIdentifier())
                 ->relatedTo((string) $user->getKey())
-                ->issuedAt(self::wholeSeconds(new DateTimeImmutable()))
-                ->expiresAt(self::wholeSeconds($accessToken->getExpiryDateTime()));
+                ->issuedAt($this->wholeSeconds(new DateTimeImmutable()))
+                ->expiresAt($this->wholeSeconds($accessToken->getExpiryDateTime()));
 
             foreach ($claims as $name => $value) {
                 $builder = $builder->withClaim($name, $value);
@@ -73,13 +73,13 @@ class IdTokenResponse extends BearerTokenResponse
     }
 
     /** The left half of the SHA-256 of the access token, base64url-encoded (OpenID Connect Core 1.0, section 3.1.3.6). */
-    private static function atHash(string $accessToken): string
+    private function atHash(string $accessToken): string
     {
         return (new JoseEncoder())->base64UrlEncode(substr(hash('sha256', $accessToken, true), 0, 16));
     }
 
     /** Some relying parties reject the fractional NumericDate values lcobucci writes for microseconds. */
-    private static function wholeSeconds(DateTimeInterface $time): DateTimeImmutable
+    private function wholeSeconds(DateTimeInterface $time): DateTimeImmutable
     {
         return new DateTimeImmutable('@'.$time->getTimestamp());
     }

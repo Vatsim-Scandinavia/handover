@@ -16,7 +16,7 @@ class JwksController extends Controller
     public function __invoke(SigningKeyStore $keys): JsonResponse
     {
         return response()
-            ->json(['keys' => array_map(fn (SigningKey $key) => $key->publicJwk(), $keys->published())])
+            ->json(['keys' => array_map(fn (SigningKey $key): array => $key->publicJwk(), $keys->published())])
             ->header('Cache-Control', 'public, max-age='.SigningKeyStore::STAGING_PERIOD_SECONDS);
     }
 }

@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('group_hierarchy', function (Blueprint $table) {
+        Schema::create('group_hierarchy', function (Blueprint $table): void {
             $table->uuid('parent_id');
             $table->uuid('child_id');
             $table->primary(['parent_id', 'child_id']);

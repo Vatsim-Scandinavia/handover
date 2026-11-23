@@ -11,9 +11,9 @@ class DropLegacyClientColumnsMigrationTest extends TestCase
 {
     use RefreshDatabase;
 
-    private const MIGRATION = '2026_11_19_900000_drop_legacy_oauth_client_columns.php';
+    private const string MIGRATION = '2026_11_19_900000_drop_legacy_oauth_client_columns.php';
 
-    private const LEGACY_COLUMNS = ['user_id', 'redirect', 'personal_access_client', 'password_client'];
+    private const array LEGACY_COLUMNS = ['user_id', 'redirect', 'personal_access_client', 'password_client'];
 
     public function test_drops_the_legacy_columns_and_the_personal_access_clients_table(): void
     {

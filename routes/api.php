@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,7 +13,7 @@ use Illuminate\Http\Request;
 
 Route::group([
     'middleware' => 'auth:api'
-], function () {
+], function (): void {
     Route::get('user')->uses('Api\OAuthUserController@view');
     Route::get('v1/user')->uses('Api\OAuthUserController@view');
 });

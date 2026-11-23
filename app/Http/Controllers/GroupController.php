@@ -1,6 +1,9 @@
 <?php
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\QueryException;
 use App\Models\Group;
 use App\Models\GroupAttributeDefinition;
 use App\Services\GroupManagerService;
@@ -14,14 +17,14 @@ use Illuminate\Validation\Rule;
 
 class GroupController extends Controller
 {
-    public function __construct(private GroupManagerService $service) {}
+    public function __construct(private readonly GroupManagerService $service) {}
 
     /**
      * The overview lists every group the user may see, without pagination, so
      * results can be split into sections by an attribute. Handover holds tens
      * of groups, not thousands.
      */
-    public function index()
+    public function index(): Factory|View
     {
         $request = request();
         $isAdmin = $request->attributes->get('is_group_admin');
@@ -47,7 +50,7 @@ class GroupController extends Controller
         $sections = $this->sections($groups, $groupBy);
         $suggestions = $query->suggestions($groups);
 
-        return view('groups.index', compact('groups', 'total', 'query', 'sort', 'definitions', 'groupBy', 'sections', 'suggestions', 'isAdmin'));
+        return view('groups.index', ['groups' => $groups, 'total' => $total, 'query' => $query, 'sort' => $sort, 'definitions' => $definitions, 'groupBy' => $groupBy, 'sections' => $sections, 'suggestions' => $suggestions, 'isAdmin' => $isAdmin]);
     }
 
     /**
@@ -59,18 +62,18 @@ class GroupController extends Controller
      */
     private function sections(Collection $groups, ?GroupAttributeDefinition $by): Collection
     {
-        if (! $by) {
+        if (!$by instanceof GroupAttributeDefinition) {
             return collect(['' => $groups]);
         }
-        return $groups->groupBy(fn (Group $g) => $g->attributeValue($by->key) ?? '')
-            ->sortKeysUsing(fn ($a, $b) => [$a === '', $a] <=> [$b === '', $b]);
+        return $groups->groupBy(fn (Group $g): string => $g->attributeValue($by->key) ?? '')
+            ->sortKeysUsing(fn ($a, $b): int => [$a === '', $a] <=> [$b === '', $b]);
     }
 
-    public function create(Request $request)
+    public function create(Request $request): Factory|View
     {
         $this->requireAdmin($request);
         $definitions = GroupAttributeDefinition::orderBy('key')->get();
-        return view('groups.create', compact('definitions'));
+        return view('groups.create', ['definitions' => $definitions]);
     }
 
     public function store(Request $request)
@@ -92,10 +95,10 @@ class GroupController extends Controller
 
         $this->service->incrementCacheVersion();
 
-        return redirect()->route('groups.show', $group)->with('success', 'Group created.');
+        return to_route('groups.show', $group)->with('success', 'Group created.');
     }
 
-    public function show(Request $request, Group $group)
+    public function show(Request $request, Group $group): Factory|View
     {
         if (!$request->attributes->get('is_group_admin') && !$this->service->canManage($request->user(), $group)) {
             abort(403);
@@ -119,10 +122,7 @@ class GroupController extends Controller
             $candidateChildren = $others;
         }
 
-        return view('groups.show', compact(
-            'group', 'isAdmin', 'grantingRules', 'editing',
-            'definitions', 'candidateParents', 'candidateChildren'
-        ));
+        return view('groups.show', ['group' => $group, 'isAdmin' => $isAdmin, 'grantingRules' => $grantingRules, 'editing' => $editing, 'definitions' => $definitions, 'candidateParents' => $candidateParents, 'candidateChildren' => $candidateChildren]);
     }
 
     public function update(Request $request, Group $group)
@@ -140,7 +140,7 @@ class GroupController extends Controller
             }
         }
 
-        DB::transaction(function () use ($data, $group, $oldIsAdmin, $newIsAdmin, $request) {
+        DB::transaction(function () use ($data, $group, $oldIsAdmin, $newIsAdmin, $request): void {
             $group->update([
                 'slug'           => $data['slug'],
                 'name'           => $data['name'],
@@ -164,7 +164,7 @@ class GroupController extends Controller
 
         $this->service->incrementCacheVersion();
 
-        return EditMode::keep(redirect()->route('groups.show', $group)->with('success', 'Group updated.'));
+        return EditMode::keep(to_route('groups.show', $group)->with('success', 'Group updated.'));
     }
 
     public function destroy(Request $request, Group $group)
@@ -181,11 +181,11 @@ class GroupController extends Controller
 
         try {
             $group->delete();
-        } catch (\Illuminate\Database\QueryException) {
+        } catch (QueryException) {
             return back()->withErrors(['group' => 'Cannot delete: group still has members.']);
         }
         $this->service->incrementCacheVersion();
-        return redirect()->route('groups.index')->with('success', 'Group deleted.');
+        return to_route('groups.index')->with('success', 'Group deleted.');
     }
 
     private function validateGroup(Request $request, ?string $groupId = null): array

@@ -15,11 +15,11 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /** Every scope that existed before client policies. */
-    private const LEGACY_SCOPES = ['full_name', 'email', 'vatsim_details', 'country', 'groups'];
+    private const array LEGACY_SCOPES = ['full_name', 'email', 'vatsim_details', 'country', 'groups'];
 
     public function up(): void
     {
-        Schema::create('oauth_client_policies', function (Blueprint $table) {
+        Schema::create('oauth_client_policies', function (Blueprint $table): void {
             $table->string('client_id', 36)->primary();
             $table->json('allowed_scopes');
             $table->boolean('single_session')->default(true);
@@ -30,7 +30,7 @@ return new class extends Migration
 
         // The restrict on group_id makes the gate fail closed: a group can't
         // be deleted while a client requires it.
-        Schema::create('oauth_client_required_groups', function (Blueprint $table) {
+        Schema::create('oauth_client_required_groups', function (Blueprint $table): void {
             $table->string('client_id', 36);
             $table->uuid('group_id');
             $table->primary(['client_id', 'group_id']);

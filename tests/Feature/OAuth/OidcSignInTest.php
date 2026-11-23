@@ -14,7 +14,7 @@ class OidcSignInTest extends TestCase
 {
     use RefreshDatabase, RunsOAuthFlows;
 
-    private const OIDC_SCOPES = ['openid', 'profile', 'email', 'groups', 'full_name', 'vatsim_details', 'country'];
+    private const array OIDC_SCOPES = ['openid', 'profile', 'email', 'groups', 'full_name', 'vatsim_details', 'country'];
 
     public function test_an_openid_sign_in_returns_an_id_token_signed_by_a_published_key(): void
     {

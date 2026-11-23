@@ -12,7 +12,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('oauth_auth_codes', function (Blueprint $table) {
+        Schema::table('oauth_auth_codes', function (Blueprint $table): void {
             $table->text('nonce')->nullable();
             $table->unsignedBigInteger('auth_time')->nullable();
         });
@@ -20,7 +20,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('oauth_auth_codes', function (Blueprint $table) {
+        Schema::table('oauth_auth_codes', function (Blueprint $table): void {
             $table->dropColumn(['nonce', 'auth_time']);
         });
     }

@@ -47,7 +47,7 @@ class PublishedKeysValidator implements AuthorizationValidatorInterface
             default => null,
         };
 
-        if ($key === null) {
+        if (!$key instanceof SigningKey) {
             throw OAuthServerException::accessDenied('Access token was signed by an unknown key');
         }
 

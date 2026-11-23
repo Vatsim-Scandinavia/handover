@@ -12,7 +12,7 @@ class AddGroupAdminCommandTest extends TestCase
 
     public function test_creates_admin_group_and_adds_user(): void
     {
-        $user = User::factory()->create(['id' => 1234567]);
+        User::factory()->create(['id' => 1234567]);
 
         $this->artisan('groups:add-admin', ['cid' => 1234567])
             ->assertExitCode(0);
@@ -25,7 +25,7 @@ class AddGroupAdminCommandTest extends TestCase
 
     public function test_reuses_existing_admin_group(): void
     {
-        $user = User::factory()->create(['id' => 1234567]);
+        User::factory()->create(['id' => 1234567]);
         Group::factory()->admin()->create(['slug' => 'system-administrators']);
 
         $this->artisan('groups:add-admin', ['cid' => 1234567])
@@ -36,7 +36,7 @@ class AddGroupAdminCommandTest extends TestCase
 
     public function test_is_idempotent_when_user_already_member(): void
     {
-        $user = User::factory()->create(['id' => 1234567]);
+        User::factory()->create(['id' => 1234567]);
         $group = Group::factory()->admin()->create(['slug' => 'system-administrators']);
         $group->members()->attach(1234567, ['created_at' => now()]);
 

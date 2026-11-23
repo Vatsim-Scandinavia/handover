@@ -1,6 +1,8 @@
 <?php
 namespace Tests\Feature\Groups;
 
+use App\Models\GroupManagerRuleByGroup;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use App\Models\Group;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -125,7 +127,7 @@ class GroupHierarchyTest extends TestCase
         $child = Group::factory()->create();
         $parent = Group::factory()->create();
         $managerGroup->members()->attach($manager->id, ['created_at' => now()]);
-        \App\Models\GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::create([
             'manager_group_id' => $managerGroup->id,
             'target_group_id'  => $child->id,
         ]);
@@ -137,7 +139,7 @@ class GroupHierarchyTest extends TestCase
 
     public function test_edit_route_no_longer_resolves(): void
     {
-        $this->expectException(\Symfony\Component\Routing\Exception\RouteNotFoundException::class);
+        $this->expectException(RouteNotFoundException::class);
         route('groups.edit', Group::factory()->create());
     }
 
@@ -227,7 +229,7 @@ class GroupHierarchyTest extends TestCase
         $group = Group::factory()->create();
         $child = Group::factory()->create();
         $managerGroup->members()->attach($manager->id, ['created_at' => now()]);
-        \App\Models\GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::create([
             'manager_group_id' => $managerGroup->id,
             'target_group_id'  => $group->id,
         ]);
@@ -244,7 +246,7 @@ class GroupHierarchyTest extends TestCase
         $group = Group::factory()->create();
         $child = Group::factory()->create();
         $managerGroup->members()->attach($manager->id, ['created_at' => now()]);
-        \App\Models\GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::create([
             'manager_group_id' => $managerGroup->id,
             'target_group_id'  => $group->id,
         ]);
@@ -294,7 +296,7 @@ class GroupHierarchyTest extends TestCase
         DB::table('group_hierarchy')->insert(['parent_id' => $parent->id, 'child_id' => $group->id]);
         DB::table('group_hierarchy')->insert(['parent_id' => $group->id, 'child_id' => $child->id]);
         $managerGroup->members()->attach($manager->id, ['created_at' => now()]);
-        \App\Models\GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::create([
             'manager_group_id' => $managerGroup->id,
             'target_group_id'  => $group->id,
         ]);

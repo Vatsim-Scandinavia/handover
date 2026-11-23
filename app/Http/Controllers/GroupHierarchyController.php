@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use App\Models\Group;
 use App\Services\GroupManagerService;
 use App\Support\EditMode;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class GroupHierarchyController extends Controller
 {
-    public function __construct(private GroupManagerService $service) {}
+    public function __construct(private readonly GroupManagerService $service) {}
 
     // Nest {group} (the child) into a parent group.
     public function store(Request $request, Group $group)
@@ -39,7 +40,7 @@ class GroupHierarchyController extends Controller
     }
 
     // Remove the nesting edge (parent -> {group}).
-    public function destroy(Request $request, Group $group, string $parent)
+    public function destroy(Request $request, Group $group, string $parent): RedirectResponse
     {
         $this->requireAdmin($request);
 
@@ -80,7 +81,7 @@ class GroupHierarchyController extends Controller
     }
 
     // Remove the nesting edge ({group} -> child).
-    public function destroyChild(Request $request, Group $group, string $child)
+    public function destroyChild(Request $request, Group $group, string $child): RedirectResponse
     {
         $this->requireAdmin($request);
 

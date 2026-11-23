@@ -2,6 +2,11 @@
 
 namespace App\Models\Passport;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Attributes\WithoutIncrementing;
+use Illuminate\Contracts\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use App\Models\Group;
 use App\OAuth\Origin;
 use App\Services\GroupMembershipResolver;
@@ -21,6 +26,9 @@ use Illuminate\Support\Arr;
  * @property list<string> $post_logout_redirect_uris The URIs Handover may send the member back to after logout. See CONTEXT.md.
  * @property bool $single_session
  */
+#[Fillable(['client_id', 'allowed_scopes', 'allowed_origins', 'post_logout_redirect_uris', 'single_session'])]
+#[Table(name: 'oauth_client_policies', key: 'client_id', keyType: 'string')]
+#[WithoutIncrementing]
 class ClientPolicy extends Model
 {
     /**
@@ -28,16 +36,6 @@ class ClientPolicy extends Model
      * scopes. Clients created outside the admin UI may request these.
      */
     public const DEFAULT_SCOPES = ['full_name', 'email', 'vatsim_details', 'country'];
-
-    protected $table = 'oauth_client_policies';
-
-    protected $primaryKey = 'client_id';
-
-    protected $keyType = 'string';
-
-    public $incrementing = false;
-
-    protected $fillable = ['client_id', 'allowed_scopes', 'allowed_origins', 'post_logout_redirect_uris', 'single_session'];
 
     protected $attributes = ['single_session' => true];
 
@@ -51,12 +49,18 @@ class ClientPolicy extends Model
         ];
     }
 
+    /**
+     * @return BelongsTo<Client, $this>
+     */
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class, 'client_id');
     }
 
-    /** The groups whose members may sign in. None means every member may. */
+    /**
+     * The groups whose members may sign in. None means every member may.
+     * @return BelongsToMany<Group, $this, Pivot>
+     */
     public function requiredGroups(): BelongsToMany
     {
         return $this->belongsToMany(Group::class, 'oauth_client_required_groups', 'client_id', 'group_id');
@@ -79,7 +83,7 @@ class ClientPolicy extends Model
     {
         return static::query()
             ->whereJsonContains('allowed_origins', $origin)
-            ->whereHas('client', fn ($client) => $client->where('revoked', false))
+            ->whereHas('client', fn (Builder $client) => $client->where('revoked', false))
             ->exists();
     }
 

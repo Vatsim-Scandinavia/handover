@@ -14,8 +14,8 @@ class GroupEditModeTest extends TestCase
 {
     use RefreshDatabase;
 
-    private const EDITING = 'x-data="{ editing: true';
-    private const READ_ONLY = 'x-data="{ editing: false';
+    private const string EDITING = 'x-data="{ editing: true';
+    private const string READ_ONLY = 'x-data="{ editing: false';
 
     protected function setUp(): void
     {

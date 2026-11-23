@@ -1,18 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use App\OAuth\SigningKeys\SigningKey;
 use App\OAuth\SigningKeys\SigningKeyStore;
 
+#[Description('List the published signing keys and their states')]
+#[Signature('signing-keys:list')]
 class SigningKeysList extends SigningKeyCommand
 {
-    protected $signature = 'signing-keys:list';
-    protected $description = 'List the published signing keys and their states';
-
     protected function handleKeys(SigningKeyStore $keys): int
     {
-        $this->table(['Kid', 'State', 'Since', 'Imported'], array_map(fn (SigningKey $key) => [
+        $this->table(['Kid', 'State', 'Since', 'Imported'], array_map(fn (SigningKey $key): array => [
             $key->kid,
             $key->state->value,
             $key->since->toIso8601String(),

@@ -17,7 +17,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('oauth_clients', function (Blueprint $table) {
+        Schema::table('oauth_clients', function (Blueprint $table): void {
             // SQLite refuses to drop an indexed column.
             $table->dropIndex(['user_id']);
             $table->dropColumn(['user_id', 'redirect', 'personal_access_client', 'password_client']);
@@ -28,14 +28,14 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('oauth_clients', function (Blueprint $table) {
+        Schema::table('oauth_clients', function (Blueprint $table): void {
             $table->unsignedBigInteger('user_id')->nullable()->index()->after('id');
             $table->text('redirect')->nullable()->after('provider');
             $table->boolean('personal_access_client')->default(false)->after('redirect');
             $table->boolean('password_client')->default(false)->after('personal_access_client');
         });
 
-        Schema::create('oauth_personal_access_clients', function (Blueprint $table) {
+        Schema::create('oauth_personal_access_clients', function (Blueprint $table): void {
             $table->bigIncrements('id');
             $table->string('client_id', 36);
             $table->timestamps();

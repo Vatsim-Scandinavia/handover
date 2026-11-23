@@ -136,7 +136,7 @@ class PublicClientManagementTest extends TestCase
             'https://user@vcas-ok.test',
             'https://vcas-ok.test#top',
         ]])->assertStatus(422)
-            ->assertJsonValidationErrors(array_map(fn (int $i) => "allowed_origins.{$i}", range(2, 8)))
+            ->assertJsonValidationErrors(array_map(fn (int $i): string => "allowed_origins.{$i}", range(2, 8)))
             ->assertJsonMissingValidationErrors(['allowed_origins.0', 'allowed_origins.1']);
     }
 

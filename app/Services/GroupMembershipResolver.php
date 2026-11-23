@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Models\Group;
 use App\User;
 use Illuminate\Support\Facades\DB;
 
@@ -64,7 +65,7 @@ class GroupMembershipResolver
      *   their membership here. A source equal to $group->id means direct;
      *   any other id is a descendant they roll up through.
      */
-    public function transitiveMembers(\App\Models\Group $group): array
+    public function transitiveMembers(Group $group): array
     {
         // parent_id => [child_id, ...]. Load the whole (small) edge set once.
         $childrenOf = [];

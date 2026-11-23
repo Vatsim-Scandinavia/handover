@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\OAuth\Oidc;
 
 use App\Services\GroupMembershipResolver;
@@ -42,7 +44,7 @@ class UserClaims
             $claims['groups'] = $this->groupIds($user);
         }
 
-        return array_filter($claims, fn ($value) => $value !== null);
+        return array_filter($claims, fn ($value): bool => $value !== null);
     }
 
     /**
@@ -52,6 +54,6 @@ class UserClaims
      */
     public function groupIds(User $user): array
     {
-        return array_map('strval', $this->memberships->effectiveGroupIds($user));
+        return array_map(strval(...), $this->memberships->effectiveGroupIds($user));
     }
 }

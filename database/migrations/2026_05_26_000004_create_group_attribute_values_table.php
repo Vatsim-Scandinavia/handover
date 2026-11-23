@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('group_attribute_values', function (Blueprint $table) {
+        Schema::create('group_attribute_values', function (Blueprint $table): void {
             $table->id();
             $table->uuid('group_id');
             $table->unsignedBigInteger('attribute_definition_id');

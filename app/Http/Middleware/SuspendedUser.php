@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use Illuminate\Http\Response;
+use Illuminate\Http\RedirectResponse;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -10,9 +12,8 @@ class SuspendedUser
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * @param  \Closure(Request): (Response|RedirectResponse)  $next
+     * @return Response|RedirectResponse
      */
     public function handle(Request $request, Closure $next)
     {

@@ -14,10 +14,8 @@ class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         // Enforce each client's policy. See App\Models\Passport\ClientPolicy.
         $this->app->bind(PassportScopeRepository::class, ScopeRepository::class);
@@ -29,10 +27,8 @@ class AppServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         //
     }

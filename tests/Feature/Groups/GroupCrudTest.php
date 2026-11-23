@@ -40,7 +40,7 @@ class GroupCrudTest extends TestCase
         $user = User::factory()->create();
         $mg = Group::factory()->create(['name' => 'Manager Group']);
         $tg = Group::factory()->create(['name' => 'Target Group']);
-        $other = Group::factory()->create(['name' => 'Other Group']);
+        Group::factory()->create(['name' => 'Other Group']);
         $mg->members()->attach($user->id, ['created_at' => now()]);
         GroupManagerRuleByGroup::create(['manager_group_id' => $mg->id, 'target_group_id' => $tg->id]);
 

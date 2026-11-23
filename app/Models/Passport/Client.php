@@ -25,6 +25,9 @@ class Client extends BaseClient
         });
     }
 
+    /**
+     * @return HasOne<ClientPolicy, $this>
+     */
     public function policy(): HasOne
     {
         return $this->hasOne(ClientPolicy::class, 'client_id');

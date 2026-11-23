@@ -20,14 +20,14 @@ use Symfony\Component\HttpFoundation\Response;
 class RedirectLogoutPostToGet
 {
     /** The logout request parameters Handover reads. */
-    private const PARAMS = ['id_token_hint', 'client_id', 'post_logout_redirect_uri', 'state'];
+    private const array PARAMS = ['id_token_hint', 'client_id', 'post_logout_redirect_uri', 'state'];
 
     public function handle(Request $request, Closure $next): Response
     {
         $ownForm = $request->request->has('_token') && $request->cookies->has(config('session.cookie'));
 
         if ($request->isMethod('POST') && ! $ownForm) {
-            return redirect()->route('oidc.logout', $request->only(self::PARAMS), 303);
+            return to_route('oidc.logout', $request->only(self::PARAMS), 303);
         }
 
         return $next($request);
