@@ -40,11 +40,10 @@ final readonly class VatsimConnect
     }
 
     /**
-     * @return array<string, mixed>
+     * @throws IncompleteConsent when the member withheld a scope we require
      */
-    public function resourceOwner(AccessToken $token): array
+    public function member(AccessToken $token): Member
     {
-        /** @var array<string, mixed> */
-        return $this->provider->getResourceOwner($token)->toArray();
+        return Member::fromResourceOwner($this->provider->getResourceOwner($token)->toArray());
     }
 }

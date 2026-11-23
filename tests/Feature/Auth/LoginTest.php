@@ -115,6 +115,15 @@ class LoginTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_accepting_the_privacy_policy_requires_a_vatsim_login(): void
+    {
+        $this->post(route('dpp.accept'))
+            ->assertRedirect(route('landing'))
+            ->assertSessionHas('error');
+
+        $this->assertGuest();
+    }
+
     public function test_a_member_who_withheld_a_scope_is_denied(): void
     {
         $owner = $this->vatsimUser(1234567);
