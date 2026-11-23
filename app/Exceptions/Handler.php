@@ -7,6 +7,7 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use League\OAuth2\Server\Exception\OAuthServerException;
+use Sentry\Laravel\Integration;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -31,19 +32,11 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
-    /**
-     * Report or log an exception.
-     *
-     *
-     * @throws Throwable
-     */
-    public function report(Throwable $exception): void
+    public function register(): void
     {
-        if (app()->bound('sentry') && $this->shouldReport($exception)) {
-            app('sentry')->captureException($exception);
-        }
-
-        parent::report($exception);
+        $this->reportable(function (Throwable $exception): void {
+            Integration::captureUnhandledException($exception);
+        });
     }
 
     /**
