@@ -45,9 +45,22 @@
       }) phpBins);
       defaultPhpEnv = phpByName."php${defaultPhpVersion}".env;
       defaultComposer = pkgs.${"php${defaultPhpVersion}Packages"}.composer;
-      phpVersionStatusLines = lib.concatStringsSep "\n" (map (version: ''
-        echo "  php${version}           $(php${version} -v 2>/dev/null | head -1)"
-      '') availablePhpVersions);
+      # The mise nix plugin discards shellHook output, so the banner lives in a
+      # command on PATH. Run it with `mise run env-info`.
+      envInfo = pkgs.writeShellScriptBin "env-info" ''
+        row() { printf "  %-10s %s\n" "$1" "$2"; }
+        echo ""
+        echo "VATSIM Scandinavia Handover: development environment"
+        echo ""
+        for php in php ${lib.concatMapStringsSep " " (version: "php${version}") availablePhpVersions}; do
+          row "$php" "$($php -v | head -1)"
+        done
+        row mysql "$(mysql --version)"
+        row composer "$(composer --version 2>/dev/null)"
+        row node "$(node --version)"
+        row npm "$(npm --version)"
+        echo ""
+      '';
     in assert lib.assertMsg (availablePhpVersions != [])
       "No supported PHP versions are available in nixpkgs. Checked: ${lib.concatStringsSep ", " desiredPhpVersions}";
       pkgs.mkShell {
@@ -58,24 +71,13 @@
         pkgs.mariadb
         defaultComposer
         pkgs.nodejs
+        envInfo
       ];
 
       env.PHP_PEAR_SYSCONF_DIR = "/tmp";
 
       shellHook = ''
-        echo ""
-        echo "────────────────────────────────────"
-        echo " VATSIM Scandinavia Handover"
-        echo " Development environment"
-        echo "────────────────────────────────────"
-        echo ""
-        echo "  PHP (default)   $(php -v 2>/dev/null | head -1)"
-        ${phpVersionStatusLines}
-        echo "  mysql           $(mysql --version 2>/dev/null || true)"
-        echo "  composer        $(composer --version 2>/dev/null || true)"
-        echo "  node            $(node --version 2>/dev/null || true)"
-        echo "  npm             $(npm --version 2>/dev/null || true)"
-        echo ""
+        env-info
       '';
     };
   in {

@@ -1,6 +1,14 @@
 [env]
 _.file = ".env"
+_.nix = true
 
 [tools]
 # Python package manager for the documentation in docs/
 pdm = "2.29.7"
+
+[settings]
+env_cache = true
+
+[tasks.env-info]
+description = "Show tool versions from the nix dev shell"
+run = "env-info"
