@@ -1,17 +1,20 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\RouteKey;
-use Illuminate\Database\Eloquent\Relations\Pivot;
 use App\Models\Passport\Client;
 use App\User;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\RouteKey;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 #[Fillable(['slug', 'name', 'description', 'is_admin_group'])]
 #[RouteKey('slug')]
@@ -111,6 +114,7 @@ class Group extends Model
     {
         return $this->hasMany(GroupManagerRuleByGroup::class, 'target_group_id');
     }
+
     protected function casts(): array
     {
         return ['is_admin_group' => 'boolean'];

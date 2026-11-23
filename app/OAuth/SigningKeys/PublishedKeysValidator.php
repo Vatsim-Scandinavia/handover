@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\OAuth\SigningKeys;
 
 use Lcobucci\JWT\Encoding\JoseEncoder;
@@ -24,8 +26,7 @@ class PublishedKeysValidator implements AuthorizationValidatorInterface
     public function __construct(
         private readonly AccessTokenRepositoryInterface $accessTokens,
         private readonly SigningKeyStore $keys,
-    ) {
-    }
+    ) {}
 
     public function validateAuthorization(ServerRequestInterface $request): ServerRequestInterface
     {
@@ -36,7 +37,7 @@ class PublishedKeysValidator implements AuthorizationValidatorInterface
         }
 
         try {
-            $kid = (new Parser(new JoseEncoder()))->parse($jwt)->headers()->get('kid');
+            $kid = (new Parser(new JoseEncoder))->parse($jwt)->headers()->get('kid');
         } catch (JwtException $e) {
             throw OAuthServerException::accessDenied($e->getMessage(), null, $e);
         }
@@ -47,7 +48,7 @@ class PublishedKeysValidator implements AuthorizationValidatorInterface
             default => null,
         };
 
-        if (!$key instanceof SigningKey) {
+        if (! $key instanceof SigningKey) {
             throw OAuthServerException::accessDenied('Access token was signed by an unknown key');
         }
 

@@ -1,21 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
-use Illuminate\Console\Attributes\Description;
-use Illuminate\Console\Attributes\Signature;
 use App\Helpers\ConnectHelper;
+use App\Http\Controllers\Controller;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use App\Http\Controllers\Controller;
 
 #[Description('Command updates users data, so we keep our user information up to date.')]
 #[Signature('member:data')]
 class UpdateMemberData extends Command
 {
-
     protected $connectHelper;
+
     protected $controller;
 
     /**
@@ -42,7 +44,7 @@ class UpdateMemberData extends Command
 
                 $refresh = $this->connectHelper->refreshToken($user);
 
-                if (!$refresh) {
+                if (! $refresh) {
 
                     $user->access_token = null;
                     $user->refresh_token = null;
@@ -59,15 +61,14 @@ class UpdateMemberData extends Command
                 $user->save();
 
             }
-            
 
             $response = $this->connectHelper->fetchUser($user);
 
             if (collect($response)->isNotEmpty()) {
 
                 $user->email = $response->data->personal->email;
-                $user->first_name = ucfirst(mb_convert_encoding($response->data->personal->name_first, "UTF-8"));
-                $user->last_name = ucfirst(mb_convert_encoding($response->data->personal->name_last, "UTF-8"));
+                $user->first_name = ucfirst(mb_convert_encoding($response->data->personal->name_first, 'UTF-8'));
+                $user->last_name = ucfirst(mb_convert_encoding($response->data->personal->name_last, 'UTF-8'));
                 $user->rating = $response->data->vatsim->rating->id;
                 $user->rating_short = $response->data->vatsim->rating->short;
                 $user->rating_long = $response->data->vatsim->rating->long;
@@ -79,7 +80,7 @@ class UpdateMemberData extends Command
                 $user->division = $response->data->vatsim->division->id;
                 $user->subdivision = $response->data->vatsim->subdivision->id;
                 $user->save();
-                
+
             }
         }
 

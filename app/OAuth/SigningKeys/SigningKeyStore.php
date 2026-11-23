@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\OAuth\SigningKeys;
 
 use Illuminate\Support\Facades\File;
@@ -34,9 +36,7 @@ class SigningKeyStore
     /** @var array<string, SigningKey> */
     private array $loaded = [];
 
-    public function __construct(private readonly string $directory)
-    {
-    }
+    public function __construct(private readonly string $directory) {}
 
     public function directory(): string
     {
@@ -53,7 +53,7 @@ class SigningKeyStore
         $order = [KeyState::Active, KeyState::Staged, KeyState::Retired];
         $manifest = $this->manifest();
         $keys = array_map($this->load(...), array_keys($manifest), $manifest);
-        usort($keys, fn (SigningKey $a, SigningKey $b): int => array_search($a->state, $order) <=> array_search($b->state, $order));
+        usort($keys, fn (SigningKey $a, SigningKey $b): int => array_search($a->state, $order, true) <=> array_search($b->state, $order, true));
 
         return $keys;
     }

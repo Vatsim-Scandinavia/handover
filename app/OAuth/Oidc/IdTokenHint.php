@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\OAuth\Oidc;
 
 use App\OAuth\SigningKeys\SigningKey;
@@ -29,14 +31,13 @@ final readonly class IdTokenHint
         public string $subject,
         /** The id of the client the id_token was issued to. */
         public string $clientId,
-    ) {
-    }
+    ) {}
 
     /** The hint, or null when Handover can't verify it. */
     public static function verify(string $jwt, SigningKeyStore $keys): ?self
     {
         try {
-            $token = (new Parser(new JoseEncoder()))->parse($jwt);
+            $token = (new Parser(new JoseEncoder))->parse($jwt);
         } catch (JwtException) {
             return null;
         }
@@ -44,13 +45,13 @@ final readonly class IdTokenHint
         $kid = $token->headers()->get('kid');
         $key = is_string($kid) ? $keys->find($kid) : null;
 
-        if (! $token instanceof UnencryptedToken || !$key instanceof SigningKey) {
+        if (! $token instanceof UnencryptedToken || ! $key instanceof SigningKey) {
             return null;
         }
 
-        $valid = (new Validator())->validate(
+        $valid = (new Validator)->validate(
             $token,
-            new SignedWith(new Sha256(), InMemory::plainText($key->publicKeyPem())),
+            new SignedWith(new Sha256, InMemory::plainText($key->publicKeyPem())),
             new IssuedBy(Issuer::url()),
         );
         $subject = $token->claims()->get('sub');

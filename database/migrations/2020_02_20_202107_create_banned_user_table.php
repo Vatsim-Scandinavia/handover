@@ -25,6 +25,7 @@ return new class extends Migration
             $table->timestamp('banned_at')->nullable();
         });
     }
+
     /**
      * Reverse the migrations.
      */

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Tests\Feature\Groups;
 
 use App\Models\Group;
@@ -24,6 +27,7 @@ class GroupManagerRuleTest extends TestCase
     {
         $user = User::factory()->create();
         Group::factory()->admin()->create()->members()->attach($user->id, ['created_at' => now()]);
+
         return $user;
     }
 
@@ -53,15 +57,15 @@ class GroupManagerRuleTest extends TestCase
 
         $this->actingAs($this->adminUser())
             ->post(route('groups.rules.store', $targetGroup), [
-                'type'             => 'group',
+                'type' => 'group',
                 'manager_group_id' => $managerGroup->id,
-                'target_group_id'  => $managerGroup->id,
+                'target_group_id' => $managerGroup->id,
             ])
             ->assertRedirect();
 
         $this->assertDatabaseHas('group_manager_rules_by_group', [
             'manager_group_id' => $managerGroup->id,
-            'target_group_id'  => $targetGroup->id,
+            'target_group_id' => $targetGroup->id,
         ]);
     }
 
@@ -72,15 +76,15 @@ class GroupManagerRuleTest extends TestCase
 
         $this->actingAs($this->adminUser())
             ->post(route('groups.rules.store', $targetGroup), [
-                'type'             => 'tag',
+                'type' => 'tag',
                 'manager_group_id' => $managerGroup->id,
-                'target_tag'       => 'vacc',
+                'target_tag' => 'vacc',
             ])
             ->assertRedirect();
 
         $this->assertDatabaseHas('group_manager_rules_by_tag', [
             'manager_group_id' => $managerGroup->id,
-            'target_tag'       => 'vacc',
+            'target_tag' => 'vacc',
         ]);
     }
 
@@ -92,16 +96,16 @@ class GroupManagerRuleTest extends TestCase
 
         $this->actingAs($this->adminUser())
             ->post(route('groups.rules.store', $targetGroup), [
-                'type'                   => 'attribute',
-                'manager_group_id'       => $managerGroup->id,
-                'target_attribute_key'   => 'region',
+                'type' => 'attribute',
+                'manager_group_id' => $managerGroup->id,
+                'target_attribute_key' => 'region',
                 'target_attribute_value' => 'EUR',
             ])
             ->assertRedirect();
 
         $this->assertDatabaseHas('group_manager_rules_by_attribute', [
-            'manager_group_id'       => $managerGroup->id,
-            'target_attribute_key'   => 'region',
+            'manager_group_id' => $managerGroup->id,
+            'target_attribute_key' => 'region',
             'target_attribute_value' => 'EUR',
         ]);
     }
@@ -110,7 +114,7 @@ class GroupManagerRuleTest extends TestCase
     {
         $rule = GroupManagerRuleByGroup::create([
             'manager_group_id' => Group::factory()->create()->id,
-            'target_group_id'  => Group::factory()->create()->id,
+            'target_group_id' => Group::factory()->create()->id,
         ]);
         $target = Group::find($rule->target_group_id);
 
@@ -128,7 +132,7 @@ class GroupManagerRuleTest extends TestCase
         $targetGroup->tags()->create(['tag' => 'vacc']);
         $rule = GroupManagerRuleByTag::create([
             'manager_group_id' => $managerGroup->id,
-            'target_tag'       => 'vacc',
+            'target_tag' => 'vacc',
         ]);
 
         $this->actingAs($this->adminUser())
@@ -145,8 +149,8 @@ class GroupManagerRuleTest extends TestCase
         $def = GroupAttributeDefinition::factory()->create(['key' => 'region']);
         $targetGroup->attributeValues()->create(['attribute_definition_id' => $def->id, 'value' => 'EUR']);
         $rule = GroupManagerRuleByAttribute::create([
-            'manager_group_id'       => $managerGroup->id,
-            'target_attribute_key'   => 'region',
+            'manager_group_id' => $managerGroup->id,
+            'target_attribute_key' => 'region',
             'target_attribute_value' => 'EUR',
         ]);
 
@@ -161,7 +165,7 @@ class GroupManagerRuleTest extends TestCase
     {
         $rule = GroupManagerRuleByGroup::create([
             'manager_group_id' => Group::factory()->create()->id,
-            'target_group_id'  => Group::factory()->create()->id,
+            'target_group_id' => Group::factory()->create()->id,
         ]);
 
         $this->actingAs($this->adminUser())
@@ -175,7 +179,7 @@ class GroupManagerRuleTest extends TestCase
     {
         $rule = GroupManagerRuleByTag::create([
             'manager_group_id' => Group::factory()->create()->id,
-            'target_tag'       => 'vacc',
+            'target_tag' => 'vacc',
         ]);
 
         $this->actingAs($this->adminUser())
@@ -189,8 +193,8 @@ class GroupManagerRuleTest extends TestCase
     {
         GroupAttributeDefinition::factory()->create(['key' => 'region']);
         $rule = GroupManagerRuleByAttribute::create([
-            'manager_group_id'       => Group::factory()->create()->id,
-            'target_attribute_key'   => 'region',
+            'manager_group_id' => Group::factory()->create()->id,
+            'target_attribute_key' => 'region',
             'target_attribute_value' => 'EUR',
         ]);
 
@@ -223,7 +227,7 @@ class GroupManagerRuleTest extends TestCase
         $targetGroup->tags()->create(['tag' => 'vacc']);
         $rule = GroupManagerRuleByTag::create([
             'manager_group_id' => $managerGroup->id,
-            'target_tag'       => 'unrelated-tag',
+            'target_tag' => 'unrelated-tag',
         ]);
 
         $this->actingAs($this->adminUser())
@@ -259,7 +263,7 @@ class GroupManagerRuleTest extends TestCase
         $targetGroup = Group::factory()->create();
         GroupManagerRuleByGroup::create([
             'manager_group_id' => $managerGroup->id,
-            'target_group_id'  => $targetGroup->id,
+            'target_group_id' => $targetGroup->id,
         ]);
 
         \DB::table('groups')->where('id', $managerGroup->id)->delete();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\OAuth\SigningKeys;
 
 use Lcobucci\JWT\Encoding\JoseEncoder;
@@ -23,7 +25,7 @@ final class Jwk
             throw new SigningKeyException('The key is not a readable RSA private key.');
         }
 
-        $encoder = new JoseEncoder();
+        $encoder = new JoseEncoder;
 
         return [
             'kty' => 'RSA',
@@ -45,6 +47,6 @@ final class Jwk
             JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR,
         );
 
-        return (new JoseEncoder())->base64UrlEncode(hash('sha256', $canonical, true));
+        return (new JoseEncoder)->base64UrlEncode(hash('sha256', $canonical, true));
     }
 }

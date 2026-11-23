@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Tests\Feature\Groups;
 
 use App\Models\Group;
@@ -23,6 +26,7 @@ class GroupCrudTest extends TestCase
     {
         $user = User::factory()->create();
         Group::factory()->admin()->create()->members()->attach($user->id, ['created_at' => now()]);
+
         return $user;
     }
 

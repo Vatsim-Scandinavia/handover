@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Http\Controllers\JwksController;
 use App\Http\Controllers\OAuth\DiscoveryController;
 

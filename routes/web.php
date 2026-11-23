@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Http\Controllers\GroupAttributeDefinitionController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GroupHierarchyController;
@@ -89,4 +91,3 @@ Route::middleware(['suspended'])->group(function (): void {
 
     Route::get('/{any?}', 'Controller@index')->where('any', '.*')->name('landing');
 });
- 

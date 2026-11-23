@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * DO NOT PUBLISH THE KEY, SECRET AND CERT TO CODE REPOSITORIES
  * FOR SECURITY. PLEASE USE LARAVEL'S .envFILES TO PROTECT
@@ -33,4 +35,4 @@ return [
      */
     'scopes' => explode(',', env('VATSIM_OAUTH_SCOPES', 'full_name,email,vatsim_details,country')),
 
-]; 
+];

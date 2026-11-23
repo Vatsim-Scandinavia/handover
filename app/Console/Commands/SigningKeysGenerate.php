@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\OAuth\SigningKeys\SigningKeyStore;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
-use App\OAuth\SigningKeys\SigningKeyStore;
 
 #[Description('Create a staged signing key')]
 #[Signature('signing-keys:generate')]

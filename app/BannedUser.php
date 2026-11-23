@@ -14,6 +14,4 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 ])]
 #[Table(name: 'banned_user', key: 'id')]
 #[WithoutTimestamps]
-class BannedUser extends Authenticatable
-{
-}
+class BannedUser extends Authenticatable {}

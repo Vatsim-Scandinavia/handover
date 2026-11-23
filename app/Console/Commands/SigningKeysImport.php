@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
+use App\OAuth\SigningKeys\SigningKeyStore;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Support\Facades\File;
-use App\OAuth\SigningKeys\SigningKeyStore;
 use Laravel\Passport\Passport;
 
 /**

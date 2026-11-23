@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Tests\Feature\Groups;
 
 use App\Models\Group;
@@ -23,13 +26,14 @@ class GroupOverviewTest extends TestCase
         $user = User::factory()->create();
         Group::factory()->admin()->create(['name' => 'Handover admins', 'slug' => 'handover-admins'])
             ->members()->attach($user->id, ['created_at' => now()]);
+
         return $user;
     }
 
     /**
-     * @param array<string, string> $attributes key => value
-     * @param string[] $tags
-     * @param array<string, bool|string> $extra
+     * @param  array<string, string>  $attributes  key => value
+     * @param  string[]  $tags
+     * @param  array<string, bool|string>  $extra
      */
     private function group(string $name, array $tags = [], array $attributes = [], array $extra = []): Group
     {
@@ -41,6 +45,7 @@ class GroupOverviewTest extends TestCase
             $definition = GroupAttributeDefinition::firstOrCreate(['key' => $key], ['label' => ucfirst($key)]);
             $group->attributeValues()->create(['attribute_definition_id' => $definition->id, 'value' => $value]);
         }
+
         return $group;
     }
 

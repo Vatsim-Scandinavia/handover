@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Tests\Feature\Groups;
 
 use App\Models\Group;
@@ -24,7 +27,7 @@ class GroupManagerServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->service = new GroupManagerService();
+        $this->service = new GroupManagerService;
     }
 
     public function test_admin_user_is_detected(): void
@@ -161,12 +164,12 @@ class GroupManagerServiceTest extends TestCase
 
         DB::table('group_hierarchy')->insert([
             'parent_id' => $managerGroup->id,
-            'child_id'  => $childGroup->id,
+            'child_id' => $childGroup->id,
         ]);
         $childGroup->members()->attach($user->id, ['created_at' => now()]);
         GroupManagerRuleByGroup::create([
             'manager_group_id' => $managerGroup->id, // rule attached to the PARENT
-            'target_group_id'  => $targetGroup->id,
+            'target_group_id' => $targetGroup->id,
         ]);
 
         // User is only a direct member of the child, but inherits managerGroup.
@@ -182,12 +185,12 @@ class GroupManagerServiceTest extends TestCase
 
         DB::table('group_hierarchy')->insert([
             'parent_id' => $managerGroup->id,
-            'child_id'  => $childGroup->id,
+            'child_id' => $childGroup->id,
         ]);
         $childGroup->members()->attach($user->id, ['created_at' => now()]);
         GroupManagerRuleByGroup::create([
             'manager_group_id' => $managerGroup->id,
-            'target_group_id'  => $targetGroup->id,
+            'target_group_id' => $targetGroup->id,
         ]);
 
         $rules = $this->service->grantingRulesFor($user, $targetGroup);
@@ -203,7 +206,7 @@ class GroupManagerServiceTest extends TestCase
 
         DB::table('group_hierarchy')->insert([
             'parent_id' => $adminGroup->id,
-            'child_id'  => $childGroup->id,
+            'child_id' => $childGroup->id,
         ]);
         $childGroup->members()->attach($user->id, ['created_at' => now()]);
 
@@ -223,7 +226,7 @@ class GroupManagerServiceTest extends TestCase
         DB::table('group_hierarchy')->insert(['parent_id' => $parent->id, 'child_id' => $child->id]);
         GroupManagerRuleByGroup::create([
             'manager_group_id' => $managerGroup->id,
-            'target_group_id'  => $parent->id,
+            'target_group_id' => $parent->id,
         ]);
 
         $this->assertTrue($this->service->canManage($manager, $parent));  // the target itself

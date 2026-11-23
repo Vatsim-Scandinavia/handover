@@ -1,19 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Passport;
 
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Table;
-use Illuminate\Database\Eloquent\Attributes\WithoutIncrementing;
-use Illuminate\Contracts\Database\Query\Builder;
-use Illuminate\Database\Eloquent\Relations\Pivot;
 use App\Models\Group;
 use App\OAuth\Origin;
 use App\Services\GroupMembershipResolver;
 use App\User;
+use Illuminate\Contracts\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Attributes\WithoutIncrementing;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Arr;
 
 /**
@@ -59,6 +61,7 @@ class ClientPolicy extends Model
 
     /**
      * The groups whose members may sign in. None means every member may.
+     *
      * @return BelongsToMany<Group, $this, Pivot>
      */
     public function requiredGroups(): BelongsToMany

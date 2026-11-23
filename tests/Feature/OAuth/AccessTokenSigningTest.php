@@ -1,24 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\OAuth;
 
-use Illuminate\Testing\TestResponse;
 use App\OAuth\AccessToken;
 use App\User;
 use DateTimeImmutable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Testing\TestResponse;
 use Laravel\Passport\Bridge\AccessToken as PassportAccessToken;
 use Laravel\Passport\Bridge\Client as ClientEntity;
 use Laravel\Passport\Bridge\Scope;
 use Laravel\Passport\Client;
-use League\OAuth2\Server\CryptKey;
 use Lcobucci\JWT\Encoding\ChainedFormatter;
 use Lcobucci\JWT\Encoding\JoseEncoder;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Token\Builder;
+use League\OAuth2\Server\CryptKey;
 use Tests\Concerns\RunsOAuthFlows;
 use Tests\TestCase;
 
@@ -169,7 +171,7 @@ class AccessTokenSigningTest extends TestCase
             'scopes' => [], 'revoked' => false, 'expires_at' => now()->addHour(),
         ]);
 
-        $builder = Builder::new(new JoseEncoder(), ChainedFormatter::default());
+        $builder = Builder::new(new JoseEncoder, ChainedFormatter::default());
         if ($kid !== null) {
             $builder = $builder->withHeader('kid', $kid);
         }
@@ -177,12 +179,12 @@ class AccessTokenSigningTest extends TestCase
         return $builder
             ->permittedFor((string) $client->getKey())
             ->identifiedBy($id)
-            ->issuedAt(new DateTimeImmutable())
-            ->canOnlyBeUsedAfter(new DateTimeImmutable())
+            ->issuedAt(new DateTimeImmutable)
+            ->canOnlyBeUsedAfter(new DateTimeImmutable)
             ->expiresAt(new DateTimeImmutable('+1 hour'))
             ->relatedTo((string) $user->getKey())
             ->withClaim('scopes', [])
-            ->getToken(new Sha256(), InMemory::plainText($privateKeyPem))
+            ->getToken(new Sha256, InMemory::plainText($privateKeyPem))
             ->toString();
     }
 

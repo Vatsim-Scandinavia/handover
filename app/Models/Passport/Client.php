@@ -1,12 +1,14 @@
 <?php
- 
+
+declare(strict_types=1);
+
 namespace App\Models\Passport;
- 
+
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 use Laravel\Passport\Client as BaseClient;
- 
+
 class Client extends BaseClient
 {
     protected static function booted(): void

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -53,14 +55,12 @@ class RouteServiceProvider extends ServiceProvider
      * Define the "web" routes for the application.
      *
      * These routes all receive session state, CSRF protection, etc.
-     *
-     * @return void
      */
-    protected function mapWebRoutes()
+    protected function mapWebRoutes(): void
     {
         Route::middleware('web')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/web.php'));
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web.php'));
     }
 
     /**
@@ -68,10 +68,8 @@ class RouteServiceProvider extends ServiceProvider
      *
      * These routes are public and stateless, and readable from any origin. They
      * load before the web routes, whose catch-all would otherwise match them.
-     *
-     * @return void
      */
-    protected function mapWellKnownRoutes()
+    protected function mapWellKnownRoutes(): void
     {
         Route::middleware('cors:any')->group(base_path('routes/well-known.php'));
     }
@@ -80,28 +78,24 @@ class RouteServiceProvider extends ServiceProvider
      * Define Handover's own "/oauth" routes, such as userinfo.
      *
      * These routes are stateless and authenticate with a bearer token.
-     *
-     * @return void
      */
-    protected function mapOAuthRoutes()
+    protected function mapOAuthRoutes(): void
     {
         Route::prefix('oauth')
-             ->middleware('api')
-             ->group(base_path('routes/oauth.php'));
+            ->middleware('api')
+            ->group(base_path('routes/oauth.php'));
     }
 
     /**
      * Define the "api" routes for the application.
      *
      * These routes are typically stateless.
-     *
-     * @return void
      */
-    protected function mapApiRoutes()
+    protected function mapApiRoutes(): void
     {
         Route::prefix('api')
-             ->middleware('api')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/api.php'));
+            ->middleware('api')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/api.php'));
     }
 }

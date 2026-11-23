@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\OAuth;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;

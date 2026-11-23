@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Support\GroupSearch;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -10,9 +13,9 @@ use Illuminate\Database\Eloquent\Builder;
 final readonly class Term
 {
     /**
-     * @param string $raw The term as the user wrote it.
-     * @param string $value The word, the tag, or the attribute value.
-     * @param string $key The attribute key.
+     * @param  string  $raw  The term as the user wrote it.
+     * @param  string  $value  The word, the tag, or the attribute value.
+     * @param  string  $key  The attribute key.
      */
     private function __construct(
         public TermKind $kind,
@@ -32,6 +35,7 @@ final readonly class Term
         if (preg_match('/^([a-z0-9_-]+)=(.+)$/i', $raw, $m) && self::unquote($m[2]) !== '') {
             return new self(TermKind::Attribute, $raw, self::unquote($m[2]), strtolower($m[1]));
         }
+
         return self::unquote($raw) === '' ? null : new self(TermKind::Word, $raw, self::unquote($raw));
     }
 

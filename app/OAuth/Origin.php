@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\OAuth;
 
 use League\Uri\Uri;
@@ -31,7 +33,7 @@ final class Origin
     {
         $uri = Uri::tryNew($value);
 
-        if (!$uri instanceof Uri
+        if (! $uri instanceof Uri
             || $uri->getUserInfo() !== null
             || $uri->getQuery() !== null
             || $uri->getFragment() !== null

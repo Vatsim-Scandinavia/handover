@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Concerns;
 
 use App\User;
@@ -105,13 +107,13 @@ trait RunsOAuthFlows
     /** @return array<string, mixed> */
     protected function jwtPayload(string $jwt): array
     {
-        return json_decode(base64_decode(strtr(explode('.', $jwt)[1], '-_', '+/')), true);
+        return json_decode(base64_decode(strtr(explode('.', $jwt)[1], '-_', '+/'), true), true);
     }
 
     /** @return array<string, mixed> */
     protected function jwtHeader(string $jwt): array
     {
-        return json_decode(base64_decode(strtr(explode('.', $jwt)[0], '-_', '+/')), true);
+        return json_decode(base64_decode(strtr(explode('.', $jwt)[0], '-_', '+/'), true), true);
     }
 
     /** A JSON request with the access token as a bearer token, and no guard state left from earlier requests. */
@@ -131,10 +133,10 @@ trait RunsOAuthFlows
         $this->assertNotNull($jwk, "The JWKS has no key with kid {$kid}.");
 
         $publicKey = PublicKeyLoader::load(json_encode($jwk))->toString('PKCS8');
-        $token = (new Parser(new JoseEncoder()))->parse($jwt);
+        $token = (new Parser(new JoseEncoder))->parse($jwt);
 
         $this->assertTrue(
-            (new Validator())->validate($token, new SignedWith(new Sha256(), InMemory::plainText($publicKey))),
+            (new Validator)->validate($token, new SignedWith(new Sha256, InMemory::plainText($publicKey))),
             'The JWT signature does not verify against the JWKS.',
         );
     }

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
-use Illuminate\Console\Attributes\Description;
-use Illuminate\Console\Attributes\Signature;
 use App\OAuth\SigningKeys\SigningKey;
 use App\OAuth\SigningKeys\SigningKeyStore;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 
 #[Description('Make a staged key sign new tokens, and retire the active key')]
 #[Signature('signing-keys:activate

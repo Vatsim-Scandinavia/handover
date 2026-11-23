@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\OAuth\SigningKeys;
 
 use Carbon\CarbonImmutable;
@@ -19,8 +21,7 @@ final readonly class SigningKey
         public CarbonImmutable $since,
         /** Whether the key was adopted from Passport's original key files. */
         public bool $imported,
-    ) {
-    }
+    ) {}
 
     /** When the key may move on: a staged key to active, a retired key to removed. */
     public function readyAt(): CarbonImmutable
