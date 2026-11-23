@@ -299,9 +299,14 @@ class GroupHierarchyTest extends TestCase
             ->assertSee(route('groups.children.store', $group))    // member-group add control
             ->assertSee(route('groups.parents.destroy', ['group' => $group, 'parent' => $parent->id]))   // per-row remove
             ->assertSee(route('groups.children.destroy', ['group' => $group, 'child' => $child->id]))
-            ->assertSee('data-admin="1"', false)         // admin-group options flagged for the dynamic warning
             ->assertSee('parentIsAdmin', false)          // warning shown reactively on selecting an admin parent
-            ->assertDontSee('(admin group');             // no static suffix in the dropdown options
+            ->assertDontSee('(admin group')              // no static suffix in the options
+            ->assertViewHas('memberOfOptions', fn (array $options): bool => collect($options)->contains(
+                fn (array $o): bool => $o['admin'] === true && $o['disabled'] === false))  // admin groups flagged for the warning
+            ->assertViewHas('memberOfOptions', fn (array $options): bool => collect($options)->contains(
+                fn (array $o): bool => $o['id'] === $parent->id && $o['disabled'] === true))  // current links shown, not pickable
+            ->assertViewHas('memberGroupOptions', fn (array $options): bool => collect($options)->contains(
+                fn (array $o): bool => $o['id'] === $child->id && $o['disabled'] === true));
     }
 
     public function test_manager_sees_read_only_group_page(): void
