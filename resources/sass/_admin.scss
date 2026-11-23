@@ -97,6 +97,14 @@ $admin-line: var(--color-gray-300);
 .section-title { margin: 0 0 .5rem; font-size: var(--heading-section); font-weight: 500; color: var(--color-tertiary); }
 * + .section-title { margin-top: 1.5rem; }
 
+// Top-level blocks of a long page, such as a group's members. The space
+// and the rule mark a new task; .section-title spacing works within one.
+.page-section + .page-section {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid $admin-line;
+}
+
 .data-table {
     width: 100%;
     border-collapse: collapse;
