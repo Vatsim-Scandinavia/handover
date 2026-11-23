@@ -1285,24 +1285,6 @@ parameters:
 			path: app/Http/Controllers/VatsimOAuthController.php
 
 		-
-			message: '#^Call to method getRefreshToken\(\) on an unknown class League\\OAuth2\\Client\\Token\.$#'
-			identifier: class.notFound
-			count: 1
-			path: app/Http/Controllers/VatsimOAuthController.php
-
-		-
-			message: '#^Method App\\Http\\Controllers\\VatsimOAuthController\:\:updateToken\(\) should return null but returns League\\OAuth2\\Client\\Token\\AccessTokenInterface\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Http/Controllers/VatsimOAuthController.php
-
-		-
-			message: '#^Parameter \$token of method App\\Http\\Controllers\\VatsimOAuthController\:\:updateToken\(\) has invalid type League\\OAuth2\\Client\\Token\.$#'
-			identifier: class.notFound
-			count: 1
-			path: app/Http/Controllers/VatsimOAuthController.php
-
-		-
 			message: '#^PHPDoc type array of property App\\Http\\Kernel\:\:\$middleware is not the same as PHPDoc type array\<int, string\> of overridden property Illuminate\\Foundation\\Http\\Kernel\:\:\$middleware\.$#'
 			identifier: property.phpDocType
 			count: 1
@@ -2209,30 +2191,6 @@ parameters:
 			path: app/Support/GroupSearch/Term.php
 
 		-
-			message: '#^Call to static method updateToken\(\) on an unknown class App\\OAuthController\.$#'
-			identifier: class.notFound
-			count: 1
-			path: app/User.php
-
-		-
-			message: '#^Cannot call method getExpires\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: app/User.php
-
-		-
-			message: '#^Cannot call method getRefreshToken\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: app/User.php
-
-		-
-			message: '#^Cannot call method getToken\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: app/User.php
-
-		-
 			message: '#^Class App\\User uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
 			identifier: missingType.generics
 			count: 1
@@ -2240,12 +2198,6 @@ parameters:
 
 		-
 			message: '#^Method App\\User\:\:banned\(\) should return App\\BannedUser but returns Illuminate\\Database\\Eloquent\\Relations\\HasOne\<App\\BannedUser, \$this\(App\\User\)\>\.$#'
-			identifier: return.type
-			count: 1
-			path: app/User.php
-
-		-
-			message: '#^Method App\\User\:\:getTokenAttribute\(\) should return null but returns mixed\.$#'
 			identifier: return.type
 			count: 1
 			path: app/User.php
