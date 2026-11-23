@@ -121,18 +121,29 @@ class GroupController extends Controller
         if (! $request->attributes->get('is_group_admin') && ! $this->service->canManage($request->user(), $group)) {
             abort(403);
         }
-        $group->load('tags', 'attributeValues.definition');
+        $group->load('tags', 'attributeValues.definition', 'parents');
         $group->setAttribute('members_count', count($this->resolver->transitiveMembers($group)));
         $isAdmin = $request->attributes->get('is_group_admin');
         $grantingRules = $isAdmin ? [] : $this->service->grantingRulesFor($request->user(), $group);
         $editing = EditMode::isOn($request);
 
+        // Groups this one is a member of through its direct parents, each
+        // with the direct parents it comes through.
+        $through = $this->resolver->indirectMemberOf($group);
+        $indirectMemberOf = Group::whereIn('id', array_keys($through))->orderBy('name')->get()
+            ->map(fn (Group $g): array => [
+                'group' => $g,
+                'through' => $group->parents->whereIn('id', $through[$g->id])->pluck('name')->sort()->values()->all(),
+            ])->all();
+
         $definitions = collect();
+        $memberOfOptions = [];
         if ($isAdmin) {
             $definitions = GroupAttributeDefinition::orderBy('key')->get();
+            $memberOfOptions = $group->nestingOptions($group->parents);
         }
 
-        return view('groups.show', ['group' => $group, 'isAdmin' => $isAdmin, 'grantingRules' => $grantingRules, 'editing' => $editing, 'definitions' => $definitions]);
+        return view('groups.show', ['group' => $group, 'isAdmin' => $isAdmin, 'grantingRules' => $grantingRules, 'editing' => $editing, 'definitions' => $definitions, 'indirectMemberOf' => $indirectMemberOf, 'memberOfOptions' => $memberOfOptions]);
     }
 
     public function update(Request $request, Group $group)
