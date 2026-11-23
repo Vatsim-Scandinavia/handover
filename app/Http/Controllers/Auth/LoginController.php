@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\VatsimOAuthController;
 use App\User;
+use App\Vatsim\VatsimConnect;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\RedirectResponse;
@@ -17,32 +17,19 @@ use Illuminate\Support\Facades\Log;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Session;
 
-/**
- * Class AuthController
- */
 class LoginController extends Controller
 {
     use AuthenticatesUsers;
 
-    protected $provider;
-
-    /**
-     * Create a new controller instance.
-     */
-    public function __construct()
-    {
-        $this->provider = new VatsimOAuthController;
-    }
+    public function __construct(private readonly VatsimConnect $vatsim) {}
 
     public function login(Request $request)
     {
         if (! $request->has('code') || ! $request->has('state')) {
-            $authorizationUrl = $this->provider->getAuthorizationUrl([
-                'required_scopes' => implode(' ', config('vatsim_auth.scopes')),
-            ]);
-            $request->session()->put('oauthstate', $this->provider->getState());
+            ['url' => $url, 'state' => $state] = $this->vatsim->authorizationUrl();
+            $request->session()->put('oauthstate', $state);
 
-            return redirect()->away($authorizationUrl);
+            return redirect()->away($url);
         }
         if ($request->input('state') !== session()->pull('oauthstate')) {
             return redirect()->to('/')->withError('Login state mismatch error. Please try again. If this persists, please contact technical department.');
@@ -54,9 +41,7 @@ class LoginController extends Controller
     protected function verifyLogin(Request $request)
     {
         try {
-            $accessToken = $this->provider->getAccessToken('authorization_code', [
-                'code' => $request->input('code'),
-            ]);
+            $accessToken = $this->vatsim->exchangeCode($request->string('code')->value());
         } catch (IdentityProviderException $e) {
             return redirect()->to('/')->withError('Authentication error: '.$e->getMessage());
         } catch (\Exception $e) {
@@ -65,7 +50,7 @@ class LoginController extends Controller
             return redirect()->to('/')->withError('Authentication error: '.$e->getMessage());
         }
 
-        $resourceOwner = json_decode(json_encode($this->provider->getResourceOwner($accessToken)->toArray()));
+        $resourceOwner = json_decode(json_encode($this->vatsim->resourceOwner($accessToken)));
 
         if (
             ! isset($resourceOwner->data) ||
