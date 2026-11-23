@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AuthorizedClientController;
 use App\Http\Controllers\GroupAttributeDefinitionController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GroupHierarchyController;
@@ -74,9 +73,6 @@ Route::middleware(['auth', 'groups.manage'])->prefix('groups')->name('groups.')-
         ->where('type', 'group|tag|attribute')
         ->where('rule', '[0-9]+');
 });
-
-Route::middleware('auth')->get('/account/authorized-clients', AuthorizedClientController::class)
-    ->name('account.authorized-clients');
 
 Route::middleware(['auth', 'admin'])->prefix('admin/oauth-clients')->name('admin.oauth-clients.')->group(function () {
     Route::get('/', [OAuthClientController::class, 'index'])->name('index');

@@ -1,21 +1,16 @@
 @extends('layouts.app')
 
+@section('title', "Privacy policy")
+
 @section('content')
+    <h1>Privacy policy</h1>
+    <p>Accept our privacy policy to log in to our services. Here it is in short. <a target="_blank" rel="noopener noreferrer" href="{{ config('app.dpp_url') }}">Read the full privacy policy</a>.</p>
 
-        @include('layouts.header')
+    @include('parts.dpp-bullets')
 
-        <div class="dpp bt py-4 text-left">
-            <h2 class="mb-2">Privacy Policy</h2>
-            <p>Accept our privacy policy to login into our services.<br>
-            Last update: {{ Config::get('app.dpp_date') }}, <a target="_blank" href="{{ Config::get('app.dpp_url') }}">read the full privacy policy.</a></p>
-
-            <h2 class="mb-3">In short terms</h2>
-            @include('parts.dpp-bullets')
-
-            <form class="form-horizontal" method="POST" action="{{ route('dpp.accept') }}">
-                    @csrf
-                    <button type="submit" class="btn btn btn-primary mt-4">Yes, I accept</button>
-            </form>
-        </div>
-
+    <form class="dpp-accept" method="POST" action="{{ route('dpp.accept') }}">
+        @csrf
+        <button type="submit" class="btn btn-primary">Yes, I accept</button>
+        <span class="small text-muted">Last updated {{ config('app.dpp_date') }}</span>
+    </form>
 @endsection

@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@section('content')
-    @include('layouts.header')
+@section('title', "Log out")
 
-    <h2 class="h5 mt-3">Log out of Handover?</h2>
+@section('content')
+    <h1>Log out of {{ config('app.name') }}?</h1>
     @if($client)
-        <p>{{ $client->name }} asked to log you out of Handover.</p>
+        <p>{{ $client->name }} asked to log you out of {{ config('app.name') }}.</p>
     @endif
     <p>You stay logged in to other services until you log out of them too.</p>
 
-    <form method="POST" action="{{ route('oidc.logout') }}" class="d-flex justify-content-center gap-2">
+    <form method="POST" action="{{ route('oidc.logout') }}" class="member-actions">
         @csrf
         @if($client)
             <input type="hidden" name="client_id" value="{{ $client->getKey() }}">

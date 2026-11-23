@@ -1,28 +1,30 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Services;
 
+use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Laravel\Passport\Client;
 use Laravel\Passport\Token;
 
-class AuthorizedClientController extends Controller
+class AuthorizedClients
 {
     /**
-     * List the third-party OAuth clients the authenticated user has authorized.
+     * The third-party OAuth clients a user has authorized.
      *
      * Replaces Passport's deprecated GET /oauth/tokens endpoint. A client counts
      * while it holds a live access token or a live refresh token, since access
      * tokens expire after an hour. Personal access and password clients are left
      * out, as /oauth/tokens did. Passport 13's firstParty() is not used: it means
      * "has no owner", which is true for every client here.
+     *
+     * @return Collection<int, array{name: string, url: ?string}>
      */
-    public function __invoke(Request $request): JsonResponse
+    public function for(User $user): Collection
     {
-        $clients = $request->user()->tokens()
+        return $user->tokens()
             ->with('client')
             ->where('revoked', false)
             ->where(fn (Builder $query) => $query
@@ -39,10 +41,22 @@ class AuthorizedClientController extends Controller
             ->unique('id')
             ->map(fn (Client $client): array => [
                 'name' => $client->name,
-                'url' => $client->redirect_uris[0] ?? null,
+                'url' => $this->origin($client->redirect_uris[0] ?? null),
             ])
             ->values();
+    }
 
-        return response()->json($clients);
+    /**
+     * The site a redirect URI belongs to. The URI itself is usually the OAuth
+     * callback, which errors when opened without an authorization code.
+     */
+    private function origin(?string $uri): ?string
+    {
+        $parts = parse_url($uri ?? '');
+        if (! in_array($parts['scheme'] ?? null, ['http', 'https'], true) || ! isset($parts['host'])) {
+            return null;
+        }
+
+        return $parts['scheme'].'://'.$parts['host'].(isset($parts['port']) ? ':'.$parts['port'] : '');
     }
 }

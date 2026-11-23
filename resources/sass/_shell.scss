@@ -1,0 +1,133 @@
+// One heading scale for member and management pages.
+:root {
+    --heading-page: 1.5rem;
+    --heading-section: 1.0625rem;
+}
+
+// The top bar (layouts/bar). Brand and account share one line at any width;
+// the management links wrap below them on narrow screens.
+
+.shell-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem 1.5rem;
+    margin-bottom: 1.25rem;
+    color: #fff;
+    font-size: .875rem;
+}
+
+.shell-brand {
+    display: flex;
+    align-items: center;
+    gap: .625rem;
+    flex-shrink: 0;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+
+    &:hover {
+        color: #fff;
+    }
+
+    img {
+        height: 2rem;
+        width: auto;
+    }
+
+    span {
+        padding-left: .625rem;
+        border-left: 1px solid rgba(255, 255, 255, .4);
+        line-height: 1.5rem;
+    }
+
+    @include media-breakpoint-up(sm) {
+        gap: .75rem;
+        font-size: 1.125rem;
+
+        img {
+            height: 2.5rem;
+        }
+
+        span {
+            padding-left: .75rem;
+            line-height: 1.75rem;
+        }
+    }
+}
+
+.shell-account {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+.shell-nav {
+    order: 3;
+    flex-basis: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem 1.25rem;
+
+    // Always underlined, so they read as links without hover.
+    a {
+        color: #fff;
+        text-decoration: underline;
+        text-decoration-color: rgba(255, 255, 255, .5);
+        text-underline-offset: .3em;
+    }
+
+    // Light enough to read on the page colour in both themes.
+    a:hover {
+        color: #8ccbe8;
+        text-decoration-color: currentColor;
+    }
+
+    a[aria-current="page"] {
+        font-weight: 500;
+        text-decoration-color: #fff;
+        text-decoration-thickness: 2px;
+    }
+
+    a:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+    }
+
+    @include media-breakpoint-up(md) {
+        order: 0;
+        flex-basis: auto;
+    }
+}
+
+// Name and CID: in the bar from sm up, under the dashboard heading below.
+.shell-who {
+    display: none;
+
+    @include media-breakpoint-up(sm) {
+        display: inline;
+    }
+}
+
+.shell-who-narrow {
+    @include media-breakpoint-up(sm) {
+        display: none;
+    }
+}
+
+// The CID, set like a callsign.
+.shell-cid {
+    margin-left: .25rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: .04em;
+    opacity: .8;
+}
+
+// The member column is too narrow for links between brand and account.
+.member .shell-nav {
+    order: 3;
+    flex-basis: 100%;
+}

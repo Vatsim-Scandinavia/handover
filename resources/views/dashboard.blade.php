@@ -1,47 +1,45 @@
 @extends('layouts.app')
 
+@section('title', "Your account")
+
 @section('content')
-    @include('layouts.header')
-    <div class="container py-4 mb-4 bt bm" id="app">
-        <passport-authorized-clients></passport-authorized-clients>
-    </div>
+    <h1>Your account</h1>
+    {{-- The bar hides the name and CID on narrow screens. --}}
+    <p class="shell-who-narrow">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }} <span class="shell-cid">{{ Auth::user()->id }}</span></p>
 
-    <div class="alert alert-info text-sm" style="font-size: 12px" role="alert">
-        <i class="fas fa-info-circle"></i>&nbsp;To delete your personal data contact the <a href="mailto:{{ Config::get('app.dpo_mail') }}">Data Protection Officer</a>.
-    </div>
-
-    <div class="d-flex flex-column justify-content-center align-items-center gap-3">
-        <x-logout-button class="btn btn-primary" />
-
-        @if($groups->isNotEmpty())
-        <div class="card w-100">
-            <div class="card-header"><strong>Your groups</strong></div>
-            <ul class="list-group list-group-flush">
-                @foreach($groups as $row)
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <span>{{ $row['group']->name }}</span>
-                    @if($row['via'] === null)
-                    <span class="badge bg-primary">Direct</span>
+    <h2>Services you've signed in to</h2>
+    @if($clients->isEmpty())
+        <p class="text-muted">You haven't signed in to any service through {{ config('app.name') }} yet.</p>
+    @else
+        <ul class="strips">
+            @foreach($clients as $client)
+                <li>
+                    @if($client['url'])
+                        <a href="{{ $client['url'] }}" class="strip strip-link" target="_blank" rel="noopener noreferrer">
+                            {{ $client['name'] }}
+                            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                            <span class="visually-hidden">(opens in a new tab)</span>
+                        </a>
                     @else
-                    <span class="badge bg-secondary">Inherited via {{ $row['via'] }}</span>
+                        <div class="strip">{{ $client['name'] }}</div>
                     @endif
                 </li>
-                @endforeach
-            </ul>
-        </div>
+            @endforeach
+        </ul>
+    @endif
+
+    <h2>Your groups</h2>
+    @if($directGroups->isEmpty())
+        <p class="text-muted">You aren't in any groups.</p>
+    @else
+        @if($children->isNotEmpty())
+            <p class="small text-muted">Indented groups come with the group above them.</p>
         @endif
+        @include('parts.group-strips', ['groups' => $directGroups])
+    @endif
 
-        @can('viewAny', \App\Models\Group::class)
-            <a href="{{ route('groups.index') }}" class="btn btn-outline-secondary" style="font-size: 14px;">
-                <i class="fas fa-users-cog"></i>&nbsp;Manage groups
-            </a>
-        @endcan
-    </div>
-@endsection
 
-@section('js')
-    <script>
-        var apiUri = "{{ url('/api') }}";
-        var csrf = "{{ csrf_token() }}";
-    </script>
+    <p class="member-note">
+        To delete your personal data, contact the <a href="mailto:{{ config('app.dpo_mail') }}">Data Protection Officer</a>.
+    </p>
 @endsection

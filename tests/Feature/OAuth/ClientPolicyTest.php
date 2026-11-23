@@ -85,7 +85,9 @@ class ClientPolicyTest extends TestCase
 
         $this->authorizeRequest(User::factory()->create(), $client)
             ->assertForbidden()
-            ->assertSee("You can't sign in to Test Client", false);
+            ->assertSee("You can't sign in to Test Client", false)
+            ->assertSee(route('landing'), false)     // a way to the member's groups
+            ->assertSee(route('oidc.logout'), false); // and a way to log out
         $this->assertSame(0, DB::table('oauth_auth_codes')->count());
     }
 

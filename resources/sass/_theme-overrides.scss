@@ -95,6 +95,13 @@ body {
     }
 }
 
+// In dark, the secondary grey is too dim on a card and outline secondary
+// buttons read as disabled.
+[data-theme="dark"] .btn-outline-secondary {
+    --bs-btn-color: var(--color-gray-700);
+    --bs-btn-border-color: var(--color-gray-500);
+}
+
 // Bootstrap alerts
 .alert {
     color: var(--color-text-primary);

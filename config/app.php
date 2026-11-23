@@ -53,6 +53,10 @@ return [
     'owner_contact' => env('APP_OWNER_CONTACT', 'webmaster@vatsim.net'),
     'owner' => env('APP_OWNER', 'VATSIM'),
 
+    // Trusted HTML telling members where to get help, shown on error pages in
+    // place of the default line that points to owner_contact.
+    'owner_support' => env('APP_OWNER_SUPPORT'),
+
     /*
     |--------------------------------------------------------------------------
     | Short name of application owner

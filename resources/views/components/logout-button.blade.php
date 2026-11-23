@@ -4,5 +4,5 @@
 @props(['inline' => false])
 <form method="POST" action="{{ route('oidc.logout') }}" @class(['d-inline' => $inline])>
     @csrf
-    <button type="submit" {{ $attributes }}>Logout</button>
+    <button type="submit" {{ $attributes }}>Log out</button>
 </form>

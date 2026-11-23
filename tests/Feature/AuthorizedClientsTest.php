@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Services\AuthorizedClients;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -66,6 +67,14 @@ class AuthorizedClientsTest extends TestCase
         ], $overrides));
     }
 
+    /**
+     * @return list<array{name: string, url: ?string}>
+     */
+    private function authorizedClients(User $user): array
+    {
+        return app(AuthorizedClients::class)->for($user)->all();
+    }
+
     public function test_lists_authorized_third_party_clients(): void
     {
         $user = User::factory()->create();
@@ -75,22 +84,35 @@ class AuthorizedClientsTest extends TestCase
         ]);
         $this->createToken($user, $clientId);
 
-        $this->actingAs($user)
-            ->getJson('/account/authorized-clients')
-            ->assertOk()
-            ->assertExactJson([
-                ['name' => 'vACC Norway', 'url' => 'https://vacc-norway.test/callback'],
-            ]);
+        $this->assertSame([
+                ['name' => 'vACC Norway', 'url' => 'https://vacc-norway.test'],
+            ], $this->authorizedClients($user));
     }
 
-    public function test_returns_empty_array_when_user_has_no_authorized_clients(): void
+    public function test_leaves_out_the_url_when_the_redirect_uri_is_not_a_web_address(): void
+    {
+        $user = User::factory()->create();
+        $this->createToken($user, $this->createClient(['redirect_uris' => ['com.example.app:/callback']]));
+
+        $this->assertSame([['name' => 'vACC Norway', 'url' => null]], $this->authorizedClients($user));
+    }
+
+    public function test_dashboard_lists_authorized_clients(): void
+    {
+        $user = User::factory()->create();
+        $this->createToken($user, $this->createClient(['name' => 'vACC Norway']));
+
+        $this->actingAs($user)
+            ->get('/')
+            ->assertOk()
+            ->assertSee('vACC Norway');
+    }
+
+    public function test_lists_nothing_when_user_has_no_authorized_clients(): void
     {
         $user = User::factory()->create();
 
-        $this->actingAs($user)
-            ->getJson('/account/authorized-clients')
-            ->assertOk()
-            ->assertExactJson([]);
+        $this->assertSame([], $this->authorizedClients($user));
     }
 
     public function test_excludes_revoked_and_expired_tokens(): void
@@ -101,10 +123,7 @@ class AuthorizedClientsTest extends TestCase
         $this->createToken($user, $clientId, ['revoked' => true]);
         $this->createToken($user, $clientId, ['expires_at' => now()->subDay()]);
 
-        $this->actingAs($user)
-            ->getJson('/account/authorized-clients')
-            ->assertOk()
-            ->assertExactJson([]);
+        $this->assertSame([], $this->authorizedClients($user));
     }
 
     public function test_excludes_personal_access_and_password_clients(): void
@@ -116,10 +135,7 @@ class AuthorizedClientsTest extends TestCase
         $this->createToken($user, $personal);
         $this->createToken($user, $password);
 
-        $this->actingAs($user)
-            ->getJson('/account/authorized-clients')
-            ->assertOk()
-            ->assertExactJson([]);
+        $this->assertSame([], $this->authorizedClients($user));
     }
 
     public function test_lists_client_with_expired_access_token_but_valid_refresh_token(): void
@@ -129,12 +145,9 @@ class AuthorizedClientsTest extends TestCase
         $tokenId = $this->createToken($user, $clientId, ['expires_at' => now()->subHour()]);
         $this->createRefreshToken($tokenId);
 
-        $this->actingAs($user)
-            ->getJson('/account/authorized-clients')
-            ->assertOk()
-            ->assertExactJson([
-                ['name' => 'vACC Norway', 'url' => 'https://vacc-norway.test/callback'],
-            ]);
+        $this->assertSame([
+                ['name' => 'vACC Norway', 'url' => 'https://vacc-norway.test'],
+            ], $this->authorizedClients($user));
     }
 
     public function test_excludes_client_whose_refresh_token_is_revoked_or_expired(): void
@@ -147,15 +160,6 @@ class AuthorizedClientsTest extends TestCase
         $expired = $this->createToken($user, $clientId, ['expires_at' => now()->subHour()]);
         $this->createRefreshToken($expired, ['expires_at' => now()->subDay()]);
 
-        $this->actingAs($user)
-            ->getJson('/account/authorized-clients')
-            ->assertOk()
-            ->assertExactJson([]);
-    }
-
-    public function test_requires_authentication(): void
-    {
-        $this->getJson('/account/authorized-clients')
-            ->assertUnauthorized();
+        $this->assertSame([], $this->authorizedClients($user));
     }
 }
