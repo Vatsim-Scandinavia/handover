@@ -14,6 +14,7 @@ use GuzzleHttp\Psr7\Response;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\GenericProvider;
 use Psr\Http\Message\RequestInterface;
+use Throwable;
 
 /**
  * Answers VatsimConnect's HTTP calls with queued responses, so tests run the
@@ -24,7 +25,7 @@ trait FakesVatsimConnect
     /** @var ArrayObject<int, array{request: RequestInterface}>|null */
     private ?ArrayObject $vatsimHistory = null;
 
-    protected function fakeVatsim(Response ...$responses): void
+    protected function fakeVatsim(Response|Throwable ...$responses): void
     {
         $history = new ArrayObject;
         $handler = HandlerStack::create(new MockHandler(array_values($responses)));
