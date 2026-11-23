@@ -1,0 +1,329 @@
+// Theme Overrides with CSS Variables
+// This file applies CSS variables to override Bootstrap's compiled colors
+// allowing dynamic theme switching at runtime.
+// Only the Bootstrap classes Handover uses are remapped.
+
+body {
+    color: var(--color-body);
+    background-color: var(--bg-body);
+    --bs-border-color: var(--border-color);
+    --bs-border-color-translucent: var(--border-color);
+}
+
+// Override Bootstrap utility classes
+.bg-white {
+    background-color: var(--bg-card) !important;
+}
+
+.text-white {
+    color: #fff !important;
+}
+
+// Override Bootstrap color classes
+.text-danger { color: var(--color-danger) !important; }
+.text-muted { color: var(--color-text-muted) !important; }
+
+.bg-primary { background-color: var(--color-primary) !important; }
+.bg-secondary { background-color: var(--color-secondary) !important; }
+.bg-success { background-color: var(--color-success) !important; }
+.bg-info { background-color: var(--color-info) !important; }
+.bg-danger { background-color: var(--color-danger) !important; }
+
+// Bootstrap button overrides
+.btn-primary {
+    // Buttons use the brighter interactive primary; white text is AA on it
+    // in dark and matches the existing light appearance.
+    --bs-btn-color: #fff;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-active-color: #fff;
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-bg: var(--color-primary-emphasis);
+    --bs-btn-border-color: var(--color-primary-emphasis);
+    --bs-btn-hover-bg: color-mix(in srgb, var(--color-primary-emphasis), #000 12%);
+    --bs-btn-hover-border-color: color-mix(in srgb, var(--color-primary-emphasis), #000 12%);
+    --bs-btn-active-bg: color-mix(in srgb, var(--color-primary-emphasis), #000 20%);
+    --bs-btn-active-border-color: color-mix(in srgb, var(--color-primary-emphasis), #000 20%);
+    --bs-btn-disabled-bg: var(--color-primary-emphasis);
+    --bs-btn-disabled-border-color: var(--color-primary-emphasis);
+    background-color: var(--color-primary-emphasis);
+    border-color: var(--color-primary-emphasis);
+}
+
+.btn-success {
+    background-color: var(--color-success);
+    border-color: var(--color-success);
+}
+
+.btn-danger {
+    background-color: var(--color-danger);
+    border-color: var(--color-danger);
+}
+
+.btn-link {
+    --bs-btn-color: var(--link-color);
+    --bs-btn-hover-color: var(--link-hover-color);
+}
+
+// Outline buttons: Bootstrap bakes these at the compiled (light) palette, so
+// they never theme. Drive them from the same primary as the filled buttons so
+// an outline button always matches its filled counterpart. Hover/active fill
+// with the colour; the hover text colour is left to Bootstrap.
+.btn-outline-primary {
+    // Resting text/border use the brighter outline primary so they read on
+    // the body; hover/active fill with the filled-button primary (white text
+    // is AA there), so a hovered outline button matches a filled one.
+    --bs-btn-color: var(--color-primary-outline);
+    --bs-btn-border-color: var(--color-primary-outline);
+    --bs-btn-hover-bg: var(--color-primary-emphasis);
+    --bs-btn-hover-border-color: var(--color-primary-emphasis);
+    --bs-btn-active-bg: var(--color-primary-emphasis);
+    --bs-btn-active-border-color: var(--color-primary-emphasis);
+    --bs-btn-disabled-color: var(--color-primary-outline);
+    --bs-btn-disabled-border-color: var(--color-primary-outline);
+}
+
+@each $name in (secondary, danger) {
+    .btn-outline-#{$name} {
+        --bs-btn-color: var(--color-#{$name});
+        --bs-btn-border-color: var(--color-#{$name});
+        --bs-btn-hover-bg: var(--color-#{$name});
+        --bs-btn-hover-border-color: var(--color-#{$name});
+        --bs-btn-active-bg: var(--color-#{$name});
+        --bs-btn-active-border-color: var(--color-#{$name});
+        --bs-btn-disabled-color: var(--color-#{$name});
+        --bs-btn-disabled-border-color: var(--color-#{$name});
+    }
+}
+
+// Bootstrap alerts
+.alert {
+    color: var(--color-text-primary);
+}
+
+.alert-success {
+    --bs-alert-bg: var(--color-success);
+    --bs-alert-color: #fff;
+    --bs-alert-border-color: var(--color-success);
+    background-color: var(--color-success);
+    border-color: var(--color-success);
+    color: #fff;
+}
+
+.alert-info {
+    --bs-alert-bg: var(--color-info);
+    --bs-alert-color: #fff;
+    --bs-alert-border-color: var(--color-info);
+    background-color: var(--color-info);
+    border-color: var(--color-info);
+    color: #fff;
+}
+
+.alert-warning {
+    --bs-alert-bg: var(--color-warning);
+    --bs-alert-color: #000;
+    --bs-alert-border-color: var(--color-warning);
+    background-color: var(--color-warning);
+    border-color: var(--color-warning);
+    color: #000;
+}
+
+.alert-danger {
+    --bs-alert-bg: var(--color-danger);
+    --bs-alert-color: #fff;
+    --bs-alert-border-color: var(--color-danger);
+    background-color: var(--color-danger);
+    border-color: var(--color-danger);
+    color: #fff;
+}
+
+// Alert links inherit the alert's text colour so they stay legible on the
+// solid background. Button-styled anchors keep their own styling.
+.alert > a:not(.btn) {
+    color: inherit;
+    text-decoration: underline;
+
+    &:hover,
+    &:focus {
+        color: inherit;
+        text-decoration: underline;
+    }
+}
+
+// Bootstrap cards
+.card {
+    --bs-card-bg: var(--bg-card);
+    --bs-card-cap-bg: var(--bg-card-header);
+    --bs-card-color: var(--color-text-primary);
+    --bs-card-border-color: var(--border-color);
+
+    background-color: var(--bg-card);
+    border-color: var(--border-color);
+    color: var(--color-text-primary);
+
+    .card-header {
+        background-color: var(--bg-card-header);
+        border-bottom-color: var(--border-color);
+        color: var(--color-text-primary);
+    }
+
+    .card-body {
+        color: var(--color-text-primary);
+    }
+}
+
+// Bootstrap forms
+.form-control,
+.form-select {
+    --bs-body-color: var(--color-text-primary);
+    background-color: var(--bg-card);
+    border-color: var(--border-color);
+    color: var(--color-text-primary);
+
+    &:focus {
+        background-color: var(--bg-card);
+        border-color: var(--color-primary);
+        color: var(--color-text-primary);
+    }
+
+    &::placeholder {
+        color: var(--color-text-muted);
+        opacity: 0.7;
+    }
+
+    &:disabled {
+        background-color: var(--color-gray-200);
+        background-image: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            var(--color-gray-300) 10px,
+            var(--color-gray-300) 20px
+        );
+        border-color: var(--color-gray-300);
+        color: var(--color-text-muted);
+        opacity: 0.8;
+        cursor: not-allowed;
+    }
+
+    &[readonly] {
+        background-color: var(--color-gray-100);
+        border-color: var(--border-color);
+        color: var(--color-text-secondary);
+        cursor: default;
+    }
+}
+
+.form-check-input {
+    background-color: var(--bg-card);
+    border-color: var(--border-color);
+
+    &:checked {
+        background-color: var(--color-primary);
+        border-color: var(--color-primary);
+    }
+
+    &:disabled {
+        background-color: var(--color-gray-200);
+        border-color: var(--color-gray-300);
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.form-label {
+    color: var(--color-text-primary);
+}
+
+.form-text {
+    color: var(--color-text-muted);
+}
+
+// Input groups
+.input-group-text {
+    background-color: var(--bg-card-header);
+    border-color: var(--border-color);
+    color: var(--color-text-primary);
+}
+
+// Bootstrap list groups
+.list-group {
+    --bs-list-group-color: var(--color-text-primary);
+    --bs-list-group-bg: var(--bg-card);
+    --bs-list-group-border-color: var(--border-color);
+}
+
+// Bootstrap tables
+.table {
+    --bs-table-bg: var(--bg-card);
+
+    color: var(--color-text-primary);
+    border-color: var(--border-color);
+    background-color: var(--bg-card);
+
+    th, td {
+        border-color: var(--border-color);
+        color: var(--color-text-primary);
+        background-color: transparent;
+    }
+
+    > :not(caption) > * > * {
+        background-color: transparent;
+    }
+}
+
+// Bootstrap modals
+.modal-content {
+    background-color: var(--bg-card);
+    border-color: var(--border-color);
+    color: var(--color-text-primary);
+
+    .modal-header {
+        border-bottom-color: var(--border-color);
+    }
+
+    .modal-footer {
+        border-top-color: var(--border-color);
+    }
+}
+
+// Bootstrap dropdowns
+.dropdown-menu {
+    background-color: var(--bg-card);
+    border-color: var(--border-color);
+}
+
+// Bootstrap navigation
+.nav-link {
+    color: var(--color-text-primary);
+
+    &:hover, &:focus {
+        color: var(--color-primary);
+    }
+}
+
+// Bootstrap pagination (the group members list)
+.pagination {
+    --bs-pagination-color: var(--color-primary-text);
+    --bs-pagination-bg: var(--bg-card);
+    --bs-pagination-border-color: var(--border-color);
+    --bs-pagination-hover-color: var(--color-primary-text);
+    --bs-pagination-hover-bg: var(--color-gray-200);
+    --bs-pagination-hover-border-color: var(--border-color);
+    --bs-pagination-focus-color: var(--color-primary-text);
+    --bs-pagination-focus-bg: var(--color-gray-200);
+    --bs-pagination-active-color: var(--color-on-primary);
+    --bs-pagination-active-bg: var(--color-primary);
+    --bs-pagination-active-border-color: var(--color-primary);
+    --bs-pagination-disabled-color: var(--color-text-muted);
+    --bs-pagination-disabled-bg: var(--bg-card);
+    --bs-pagination-disabled-border-color: var(--border-color);
+}
+
+// Links
+a {
+    color: var(--link-color);
+
+    &:hover {
+        color: var(--link-hover-color);
+    }
+}

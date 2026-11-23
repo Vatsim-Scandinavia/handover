@@ -1,0 +1,65 @@
+// Light Theme CSS Variables
+// This theme uses the current color scheme as the light mode
+
+:root,
+[data-theme="light"] {
+    // Primary Colors
+    --color-primary: #1a475f;
+    --color-secondary: #484b4c;
+    --color-tertiary: #011328;
+
+    // Foreground used for text/icons on top of --color-primary fills
+    --color-on-primary: #fff;
+
+    // Brighter "interactive" primary used by filled buttons. Same as
+    // --color-primary in light; brighter in dark so buttons stay legible
+    // without darkening surfaces.
+    --color-primary-emphasis: #1a475f;
+
+    // Outline buttons brighten their resting text/border one step further so
+    // they read on --bg-body; on hover they fill with
+    // --color-primary-emphasis.
+    --color-primary-outline: #1a475f;
+
+    // Primary used as *foreground text* on surfaces, such as links in
+    // paragraphs and group tags. Same as --color-primary in light.
+    --color-primary-text: #1a475f;
+
+    // Status Colors
+    --color-info: #17a2b8;
+    --color-success: #41826e;
+    --color-warning: #ff9800;
+    --color-danger: #b63f3f;
+
+    // Gray Scale
+    --color-gray-100: #f8f9fc;
+    --color-gray-200: #eaecf4;
+    --color-gray-300: #dddfeb;
+    --color-gray-400: #d1d3e2;
+    --color-gray-500: #b7b9cc;
+    --color-gray-700: #6e707e;
+    --color-gray-900: #3a3b45;
+
+    // Text Colors
+    --color-body: #011328;
+    --color-text-primary: #3a3b45;
+    --color-text-secondary: #858796;
+    --color-text-muted: #858796;
+    --color-text-dark: #3a3b45;
+
+    // Background Colors
+    --bg-body: #f8f9fc;
+    --bg-card: #fff;
+    --bg-card-header: #f8f9fc;
+    --bg-light: #f8f9fc;
+
+    // Border
+    --border-color: #e3e6f0;
+
+    // Link Colors
+    --link-color: #1a475f;
+    --link-hover-color: #011328;
+
+    // Table row hover, one step darker than the white card.
+    --table-hover-bg: var(--color-gray-200);
+}

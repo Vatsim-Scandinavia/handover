@@ -1,12 +1,7 @@
 // Override Bootstrap default variables here
-// Do not edit any of the files in /vendor/bootstrap/scss/!
-
+// Bootstrap needs literal colours for its Sass functions. At runtime the
+// theme's CSS custom properties override them (see _theme-overrides.scss).
 @use "sass:color";
-
-@import "_env";
-
-// Color Variables
-// Bootstrap Color Overrides
 
 $snow: #dfebeb !default;
 $white: #fff !default;
@@ -34,49 +29,32 @@ $teal: #20c9a6 !default;
 $cyan: #43c6e7 !default;
 
 // Note: We don't have $primary here as it overrides bootstrap vars.
-$primary: $envColorPrimary;
-$secondary: $envColorSecondary;
-$tertiary: $envColorTertiary;
+$primary: #1a475f;
+$secondary: #484b4c;
+$tertiary: #011328;
 
-$info: $envColorInfo;
-$warning: $envColorWarning;
-$danger: $envColorDanger;
-$success: $envColorSuccess;
-
-$tertiary: $darkblue;
-
-// Custom Colors
-$brand-google: #ea4335;
-$brand-facebook: #3b5998;
-
-// Set Contrast Threshold
-$yiq-contrasted-threshold: 195 !default;
+$info: #17a2b8;
+$warning: #ff9800;
+$danger: #b63f3f;
+$success: #41826e;
 
 // Typography
-$body-color: $gray-600 !default;
+$body-color: #011328 !default;
 
-$font-family-sans-serif: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", 'Noto Color Emoji' !default;
+$font-family-sans-serif: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
 
 $font-weight-light: 300 !default;
-// $font-weight-base: 400;
 $headings-font-weight: 400 !default;
 
 // Shadows
-$box-shadow-sm: 0 0.125rem 0.25rem 0 rgba($gray-900, .2) !default;
-$box-shadow: 0 0.15rem 1.75rem 0 rgba($gray-900, .15) !default;
-// $box-shadow-lg: 0 1rem 3rem rgba($black, .175) !default;
+$box-shadow-sm: 0 0.125rem 0.25rem 0 rgba($gray-900, 0.2) !default;
+$box-shadow: 0 0.15rem 1.75rem 0 rgba($gray-900, 0.15) !default;
 
 // Borders Radius
-$border-radius: $envBorderRadius !default;
+$border-radius: 2px !default;
+$border-radius-sm: 2px !default;
 $border-color: color.adjust($gray-200, $lightness: -2%);
-
-// Spacing Variables
-// Change below variable if the height of the navbar changes
-$topbar-base-height: 4.375rem;
-// Change below variable to change the width of the sidenav
-$sidebar-base-width: 14rem;
-// Change below variable to change the width of the sidenav when collapsed
-$sidebar-collapsed-width: 6.5rem;
 
 // Buttons and pagination are square at every size. Bootstrap's -sm and -lg
 // radii otherwise fall back to its own .25rem and .5rem.
@@ -96,7 +74,7 @@ $spacer: 1rem;
 $grid-gutter-width: $spacer * 1.5;
 
 // Transitions
-$transition-collapse: height .15s ease !default;
+$transition-collapse: height 0.15s ease !default;
 
 // Dropdowns
 $dropdown-font-size: 0.85rem;

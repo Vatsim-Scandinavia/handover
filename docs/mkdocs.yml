@@ -95,6 +95,7 @@ nav:
       - Environment variables: reference/environment-variables.md
       - Setup:
           - Customising the theme: setup/theme.md
+          - Custom container image: setup/custom.md
           - Data protection policy: setup/dpp.md
           - Signing keys: setup/signing-keys.md
   - Usage:
