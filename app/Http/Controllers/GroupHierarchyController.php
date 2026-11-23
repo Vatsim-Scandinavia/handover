@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use App\Services\GroupManagerService;
-use App\Support\EditMode;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -40,7 +39,7 @@ class GroupHierarchyController extends Controller
         ]);
         $this->service->incrementCacheVersion();
 
-        return EditMode::keep(back()->with('success', "Added {$group->name} to {$parent->name}."));
+        return back()->with('success', "Added {$group->name} to {$parent->name}.");
     }
 
     // Take {group} out of a group it is a member of.
@@ -55,7 +54,7 @@ class GroupHierarchyController extends Controller
         $this->service->incrementCacheVersion();
         $name = Group::find($parent)->name ?? 'the group';
 
-        return EditMode::keep(back()->with('success', "Removed {$group->name} from {$name}."));
+        return back()->with('success', "Removed {$group->name} from {$name}.");
     }
 
     // Add another group as a member of {group} (edge: parent = {group}, child = selected).
@@ -83,7 +82,7 @@ class GroupHierarchyController extends Controller
         ]);
         $this->service->incrementCacheVersion();
 
-        return EditMode::keep(back()->with('success', "Added {$child->name} to {$group->name}."));
+        return back()->with('success', "Added {$child->name} to {$group->name}.");
     }
 
     // Take a member group out of {group}.
@@ -98,7 +97,7 @@ class GroupHierarchyController extends Controller
         $this->service->incrementCacheVersion();
         $name = Group::find($child)->name ?? 'the group';
 
-        return EditMode::keep(back()->with('success', "Removed {$name} from {$group->name}."));
+        return back()->with('success', "Removed {$name} from {$group->name}.");
     }
 
     /**

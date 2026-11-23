@@ -14,44 +14,28 @@ use Illuminate\Http\Request;
 
 class GroupMemberController extends Controller
 {
-    public function __construct(private readonly GroupManagerService $service) {}
+    public function __construct(
+        private readonly GroupManagerService $service,
+        private readonly GroupMembershipResolver $resolver,
+    ) {}
 
+    /**
+     * Everyone who counts as a member: enrolled in the group, or in a member
+     * group (their members roll up here), with where each membership comes
+     * from. Also the group's member groups and the groups it is a member of.
+     */
     public function index(): Factory|View
     {
+        // No parameters: this overrides Controller::index(), the dashboard.
         $request = request();
         $slug = $request->route('group');
         $group = $slug instanceof Group ? $slug : Group::where('slug', $slug)->firstOrFail();
 
         $this->requireAccess($request, $group);
-
-        $search = $request->input('search');
-        $query = $group->members()->orderBy('first_name');
-
-        if ($search) {
-            $query->where(function ($q) use ($search): void {
-                $q->where('first_name', 'like', $search.'%')
-                    ->orWhere('last_name', 'like', $search.'%')
-                    ->orWhere('users.id', $search);
-            });
-        }
-
-        $members = $query->paginate(25)->withQueryString();
-        $transitive = false;
-
-        return view('groups.members', ['group' => $group, 'members' => $members, 'search' => $search, 'transitive' => $transitive]);
-    }
-
-    /**
-     * Every member of the group, including those inherited from descendant
-     * groups (their members roll up here). Read-only: enrolment is managed on
-     * the direct-members view.
-     */
-    public function all(Request $request, Group $group, GroupMembershipResolver $resolver): Factory|View
-    {
-        $this->requireAccess($request, $group);
+        $isAdmin = (bool) $request->attributes->get('is_group_admin');
 
         // userId => enrolment source group ids (this group and/or descendants).
-        $sourceMap = $resolver->transitiveMembers($group);
+        $sourceMap = $this->resolver->transitiveMembers($group);
 
         $search = $request->input('search');
         $query = User::whereIn('id', array_keys($sourceMap))->orderBy('first_name');
@@ -80,9 +64,13 @@ class GroupMemberController extends Controller
                 ->values()->all(),
         ])->all();
 
-        $transitive = true;
+        $group->load('parents', 'children');
+        // Candidates: every other group (cycle/self attempts are rejected on submit).
+        $candidates = $isAdmin
+            ? Group::where('id', '!=', $group->id)->orderBy('name')->get(['id', 'name', 'is_admin_group'])
+            : collect();
 
-        return view('groups.members', ['group' => $group, 'members' => $members, 'search' => $search, 'transitive' => $transitive, 'memberSources' => $memberSources]);
+        return view('groups.members', ['group' => $group, 'members' => $members, 'search' => $search, 'memberSources' => $memberSources, 'isAdmin' => $isAdmin, 'candidates' => $candidates]);
     }
 
     public function store(Request $request, Group $group)

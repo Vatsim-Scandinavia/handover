@@ -147,7 +147,7 @@ class GroupHierarchyTest extends TestCase
         route('groups.edit', Group::factory()->create());
     }
 
-    public function test_show_page_lists_parent_and_child_groups(): void
+    public function test_members_page_lists_member_groups_and_member_of(): void
     {
         $group = Group::factory()->create(['name' => 'vACC Norway']);
         $parent = Group::factory()->create(['name' => 'EUR Region']);
@@ -156,19 +156,19 @@ class GroupHierarchyTest extends TestCase
         DB::table('group_hierarchy')->insert(['parent_id' => $group->id, 'child_id' => $child->id]);
 
         $this->actingAs($this->admin())
-            ->get(route('groups.show', $group))
+            ->get(route('groups.members.index', $group))
             ->assertOk()
             ->assertSee('EUR Region')
             ->assertSee('Norway Trainees');
     }
 
-    public function test_group_page_shows_parent_control_and_admin_hint(): void
+    public function test_members_page_shows_member_of_control_and_admin_hint(): void
     {
         $group = Group::factory()->create();
         Group::factory()->admin()->create(['name' => 'System Administrators']);
 
         $this->actingAs($this->admin())
-            ->get(route('groups.show', $group))
+            ->get(route('groups.members.index', $group))
             ->assertOk()
             ->assertSee(route('groups.parents.store', $group))
             ->assertSee('does not grant admin'); // hint text near admin-group options
@@ -277,15 +277,28 @@ class GroupHierarchyTest extends TestCase
             ->get(route('groups.show', $group))
             ->assertOk()
             ->assertSee('Save changes')          // core-field form
-            ->assertSee(route('groups.parents.store', $group))     // member-of add control
-            ->assertSee(route('groups.children.store', $group))    // member-group add control
-            ->assertSee('does not grant admin')  // admin-group hint (now the dynamic warning)
-            ->assertSee(route('groups.parents.destroy', ['group' => $group, 'parent' => $parent->id]))   // per-row remove
-            ->assertSee(route('groups.children.destroy', ['group' => $group, 'child' => $child->id]))
             ->assertSee('Delete group')          // danger zone
             ->assertSee('x-data="{ editing:', false)     // Alpine edit toggle wired
             ->assertSee('editing = !editing', false)     // toggle button flips edit mode
-            ->assertSee(':disabled="!editing"', false)   // controls disabled until editing, not hidden
+            ->assertSee(':disabled="!editing"', false);  // controls disabled until editing, not hidden
+    }
+
+    public function test_admin_sees_nesting_controls_on_members_page(): void
+    {
+        $group = Group::factory()->create();
+        Group::factory()->admin()->create(['name' => 'System Administrators']);
+        $parent = Group::factory()->create();
+        $child = Group::factory()->create();
+        DB::table('group_hierarchy')->insert(['parent_id' => $parent->id, 'child_id' => $group->id]);
+        DB::table('group_hierarchy')->insert(['parent_id' => $group->id, 'child_id' => $child->id]);
+
+        $this->actingAs($this->admin())
+            ->get(route('groups.members.index', $group))
+            ->assertOk()
+            ->assertSee(route('groups.parents.store', $group))     // member-of add control
+            ->assertSee(route('groups.children.store', $group))    // member-group add control
+            ->assertSee(route('groups.parents.destroy', ['group' => $group, 'parent' => $parent->id]))   // per-row remove
+            ->assertSee(route('groups.children.destroy', ['group' => $group, 'child' => $child->id]))
             ->assertSee('data-admin="1"', false)         // admin-group options flagged for the dynamic warning
             ->assertSee('parentIsAdmin', false)          // warning shown reactively on selecting an admin parent
             ->assertDontSee('(admin group');             // no static suffix in the dropdown options
@@ -310,14 +323,18 @@ class GroupHierarchyTest extends TestCase
             ->get(route('groups.show', $group))
             ->assertOk()
             ->assertSee('A read-only overview')  // overview renders
-            ->assertSee($parent->name)           // parent/child lists still render
-            ->assertSee($child->name)
             ->assertDontSee('Save changes')      // no editing form
             ->assertDontSee('Delete group')      // no danger zone
+            ->assertDontSee('x-data="{ editing', false); // no Alpine edit toggle for managers
+
+        $this->actingAs($manager)
+            ->get(route('groups.members.index', $group))
+            ->assertOk()
+            ->assertSee($parent->name)           // nesting lists render read-only
+            ->assertSee($child->name)
             ->assertDontSee(route('groups.parents.store', $group))
             ->assertDontSee(route('groups.children.store', $group))
             ->assertDontSee(route('groups.parents.destroy', ['group' => $group, 'parent' => $parent->id]))
-            ->assertDontSee(route('groups.children.destroy', ['group' => $group, 'child' => $child->id]))
-            ->assertDontSee('x-data="{ editing', false); // no Alpine edit toggle for managers
+            ->assertDontSee(route('groups.children.destroy', ['group' => $group, 'child' => $child->id]));
     }
 }

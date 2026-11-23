@@ -7,7 +7,7 @@
      the initial disabled state server-side (no flash before Alpine), and
      `:disabled="!editing"` keeps it in sync. Managers get no x-data, so they
      are always read-only. --}}
-<div class="card"@if($isAdmin) x-data="{ editing: {{ $editing ? 'true' : 'false' }}, parentIsAdmin: false }"@endif>
+<div class="card"@if($isAdmin) x-data="{ editing: {{ $editing ? 'true' : 'false' }} }"@endif>
     <x-page-header :title="$group->name" :crumbs="[['Groups', route('groups.index')]]">
         @if($group->is_admin_group)
             <span class="badge bg-danger">Admin</span>
@@ -48,92 +48,6 @@
         @else
             @include('groups._overview')
         @endif
-
-        {{-- ── Nesting: member groups and the groups this one is a member of,
-             side by side on wide screens, stacked on narrow ones (col-md-6
-             collapses below the md breakpoint). Stored as child/parent edges. --}}
-        <hr>
-        <div class="row">
-            {{-- Member groups (children) --}}
-            <div class="col-md-6 mb-4 mb-md-0">
-                <h2 class="section-title">Member groups</h2>
-                <p class="text-muted">Everyone in these groups also counts as a member of {{ $group->name }}.</p>
-
-                @if($group->children->isNotEmpty())
-                <ul class="list-group mb-2">
-                    @foreach($group->children as $child)
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href="{{ route('groups.show', $child) }}" class="text-decoration-none">{{ $child->name }}</a>
-                        @if($isAdmin)
-                        <form method="POST" action="{{ route('groups.children.destroy', ['group' => $group, 'child' => $child->id]) }}" class="d-inline ms-2">
-                            @csrf @method('DELETE')
-                            <button x-show="editing" x-cloak class="btn btn-link btn-sm text-danger p-0">remove<span class="visually-hidden"> {{ $child->name }}</span></button>
-                        </form>
-                        @endif
-                    </li>
-                    @endforeach
-                </ul>
-                @else
-                <p class="text-muted">None.</p>
-                @endif
-
-                @if($isAdmin)
-                <form method="POST" action="{{ route('groups.children.store', $group) }}" class="d-flex gap-2 align-items-start">
-                    @csrf
-                    <select @disabled(!$editing) :disabled="!editing" name="child_id" class="form-select form-select-sm" required aria-label="Group to add as a member">
-                        <option value="">Add a member group…</option>
-                        @foreach($candidateChildren as $candidate)
-                        <option value="{{ $candidate->id }}">{{ $candidate->name }}</option>
-                        @endforeach
-                    </select>
-                    <button @disabled(!$editing) :disabled="!editing" class="btn btn-sm btn-outline-primary text-nowrap">Add group</button>
-                </form>
-                @error('child_id')<div class="text-danger mt-1" role="alert">{{ $message }}</div>@enderror
-                @endif
-            </div>
-
-            {{-- Member of (parents) --}}
-            <div class="col-md-6">
-                <h2 class="section-title">Member of</h2>
-                <p class="text-muted">Members of {{ $group->name }} also count as members of these groups.</p>
-
-                @if($group->parents->isNotEmpty())
-                <ul class="list-group mb-2">
-                    @foreach($group->parents as $parent)
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href="{{ route('groups.show', $parent) }}" class="text-decoration-none">{{ $parent->name }}</a>
-                        @if($isAdmin)
-                        <form method="POST" action="{{ route('groups.parents.destroy', ['group' => $group, 'parent' => $parent->id]) }}" class="d-inline ms-2">
-                            @csrf @method('DELETE')
-                            <button x-show="editing" x-cloak class="btn btn-link btn-sm text-danger p-0">remove<span class="visually-hidden"> {{ $parent->name }}</span></button>
-                        </form>
-                        @endif
-                    </li>
-                    @endforeach
-                </ul>
-                @else
-                <p class="text-muted">None.</p>
-                @endif
-
-                @if($isAdmin)
-                <form method="POST" action="{{ route('groups.parents.store', $group) }}" class="d-flex gap-2 align-items-start">
-                    @csrf
-                    <select @disabled(!$editing) :disabled="!editing" name="parent_id" class="form-select form-select-sm" required aria-label="Group to join"
-                            x-on:change="parentIsAdmin = $event.target.selectedOptions[0]?.dataset.admin === '1'">
-                        <option value="">Add to a group…</option>
-                        @foreach($candidateParents as $candidate)
-                        <option value="{{ $candidate->id }}" @if($candidate->is_admin_group) data-admin="1" @endif>{{ $candidate->name }}</option>
-                        @endforeach
-                    </select>
-                    <button @disabled(!$editing) :disabled="!editing" class="btn btn-sm btn-outline-primary text-nowrap">Add to group</button>
-                </form>
-                <div x-show="parentIsAdmin" x-cloak class="alert alert-warning py-1 px-2 mt-2 mb-0" role="status">
-                    <i class="fa-solid fa-triangle-exclamation me-1" aria-hidden="true"></i>Membership of an admin group through another group <strong>does not grant admin</strong>. Admin access is assigned directly.
-                </div>
-                @error('parent_id')<div class="text-danger mt-1" role="alert">{{ $message }}</div>@enderror
-                @endif
-            </div>
-        </div>
 
         {{-- ── Access context ──────────────────────────────────────────── --}}
         @if($isAdmin)
