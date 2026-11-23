@@ -1,7 +1,6 @@
 import * as bootstrap from 'bootstrap'
 import Alpine from 'alpinejs';
 import { createApp } from 'vue';
-import AuthorizedClients from './components/passport/AuthorizedClients.vue';
 import Clients from './components/passport/Clients.vue';
 import axios from 'axios';
 import { reportServerErrors } from './server-errors';
@@ -25,7 +24,6 @@ Alpine.start();
 
 const app = createApp({});
 
-app.component('passport-authorized-clients', AuthorizedClients);
 app.component('oauth-clients', Clients);
 
 app.mount('#app');

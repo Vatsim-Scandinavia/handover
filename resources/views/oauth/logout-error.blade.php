@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('content')
-    @include('layouts.header')
+@section('title', "Logout failed")
 
-    <h2 class="h5 mt-3">Handover can't complete this logout</h2>
+@section('content')
+    <h1>{{ config('app.name') }} can't complete this logout</h1>
     <p>{{ $message }}</p>
     @auth
-        <p>You are still logged in to Handover.</p>
+        <p>You are still logged in to {{ config('app.name') }}.</p>
     @endauth
     <p class="mb-0">If this keeps happening, contact the people who run the service.</p>
 @endsection

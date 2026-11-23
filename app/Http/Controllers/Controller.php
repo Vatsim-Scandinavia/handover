@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\User;
 use App\Models\Group;
+use App\Services\AuthorizedClients;
 use App\Services\GroupMembershipResolver;
 
 class Controller extends BaseController
@@ -22,19 +23,15 @@ class Controller extends BaseController
             return view('landing');
         }
 
+        // Direct groups are roots; inherited ones nest under the group they came through.
         $map = app(GroupMembershipResolver::class)->effectiveMembership(Auth::user());
-        $groups = collect();
-        if ($map !== []) {
-            $byId = Group::whereIn('id', array_keys($map))->orderBy('name')->get()->keyBy('id');
-            $groups = collect($map)->map(fn ($viaId, $groupId) => [
-                'group' => $byId[$groupId],
-                'via'   => $viaId !== null ? ($byId[$viaId]->name ?? null) : null,
-            ])->filter(fn ($row) => $row['group'] !== null)
-              ->sortBy(fn ($row) => $row['group']->name)
-              ->values();
-        }
+        $groups = Group::whereIn('id', array_keys($map))->orderBy('name')->get();
+        $children = $groups->groupBy(fn (Group $group) => $map[$group->id] ?? '');
+        $directGroups = $children->pull('', collect());
 
-        return view('dashboard', compact('groups'));
+        $clients = app(AuthorizedClients::class)->for(Auth::user());
+
+        return view('dashboard', compact('directGroups', 'children', 'clients'));
     }
 
     public function privacy(){

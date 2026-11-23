@@ -58,6 +58,23 @@ class TransitiveMembershipTest extends TestCase
         $this->assertTrue($groups['parent']['direct']); // direct wins
     }
 
+    public function test_dashboard_nests_groups_more_than_one_level_deep(): void
+    {
+        $user = User::factory()->create();
+        $direct = Group::factory()->create(['name' => 'Zulu']);
+        $middle = Group::factory()->create(['name' => 'Mike']);
+        $top = Group::factory()->create(['name' => 'Alpha']);
+        $this->nest($direct, $middle);
+        $this->nest($middle, $top);
+        $direct->members()->attach($user->id, ['created_at' => now()]);
+
+        // Nesting order, which an alphabetical flat list would reverse.
+        $this->actingAs($user)
+            ->get('/')
+            ->assertOk()
+            ->assertSeeInOrder(['Zulu', 'Mike', 'Alpha']);
+    }
+
     public function test_dashboard_lists_direct_and_inherited_groups(): void
     {
         $user = User::factory()->create();
@@ -69,8 +86,6 @@ class TransitiveMembershipTest extends TestCase
         $this->actingAs($user)
             ->get('/')
             ->assertOk()
-            ->assertSee('vACC Norway')
-            ->assertSee('EUR Region')
-            ->assertSee('Inherited via vACC Norway');
+            ->assertSeeInOrder(['vACC Norway', 'EUR Region']); // inherited sits under its direct group
     }
 }

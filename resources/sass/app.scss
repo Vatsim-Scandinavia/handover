@@ -24,6 +24,8 @@
 
 @import 'admin';
 @import 'groups';
+@import 'shell';
+@import 'member';
 
 
 html,body {
@@ -40,7 +42,7 @@ h2{
 	color: var(--color-tertiary);
 }
 
-p, .pp-bullet {
+p {
 	font-size: 0.9rem;
 	color: var(--color-tertiary);
 
@@ -55,14 +57,6 @@ p, .pp-bullet {
 
 }
 
-.bt{
-	border-top: 1px solid var(--border-color);
-}
-
-.bm{
-	border-bottom: 1px solid var(--border-color);
-}
-
 .fill {
     min-height: 100%;
     height: 100%;
@@ -75,6 +69,7 @@ p, .pp-bullet {
     flex-direction: column;
     min-height: 100vh;
     min-height: 100dvh;
+    background-color: var(--bg-page);
 }
 
 .site-footer {
@@ -85,25 +80,15 @@ p, .pp-bullet {
     color: var(--bs-white);
     opacity: .5;
 
-    a {
+    a,
+    a:hover {
         color: inherit;
     }
+
+    a:hover {
+        text-decoration: none;
+    }
 }
-
-.dpp {
-	.pp-bullet{
-		font-weight: 200;
-		margin-bottom: 10px;
-		color: var(--color-text-muted);
-	}
-
-	.pp-bullet i{
-		width: 15px;
-		margin-right: 5px;
-		color: var(--color-text-dark);
-	}
-}
-
 
 .alert a {
 	text-decoration: underline;
