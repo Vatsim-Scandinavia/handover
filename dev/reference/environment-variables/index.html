@@ -641,6 +641,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#support-on-error-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Support on error pages
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1496,6 +1507,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#support-on-error-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Support on error pages
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1548,7 +1570,7 @@ Override a variable when its default does not fit.</p>
 <tr>
 <td><code>APP_OWNER_CONTACT</code></td>
 <td><code>webmaster@vatsim.net</code></td>
-<td>E-mail address banned users contact to dispute a ban</td>
+<td>E-mail address members contact for help. Shown on error pages, and to banned users to dispute a ban</td>
 </tr>
 <tr>
 <td><code>APP_DPP_URL</code></td>
@@ -1671,6 +1693,11 @@ Override a variable when its default does not fit.</p>
 <td>Show detailed error pages. Never enable in production</td>
 </tr>
 <tr>
+<td><code>APP_OWNER_SUPPORT</code></td>
+<td>none</td>
+<td>HTML telling members where to get help, shown on the 403, 500 and 503 error pages instead of the line pointing to <code>APP_OWNER_CONTACT</code>. See <a href="#support-on-error-pages">support on error pages</a></td>
+</tr>
+<tr>
 <td><code>VATSIM_OAUTH_SCOPES</code></td>
 <td><code>full_name,email,vatsim_details,country</code></td>
 <td>Comma-separated scopes Handover requests from <abbr title="Virtual Air Traffic Simulation network">VATSIM</abbr> Connect</td>
@@ -1692,6 +1719,14 @@ Override a variable when its default does not fit.</p>
 </tr>
 </tbody>
 </table>
+<h2 id="support-on-error-pages">Support on error pages<a class="headerlink" href="#support-on-error-pages" title="Permanent link">&para;</a></h2>
+<p>Error pages for 403, 500 and 503 end with a line telling members where to get help.
+By default it points to <code>APP_OWNER_CONTACT</code>.
+Set <code>APP_OWNER_SUPPORT</code> to replace it with your own HTML, for example a link to your helpdesk or Discord:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">environment</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'APP_OWNER_SUPPORT=Ask</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">help</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">&lt;a</span><span class="nv"> </span><span class="s">href="https://discord.gg/example"&gt;#support</span><span class="nv"> </span><span class="s">on</span><span class="nv"> </span><span class="s">our</span><span class="nv"> </span><span class="s">Discord&lt;/a&gt;.'</span>
+</code></pre></div>
+<p>Handover shows the HTML as it is, without escaping, so only put HTML you trust here.</p>
 <!--
 This is a list of abbreviations which will be automatically expanded on every content page.
 Don't add any words or abbreviations which are confusingly or rarely used.
@@ -1721,7 +1756,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 23, 2026 08:00:21 UTC">November 23, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 23, 2026 09:14:36 UTC">November 23, 2026</span>
   </span>
 
     
