@@ -9,8 +9,10 @@ use App\Vatsim\AsVatsimToken;
 use App\Vatsim\Member;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\WithoutIncrementing;
 use Illuminate\Database\Eloquent\Attributes\WithoutTimestamps;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
@@ -87,5 +89,26 @@ class User extends Authenticatable implements OAuthenticatable
     {
         return $this->belongsToMany(Group::class, 'group_user')
             ->withPivot('added_by', 'created_at');
+    }
+
+    /**
+     * Users matching every word of $term. A word matches the start of the
+     * first or last name; a number also matches the start of the CID.
+     *
+     * @param  Builder<static>  $query
+     */
+    #[Scope]
+    protected function matching(Builder $query, string $term): void
+    {
+        $words = preg_split('/\s+/', trim($term), -1, PREG_SPLIT_NO_EMPTY);
+        foreach ($words === false ? [] : $words as $word) {
+            $prefix = $word.'%';
+            $query->where(function (Builder $q) use ($word, $prefix): void {
+                $q->where('first_name', 'like', $prefix)->orWhere('last_name', 'like', $prefix);
+                if (ctype_digit($word)) {
+                    $q->orWhere('users.id', 'like', $prefix);
+                }
+            });
+        }
     }
 }

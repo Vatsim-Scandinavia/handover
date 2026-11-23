@@ -58,6 +58,7 @@ Route::middleware(['auth', 'groups.manage'])->prefix('groups')->name('groups.')-
     Route::delete('{group}', [GroupController::class, 'destroy'])->name('destroy');
 
     Route::get('{group}/members', [GroupMemberController::class, 'index'])->name('members.index');
+    Route::get('{group}/members/candidates', [GroupMemberController::class, 'candidates'])->name('members.candidates');
     Route::post('{group}/members', [GroupMemberController::class, 'store'])->name('members.store');
     Route::delete('{group}/members/{user}', [GroupMemberController::class, 'destroy'])->name('members.destroy');
 

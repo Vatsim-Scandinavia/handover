@@ -9,14 +9,69 @@
     <div class="card-body">
         <section class="page-section">
         <h2 class="section-title">Add member</h2>
-        <form method="POST" action="{{ route('groups.members.store', $group) }}" class="row g-2 align-items-end">
+        {{-- Type a name or CID and pick a match. A bare CID can be added
+             without picking, for users not yet in the list. --}}
+        <form method="POST" action="{{ route('groups.members.store', $group) }}" class="row g-2 align-items-end"
+              x-data="{
+                  query: '', results: [], open: false, active: -1, picked: null, invalid: false,
+                  get cid() { return this.picked?.id ?? (/^\d+$/.test(this.query.trim()) ? this.query.trim() : ''); },
+                  async search() {
+                      this.picked = null;
+                      this.invalid = false;
+                      const q = this.query.trim();
+                      if (q.length < 2) { this.results = []; this.open = false; return; }
+                      const res = await fetch(@js(route('groups.members.candidates', $group)) + '?q=' + encodeURIComponent(q), { headers: { Accept: 'application/json' } });
+                      if (q !== this.query.trim()) return;
+                      this.results = res.ok ? await res.json() : [];
+                      this.active = this.results.findIndex(u => !u.member);
+                      this.open = true;
+                  },
+                  pick(user) {
+                      if (!user || user.member) return;
+                      this.picked = user;
+                      this.query = user.name + ' (' + user.id + ')';
+                      this.open = false;
+                  },
+                  move(step) {
+                      // Skip rows for people already in the group; they cannot be picked.
+                      const n = this.results.length;
+                      for (let i = 1; this.open && i <= n; i++) {
+                          const next = (this.active + step * i + n * n) % n;
+                          if (!this.results[next].member) { this.active = next; return; }
+                      }
+                  },
+              }"
+              x-on:submit="if (!cid) { $event.preventDefault(); invalid = true }">
             @csrf
-            <div class="col-md-6">
-                <label class="form-label" for="member-cid">VATSIM CID</label>
-                <input type="number" id="member-cid" name="cid" class="form-control" inputmode="numeric" required>
+            <input type="hidden" name="cid" :value="cid">
+            <div class="col-md-6 position-relative">
+                <label class="form-label" for="member-query">Name or VATSIM CID</label>
+                <input type="text" id="member-query" class="form-control" autocomplete="off" required
+                       role="combobox" aria-autocomplete="list" aria-controls="member-options"
+                       :aria-expanded="open" :aria-activedescendant="open && active >= 0 ? 'member-option-' + active : null"
+                       :aria-invalid="invalid" aria-describedby="member-query-hint"
+                       x-model="query" x-on:input.debounce.250ms="search()"
+                       x-on:keydown.down.prevent="move(1)" x-on:keydown.up.prevent="move(-1)"
+                       x-on:keydown.enter="if (open && active >= 0) { $event.preventDefault(); pick(results[active]) }"
+                       x-on:keydown.escape="open = false" x-on:blur="open = false">
+                <ul id="member-options" role="listbox" class="list-group member-options" x-show="open" x-cloak>
+                    <template x-for="(user, i) in results" :key="user.id">
+                        <li role="option" :id="'member-option-' + i" :aria-selected="i === active" :aria-disabled="user.member"
+                            class="list-group-item list-group-item-action" :class="{ active: i === active, disabled: user.member }"
+                            x-on:mousedown.prevent="pick(user)">
+                            <span x-text="user.name"></span> <span class="member-option-cid" x-text="user.id"></span>
+                            <span x-show="user.member" class="small">· already a member</span>
+                        </li>
+                    </template>
+                    <li x-show="!results.length" class="list-group-item text-muted">No matches. Enter a CID to add someone not listed.</li>
+                </ul>
             </div>
             <div class="col-md-3">
                 <button class="btn btn-primary w-100">Add member</button>
+            </div>
+            <div id="member-query-hint" class="form-text mt-1" :class="{ 'text-danger': invalid }">
+                <span x-show="!invalid">Start typing a name, then pick from the list.</span>
+                <span x-show="invalid" x-cloak>Pick a member from the list, or enter a CID.</span>
             </div>
         </form>
         </section>
