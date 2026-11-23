@@ -7,11 +7,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="robots" content="noindex">
 
-    <title>{{ config('app.name', 'Handover') }}</title>
+    <title>{{ config('app.name') }}</title>
 
     <!-- Styles -->
     <link rel="icon" href="{{ URL::asset('/favicon.ico') }}" type="image/x-icon"/>
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @include('layouts.theme-head')
+    @vite(['resources/js/theme.js', 'resources/sass/app.scss', 'resources/js/app.js'])
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
@@ -19,12 +20,12 @@
     @stack('head')
 </head>
 <body>
-    <div class="bg-primary min-vh-100 pb-2">
+    <div class="bg-primary page">
         <div class="container">
             <div class="row justify-content-center pt-4 pb-4">
                 <div class="col-md-6 text-center">
 
-                    <a href="{{ env('APP_URL') }}"><img src="{{ asset('images/logos/'.Config::get('app.logo')) }}" alt="{{ Config::get('app.owner_contact') }} logo" class="w-100 pb-4" style="max-width: 300px"/></a>
+                    <a href="{{ env('APP_URL') }}"><img src="{{ asset('images/logos/'.Config::get('app.logo')) }}" alt="{{ Config::get('app.owner') }} logo" class="w-100 pb-4" style="max-width: 300px"/></a>
 
                     @if(Session::has('error') OR isset($error))
                         <div class="alert alert-danger" role="alert">
@@ -37,10 +38,11 @@
                             @yield('content')
                         </div>
                     </div>
-                    @auth <p class="text-white" style="font-size: 10px; padding-top: 5px;">Logged in as {{ Auth::user()->first_name }} {{ Auth::user()->last_name}}, {{ Auth::user()->id }}</p> @endauth
+                    @auth <p class="text-white" style="font-size: 10px; padding-top: 5px;">Logged in as {{ Auth::user()->first_name }} {{ Auth::user()->last_name}}, {{ Auth::user()->id }} <span class="ms-1" style="font-size: 12px;">@include('layouts.theme-toggle')</span></p> @endauth
                 </div>
             </div>
         </div>
+        <x-version-footer />
     </div>
     @yield('js')
 </body>

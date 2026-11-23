@@ -21,6 +21,7 @@ docker-compose.local.yaml
 public/mix-manifest.json
 .DS_Store
 resources/sass/_env.scss
+resources/sass/themes/_custom.scss
 .miserc.toml
 mise.*.toml
 

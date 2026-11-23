@@ -7,13 +7,24 @@ return [
     | Application Name
     |--------------------------------------------------------------------------
     |
-    | This value is the name of your application. This value is used when the
-    | framework needs to place the application's name in a notification or
-    | any other location as required by the application or its packages.
+    | The name of the software, shown in page titles and headings. It is
+    | always Handover, so don't change it.
     |
     */
 
-    'name' => env('APP_NAME', 'Handover'),
+    'name' => 'Handover',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Tagline
+    |--------------------------------------------------------------------------
+    |
+    | A short description of the application, displayed beneath the name on
+    | the front page. Customise it to describe your deployment.
+    |
+    */
+
+    'tagline' => env('APP_TAGLINE') ?: 'Centralised Login Service',
 
     /*
     |--------------------------------------------------------------------------
