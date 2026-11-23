@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use App\OAuth\SigningKeys\SigningKeyStore;
 
+#[Description('Create a staged signing key')]
+#[Signature('signing-keys:generate')]
 class SigningKeysGenerate extends SigningKeyCommand
 {
-    protected $signature = 'signing-keys:generate';
-    protected $description = 'Create a staged signing key';
-
     protected function handleKeys(SigningKeyStore $keys): int
     {
         $key = $keys->generate();

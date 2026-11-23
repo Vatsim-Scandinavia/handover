@@ -1,9 +1,15 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\GroupAttributeDefinition;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<GroupAttributeDefinition>
+ */
 class GroupAttributeDefinitionFactory extends Factory
 {
     protected $model = GroupAttributeDefinition::class;
@@ -11,8 +17,8 @@ class GroupAttributeDefinitionFactory extends Factory
     public function definition(): array
     {
         return [
-            'key' => $this->faker->unique()->lexify('attr_????'),
-            'label' => $this->faker->words(2, true),
+            'key' => fake()->unique()->lexify('attr_????'),
+            'label' => fake()->words(2, true),
         ];
     }
 }

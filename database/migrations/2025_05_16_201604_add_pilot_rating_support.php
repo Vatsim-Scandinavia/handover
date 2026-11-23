@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table): void {
             $table->string('pilot_rating_short', 6)->nullable()->after('pilot_rating');
             $table->string('pilot_rating_long', 32)->nullable()->after('pilot_rating_short');
         });
@@ -23,7 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table): void {
             $table->dropColumn('pilot_rating_short');
             $table->dropColumn('pilot_rating_long');
         });

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\Response;
 use Carbon\CarbonInterval;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -27,10 +29,8 @@ class AuthServiceProvider extends ServiceProvider
 
     /**
      * Register any authentication / authorization services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         Passport::tokensCan([
             'full_name'      => 'First and last name',
@@ -61,7 +61,7 @@ class AuthServiceProvider extends ServiceProvider
         // it, every /oauth/authorize request fails with "not instantiable". All of
         // this app's clients auto-approve (Client::skipsAuthorization), so the consent
         // screen is never rendered, but the binding must exist for the route to resolve.
-        Passport::authorizationView(fn (array $parameters) => response(
+        Passport::authorizationView(fn (array $parameters): ResponseFactory|Response => response(
             'This application does not require explicit authorization.'
         ));
 
@@ -70,7 +70,7 @@ class AuthServiceProvider extends ServiceProvider
         // guests get an empty 401 instead of the login page. Elsewhere, null
         // keeps the framework default.
         AuthenticationException::redirectUsing(
-            fn (Request $request) => $request->routeIs('passport.authorizations.authorize')
+            fn (Request $request): ?string => $request->routeIs('passport.authorizations.authorize')
                 ? route('login')
                 : null
         );

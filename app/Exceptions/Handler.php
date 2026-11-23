@@ -2,6 +2,9 @@
 
 namespace App\Exceptions;
 
+use League\OAuth2\Server\Exception\OAuthServerException;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -13,7 +16,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        \League\OAuth2\Server\Exception\OAuthServerException::class,
+        OAuthServerException::class,
     ];
 
     /**
@@ -29,12 +32,10 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Throwable  $exception
-     * @return void
      *
      * @throws \Throwable
      */
-    public function report(Throwable $exception)
+    public function report(Throwable $exception): void
     {
         if (app()->bound('sentry') && $this->shouldReport($exception)) {
             app('sentry')->captureException($exception);
@@ -46,9 +47,8 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param  Request  $request
+     * @return Response
      *
      * @throws \Throwable
      */

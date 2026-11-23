@@ -16,15 +16,15 @@ use Illuminate\Support\Facades\Schema;
  */
 return new class extends Migration
 {
-    private const CLIENT_ID_TABLES = ['oauth_auth_codes', 'oauth_access_tokens', 'oauth_personal_access_clients'];
+    private const array CLIENT_ID_TABLES = ['oauth_auth_codes', 'oauth_access_tokens', 'oauth_personal_access_clients'];
 
     public function up(): void
     {
-        Schema::table('oauth_clients', function (Blueprint $table) {
+        Schema::table('oauth_clients', function (Blueprint $table): void {
             $table->string('id', 36)->change();
         });
 
-        Schema::table('oauth_clients', function (Blueprint $table) {
+        Schema::table('oauth_clients', function (Blueprint $table): void {
             $table->nullableMorphs('owner');
             $table->text('redirect_uris')->nullable();
             $table->text('grant_types')->nullable();
@@ -34,7 +34,7 @@ return new class extends Migration
         });
 
         foreach (self::CLIENT_ID_TABLES as $name) {
-            Schema::table($name, function (Blueprint $table) {
+            Schema::table($name, function (Blueprint $table): void {
                 $table->string('client_id', 36)->change();
             });
         }
@@ -48,7 +48,7 @@ return new class extends Migration
             ]);
         }
 
-        Schema::table('oauth_clients', function (Blueprint $table) {
+        Schema::table('oauth_clients', function (Blueprint $table): void {
             $table->text('redirect_uris')->nullable(false)->change();
             $table->text('grant_types')->nullable(false)->change();
         });
@@ -56,7 +56,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        if (DB::table('oauth_clients')->pluck('id')->contains(fn ($id) => ! ctype_digit((string) $id))) {
+        if (DB::table('oauth_clients')->pluck('id')->contains(fn ($id): bool => ! ctype_digit((string) $id))) {
             throw new RuntimeException('Clients with UUID ids exist. Restore the 3.x backup instead of rolling back.');
         }
 
@@ -71,12 +71,12 @@ return new class extends Migration
         }
 
         foreach (self::CLIENT_ID_TABLES as $name) {
-            Schema::table($name, function (Blueprint $table) {
+            Schema::table($name, function (Blueprint $table): void {
                 $table->unsignedBigInteger('client_id')->change();
             });
         }
 
-        Schema::table('oauth_clients', function (Blueprint $table) {
+        Schema::table('oauth_clients', function (Blueprint $table): void {
             $table->dropMorphs('owner');
             $table->dropColumn(['redirect_uris', 'grant_types']);
             $table->text('redirect')->nullable(false)->change();
@@ -84,7 +84,7 @@ return new class extends Migration
             $table->boolean('password_client')->default(null)->change();
         });
 
-        Schema::table('oauth_clients', function (Blueprint $table) {
+        Schema::table('oauth_clients', function (Blueprint $table): void {
             $table->bigIncrements('id')->change();
         });
     }
@@ -100,9 +100,9 @@ return new class extends Migration
         $confidential = ! empty($client->secret);
 
         return array_keys(array_filter([
-            'authorization_code' => ! empty($redirectUris),
+            'authorization_code' => $redirectUris !== [],
             'client_credentials' => $confidential && empty($client->user_id),
-            'implicit' => ! empty($redirectUris),
+            'implicit' => $redirectUris !== [],
             'password' => (bool) $client->password_client,
             'personal_access' => (bool) $client->personal_access_client && $confidential,
             'refresh_token' => true,

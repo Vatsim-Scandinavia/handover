@@ -26,7 +26,11 @@ class GroupOverviewTest extends TestCase
         return $user;
     }
 
-    /** @param array<string, string> $attributes key => value */
+    /**
+     * @param array<string, string> $attributes key => value
+     * @param string[] $tags
+     * @param array<string, bool|string> $extra
+     */
     private function group(string $name, array $tags = [], array $attributes = [], array $extra = []): Group
     {
         $group = Group::factory()->create(array_merge(['name' => $name, 'description' => null], $extra));

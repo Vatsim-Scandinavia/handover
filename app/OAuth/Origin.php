@@ -31,7 +31,7 @@ final class Origin
     {
         $uri = Uri::tryNew($value);
 
-        if ($uri === null
+        if (!$uri instanceof Uri
             || $uri->getUserInfo() !== null
             || $uri->getQuery() !== null
             || $uri->getFragment() !== null

@@ -9,7 +9,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('group_attribute_definitions', function (Blueprint $table) {
+        Schema::create('group_attribute_definitions', function (Blueprint $table): void {
             $table->id();
             $keyCol = $table->string('key', 32)->unique();
             if (DB::getDriverName() === 'mysql') {

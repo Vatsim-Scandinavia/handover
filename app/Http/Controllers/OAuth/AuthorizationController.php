@@ -27,7 +27,7 @@ class AuthorizationController extends PassportAuthorizationController
         AuthorizationServer $server,
         StatefulGuard $guard,
         ClientRepository $clients,
-        private ScopeRepository $scopes,
+        private readonly ScopeRepository $scopes,
     ) {
         parent::__construct($server, $guard, $clients);
     }

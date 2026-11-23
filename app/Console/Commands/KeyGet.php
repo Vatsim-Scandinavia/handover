@@ -2,30 +2,18 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
+#[Description('Get the current application key')]
+#[Signature('key:get')]
 class KeyGet extends Command
 {
     /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'key:get';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Get the current application key';
-
-    /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
 
         $this->info('Current application key, copy the whole next line:');

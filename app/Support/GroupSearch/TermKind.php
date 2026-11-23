@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Support\GroupSearch;
 
 enum TermKind: string

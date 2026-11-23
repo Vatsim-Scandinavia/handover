@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('group_user', function (Blueprint $table) {
+        Schema::create('group_user', function (Blueprint $table): void {
             $table->uuid('group_id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('added_by')->nullable();

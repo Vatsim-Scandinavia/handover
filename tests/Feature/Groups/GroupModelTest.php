@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Feature\Groups;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\Group;
 use App\Models\GroupTag;
 use App\Models\GroupAttributeDefinition;
@@ -60,10 +61,10 @@ class GroupModelTest extends TestCase
 
     public function test_group_hierarchy_relations_resolve_parents_and_children(): void
     {
-        $parent = \App\Models\Group::factory()->create();
-        $child = \App\Models\Group::factory()->create();
+        $parent = Group::factory()->create();
+        $child = Group::factory()->create();
 
-        \Illuminate\Support\Facades\DB::table('group_hierarchy')->insert([
+        DB::table('group_hierarchy')->insert([
             'parent_id' => $parent->id,
             'child_id'  => $child->id,
         ]);

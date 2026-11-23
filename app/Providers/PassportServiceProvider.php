@@ -31,7 +31,7 @@ class PassportServiceProvider extends BaseServiceProvider
         parent::register();
 
         // Scoped, so a long-lived worker re-reads the store for each request or job.
-        $this->app->scoped(SigningKeyStore::class, fn () => new SigningKeyStore(storage_path('oauth-keys')));
+        $this->app->scoped(SigningKeyStore::class, fn (): SigningKeyStore => new SigningKeyStore(storage_path('oauth-keys')));
 
         Passport::useAccessTokenEntity(AccessToken::class);
 
@@ -70,7 +70,7 @@ class PassportServiceProvider extends BaseServiceProvider
 
     protected function registerResourceServer(): void
     {
-        $this->app->scoped(ResourceServer::class, function ($container) {
+        $this->app->scoped(ResourceServer::class, function ($container): ResourceServer {
             $tokens = $container->make(AccessTokenRepository::class);
             $keys = $container->make(SigningKeyStore::class);
 

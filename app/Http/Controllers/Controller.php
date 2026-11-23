@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use App\User;
 use App\Models\Group;
 use App\Services\AuthorizedClients;
 use App\Services\GroupMembershipResolver;
@@ -17,7 +17,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function index()
+    public function index(): Factory|View
     {
         if (!Auth::check()) {
             return view('landing');
@@ -31,10 +31,10 @@ class Controller extends BaseController
 
         $clients = app(AuthorizedClients::class)->for(Auth::user());
 
-        return view('dashboard', compact('directGroups', 'children', 'clients'));
+        return view('dashboard', ['directGroups' => $directGroups, 'children' => $children, 'clients' => $clients]);
     }
 
-    public function privacy(){
+    public function privacy(): Factory|View{
         return view('dpp');
     }
 

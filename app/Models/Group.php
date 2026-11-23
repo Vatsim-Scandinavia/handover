@@ -1,6 +1,9 @@
 <?php
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\RouteKey;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use App\Models\Passport\Client;
 use App\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,23 +13,23 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[Fillable(['slug', 'name', 'description', 'is_admin_group'])]
+#[RouteKey('slug')]
 class Group extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $fillable = ['slug', 'name', 'description', 'is_admin_group'];
-    protected $casts = ['is_admin_group' => 'boolean'];
-
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
-    }
-
+    /**
+     * @return HasMany<GroupTag, $this>
+     */
     public function tags(): HasMany
     {
         return $this->hasMany(GroupTag::class);
     }
 
+    /**
+     * @return HasMany<GroupAttributeValue, $this>
+     */
     public function attributeValues(): HasMany
     {
         return $this->hasMany(GroupAttributeValue::class);
@@ -35,9 +38,12 @@ class Group extends Model
     /** The group's value for an attribute key, from loaded attributeValues.definition. */
     public function attributeValue(string $key): ?string
     {
-        return $this->attributeValues->first(fn (GroupAttributeValue $av) => $av->definition->key === $key)?->value;
+        return $this->attributeValues->first(fn (GroupAttributeValue $av): bool => $av->definition->key === $key)?->value;
     }
 
+    /**
+     * @return BelongsToMany<User, $this, Pivot>
+     */
     public function members(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'group_user')
@@ -55,36 +61,58 @@ class Group extends Model
     }
 
     // Groups this group nests INTO (its parents). Roll-up flows toward these.
+    /**
+     * @return BelongsToMany<Group, $this, Pivot>
+     */
     public function parents(): BelongsToMany
     {
         return $this->belongsToMany(Group::class, 'group_hierarchy', 'child_id', 'parent_id');
     }
 
     // Groups nested INTO this group (its children).
+    /**
+     * @return BelongsToMany<Group, $this, Pivot>
+     */
     public function children(): BelongsToMany
     {
         return $this->belongsToMany(Group::class, 'group_hierarchy', 'parent_id', 'child_id');
     }
 
     // Rules FROM this group (what it manages)
+    /**
+     * @return HasMany<GroupManagerRuleByGroup, $this>
+     */
     public function managerRulesByGroup(): HasMany
     {
         return $this->hasMany(GroupManagerRuleByGroup::class, 'manager_group_id');
     }
 
+    /**
+     * @return HasMany<GroupManagerRuleByTag, $this>
+     */
     public function managerRulesByTag(): HasMany
     {
         return $this->hasMany(GroupManagerRuleByTag::class, 'manager_group_id');
     }
 
+    /**
+     * @return HasMany<GroupManagerRuleByAttribute, $this>
+     */
     public function managerRulesByAttribute(): HasMany
     {
         return $this->hasMany(GroupManagerRuleByAttribute::class, 'manager_group_id');
     }
 
     // Rules TO this group (who can manage it) — used on the rules management page
+    /**
+     * @return HasMany<GroupManagerRuleByGroup, $this>
+     */
     public function targetedByGroupRules(): HasMany
     {
         return $this->hasMany(GroupManagerRuleByGroup::class, 'target_group_id');
+    }
+    protected function casts(): array
+    {
+        return ['is_admin_group' => 'boolean'];
     }
 }

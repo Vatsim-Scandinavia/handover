@@ -2,6 +2,7 @@
 
 namespace App\OAuth\Oidc;
 
+use App\OAuth\SigningKeys\SigningKey;
 use App\OAuth\SigningKeys\SigningKeyStore;
 use Lcobucci\JWT\Encoding\JoseEncoder;
 use Lcobucci\JWT\Exception as JwtException;
@@ -43,7 +44,7 @@ final readonly class IdTokenHint
         $kid = $token->headers()->get('kid');
         $key = is_string($kid) ? $keys->find($kid) : null;
 
-        if (! $token instanceof UnencryptedToken || $key === null) {
+        if (! $token instanceof UnencryptedToken || !$key instanceof SigningKey) {
             return null;
         }
 

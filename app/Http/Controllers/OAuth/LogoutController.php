@@ -31,7 +31,7 @@ class LogoutController extends Controller
         $hint = $hintJwt === null ? null : IdTokenHint::verify($hintJwt, $keys);
         $clientId = $this->param($request, 'client_id');
 
-        if ($hint !== null && $clientId !== null && $hint->clientId !== $clientId) {
+        if ($hint instanceof IdTokenHint && $clientId !== null && $hint->clientId !== $clientId) {
             return $this->errorPage('The logout request names two different services.');
         }
 

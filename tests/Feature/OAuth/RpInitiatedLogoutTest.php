@@ -21,7 +21,7 @@ class RpInitiatedLogoutTest extends TestCase
 {
     use RefreshDatabase, RunsOAuthFlows;
 
-    private const LOGGED_OUT_URI = 'https://client.test/logged-out';
+    private const string LOGGED_OUT_URI = 'https://client.test/logged-out';
 
     private User $user;
 
@@ -285,6 +285,9 @@ class RpInitiatedLogoutTest extends TestCase
         return $this->withCookie(config('session.cookie'), 'session')->post('/oauth/logout', $data);
     }
 
+    /**
+     * @param array<string, mixed> $params
+     */
     private function logout(array $params = []): TestResponse
     {
         return $this->get('/oauth/logout?'.http_build_query($params));

@@ -62,7 +62,7 @@ class GroupMemberTest extends TestCase
     public function test_admin_can_add_member(): void
     {
         $group = Group::factory()->create();
-        $user = User::factory()->create(['id' => 1234567]);
+        User::factory()->create(['id' => 1234567]);
 
         $this->actingAs($this->adminUser())
             ->post(route('groups.members.store', $group), ['cid' => 1234567])
@@ -74,7 +74,7 @@ class GroupMemberTest extends TestCase
     public function test_adding_already_existing_member_is_idempotent(): void
     {
         $group = Group::factory()->create();
-        $user = User::factory()->create(['id' => 1234567]);
+        User::factory()->create(['id' => 1234567]);
         $group->members()->attach(1234567, ['created_at' => now()]);
 
         $this->actingAs($this->adminUser())
@@ -120,7 +120,7 @@ class GroupMemberTest extends TestCase
     public function test_added_by_pivot_is_populated(): void
     {
         $group = Group::factory()->create();
-        $user = User::factory()->create(['id' => 1234567]);
+        User::factory()->create(['id' => 1234567]);
         $admin = $this->adminUser();
 
         $this->actingAs($admin)

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\OAuth;
 
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
@@ -14,7 +16,7 @@ final class ScopeIds
      */
     public static function of(array $scopes): array
     {
-        return array_values(array_map(fn (ScopeEntityInterface $scope) => $scope->getIdentifier(), $scopes));
+        return array_values(array_map(fn (ScopeEntityInterface $scope): string => $scope->getIdentifier(), $scopes));
     }
 
     /**

@@ -2,13 +2,16 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use App\Helpers\ConnectHelper;
 use App\User;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Console\Command;
 use App\Http\Controllers\Controller;
 
+#[Description('Command updates users data, so we keep our user information up to date.')]
+#[Signature('member:data')]
 class UpdateMemberData extends Command
 {
 
@@ -16,23 +19,7 @@ class UpdateMemberData extends Command
     protected $controller;
 
     /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'member:data';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Command updates users data, so we keep our user information up to date.';
-
-    /**
      * Create a new command instance.
-     *
-     * @return void
      */
     public function __construct(ConnectHelper $connectHelper, Controller $controller)
     {
@@ -43,10 +30,8 @@ class UpdateMemberData extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): void
     {
 
         $users = User::query()->where('refresh_token', '!=', null)->get();

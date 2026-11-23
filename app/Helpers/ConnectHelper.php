@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use League\OAuth2\Server\Exception\OAuthServerException;
 use App\User;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
@@ -18,7 +19,7 @@ class ConnectHelper
         $this->baseUrl = config('vatsim_auth.base');
     }
 
-    protected function client() {
+    protected function client(): Client {
         return new Client([
             'base_uri' => $this->baseUrl,
             'headers' => [
@@ -37,7 +38,7 @@ class ConnectHelper
             ]);
             
             return json_decode($response->getBody());
-        } catch(\League\OAuth2\Server\Exception\OAuthServerException $exception){
+        } catch(OAuthServerException){
             return false;
         } catch(\Exception $exception) {
             Log::critical($exception->getMessage());;
@@ -62,7 +63,7 @@ class ConnectHelper
             }
 
             return json_decode($response->getBody());
-        } catch(\League\OAuth2\Server\Exception\OAuthServerException $exception){
+        } catch(OAuthServerException){
             return false;
         } catch(\Exception $exception) {
             Log::critical($exception->getMessage());;

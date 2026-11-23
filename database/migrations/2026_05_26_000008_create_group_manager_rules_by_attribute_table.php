@@ -9,7 +9,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('group_manager_rules_by_attribute', function (Blueprint $table) {
+        Schema::create('group_manager_rules_by_attribute', function (Blueprint $table): void {
             $table->id();
             $table->uuid('manager_group_id');
             $keyCol = $table->string('target_attribute_key', 32);

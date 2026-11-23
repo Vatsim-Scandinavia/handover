@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Passport;
 
 use Illuminate\Auth\AuthenticationException;
@@ -38,7 +40,7 @@ class GuestAuthorizationTest extends TestCase
     public function test_other_routes_keep_the_default_401(): void
     {
         // POST, since the landing page catches every GET.
-        Route::post('/_test/unauthenticated', fn () => throw new AuthenticationException);
+        Route::post('/_test/unauthenticated', fn (): never => throw new AuthenticationException);
 
         $this->post('/_test/unauthenticated')->assertStatus(401);
     }

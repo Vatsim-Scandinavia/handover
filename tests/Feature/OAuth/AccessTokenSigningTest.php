@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\OAuth;
 
+use Illuminate\Testing\TestResponse;
 use App\OAuth\AccessToken;
 use App\User;
 use DateTimeImmutable;
@@ -151,7 +152,7 @@ class AccessTokenSigningTest extends TestCase
         $this->callApi($this->forgeToken($user, $client, self::testPrivateKey(), kid: null))->assertUnauthorized();
     }
 
-    private function callApi(string $accessToken)
+    private function callApi(string $accessToken): TestResponse
     {
         return $this->bearerJson('GET', '/api/user', $accessToken);
     }

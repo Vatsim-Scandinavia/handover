@@ -2,6 +2,7 @@
 
 namespace App\OAuth\SigningKeys;
 
+use Illuminate\Support\Facades\File;
 use SensitiveParameter;
 
 /**
@@ -20,7 +21,7 @@ class SigningKeyStore
     /** How long a key stays retired before it may be removed. */
     public const RETIREMENT_PERIOD_SECONDS = 7200;
 
-    private const NEW_KEY_BITS = 2048;
+    private const int NEW_KEY_BITS = 2048;
 
     /**
      * The manifest and key files as last read. The store is scoped to one request,
@@ -52,7 +53,7 @@ class SigningKeyStore
         $order = [KeyState::Active, KeyState::Staged, KeyState::Retired];
         $manifest = $this->manifest();
         $keys = array_map($this->load(...), array_keys($manifest), $manifest);
-        usort($keys, fn (SigningKey $a, SigningKey $b) => array_search($a->state, $order) <=> array_search($b->state, $order));
+        usort($keys, fn (SigningKey $a, SigningKey $b): int => array_search($a->state, $order) <=> array_search($b->state, $order));
 
         return $keys;
     }
@@ -67,14 +68,14 @@ class SigningKeyStore
     /** The key that signs new tokens. */
     public function active(): SigningKey
     {
-        return $this->first(fn (ManifestEntry $entry) => $entry->state === KeyState::Active)
+        return $this->first(fn (ManifestEntry $entry): bool => $entry->state === KeyState::Active)
             ?? throw new SigningKeyException('There is no active signing key. Run `php artisan signing-keys:import` to create one.');
     }
 
     /** Passport's original key, while it is still published. It verifies tokens that have no kid. */
     public function imported(): ?SigningKey
     {
-        return $this->first(fn (ManifestEntry $entry) => $entry->imported);
+        return $this->first(fn (ManifestEntry $entry): bool => $entry->imported);
     }
 
     public function isEmpty(): bool
@@ -312,7 +313,7 @@ class SigningKeyStore
 
     private function deleteKeyFile(string $kid): void
     {
-        @unlink($this->keyPath($kid));
+        File::delete($this->keyPath($kid));
     }
 
     private function writeAtomically(string $path, #[SensitiveParameter] string $contents): void
@@ -329,7 +330,7 @@ class SigningKeyStore
 
         try {
             if (file_put_contents($temporary, $contents) === false || ! rename($temporary, $path)) {
-                @unlink($temporary);
+                File::delete($temporary);
                 throw new SigningKeyException("Could not write {$path}.");
             }
             $this->giveToStorageOwner($path);

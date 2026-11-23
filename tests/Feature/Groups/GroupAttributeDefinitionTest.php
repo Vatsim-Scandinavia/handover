@@ -1,6 +1,8 @@
 <?php
 namespace Tests\Feature\Groups;
 
+use App\Models\GroupManagerRuleByGroup;
+use App\Models\GroupAttributeValue;
 use App\Models\Group;
 use App\Models\GroupAttributeDefinition;
 use App\User;
@@ -31,7 +33,7 @@ class GroupAttributeDefinitionTest extends TestCase
         $managerGroup = Group::factory()->create();
         $targetGroup = Group::factory()->create();
         $managerGroup->members()->attach($user->id, ['created_at' => now()]);
-        \App\Models\GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::create([
             'manager_group_id' => $managerGroup->id,
             'target_group_id' => $targetGroup->id,
         ]);
@@ -98,7 +100,7 @@ class GroupAttributeDefinitionTest extends TestCase
         $managerGroup = Group::factory()->create();
         $targetGroup = Group::factory()->create();
         $managerGroup->members()->attach($user->id, ['created_at' => now()]);
-        \App\Models\GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::create([
             'manager_group_id' => $managerGroup->id,
             'target_group_id' => $targetGroup->id,
         ]);
@@ -116,7 +118,7 @@ class GroupAttributeDefinitionTest extends TestCase
         $admin = $this->adminUser();
         $def = GroupAttributeDefinition::factory()->create();
         $group = Group::factory()->create();
-        \App\Models\GroupAttributeValue::create([
+        GroupAttributeValue::create([
             'group_id' => $group->id,
             'attribute_definition_id' => $def->id,
             'value' => 'test',

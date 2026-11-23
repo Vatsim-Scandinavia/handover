@@ -45,12 +45,12 @@ class GroupQuery
     /** The query string without one of its terms, as the user wrote it. */
     public function without(Term $term): string
     {
-        return implode(' ', array_map(fn (Term $t) => $t->raw, array_filter($this->terms, fn (Term $t) => $t !== $term)));
+        return implode(' ', array_map(fn (Term $t): string => $t->raw, array_filter($this->terms, fn (Term $t): bool => $t !== $term)));
     }
 
     public function toString(): string
     {
-        return implode(' ', array_map(fn (Term $t) => $t->raw, $this->terms));
+        return implode(' ', array_map(fn (Term $t): string => $t->raw, $this->terms));
     }
 
     public function apply(Builder $groups): Builder
@@ -71,11 +71,11 @@ class GroupQuery
     public function suggestions(Collection $groups, int $limit = 10): Collection
     {
         return $groups->toBase()
-            ->flatMap(fn (Group $g) => $g->tags->toBase()->map(fn ($t) => Term::tag($t->tag))
-                ->merge($g->attributeValues->map(fn ($av) => Term::attribute($av->definition->key, $av->value))))
-            ->groupBy(fn (Term $t) => $t->raw)
-            ->map(fn (Collection $same) => ['term' => $same->first(), 'count' => $same->count()])
-            ->reject(fn (array $s) => $s['count'] === $groups->count() || $this->has($s['term']))
+            ->flatMap(fn (Group $g) => $g->tags->toBase()->map(fn ($t): Term => Term::tag($t->tag))
+                ->merge($g->attributeValues->map(fn ($av): Term => Term::attribute($av->definition->key, $av->value))))
+            ->groupBy(fn (Term $t): string => $t->raw)
+            ->map(fn (Collection $same): array => ['term' => $same->first(), 'count' => $same->count()])
+            ->reject(fn (array $s): bool => $s['count'] === $groups->count() || $this->has($s['term']))
             ->sortByDesc('count')
             ->take($limit)
             ->values();

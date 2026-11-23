@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use App\Http\Resources\GroupResource;
 use App\Models\Group;
 use App\Services\GroupMembershipResolver;
@@ -12,7 +13,7 @@ class UserCollection extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request) {
@@ -95,7 +96,7 @@ class UserCollection extends JsonResource
                         ->with('tags', 'attributeValues.definition')
                         ->orderBy('name')
                         ->get()
-                        ->map(fn (Group $g) => new GroupResource($g, direct: $map[$g->id] === null))
+                        ->map(fn (Group $g): GroupResource => new GroupResource($g, direct: $map[$g->id] === null))
                         ->values();
                 }
             ),

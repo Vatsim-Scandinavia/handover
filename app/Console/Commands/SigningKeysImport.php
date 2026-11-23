@@ -2,6 +2,9 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
+use Illuminate\Support\Facades\File;
 use App\OAuth\SigningKeys\SigningKeyStore;
 use Laravel\Passport\Passport;
 
@@ -10,11 +13,10 @@ use Laravel\Passport\Passport;
  * key on a fresh install. Safe to run on every start: a store that holds keys is
  * left alone. The container entrypoint and a migration both run it.
  */
+#[Description('Adopt the Passport signing key as the first active key, or create one on a fresh install')]
+#[Signature('signing-keys:import')]
 class SigningKeysImport extends SigningKeyCommand
 {
-    protected $signature = 'signing-keys:import';
-    protected $description = 'Adopt the Passport signing key as the first active key, or create one on a fresh install';
-
     protected function handleKeys(SigningKeyStore $keys): int
     {
         $fromEnvironment = config('passport.private_key');
@@ -46,7 +48,7 @@ class SigningKeysImport extends SigningKeyCommand
         foreach (['oauth-private.key', 'oauth-public.key'] as $file) {
             $path = Passport::keyPath($file);
 
-            if (is_file($path) && ! @unlink($path)) {
+            if (is_file($path) && ! File::delete($path)) {
                 $this->warn("Could not delete {$path}. Delete it by hand: Handover no longer reads it.");
             }
         }

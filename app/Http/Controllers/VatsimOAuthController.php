@@ -2,19 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use League\OAuth2\Client\Token;
-use Illuminate\Support\Facades\Auth;
 use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 
 class VatsimOAuthController extends GenericProvider
 {
-    /**
-     * @var GenericProvider
-     */
-    private $provider;
-
     /**
      * Initializes the provider variable.
      */
@@ -45,7 +38,7 @@ class VatsimOAuthController extends GenericProvider
             return $controller->getAccessToken('refresh_token', [
                 'refresh_token' => $token->getRefreshToken()
             ]);
-        } catch (IdentityProviderException $e) {
+        } catch (IdentityProviderException) {
             return null;
         }
     }

@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('groups', function (Blueprint $table) {
+        Schema::create('groups', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('slug', 64)->unique();
             $table->string('name', 255);

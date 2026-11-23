@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use App\Models\Group;
 use App\Services\GroupManagerService;
 use App\Services\GroupMembershipResolver;
@@ -9,21 +11,21 @@ use Illuminate\Http\Request;
 
 class GroupMemberController extends Controller
 {
-    public function __construct(private GroupManagerService $service) {}
+    public function __construct(private readonly GroupManagerService $service) {}
 
-    public function index()
+    public function index(): Factory|View
     {
         $request = request();
         $slug = $request->route('group');
-        $group = $slug instanceof \App\Models\Group ? $slug : \App\Models\Group::where('slug', $slug)->firstOrFail();
+        $group = $slug instanceof Group ? $slug : Group::where('slug', $slug)->firstOrFail();
 
         $this->requireAccess($request, $group);
 
-        $search = $request->get('search');
+        $search = $request->input('search');
         $query = $group->members()->orderBy('first_name');
 
         if ($search) {
-            $query->where(function ($q) use ($search) {
+            $query->where(function ($q) use ($search): void {
                 $q->where('first_name', 'like', $search . '%')
                   ->orWhere('last_name', 'like', $search . '%')
                   ->orWhere('users.id', $search);
@@ -32,7 +34,7 @@ class GroupMemberController extends Controller
 
         $members = $query->paginate(25)->withQueryString();
         $transitive = false;
-        return view('groups.members', compact('group', 'members', 'search', 'transitive'));
+        return view('groups.members', ['group' => $group, 'members' => $members, 'search' => $search, 'transitive' => $transitive]);
     }
 
     /**
@@ -40,18 +42,18 @@ class GroupMemberController extends Controller
      * groups (their members roll up here). Read-only: enrolment is managed on
      * the direct-members view.
      */
-    public function all(Request $request, Group $group, GroupMembershipResolver $resolver)
+    public function all(Request $request, Group $group, GroupMembershipResolver $resolver): Factory|View
     {
         $this->requireAccess($request, $group);
 
         // userId => enrolment source group ids (this group and/or descendants).
         $sourceMap = $resolver->transitiveMembers($group);
 
-        $search = $request->get('search');
+        $search = $request->input('search');
         $query = User::whereIn('id', array_keys($sourceMap))->orderBy('first_name');
 
         if ($search) {
-            $query->where(function ($q) use ($search) {
+            $query->where(function ($q) use ($search): void {
                 $q->where('first_name', 'like', $search . '%')
                   ->orWhere('last_name', 'like', $search . '%')
                   ->orWhere('users.id', $search);
@@ -62,22 +64,20 @@ class GroupMemberController extends Controller
 
         // Names for the descendant groups a membership rolls up through.
         $viaIds = collect($sourceMap)->flatten()->unique()
-            ->reject(fn ($id) => $id === $group->id)->values();
+            ->reject(fn ($id): bool => $id === $group->id)->values();
         $viaNames = Group::whereIn('id', $viaIds)->pluck('name', 'id');
 
         // userId => ['direct' => bool, 'via' => list<string names>]
-        $memberSources = collect($sourceMap)->map(function ($sources) use ($group, $viaNames) {
-            return [
-                'direct' => in_array($group->id, $sources, true),
-                'via'    => collect($sources)
-                    ->reject(fn ($id) => $id === $group->id)
-                    ->map(fn ($id) => $viaNames[$id] ?? 'unknown')
-                    ->values()->all(),
-            ];
-        })->all();
+        $memberSources = collect($sourceMap)->map(fn($sources): array => [
+            'direct' => in_array($group->id, $sources, true),
+            'via'    => collect($sources)
+                ->reject(fn ($id): bool => $id === $group->id)
+                ->map(fn ($id) => $viaNames[$id] ?? 'unknown')
+                ->values()->all(),
+        ])->all();
 
         $transitive = true;
-        return view('groups.members', compact('group', 'members', 'search', 'transitive', 'memberSources'));
+        return view('groups.members', ['group' => $group, 'members' => $members, 'search' => $search, 'transitive' => $transitive, 'memberSources' => $memberSources]);
     }
 
     public function store(Request $request, Group $group)

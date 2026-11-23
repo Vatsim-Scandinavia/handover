@@ -23,7 +23,7 @@ class OAuthClientController extends Controller
      * from before 4.0.0 may also hold grant types Handover does not support.
      * An admin can keep or remove those, but not add them.
      */
-    private const GRANT_TYPES = [
+    private const array GRANT_TYPES = [
         'authorization_code' => 'Authorization code',
         'refresh_token' => 'Refresh token',
         'client_credentials' => 'Client credentials',
@@ -33,9 +33,9 @@ class OAuthClientController extends Controller
      * Grant types the form ticks for a new client, as createAuthorizationCodeGrantClient()
      * sets them. They are also the only grant types a public client may have.
      */
-    private const DEFAULT_GRANT_TYPES = ['authorization_code', 'refresh_token'];
+    private const array DEFAULT_GRANT_TYPES = ['authorization_code', 'refresh_token'];
 
-    public function __construct(private ClientRepository $clients) {}
+    public function __construct(private readonly ClientRepository $clients) {}
 
     /**
      * Render the admin OAuth client management page.
@@ -145,7 +145,7 @@ class OAuthClientController extends Controller
      */
     private function validateClient(Request $request, ?Client $client = null): array
     {
-        $public = $client ? ! $client->confidential() : ! $request->boolean('confidential', true);
+        $public = $client instanceof Client ? ! $client->confidential() : ! $request->boolean('confidential', true);
         $allowedGrantTypes = $public
             ? self::DEFAULT_GRANT_TYPES
             : [...array_keys(self::GRANT_TYPES), ...($client?->grant_types ?? [])];
@@ -154,7 +154,7 @@ class OAuthClientController extends Controller
             'name' => ['required', 'string', 'max:255'],
             // The type is fixed once the client exists.
             'confidential' => ['sometimes', 'boolean', function (string $attribute, mixed $value, Closure $fail) use ($client): void {
-                if ($client && (bool) $value !== $client->confidential()) {
+                if ($client instanceof Client && (bool) $value !== $client->confidential()) {
                     $fail('A client cannot change between confidential and public.');
                 }
             }],
@@ -162,7 +162,7 @@ class OAuthClientController extends Controller
             'redirect_uris.*' => $this->redirectUriRules($public),
             'grant_types' => ['sometimes', 'list', 'min:1'],
             'grant_types.*' => ['required', 'string', 'distinct', Rule::in($allowedGrantTypes)],
-            'allowed_scopes' => [$client ? 'sometimes' : 'required', 'list', 'min:1'],
+            'allowed_scopes' => [$client instanceof Client ? 'sometimes' : 'required', 'list', 'min:1'],
             'allowed_scopes.*' => ['required', 'string', 'distinct', Rule::in(Passport::scopeIds())],
             // Only a public client calls Handover from the browser.
             'allowed_origins' => $public ? ['sometimes', 'list'] : ['prohibited'],

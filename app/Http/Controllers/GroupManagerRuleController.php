@@ -1,6 +1,9 @@
 <?php
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Contracts\Database\Query\Builder;
 use App\Models\Group;
 use App\Models\GroupAttributeDefinition;
 use App\Models\GroupManagerRuleByAttribute;
@@ -11,7 +14,7 @@ use Illuminate\Http\Request;
 
 class GroupManagerRuleController extends Controller
 {
-    public function __construct(private GroupManagerService $service) {}
+    public function __construct(private readonly GroupManagerService $service) {}
 
     public function destroyFromOverview(Request $request, string $type, int $rule)
     {
@@ -28,7 +31,7 @@ class GroupManagerRuleController extends Controller
         return back()->with('success', 'Rule removed.');
     }
 
-    public function overview()
+    public function overview(): Factory|View
     {
         $request = request();
         $this->requireAdmin($request);
@@ -38,17 +41,17 @@ class GroupManagerRuleController extends Controller
         $attrRules  = GroupManagerRuleByAttribute::with('managerGroup')->get();
 
         $rules = collect()
-            ->merge($groupRules->map(fn($r) => ['manager' => $r->managerGroup, 'type' => 'group',     'rule' => $r]))
-            ->merge($tagRules->map(fn($r)   => ['manager' => $r->managerGroup, 'type' => 'tag',       'rule' => $r]))
-            ->merge($attrRules->map(fn($r)  => ['manager' => $r->managerGroup, 'type' => 'attribute', 'rule' => $r]))
-            ->filter(fn($e) => $e['manager'] !== null)
+            ->merge($groupRules->map(fn($r): array => ['manager' => $r->managerGroup, 'type' => 'group',     'rule' => $r]))
+            ->merge($tagRules->map(fn($r): array   => ['manager' => $r->managerGroup, 'type' => 'tag',       'rule' => $r]))
+            ->merge($attrRules->map(fn($r): array  => ['manager' => $r->managerGroup, 'type' => 'attribute', 'rule' => $r]))
+            ->filter(fn($e): bool => $e['manager'] !== null)
             ->sortBy('manager.name')
             ->values();
 
-        return view('groups.rules-overview', compact('rules'));
+        return view('groups.rules-overview', ['rules' => $rules]);
     }
 
-    public function index()
+    public function index(): Factory|View
     {
         $request = request();
         $this->requireAdmin($request);
@@ -74,18 +77,18 @@ class GroupManagerRuleController extends Controller
                 ->exists()
             );
 
-        return view('groups.rules', compact('group', 'allGroups', 'definitions', 'tagRules', 'attrRules'));
+        return view('groups.rules', ['group' => $group, 'allGroups' => $allGroups, 'definitions' => $definitions, 'tagRules' => $tagRules, 'attrRules' => $attrRules]);
     }
 
     public function store(Request $request, Group $group)
     {
         $this->requireAdmin($request);
-        $type = $request->validate(['type' => 'required|in:group,tag,attribute'])['type'];
+        $type = $request->validate(['type' => ['required', 'in:group,tag,attribute']])['type'];
 
         match ($type) {
             'group'     => $this->storeGroupRule($request, $group),
-            'tag'       => $this->storeTagRule($request, $group),
-            'attribute' => $this->storeAttributeRule($request, $group),
+            'tag'       => $this->storeTagRule($request),
+            'attribute' => $this->storeAttributeRule($request),
         };
 
         $this->service->incrementCacheVersion();
@@ -101,13 +104,13 @@ class GroupManagerRuleController extends Controller
                 ->where('target_group_id', $group->id)
                 ->firstOrFail()
                 ->delete(),
-            'tag' => tap(GroupManagerRuleByTag::findOrFail($rule), function ($r) use ($group) {
+            'tag' => tap(GroupManagerRuleByTag::findOrFail($rule), function ($r) use ($group): void {
                 abort_unless($group->tags()->where('tag', $r->target_tag)->exists(), 404);
             })->delete(),
-            'attribute' => tap(GroupManagerRuleByAttribute::findOrFail($rule), function ($r) use ($group) {
+            'attribute' => tap(GroupManagerRuleByAttribute::findOrFail($rule), function ($r) use ($group): void {
                 abort_unless(
                     $group->attributeValues()
-                        ->whereHas('definition', fn ($q) => $q->where('key', $r->target_attribute_key))
+                        ->whereHas('definition', fn (Builder $q) => $q->where('key', $r->target_attribute_key))
                         ->where('value', $r->target_attribute_value)
                         ->exists(),
                     404
@@ -131,7 +134,7 @@ class GroupManagerRuleController extends Controller
         ]);
     }
 
-    private function storeTagRule(Request $request, Group $group): void
+    private function storeTagRule(Request $request): void
     {
         $data = $request->validate([
             'manager_group_id' => ['required', 'uuid', 'exists:groups,id'],
@@ -143,7 +146,7 @@ class GroupManagerRuleController extends Controller
         ]);
     }
 
-    private function storeAttributeRule(Request $request, Group $group): void
+    private function storeAttributeRule(Request $request): void
     {
         $data = $request->validate([
             'manager_group_id'       => ['required', 'uuid', 'exists:groups,id'],

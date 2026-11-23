@@ -18,10 +18,10 @@ class ClientSchemaMigrationTest extends TestCase
     use RefreshDatabase;
     use RunsOAuthFlows;
 
-    private const MIGRATION = '2026_11_19_000002_adopt_passport_13_client_schema.php';
+    private const string MIGRATION = '2026_11_19_000002_adopt_passport_13_client_schema.php';
 
     /** Depends on the new schema, so it rolls back first and migrates last. */
-    private const POLICY_MIGRATION = '2026_11_19_000003_create_oauth_client_policies.php';
+    private const string POLICY_MIGRATION = '2026_11_19_000003_create_oauth_client_policies.php';
 
     protected function setUp(): void
     {

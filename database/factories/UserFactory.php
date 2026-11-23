@@ -1,9 +1,15 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<User>
+ */
 class UserFactory extends Factory
 {
     protected $model = User::class;
@@ -11,10 +17,10 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'id' => $this->faker->unique()->numberBetween(1000000, 2000000000),
-            'email' => $this->faker->unique()->safeEmail(),
-            'first_name' => $this->faker->firstName(),
-            'last_name' => $this->faker->lastName(),
+            'id' => fake()->unique()->numberBetween(1000000, 2000000000),
+            'email' => fake()->unique()->safeEmail(),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
             'rating' => 1,
             'rating_short' => 'OBS',
             'rating_long' => 'Observer',
