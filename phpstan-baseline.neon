@@ -25,12 +25,6 @@ parameters:
 			path: app/Console/Commands/DeleteClient.php
 
 		-
-			message: '#^Cannot call method revokeRefreshTokensByAccessTokenId\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: app/Console/Commands/DeleteClient.php
-
-		-
 			message: '#^Cannot call method update\(\) on App\\Models\\Passport\\Client\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\Models\\Passport\\Client\>\|null\.$#'
 			identifier: method.nonObject
 			count: 1

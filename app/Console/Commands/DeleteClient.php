@@ -24,11 +24,9 @@ class DeleteClient extends Command
         if ($this->confirm('Are you sure you want to delete the client \''.$client->name.'\'?')) {
             $clientAccessTokens = $client->tokens;
 
-            $refreshTokenRepository = app('Laravel\Passport\RefreshTokenRepository');
-
             foreach ($clientAccessTokens as $clientAccessToken) {
                 // Revoke the refresh token
-                $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($clientAccessToken->id);
+                $clientAccessToken->refreshToken?->revoke();
 
                 // Revoke the access token
                 $clientAccessToken->revoke();
