@@ -648,6 +648,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../setup/custom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom container image
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../setup/dpp/" class="md-nav__link">
         
   
@@ -1537,6 +1565,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#light-and-dark-themes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Light and dark themes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#why-this-is-a-major-release" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1780,6 +1819,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#light-and-dark-themes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Light and dark themes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#why-this-is-a-major-release" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1856,7 +1906,7 @@ The image ships with Composer dependencies installed and frontend assets built, 
 <div class="language-sh highlight"><pre><span></span><code>php<span class="w"> </span>artisan<span class="w"> </span>migrate<span class="w"> </span>--force
 php<span class="w"> </span>artisan<span class="w"> </span>optimize:clear
 </code></pre></div>
-<p>If you run a <a href="../setup/theme/">custom theme</a>, run the theme build again, because recreating the container resets it.</p>
+<p>If you run a <a href="../setup/theme/">custom theme</a>, rebuild your <a href="../setup/custom/">custom image</a> on the new version.</p>
 <div class="admonition info">
 <p class="admonition-title">Why <code>--force</code></p>
 <p>In production, <code>migrate</code> asks for confirmation.
@@ -1922,7 +1972,7 @@ Running it twice is safe: it skips secrets that are already hashed.</p>
 </code></pre></div>
 </li>
 <li>
-<p>If you run a <a href="../setup/theme/">custom theme</a>, run the theme build again.</p>
+<p>Remove any <code>VITE_THEME_*</code> variables. They are no longer used. If you had custom colours, see <a href="#light-and-dark-themes">light and dark themes</a>.</p>
 </li>
 <li>
 <p>Lift maintenance mode:</p>
@@ -2071,6 +2121,21 @@ Before you rotate, move them to the JWKS. See <a href="../integrations/clients/#
 Once you nest groups, the array also lists groups a member inherits.
 Clients that only want direct memberships should filter on <code>direct: true</code>.
 See the <a href="../reference/api/#groups">user API</a>.</p>
+<h4 id="light-and-dark-themes">Light and dark themes<a class="headerlink" href="#light-and-dark-themes" title="Permanent link">&para;</a></h4>
+<p>Handover now has a light and a dark theme, and follows the operating system by default.
+Signed-in members can switch between system, light and dark with the toggle next to their name.
+The choice is kept in the browser.</p>
+<p>The <code>VITE_THEME_*</code> variables are gone, including <code>VITE_THEME_BORDER_RADIUS</code>.
+The 4.0.0 betas still read them, so this applies to them too.
+If you set custom colours with them, copy <code>resources/sass/themes/_custom.scss.example</code> to <code>_custom.scss</code>, move your colours into it, and rebuild.
+Use <code>_light.scss</code> and <code>_dark.scss</code> as a reference.
+See <a href="../setup/theme/#colours">customising the theme</a>, which also covers how to bake a custom theme into a container image.</p>
+<p><code>APP_NAME</code> no longer changes the name Handover shows.
+Page titles and headings always say Handover.
+Set the new <code>APP_TAGLINE</code> to describe your instance beneath the front page heading.
+Leave <code>APP_NAME</code> as it is: it still names the session cookie, so changing or removing it signs every member out once.
+A footer on every page says who runs your Handover and credits Handover to <abbr title="Virtual Air Traffic Simulation network">VATSIM</abbr> Scandinavia.
+See <a href="../setup/theme/#front-page-heading">front page heading</a>.</p>
 <h4 id="why-this-is-a-major-release">Why this is a major release<a class="headerlink" href="#why-this-is-a-major-release" title="Permanent link">&para;</a></h4>
 <p>Passport 13 changed behaviour Handover depends on as an OAuth provider.
 It became headless, so the authorization endpoint needs a view bound, and it switched client IDs to UUIDs.
@@ -2106,7 +2171,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 22, 2026 00:05:14 UTC">November 22, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 23, 2026 08:00:21 UTC">November 23, 2026</span>
   </span>
 
     

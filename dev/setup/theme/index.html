@@ -16,7 +16,7 @@
         <link rel="prev" href="../../reference/environment-variables/">
       
       
-        <link rel="next" href="../dpp/">
+        <link rel="next" href="../custom/">
       
       
         
@@ -694,6 +694,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#themes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Themes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#logo" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -713,13 +724,52 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Colours">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-create-the-override-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Create the override file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-edit-your-colours" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Edit your colours
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-rebuild-the-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Rebuild the assets
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#header-text" class="md-nav__link">
+  <a href="#front-page-heading" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Header text
+        Front page heading
       
     </span>
   </a>
@@ -737,10 +787,49 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../custom/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom container image
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1449,6 +1538,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#themes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Themes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#logo" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1468,13 +1568,52 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Colours">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-create-the-override-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Create the override file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-edit-your-colours" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Edit your colours
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-rebuild-the-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Rebuild the assets
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#header-text" class="md-nav__link">
+  <a href="#front-page-heading" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Header text
+        Front page heading
       
     </span>
   </a>
@@ -1486,6 +1625,17 @@
     <span class="md-ellipsis">
       
         Simplified Data Protection Policy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
       
     </span>
   </a>
@@ -1518,34 +1668,64 @@
 
 
 <h1 id="customising-the-theme">Customising the theme<a class="headerlink" href="#customising-the-theme" title="Permanent link">&para;</a></h1>
-<p>You can change the logo, the colours, the header text, and the simplified Data Protection Policy.</p>
+<p>You can change the logo, the colours, the front page heading, and the simplified Data Protection Policy.</p>
+<h2 id="themes">Themes<a class="headerlink" href="#themes" title="Permanent link">&para;</a></h2>
+<p>Handover ships a light and a dark theme.
+By default it follows the operating system.
+A signed-in member can switch between system, light and dark with the toggle next to their name.
+The choice is kept in the browser only, so it does not follow the member to another device.</p>
+<p>Both themes are built from the same set of CSS custom properties, so anything you override below applies in either mode.</p>
 <h2 id="logo">Logo<a class="headerlink" href="#logo" title="Permanent link">&para;</a></h2>
 <p>Bind your logo files to <code>/app/public/images/logos</code> and set <a href="../../reference/environment-variables/#optional-theming"><code>APP_LOGO</code></a> to the file name.</p>
 <h2 id="colours">Colours<a class="headerlink" href="#colours" title="Permanent link">&para;</a></h2>
-<p>Handover compiles its colours into the frontend at build time.
-Set the <code>VITE_THEME_*</code> <a href="../../reference/environment-variables/#optional-theming">environment variables</a>, then rebuild the frontend inside the container:</p>
-<div class="language-sh highlight"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>handover<span class="w"> </span>sh<span class="w"> </span>container/theme/build.sh
+<p>To brand your instance, put your overrides in <code>resources/sass/themes/_custom.scss</code>.
+That file is git-ignored, so your styles stay out of version control while still compiling into the regular front-end build.</p>
+<h3 id="1-create-the-override-file">1. Create the override file<a class="headerlink" href="#1-create-the-override-file" title="Permanent link">&para;</a></h3>
+<p>Copy the example to get started:</p>
+<div class="language-sh highlight"><pre><span></span><code>cp<span class="w"> </span>resources/sass/themes/_custom.scss.example<span class="w"> </span>resources/sass/themes/_custom.scss
 </code></pre></div>
-<p>If the build fails with an error like <code>"#5f271a" is not a color</code>, remove the <code>"</code> quotes around the value of your environment variable.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
+<h3 id="2-edit-your-colours">2. Edit your colours<a class="headerlink" href="#2-edit-your-colours" title="Permanent link">&para;</a></h3>
+<p>Edit <code>resources/sass/themes/_custom.scss</code>. Override only what you need.
+Anything left out keeps its default.</p>
+<p>Reference for the available values:</p>
 <ul>
-<li>The script installs Node.js inside the container, builds the frontend, and removes Node.js again. The container still grows by about 200 MB.</li>
-<li>Run the script again each time you recreate the container.</li>
+<li><code>resources/sass/themes/_light.scss</code>: CSS custom properties for the light theme</li>
+<li><code>resources/sass/themes/_dark.scss</code>: CSS custom properties for the dark theme</li>
 </ul>
+<h3 id="3-rebuild-the-assets">3. Rebuild the assets<a class="headerlink" href="#3-rebuild-the-assets" title="Permanent link">&para;</a></h3>
+<p>The CSS is compiled ahead of time, so the override only takes effect once the front-end is rebuilt.
+How you do that depends on how you run Handover.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Without a container</label><label for="__tabbed_1_2">With a container</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-sh highlight"><pre><span></span><code>npm<span class="w"> </span>run<span class="w"> </span>build
+</code></pre></div>
 </div>
-<div class="admonition tip">
-<p class="admonition-title">Renamed variables</p>
-<p>Older versions of this guide used <code>BOOTSTRAP_COLOR_*</code> names.
-Handover reads <code>VITE_THEME_*</code> only, so rename any old variables.</p>
+<div class="tabbed-block">
+<p>Build your own image with the override baked in.
+See <a href="../custom/#custom-theme">custom container image</a>.</p>
 </div>
-<h2 id="header-text">Header text<a class="headerlink" href="#header-text" title="Permanent link">&para;</a></h2>
-<p>To change the header text, bind your own Blade <strong>file</strong> to <code>/app/resources/views/layouts/header.blade.php</code>.
+</div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Don't build inside a running container</p>
+<p>The published image contains no Node toolchain, and anything compiled into a running container is lost the moment it is recreated.
+Either bake the theme into an image you build yourself, or run Handover without a container.</p>
+</div>
+<h2 id="front-page-heading">Front page heading<a class="headerlink" href="#front-page-heading" title="Permanent link">&para;</a></h2>
+<p>The front page heading always says Handover.
+Set <a href="../../reference/environment-variables/#optional-theming"><code>APP_TAGLINE</code></a> to describe your instance beneath it.</p>
+<p>The footer says your Handover is run by <a href="../../reference/environment-variables/#required"><code>APP_OWNER</code></a>, and credits Handover to <abbr title="Virtual Air Traffic Simulation network">VATSIM</abbr> Scandinavia.
+The Handover version shows on the management pages only.</p>
+<p>To change more than the text, bind your own Blade <strong>file</strong> to <code>/app/resources/views/layouts/header.blade.php</code>.
 Start from a copy of the original file and edit it.</p>
 <h2 id="simplified-data-protection-policy">Simplified Data Protection Policy<a class="headerlink" href="#simplified-data-protection-policy" title="Permanent link">&para;</a></h2>
 <p>Before a member's data is stored, Handover shows a short summary of your Data Protection Policy as icons and bullet points.
 To change it, bind your own Blade <strong>file</strong> to <code>/app/resources/views/parts/dpp-bullets.blade.php</code>.
 Start from a copy of the original file and edit it.</p>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<p>If the colours don't change, rebuild the assets and reload the page without the cache.
+Check that you set each colour in both the light and the dark block of <code>_custom.scss</code>, so it applies in either mode.</p>
 <!--
 This is a list of abbreviations which will be automatically expanded on every content page.
 Don't add any words or abbreviations which are confusingly or rarely used.
@@ -1575,7 +1755,7 @@ They'll be better off on the specific page in question.
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 18, 2026 21:18:16 UTC">November 18, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 23, 2026 08:00:21 UTC">November 23, 2026</span>
   </span>
 
     
@@ -1661,13 +1841,13 @@ They'll be better off on the specific page in question.
         
         
           
-          <a href="../dpp/" class="md-footer__link md-footer__link--next" aria-label="Next: Data protection policy">
+          <a href="../custom/" class="md-footer__link md-footer__link--next" aria-label="Next: Custom container image">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Data protection policy
+                Custom container image
               </div>
             </div>
             <div class="md-footer__button md-icon">
