@@ -42,19 +42,23 @@ final readonly class VatsimConnect
     }
 
     /**
-     * @return AccessToken|null null when the refresh fails
+     * @return AccessToken|null null when VATSIM rejects the refresh token
+     *
+     * @throws Exception when the refresh fails for another reason, such as an outage
      */
     public function refresh(AccessToken $token): ?AccessToken
     {
         try {
             /** @var AccessToken */
             return $this->provider->getAccessToken('refresh_token', ['refresh_token' => $token->getRefreshToken()]);
-        } catch (IdentityProviderException) {
-            return null;
-        } catch (Exception $exception) {
-            report($exception);
+        } catch (IdentityProviderException $exception) {
+            // RFC 6749, section 5.2: invalid_grant covers an expired, revoked
+            // or reused refresh token.
+            if ($exception->getMessage() === 'invalid_grant') {
+                return null;
+            }
 
-            return null;
+            throw $exception;
         }
     }
 

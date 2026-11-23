@@ -5,12 +5,18 @@ declare(strict_types=1);
 namespace Tests\Feature\Vatsim;
 
 use App\User;
+use Closure;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Testing\PendingCommand;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Concerns\FakesVatsimConnect;
 use Tests\TestCase;
+use Throwable;
 
 class UpdateMemberDataTest extends TestCase
 {
@@ -88,6 +94,35 @@ class UpdateMemberDataTest extends TestCase
         $this->assertNull($user->refresh_token);
         $this->assertNull($user->token_expires);
         $this->assertSame('Old', $user->first_name);
+    }
+
+    /**
+     * @param  Closure(self): (Response|Throwable)  $failure
+     */
+    #[DataProvider('failedRefreshes')]
+    public function test_a_refresh_that_fails_for_other_reasons_keeps_the_token(Closure $failure): void
+    {
+        Exceptions::fake();
+        $user = $this->linkedUser(['token_expires' => now()->subMinute()->timestamp]);
+        $this->fakeVatsim($failure($this));
+
+        $this->updateMemberData();
+
+        $this->assertSame('stored-refresh', $user->fresh()?->refresh_token);
+        Exceptions::assertReportedCount(1);
+    }
+
+    /**
+     * @return array<string, array{Closure(self): (Response|Throwable)}>
+     */
+    public static function failedRefreshes(): array
+    {
+        return [
+            'connection failure' => [fn (self $test): Throwable => new ConnectException('Connection refused', new Request('POST', 'https://vatsim.test/oauth/token'))],
+            'server error' => [fn (self $test): Response => $test->vatsimJson(['error' => 'server_error'], 503)],
+            'HTML error page' => [fn (self $test): Response => new Response(502, ['Content-Type' => 'text/html'], '<h1>Bad Gateway</h1>')],
+            'our client rejected' => [fn (self $test): Response => $test->vatsimJson(['error' => 'invalid_client'], 401)],
+        ];
     }
 
     public function test_the_new_token_is_kept_when_the_fetch_fails(): void
