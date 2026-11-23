@@ -139,7 +139,11 @@
                     <td>
                         <a class="name stretched-link" href="{{ route('groups.show', $group) }}">{{ $group->name }}</a>
                         @if($group->is_admin_group) <span class="admin">Admin</span> @endif
-                        <div class="slug">{{ $group->slug }}</div>
+                        <div class="slug">
+                            {{ $group->slug }}
+                            <x-copy-button class="group-id" :value="$group->id" label="Group ID"
+                                hint="Sent to OIDC clients in the groups claim. Click to copy.">ID</x-copy-button>
+                        </div>
                     </td>
                     <td @class(['tags', 'is-empty' => $group->tags->isEmpty()])>
                         <div class="group-chips">

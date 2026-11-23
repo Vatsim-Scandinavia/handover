@@ -316,6 +316,6 @@ class GroupHierarchyTest extends TestCase
             ->assertDontSee('Add a parent group')
             ->assertDontSee('Add a child group')
             ->assertDontSee('remove')            // no per-row remove control on populated lists
-            ->assertDontSee('x-data', false);    // no Alpine edit toggle for managers
+            ->assertDontSee('x-data="{ editing', false); // no Alpine edit toggle for managers
     }
 }
