@@ -26,12 +26,12 @@ class Controller extends BaseController
         }
 
         // Direct groups are roots; inherited ones nest under the group they came through.
-        $map = app(GroupMembershipResolver::class)->effectiveMembership(Auth::user());
+        $map = resolve(GroupMembershipResolver::class)->effectiveMembership(Auth::user());
         $groups = Group::whereIn('id', array_keys($map))->orderBy('name')->get();
         $children = $groups->groupBy(fn (Group $group) => $map[$group->id] ?? '');
         $directGroups = $children->pull('', collect());
 
-        $clients = app(AuthorizedClients::class)->for(Auth::user());
+        $clients = resolve(AuthorizedClients::class)->for(Auth::user());
 
         return view('dashboard', ['directGroups' => $directGroups, 'children' => $children, 'clients' => $clients]);
     }

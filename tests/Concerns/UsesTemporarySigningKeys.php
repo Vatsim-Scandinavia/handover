@@ -42,7 +42,7 @@ trait UsesTemporarySigningKeys
 
     protected function signingKeys(): SigningKeyStore
     {
-        return app(SigningKeyStore::class);
+        return resolve(SigningKeyStore::class);
     }
 
     /** @return list<string> */

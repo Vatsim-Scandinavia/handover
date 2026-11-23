@@ -38,11 +38,11 @@ class IdTokenResponse extends BearerTokenResponse
 
     private function idToken(AccessTokenEntityInterface $accessToken, User $user, string $codeId): string
     {
-        $claims = array_filter(app(AuthCodeRepository::class)->signInParameters($codeId), fn (int|string|null $value): bool => $value !== null)
+        $claims = array_filter(resolve(AuthCodeRepository::class)->signInParameters($codeId), fn (int|string|null $value): bool => $value !== null)
             + ['at_hash' => $this->atHash($accessToken->toString())]
-            + app(UserClaims::class)->forScopes($user, ScopeIds::of($accessToken->getScopes()));
+            + resolve(UserClaims::class)->forScopes($user, ScopeIds::of($accessToken->getScopes()));
 
-        return app(ActiveKeySigner::class)->sign(function (Builder $builder) use ($accessToken, $user, $claims): Builder {
+        return resolve(ActiveKeySigner::class)->sign(function (Builder $builder) use ($accessToken, $user, $claims): Builder {
             $builder = $builder
                 ->issuedBy(Issuer::url())
                 ->permittedFor($accessToken->getClient()->getIdentifier())

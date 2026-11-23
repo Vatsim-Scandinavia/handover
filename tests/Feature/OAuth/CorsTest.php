@@ -93,7 +93,7 @@ class CorsTest extends TestCase
 
     public function test_a_revoked_clients_origins_are_not_allowed(): void
     {
-        app(ClientRepository::class)->delete($this->client);
+        resolve(ClientRepository::class)->delete($this->client);
 
         $this->assertNoCors($this->preflight('/oauth/token', self::ORIGIN)->assertForbidden());
     }

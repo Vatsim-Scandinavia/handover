@@ -15,7 +15,7 @@ class ClientCreationTest extends TestCase
 
     public function test_creates_client_with_a_uuid7_id(): void
     {
-        $client = app(ClientRepository::class)->createAuthorizationCodeGrantClient(
+        $client = resolve(ClientRepository::class)->createAuthorizationCodeGrantClient(
             'First Client',
             ['https://first.test/callback', 'https://first.test/other'],
         );

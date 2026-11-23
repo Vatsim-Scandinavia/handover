@@ -34,7 +34,7 @@ class AccessToken extends PassportAccessToken
         $now = new DateTimeImmutable;
         $groups = $this->groupIds();
 
-        return app(ActiveKeySigner::class)->sign(function (Builder $builder) use ($now, $groups): Builder {
+        return resolve(ActiveKeySigner::class)->sign(function (Builder $builder) use ($now, $groups): Builder {
             $builder = $builder
                 ->permittedFor($this->getClient()->getIdentifier())
                 ->identifiedBy($this->getIdentifier())
@@ -58,6 +58,6 @@ class AccessToken extends PassportAccessToken
 
         $user = User::find($this->getUserIdentifier());
 
-        return $user === null ? null : app(UserClaims::class)->groupIds($user);
+        return $user === null ? null : resolve(UserClaims::class)->groupIds($user);
     }
 }

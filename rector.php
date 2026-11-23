@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use RectorLaravel\Rector\ClassMethod\MigrateToSimplifiedAttributeRector;
-use RectorLaravel\Rector\FuncCall\AppToResolveRector;
 use RectorLaravel\Rector\MethodCall\AssertSeeToAssertSeeHtmlRector;
 use RectorLaravel\Rector\StaticCall\CarbonToDateFacadeRector;
 use RectorLaravel\Set\LaravelSetList;
@@ -24,8 +23,7 @@ return RectorConfig::configure()
         __DIR__.'/config/app.php',
         // assertSeeHtml stops escaping, which changes what tests assert.
         AssertSeeToAssertSeeHtmlRector::class,
-        // Style-only rewrites that add no type information.
-        AppToResolveRector::class,
+        // A style-only rewrite that adds no type information.
         CarbonToDateFacadeRector::class,
         // A token() accessor would shadow Passport's HasApiTokens::token().
         MigrateToSimplifiedAttributeRector::class => [__DIR__.'/app/User.php'],
