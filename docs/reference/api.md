@@ -65,7 +65,7 @@ Notes:
 ## Groups
 
 With the `groups` scope, `groups` lists every group the member belongs to, sorted by name.
-It includes groups the member inherits through [nested groups](../groups.md#nested-groups-transitive-membership).
+It includes groups the member inherits through [member groups](../groups.md#member-groups-transitive-membership).
 
 ```json
 {
@@ -93,5 +93,5 @@ It includes groups the member inherits through [nested groups](../groups.md#nest
 Tags and attributes carry no stability promise.
 
 !!! note "Compatibility"
-    Once nesting is in use, `groups` includes inherited groups.
+    Once groups have member groups, `groups` includes inherited groups.
     Clients that want only directly assigned groups should filter on `direct: true`.

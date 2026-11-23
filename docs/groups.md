@@ -14,24 +14,29 @@ Manager access is resolved at request time by checking whether any rule points a
 
 ---
 
-## Nested groups (transitive membership)
+## Member groups (transitive membership)
 
-Groups can be nested inside other groups, forming a directed acyclic graph. When
-group **C** is nested into group **P**, every member of **C** becomes an *inherited*
-(transitive) member of **P** and of P's ancestors. A group may have multiple parents.
-Cycles are rejected when an edge is created.
+A group can be a member of another group. When group **C** is a member of group
+**P**, every member of **C** also counts as a member of **P**, and of every group
+**P** is a member of. A group can be a member of several groups. A change that
+would make a group a member of itself, directly or through other groups, is rejected.
+
+On a group's page, **Member groups** lists the groups that are members of it, and
+**Member of** lists the groups it is a member of. Internally these are child and
+parent edges in the `group_hierarchy` table.
 
 Inherited membership is reflected in two places:
 
 - The `groups` API array lists inherited groups alongside direct ones, each tagged
   with a `direct` boolean (`false` for inherited).
 - Manager rules match on a user's *effective* group set, so managing rights held by a
-  parent group flow down to members of its children.
+  group flow down to everyone in its member groups.
 
-Nesting deliberately does **not** grant admin: a user in a group nested under an admin
-group is not an administrator. Admin access is always a direct membership.
+Membership through another group deliberately does **not** grant admin: a user in a
+member group of an admin group is not an administrator. Admin access is always a
+direct membership.
 
-Nesting edges are edited by system administrators on a group's edit page.
+System administrators edit member groups on a group's page.
 
 ---
 

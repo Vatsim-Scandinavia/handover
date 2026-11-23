@@ -78,7 +78,7 @@ The container also moves the OAuth signing key into a key store that supports [k
 
     The migrations do the following:
 
-    - Add the `group_hierarchy` table for [nested groups](groups.md#nested-groups-transitive-membership).
+    - Add the `group_hierarchy` table for [member groups](groups.md#member-groups-transitive-membership).
     - Shorten the lifetime of existing refresh tokens.
     - Move OAuth clients to the [Passport 13 client schema](#oauth-clients-use-the-passport-13-schema).
     - Give every client [allowed scopes, required groups and a session setting](#client-access-settings).

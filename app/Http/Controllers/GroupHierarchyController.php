@@ -15,7 +15,7 @@ class GroupHierarchyController extends Controller
 {
     public function __construct(private readonly GroupManagerService $service) {}
 
-    // Nest {group} (the child) into a parent group.
+    // Make {group} a member of another group (edge: parent = selected, child = {group}).
     public function store(Request $request, Group $group)
     {
         $this->requireAdmin($request);
@@ -24,12 +24,13 @@ class GroupHierarchyController extends Controller
             'parent_id' => ['required', 'uuid', 'exists:groups,id'],
         ]);
         $parentId = $data['parent_id'];
+        $parent = Group::whereKey($parentId)->firstOrFail();
 
         if ($parentId === $group->id) {
-            return back()->withErrors(['parent_id' => 'A group cannot nest into itself.']);
+            return back()->withErrors(['parent_id' => "{$group->name} cannot be a member of itself."]);
         }
         if ($this->wouldCreateCycle(childId: $group->id, parentId: $parentId)) {
-            return back()->withErrors(['parent_id' => 'That would create a nesting cycle.']);
+            return back()->withErrors(['parent_id' => "{$parent->name} is already a member of {$group->name}, directly or through other groups."]);
         }
 
         // Idempotent: primary key (parent_id, child_id) makes a duplicate a no-op.
@@ -39,10 +40,10 @@ class GroupHierarchyController extends Controller
         ]);
         $this->service->incrementCacheVersion();
 
-        return EditMode::keep(back()->with('success', 'Parent group added.'));
+        return EditMode::keep(back()->with('success', "Added {$group->name} to {$parent->name}."));
     }
 
-    // Remove the nesting edge (parent -> {group}).
+    // Take {group} out of a group it is a member of.
     public function destroy(Request $request, Group $group, string $parent): RedirectResponse
     {
         $this->requireAdmin($request);
@@ -52,11 +53,12 @@ class GroupHierarchyController extends Controller
             ->where('child_id', $group->id)
             ->delete();
         $this->service->incrementCacheVersion();
+        $name = Group::find($parent)->name ?? 'the group';
 
-        return EditMode::keep(back()->with('success', 'Parent group removed.'));
+        return EditMode::keep(back()->with('success', "Removed {$group->name} from {$name}."));
     }
 
-    // Nest a child group INTO {group}. Edge is (parent = {group}, child = selected).
+    // Add another group as a member of {group} (edge: parent = {group}, child = selected).
     public function storeChild(Request $request, Group $group)
     {
         $this->requireAdmin($request);
@@ -65,12 +67,13 @@ class GroupHierarchyController extends Controller
             'child_id' => ['required', 'uuid', 'exists:groups,id'],
         ]);
         $childId = $data['child_id'];
+        $child = Group::whereKey($childId)->firstOrFail();
 
         if ($childId === $group->id) {
-            return back()->withErrors(['child_id' => 'A group cannot nest into itself.']);
+            return back()->withErrors(['child_id' => "{$group->name} cannot be a member of itself."]);
         }
         if ($this->wouldCreateCycle(childId: $childId, parentId: $group->id)) {
-            return back()->withErrors(['child_id' => 'That would create a nesting cycle.']);
+            return back()->withErrors(['child_id' => "{$group->name} is already a member of {$child->name}, directly or through other groups."]);
         }
 
         // Idempotent: primary key (parent_id, child_id) makes a duplicate a no-op.
@@ -80,10 +83,10 @@ class GroupHierarchyController extends Controller
         ]);
         $this->service->incrementCacheVersion();
 
-        return EditMode::keep(back()->with('success', 'Child group added.'));
+        return EditMode::keep(back()->with('success', "Added {$child->name} to {$group->name}."));
     }
 
-    // Remove the nesting edge ({group} -> child).
+    // Take a member group out of {group}.
     public function destroyChild(Request $request, Group $group, string $child): RedirectResponse
     {
         $this->requireAdmin($request);
@@ -93,8 +96,9 @@ class GroupHierarchyController extends Controller
             ->where('child_id', $child)
             ->delete();
         $this->service->incrementCacheVersion();
+        $name = Group::find($child)->name ?? 'the group';
 
-        return EditMode::keep(back()->with('success', 'Child group removed.'));
+        return EditMode::keep(back()->with('success', "Removed {$name} from {$group->name}."));
     }
 
     /**

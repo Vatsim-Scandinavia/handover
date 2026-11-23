@@ -170,7 +170,7 @@ class GroupHierarchyTest extends TestCase
         $this->actingAs($this->admin())
             ->get(route('groups.show', $group))
             ->assertOk()
-            ->assertSee('Parent groups')
+            ->assertSee(route('groups.parents.store', $group))
             ->assertSee('does not grant admin'); // hint text near admin-group options
     }
 
@@ -277,10 +277,11 @@ class GroupHierarchyTest extends TestCase
             ->get(route('groups.show', $group))
             ->assertOk()
             ->assertSee('Save changes')          // core-field form
-            ->assertSee('Add a parent group')    // parent add control
-            ->assertSee('Add a child group')     // child add control
+            ->assertSee(route('groups.parents.store', $group))     // member-of add control
+            ->assertSee(route('groups.children.store', $group))    // member-group add control
             ->assertSee('does not grant admin')  // admin-group hint (now the dynamic warning)
-            ->assertSee('remove')                // per-row remove control on populated parent/child lists
+            ->assertSee(route('groups.parents.destroy', ['group' => $group, 'parent' => $parent->id]))   // per-row remove
+            ->assertSee(route('groups.children.destroy', ['group' => $group, 'child' => $child->id]))
             ->assertSee('Delete group')          // danger zone
             ->assertSee('x-data="{ editing:', false)     // Alpine edit toggle wired
             ->assertSee('editing = !editing', false)     // toggle button flips edit mode
@@ -313,9 +314,10 @@ class GroupHierarchyTest extends TestCase
             ->assertSee($child->name)
             ->assertDontSee('Save changes')      // no editing form
             ->assertDontSee('Delete group')      // no danger zone
-            ->assertDontSee('Add a parent group')
-            ->assertDontSee('Add a child group')
-            ->assertDontSee('remove')            // no per-row remove control on populated lists
+            ->assertDontSee(route('groups.parents.store', $group))
+            ->assertDontSee(route('groups.children.store', $group))
+            ->assertDontSee(route('groups.parents.destroy', ['group' => $group, 'parent' => $parent->id]))
+            ->assertDontSee(route('groups.children.destroy', ['group' => $group, 'child' => $child->id]))
             ->assertDontSee('x-data="{ editing', false); // no Alpine edit toggle for managers
     }
 }

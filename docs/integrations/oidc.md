@@ -59,7 +59,7 @@ Handover leaves out a claim that has no value, such as `family_name` for a membe
 
 The `groups` claim is an array of group IDs.
 Each ID is a UUID that never changes.
-The array covers every group the member belongs to, including groups they inherit through [nested groups](../groups.md#nested-groups-transitive-membership).
+The array covers every group the member belongs to, including groups they inherit through [member groups](../groups.md#member-groups-transitive-membership).
 It is empty when the member belongs to no group.
 
 Map roles in the service from group IDs, not from group names or slugs.

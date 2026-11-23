@@ -17,7 +17,7 @@
         </x-slot:actions>
         @if($transitive)
         <x-slot:lead>
-            Includes members inherited from child groups. Inherited members are managed
+            Includes everyone in member groups. Inherited members are managed
             in the group they are enrolled in. Use <strong>Direct members</strong> to add or remove here.
         </x-slot:lead>
         @endif
