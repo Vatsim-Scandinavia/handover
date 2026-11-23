@@ -190,5 +190,7 @@ $admin-line: var(--color-gray-300);
 .empty-state { margin: 0; padding: 2rem 0; text-align: center; color: $admin-muted; }
 
 // A wide table scrolls sideways. It takes focus so keyboard users can scroll it.
-.table-scroll { overflow-x: auto; }
+// Positioned, so absolutely placed children (.visually-hidden labels) are
+// clipped too instead of widening the page.
+.table-scroll { position: relative; overflow-x: auto; }
 .table-scroll:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
