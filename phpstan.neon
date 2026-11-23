@@ -1,0 +1,21 @@
+parameters:
+    level: max
+    paths:
+        - app
+        - bootstrap/app.php
+        - config
+        - database
+        - routes
+        - tests
+    tmpDir: storage/framework/cache/phpstan
+
+    checkMissingCallableSignature: true
+    checkUninitializedProperties: true
+    checkImplicitMixed: true
+    checkBenevolentUnionTypes: true
+    reportUnmatchedIgnoredErrors: true
+    treatPhpDocTypesAsCertain: false
+
+    strictRules:
+        # PHPUnit assertions are static, but $this->assert*() is the Laravel idiom.
+        dynamicCallOnStaticMethod: false
