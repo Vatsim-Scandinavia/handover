@@ -553,18 +553,6 @@ parameters:
 			path: app/Http/Controllers/Auth/LoginController.php
 
 		-
-			message: '#^Cannot call method getAccessToken\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot call method getAuthorizationUrl\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
 			message: '#^Cannot call method getExpires\(\) on mixed\.$#'
 			identifier: method.nonObject
 			count: 1
@@ -577,25 +565,7 @@ parameters:
 			path: app/Http/Controllers/Auth/LoginController.php
 
 		-
-			message: '#^Cannot call method getResourceOwner\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot call method getState\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
 			message: '#^Cannot call method getToken\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Cannot call method toArray\(\) on mixed\.$#'
 			identifier: method.nonObject
 			count: 1
 			path: app/Http/Controllers/Auth/LoginController.php
@@ -655,12 +625,6 @@ parameters:
 			path: app/Http/Controllers/Auth/LoginController.php
 
 		-
-			message: '#^Parameter \#1 \$path of method Illuminate\\Routing\\Redirector\:\:away\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
 			message: '#^Parameter \#1 \$string of function mb_convert_encoding expects array\|string, mixed given\.$#'
 			identifier: argument.type
 			count: 2
@@ -681,18 +645,6 @@ parameters:
 		-
 			message: '#^Parameter \#1 \$user of static method Illuminate\\Support\\Facades\\Auth\:\:login\(\) expects Illuminate\\Contracts\\Auth\\Authenticatable, App\\User\|Illuminate\\Database\\Eloquent\\Collection\<int, App\\User\>\|null given\.$#'
 			identifier: argument.type
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Parameter \#2 \$array of function implode expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Http/Controllers/Auth/LoginController.php
-
-		-
-			message: '#^Property App\\Http\\Controllers\\Auth\\LoginController\:\:\$provider has no type specified\.$#'
-			identifier: missingType.property
 			count: 1
 			path: app/Http/Controllers/Auth/LoginController.php
 
@@ -1265,24 +1217,6 @@ parameters:
 			identifier: nullsafe.neverNull
 			count: 1
 			path: app/Http/Controllers/OAuthClientController.php
-
-		-
-			message: '#^Binary operation "\." between mixed and ''/api/user'' results in an error\.$#'
-			identifier: binaryOp.invalid
-			count: 1
-			path: app/Http/Controllers/VatsimOAuthController.php
-
-		-
-			message: '#^Binary operation "\." between mixed and ''/oauth/authorize'' results in an error\.$#'
-			identifier: binaryOp.invalid
-			count: 1
-			path: app/Http/Controllers/VatsimOAuthController.php
-
-		-
-			message: '#^Binary operation "\." between mixed and ''/oauth/token'' results in an error\.$#'
-			identifier: binaryOp.invalid
-			count: 1
-			path: app/Http/Controllers/VatsimOAuthController.php
 
 		-
 			message: '#^PHPDoc type array of property App\\Http\\Kernel\:\:\$middleware is not the same as PHPDoc type array\<int, string\> of overridden property Illuminate\\Foundation\\Http\\Kernel\:\:\$middleware\.$#'
