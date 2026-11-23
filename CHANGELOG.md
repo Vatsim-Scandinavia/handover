@@ -1,5 +1,22 @@
 # Changelog
 
+## [4.0.0-beta.7](https://github.com/Vatsim-Scandinavia/handover/compare/v4.0.0-beta.6...v4.0.0-beta.7) (2026-11-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* the legacy oauth_clients columns and the oauth_personal_access_clients table are gone. External tools must read redirect_uris and grant_types instead.
+
+### Features
+
+* copy a group's ID for connected apps ([#242](https://github.com/Vatsim-Scandinavia/handover/issues/242)) ([8f5c864](https://github.com/Vatsim-Scandinavia/handover/commit/8f5c864800d22e217021d52e0587efbc90cea001))
+* drop legacy OAuth client columns ([77c6a36](https://github.com/Vatsim-Scandinavia/handover/commit/77c6a368136b80b219c2fb3e0a1f69fe8814cdac))
+
+
+### Bug Fixes
+
+* revoke refresh tokens in passport:client:delete ([7ae4b0a](https://github.com/Vatsim-Scandinavia/handover/commit/7ae4b0ac0529f39313e5af7a4aaa946c1ae121b4))
+
 ## [4.0.0-beta.6](https://github.com/Vatsim-Scandinavia/handover/compare/v4.0.0-beta.5...v4.0.0-beta.6) (2026-11-23)
 
 This update features a new, slightly cleaner, less centered, look for Handover which improves on error pages, next steps, group overview, apps, and customiztion options.
