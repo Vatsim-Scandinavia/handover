@@ -28,7 +28,7 @@ class OAuthFlowTest extends TestCase
         $user = User::factory()->create();
         $redirectUri = 'https://client.test/callback';
 
-        $client = app(ClientRepository::class)->createAuthorizationCodeGrantClient(
+        $client = resolve(ClientRepository::class)->createAuthorizationCodeGrantClient(
             'Regression Client',
             [$redirectUri],
             confidential: true,

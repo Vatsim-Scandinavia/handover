@@ -22,3 +22,20 @@ parameters:
     strictRules:
         # PHPUnit assertions are static, but $this->assert*() is the Laravel idiom.
         dynamicCallOnStaticMethod: false
+
+    # Services should arrive through constructors. Where that is not workable,
+    # resolve() is the fallback; Rector rewrites app(X) to it.
+    disallowedFunctionCalls:
+        -
+            function: 'app()'
+            message: 'inject the dependency through the constructor, or use resolve() if that is not workable'
+            allowIn:
+                - bootstrap/*
+                - config/*
+    disallowedStaticCalls:
+        -
+            method:
+                - 'Illuminate\Support\Facades\App::make()'
+                - 'Illuminate\Support\Facades\App::makeWith()'
+                - 'Illuminate\Container\Container::getInstance()'
+            message: 'inject the dependency through the constructor, or use resolve() if that is not workable'

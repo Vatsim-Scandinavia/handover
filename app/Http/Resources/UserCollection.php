@@ -89,7 +89,7 @@ class UserCollection extends JsonResource
             'groups' => $this->when(
                 $this->tokenCan('groups'),
                 function () {
-                    $map = app(GroupMembershipResolver::class)->effectiveMembership($this->resource);
+                    $map = resolve(GroupMembershipResolver::class)->effectiveMembership($this->resource);
                     if ($map === []) {
                         return [];
                     }

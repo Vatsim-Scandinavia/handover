@@ -23,7 +23,7 @@ class GuestAuthorizationTest extends TestCase
     {
         $redirectUri = 'https://client.test/callback';
 
-        $client = app(ClientRepository::class)->createAuthorizationCodeGrantClient(
+        $client = resolve(ClientRepository::class)->createAuthorizationCodeGrantClient(
             'Regression Client',
             [$redirectUri],
             confidential: true,

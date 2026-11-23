@@ -74,7 +74,7 @@ class AuthorizedClientsTest extends TestCase
      */
     private function authorizedClients(User $user): array
     {
-        return app(AuthorizedClients::class)->for($user)->all();
+        return resolve(AuthorizedClients::class)->for($user)->all();
     }
 
     public function test_lists_authorized_third_party_clients(): void

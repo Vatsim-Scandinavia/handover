@@ -31,7 +31,7 @@ trait RunsOAuthFlows
 
     protected function makeClient(bool $confidential = true): Client
     {
-        return app(ClientRepository::class)->createAuthorizationCodeGrantClient(
+        return resolve(ClientRepository::class)->createAuthorizationCodeGrantClient(
             'Test Client',
             [$this->redirectUri],
             confidential: $confidential,

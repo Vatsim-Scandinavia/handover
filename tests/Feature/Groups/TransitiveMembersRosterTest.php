@@ -38,7 +38,7 @@ class TransitiveMembersRosterTest extends TestCase
 
     private function transitiveMembers(Group $group): array
     {
-        return app(GroupMembershipResolver::class)->transitiveMembers($group);
+        return resolve(GroupMembershipResolver::class)->transitiveMembers($group);
     }
 
     // ── Resolver traversal ───────────────────────────────────────────────

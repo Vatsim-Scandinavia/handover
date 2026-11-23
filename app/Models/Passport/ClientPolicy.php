@@ -138,6 +138,6 @@ class ClientPolicy extends Model
         $required = $this->requiredGroups()->pluck('groups.id')->all();
 
         return $required === []
-            || array_intersect($required, app(GroupMembershipResolver::class)->effectiveGroupIds($user)) !== [];
+            || array_intersect($required, resolve(GroupMembershipResolver::class)->effectiveGroupIds($user)) !== [];
     }
 }
