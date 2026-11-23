@@ -1,5 +1,49 @@
 # Changelog
 
+## [4.0.0-beta.6](https://github.com/Vatsim-Scandinavia/handover/compare/v4.0.0-beta.5...v4.0.0-beta.6) (2026-11-23)
+
+
+### Features
+
+* add client policies for scopes, required groups and sessions ([c834088](https://github.com/Vatsim-Scandinavia/handover/commit/c834088aa1d5dd94096ab6c162ec52d03bcb6182))
+* add OpenID Connect core ([69e0c0b](https://github.com/Vatsim-Scandinavia/handover/commit/69e0c0b32c6fcadf95753575a3abacc8893dd15d))
+* add public clients, PKCE and CORS ([14d3312](https://github.com/Vatsim-Scandinavia/handover/commit/14d33121a505f522794fdb24e4337a0bf9a075f4))
+* add RP-initiated logout ([894e04c](https://github.com/Vatsim-Scandinavia/handover/commit/894e04c15004db2e24bcd2280239f14c5ffd9d0a))
+* add signing key rotation with kid and JWKS ([f82ee35](https://github.com/Vatsim-Scandinavia/handover/commit/f82ee35986bad84c5f362bb6138e7f70c5ce406f))
+* **dashboard:** show services and groups as strips ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* **dpp:** lay out the privacy summary as a list ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* **errors:** add APP_OWNER_SUPPORT for the support line ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* **errors:** brand the error pages ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* **errors:** explain each error and the next step ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* **landing:** explain what Handover is for ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* **oauth:** add next steps to the refused page ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* **theme:** add light and dark themes with a local toggle ([#231](https://github.com/Vatsim-Scandinavia/handover/issues/231)) ([c10a1a6](https://github.com/Vatsim-Scandinavia/handover/commit/c10a1a66a66ca8ad26d30c810afcedb2771b1605))
+* **theme:** rework for usability, readability & simplicity ([#233](https://github.com/Vatsim-Scandinavia/handover/issues/233)) ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* **ui:** move member pages to a left-aligned sheet and top bar ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* **ui:** share one top bar between member and management pages ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+
+
+### Bug Fixes
+
+* **copy:** use "log in" and "log out" as verbs ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* **dashboard:** link linked services to their origin ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* **dashboard:** render linked services on the server ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* **dashboard:** replace the data protection banner with a plain note ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* **dashboard:** wrap group rows on narrow screens ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* **dpp:** raise the privacy summary's text contrast ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* let confidential clients send Origin, allow loopback IPs ([1931bd4](https://github.com/Vatsim-Scandinavia/handover/commit/1931bd43b2572f8e90647f8e4a3d5423049417c9))
+* **theme:** darken the page background in dark mode ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* **theme:** tint dark cards and lighten outline buttons ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* **ui:** give each member page its own title ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* **ui:** keep footer links readable on hover ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* **ui:** keep the management links readable on hover ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+* **ui:** make the management links read as links ([52287b3](https://github.com/Vatsim-Scandinavia/handover/commit/52287b380d6b032ac54436ca01de8b2ce398663e))
+
+
+### Miscellaneous Chores
+
+* **deps:** update dependency vue to v3.5.46 ([#226](https://github.com/Vatsim-Scandinavia/handover/issues/226)) ([357a4c4](https://github.com/Vatsim-Scandinavia/handover/commit/357a4c4c059ec5aedbf44d0e1b068fbf0307cac9))
+
 ## [4.0.0-beta.5](https://github.com/Vatsim-Scandinavia/handover/compare/v4.0.0-beta.4...v4.0.0-beta.5) (2026-11-19)
 
 
