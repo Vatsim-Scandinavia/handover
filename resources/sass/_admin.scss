@@ -80,6 +80,15 @@ $admin-line: var(--color-gray-300);
     font-size: inherit;
     &:hover, &:focus-visible { color: var(--bs-link-color); }
 }
+.remove-button {
+    padding: 0 .25rem;
+    border: 0;
+    background: none;
+    color: $admin-muted;
+    font-size: .875rem;
+    line-height: 1;
+    &:hover, &:focus-visible { color: var(--bs-danger); }
+}
 .page-meta .group-id { opacity: .6; }
 .page-meta .group-id:hover, .page-meta .group-id:focus-visible { opacity: 1; }
 .page-lead { max-width: 65ch; margin: .5rem 0 0; font-size: .875rem; color: $admin-muted; }

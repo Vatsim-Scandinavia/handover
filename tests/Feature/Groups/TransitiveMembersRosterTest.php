@@ -112,27 +112,27 @@ class TransitiveMembersRosterTest extends TestCase
 
     // ── Page ─────────────────────────────────────────────────────────────
 
-    public function test_all_members_page_shows_direct_and_inherited_with_source(): void
+    public function test_members_page_shows_direct_and_inherited_with_source(): void
     {
         $group = Group::factory()->create();
         $child = Group::factory()->create(['name' => 'Norway Trainees']);
         $this->nest($child, $group);
 
-        $this->enrol($group, User::factory()->create(['first_name' => 'Ada']));
-        $this->enrol($child, User::factory()->create(['first_name' => 'Bo']));
+        $ada = $this->enrol($group, User::factory()->create(['first_name' => 'Ada']));
+        $bo = $this->enrol($child, User::factory()->create(['first_name' => 'Bo']));
 
         $this->actingAs($this->admin())
-            ->get(route('groups.members.all', $group))
+            ->get(route('groups.members.index', $group))
             ->assertOk()
             ->assertSee('Ada')                                          // direct member listed
             ->assertSee('Bo')                                           // inherited member listed
             ->assertSee('<span class="badge bg-success">Direct</span>', false)  // direct source badge
             ->assertSee('via Norway Trainees')                          // inherited source badge
-            ->assertDontSee('Add member')                               // read-only: no add form
-            ->assertDontSee('Remove');                                  // read-only: no per-row remove
+            ->assertSee(route('groups.members.destroy', [$group, $ada]))      // direct members can be removed here
+            ->assertDontSee(route('groups.members.destroy', [$group, $bo]));  // inherited ones only in their own group
     }
 
-    public function test_all_members_page_lists_a_diamond_member_once(): void
+    public function test_members_page_lists_a_diamond_member_once(): void
     {
         $group = Group::factory()->create();
         $left = Group::factory()->create();
@@ -145,32 +145,14 @@ class TransitiveMembersRosterTest extends TestCase
         $this->enrol($right, $user);
 
         $html = $this->actingAs($this->admin())
-            ->get(route('groups.members.all', $group))
+            ->get(route('groups.members.index', $group))
             ->assertOk()
             ->getContent();
 
         $this->assertSame(1, substr_count($html, '<td>Solo Once</td>'));
     }
 
-    public function test_direct_members_page_still_excludes_inherited(): void
-    {
-        $group = Group::factory()->create();
-        $child = Group::factory()->create();
-        $this->nest($child, $group);
-
-        // Full names in a cell: a bare "Bo" also matches random faker values like "Bode".
-        $this->enrol($group, User::factory()->create(['first_name' => 'Ada', 'last_name' => 'Directly']));
-        $this->enrol($child, User::factory()->create(['first_name' => 'Bo', 'last_name' => 'Inherited']));
-
-        $this->actingAs($this->admin())
-            ->get(route('groups.members.index', $group))
-            ->assertOk()
-            ->assertSee('<td>Ada Directly</td>', false)
-            ->assertDontSee('<td>Bo Inherited</td>', false)  // inherited member not on the direct view
-            ->assertSee('Add member');   // direct view keeps management controls
-    }
-
-    public function test_all_members_search_filters_the_roster(): void
+    public function test_members_search_filters_the_roster(): void
     {
         $group = Group::factory()->create();
         $child = Group::factory()->create();
@@ -180,13 +162,13 @@ class TransitiveMembersRosterTest extends TestCase
         $this->enrol($child, User::factory()->create(['first_name' => 'Zizzy']));
 
         $this->actingAs($this->admin())
-            ->get(route('groups.members.all', ['group' => $group, 'search' => 'Ada']))
+            ->get(route('groups.members.index', ['group' => $group, 'search' => 'Ada']))
             ->assertOk()
             ->assertSee('Ada')
             ->assertDontSee('Zizzy');
     }
 
-    public function test_manager_can_view_all_members(): void
+    public function test_manager_can_view_members(): void
     {
         $manager = User::factory()->create();
         $managerGroup = Group::factory()->create();
@@ -195,14 +177,14 @@ class TransitiveMembersRosterTest extends TestCase
         GroupManagerRuleByGroup::create(['manager_group_id' => $managerGroup->id, 'target_group_id' => $group->id]);
 
         $this->actingAs($manager)
-            ->get(route('groups.members.all', $group))
+            ->get(route('groups.members.index', $group))
             ->assertOk();
     }
 
-    public function test_user_without_access_cannot_view_all_members(): void
+    public function test_user_without_access_cannot_view_members(): void
     {
         $this->actingAs(User::factory()->create())
-            ->get(route('groups.members.all', Group::factory()->create()))
+            ->get(route('groups.members.index', Group::factory()->create()))
             ->assertForbidden();
     }
 }

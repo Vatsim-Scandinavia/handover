@@ -121,26 +121,18 @@ class GroupController extends Controller
         if (! $request->attributes->get('is_group_admin') && ! $this->service->canManage($request->user(), $group)) {
             abort(403);
         }
-        $group->load('tags', 'attributeValues.definition', 'parents', 'children');
+        $group->load('tags', 'attributeValues.definition');
         $group->setAttribute('members_count', count($this->resolver->transitiveMembers($group)));
         $isAdmin = $request->attributes->get('is_group_admin');
         $grantingRules = $isAdmin ? [] : $this->service->grantingRulesFor($request->user(), $group);
         $editing = EditMode::isOn($request);
 
         $definitions = collect();
-        $candidateParents = collect();
-        $candidateChildren = collect();
         if ($isAdmin) {
             $definitions = GroupAttributeDefinition::orderBy('key')->get();
-            // Candidates: every other group (cycle/self attempts are rejected on submit).
-            $others = Group::where('id', '!=', $group->id)
-                ->orderBy('name')
-                ->get(['id', 'name', 'is_admin_group']);
-            $candidateParents = $others;
-            $candidateChildren = $others;
         }
 
-        return view('groups.show', ['group' => $group, 'isAdmin' => $isAdmin, 'grantingRules' => $grantingRules, 'editing' => $editing, 'definitions' => $definitions, 'candidateParents' => $candidateParents, 'candidateChildren' => $candidateChildren]);
+        return view('groups.show', ['group' => $group, 'isAdmin' => $isAdmin, 'grantingRules' => $grantingRules, 'editing' => $editing, 'definitions' => $definitions]);
     }
 
     public function update(Request $request, Group $group)
