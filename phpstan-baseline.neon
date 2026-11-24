@@ -469,12 +469,6 @@ parameters:
 			path: app/Http/Controllers/GroupMemberController.php
 
 		-
-			message: '#^Binary operation "\." between mixed and ''%%'' results in an error\.$#'
-			identifier: binaryOp.invalid
-			count: 2
-			path: app/Http/Controllers/GroupMemberController.php
-
-		-
 			message: '#^Cannot access property \$id on App\\User\|null\.$#'
 			identifier: property.nonObject
 			count: 1
@@ -502,12 +496,6 @@ parameters:
 			message: '#^Only booleans are allowed in a negated boolean, mixed given\.$#'
 			identifier: booleanNot.exprNotBoolean
 			count: 2
-			path: app/Http/Controllers/GroupMemberController.php
-
-		-
-			message: '#^Only booleans are allowed in an if condition, mixed given\.$#'
-			identifier: if.condNotBoolean
-			count: 1
 			path: app/Http/Controllers/GroupMemberController.php
 
 		-

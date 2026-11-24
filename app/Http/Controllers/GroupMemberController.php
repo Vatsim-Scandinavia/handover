@@ -10,6 +10,7 @@ use App\Services\GroupMembershipResolver;
 use App\User;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class GroupMemberController extends Controller
@@ -37,16 +38,8 @@ class GroupMemberController extends Controller
         // userId => enrolment source group ids (this group and/or descendants).
         $sourceMap = $this->resolver->transitiveMembers($group);
 
-        $search = $request->input('search');
-        $query = User::whereIn('id', array_keys($sourceMap))->orderBy('first_name');
-
-        if ($search) {
-            $query->where(function ($q) use ($search): void {
-                $q->where('first_name', 'like', $search.'%')
-                    ->orWhere('last_name', 'like', $search.'%')
-                    ->orWhere('users.id', $search);
-            });
-        }
+        $search = $request->string('search')->toString();
+        $query = User::whereIn('id', array_keys($sourceMap))->matching($search)->orderBy('first_name');
 
         $members = $query->paginate(25)->withQueryString();
 
@@ -71,6 +64,30 @@ class GroupMemberController extends Controller
             : collect();
 
         return view('groups.members', ['group' => $group, 'members' => $members, 'search' => $search, 'memberSources' => $memberSources, 'isAdmin' => $isAdmin, 'candidates' => $candidates]);
+    }
+
+    /**
+     * Up to ten users matching a name or CID, for the add-member picker.
+     * Direct members are flagged so the picker can show them as added.
+     */
+    public function candidates(Request $request, Group $group): JsonResponse
+    {
+        $this->requireAccess($request, $group);
+
+        $term = $request->string('q')->trim()->toString();
+        if (mb_strlen($term) < 2) {
+            return response()->json([]);
+        }
+
+        $users = User::matching($term)->orderBy('first_name')->orderBy('last_name')
+            ->limit(10)->get(['id', 'first_name', 'last_name']);
+        $memberIds = $group->members()->whereKey($users->modelKeys())->pluck('users.id')->all();
+
+        return response()->json($users->map(fn (User $user): array => [
+            'id' => $user->id,
+            'name' => trim($user->first_name.' '.$user->last_name),
+            'member' => in_array($user->id, $memberIds, true),
+        ])->values());
     }
 
     public function store(Request $request, Group $group)

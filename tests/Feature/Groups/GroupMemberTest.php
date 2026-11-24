@@ -160,4 +160,55 @@ class GroupMemberTest extends TestCase
             ->assertSee('<td>Zara Smith</td>', false)
             ->assertDontSee('<td>Bob Jones</td>', false);
     }
+
+    public function test_member_search_matches_full_name(): void
+    {
+        $group = Group::factory()->create();
+        $zara = User::factory()->create(['first_name' => 'Zara', 'last_name' => 'Smith']);
+        $zack = User::factory()->create(['first_name' => 'Zara', 'last_name' => 'Jones']);
+        $group->members()->attach([$zara->id, $zack->id], ['created_at' => now()]);
+
+        $this->actingAs($this->adminUser())
+            ->get(route('groups.members.index', ['group' => $group, 'search' => 'zara smi']))
+            ->assertSee('<td>Zara Smith</td>', false)
+            ->assertDontSee('<td>Zara Jones</td>', false);
+    }
+
+    public function test_candidates_match_name_and_cid_and_flag_members(): void
+    {
+        $group = Group::factory()->create();
+        $member = User::factory()->create(['id' => 1234567, 'first_name' => 'Ada', 'last_name' => 'Lovelace']);
+        $other = User::factory()->create(['id' => 7654321, 'first_name' => 'Ada', 'last_name' => 'Byron']);
+        User::factory()->create(['id' => 5555555, 'first_name' => 'Grace', 'last_name' => 'Hopper']);
+        $group->members()->attach($member->id, ['created_at' => now()]);
+        $admin = $this->adminUser();
+
+        $this->actingAs($admin)
+            ->getJson(route('groups.members.candidates', ['group' => $group, 'q' => 'ada']))
+            ->assertOk()
+            ->assertExactJson([
+                ['id' => $other->id, 'name' => 'Ada Byron', 'member' => false],
+                ['id' => $member->id, 'name' => 'Ada Lovelace', 'member' => true],
+            ]);
+
+        $this->actingAs($admin)
+            ->getJson(route('groups.members.candidates', ['group' => $group, 'q' => '76543']))
+            ->assertExactJson([['id' => $other->id, 'name' => 'Ada Byron', 'member' => false]]);
+    }
+
+    public function test_candidates_need_two_characters(): void
+    {
+        User::factory()->create(['first_name' => 'Ada']);
+
+        $this->actingAs($this->adminUser())
+            ->getJson(route('groups.members.candidates', ['group' => Group::factory()->create(), 'q' => 'a']))
+            ->assertExactJson([]);
+    }
+
+    public function test_candidates_need_access_to_the_group(): void
+    {
+        $this->actingAs(User::factory()->create())
+            ->getJson(route('groups.members.candidates', ['group' => Group::factory()->create(), 'q' => 'ada']))
+            ->assertForbidden();
+    }
 }

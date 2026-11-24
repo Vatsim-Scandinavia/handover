@@ -36,6 +36,19 @@ $admin-line: var(--color-gray-300);
     padding: 1.5rem 1rem 0;
 }
 
+// The add-member picker's matches, dropped below its input.
+.member-options {
+    position: absolute;
+    z-index: 10;
+    left: calc(var(--bs-gutter-x) * .5);
+    right: calc(var(--bs-gutter-x) * .5);
+    max-height: 18rem;
+    overflow-y: auto;
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .15);
+    .list-group-item { cursor: pointer; }
+    .member-option-cid { opacity: .7; font-variant-numeric: tabular-nums; }
+}
+
 .btn-close { border-radius: 0; }
 
 .page-header {
