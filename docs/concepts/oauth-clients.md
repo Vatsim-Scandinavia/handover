@@ -106,7 +106,7 @@ A request from an origin that is not on the list fails, see [public clients](../
 Required groups set who may sign in to a client.
 If you tick no groups, every member may sign in.
 If you tick one or more groups, only members of at least one of them may sign in.
-Membership includes [nested groups](../groups.md#nested-groups-transitive-membership): a member of a group nested in a required group may sign in too.
+Membership includes [member groups](../groups.md#member-groups-transitive-membership): someone in a member group of a required group may sign in too.
 
 A member outside the required groups sees an error page in Handover that names the client.
 Handover does not send them back to the service.

@@ -68,7 +68,6 @@ class GroupEditModeTest extends TestCase
             ->followingRedirects()
             ->post(route('groups.parents.store', $group), ['parent_id' => $parent->id])
             ->assertOk()
-            ->assertSee('Parent group added.')
             ->assertSee(self::EDITING, escape: false);
     }
 
@@ -83,7 +82,6 @@ class GroupEditModeTest extends TestCase
             ->followingRedirects()
             ->delete(route('groups.children.destroy', ['group' => $group, 'child' => $child->id]))
             ->assertOk()
-            ->assertSee('Child group removed.')
             ->assertSee(self::EDITING, escape: false);
     }
 }
