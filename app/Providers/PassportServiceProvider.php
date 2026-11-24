@@ -16,9 +16,11 @@ use Laravel\Passport\Bridge\AuthCodeRepository as PassportAuthCodeRepository;
 use Laravel\Passport\Bridge\RefreshTokenRepository;
 use Laravel\Passport\Passport;
 use Laravel\Passport\PassportServiceProvider as BaseServiceProvider;
+use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\CryptKey;
 use League\OAuth2\Server\Grant\AuthCodeGrant as LeagueAuthCodeGrant;
 use League\OAuth2\Server\ResourceServer;
+use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 
 /**
  * Passport, with its keys taken from the signing key store instead of
@@ -37,10 +39,18 @@ class PassportServiceProvider extends BaseServiceProvider
 
         Passport::useAccessTokenEntity(AccessToken::class);
 
-        // OpenID Connect: store the nonce and auth_time with each auth code, and
-        // add an id_token to the token response. See docs/integrations/oidc.md.
+        // OpenID Connect: store the nonce and auth_time with each auth code.
+        // makeAuthorizationServer() adds the id_token. Docs: docs/integrations/oidc.md.
         $this->app->bind(PassportAuthCodeRepository::class, AuthCodeRepository::class);
-        Passport::useAuthorizationServerResponseType(new IdTokenResponse);
+    }
+
+    /**
+     * OpenID Connect: add an id_token to the token response. A caller's own
+     * response type, such as the personal access token one, takes precedence.
+     */
+    protected function makeAuthorizationServer(?ResponseTypeInterface $responseType = null): AuthorizationServer
+    {
+        return parent::makeAuthorizationServer($responseType ?? $this->app->make(IdTokenResponse::class));
     }
 
     /**

@@ -21,6 +21,11 @@ use League\OAuth2\Server\ResponseTypes\BearerTokenResponse;
  */
 class IdTokenResponse extends BearerTokenResponse
 {
+    public function __construct(
+        private readonly AuthCodeRepository $authCodes,
+        private readonly UserClaims $userClaims,
+    ) {}
+
     protected function getExtraParams(AccessTokenEntityInterface $accessToken): array
     {
         $codeId = $this->redeemedAuthCodeId();
@@ -38,10 +43,12 @@ class IdTokenResponse extends BearerTokenResponse
 
     private function idToken(AccessTokenEntityInterface $accessToken, User $user, string $codeId): string
     {
-        $claims = array_filter(resolve(AuthCodeRepository::class)->signInParameters($codeId), fn (int|string|null $value): bool => $value !== null)
+        $claims = array_filter($this->authCodes->signInParameters($codeId), fn (int|string|null $value): bool => $value !== null)
             + ['at_hash' => $this->atHash($accessToken->toString())]
-            + resolve(UserClaims::class)->forScopes($user, ScopeIds::of($accessToken->getScopes()));
+            + $this->userClaims->forScopes($user, ScopeIds::of($accessToken->getScopes()));
 
+        // Not injected: the authorization server outlives a request, and the
+        // signer must read the scoped key store per request to follow rotation.
         return resolve(ActiveKeySigner::class)->sign(function (Builder $builder) use ($accessToken, $user, $claims): Builder {
             $builder = $builder
                 ->issuedBy(Issuer::url())
