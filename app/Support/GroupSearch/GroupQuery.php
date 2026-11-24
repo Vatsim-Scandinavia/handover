@@ -58,6 +58,10 @@ class GroupQuery
         return implode(' ', array_map(fn (Term $t): string => $t->raw, $this->terms));
     }
 
+    /**
+     * @param  Builder<Group>  $groups
+     * @return Builder<Group>
+     */
     public function apply(Builder $groups): Builder
     {
         foreach ($this->terms as $term) {

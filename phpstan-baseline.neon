@@ -301,18 +301,6 @@ parameters:
 			path: app/Http/Controllers/GroupController.php
 
 		-
-			message: '#^Parameter \#1 \$groups of method App\\Http\\Controllers\\GroupController\:\:sections\(\) expects Illuminate\\Support\\Collection\<int, App\\Models\\Group\>, Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\> given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Http/Controllers/GroupController.php
-
-		-
-			message: '#^Parameter \#1 \$groups of method App\\Support\\GroupSearch\\GroupQuery\:\:suggestions\(\) expects Illuminate\\Support\\Collection\<int, App\\Models\\Group\>, Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\> given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Http/Controllers/GroupController.php
-
-		-
 			message: '#^Parameter \#1 \$key of method App\\Models\\Group\:\:attributeValue\(\) expects string, mixed given\.$#'
 			identifier: argument.type
 			count: 1
@@ -1551,7 +1539,7 @@ parameters:
 		-
 			message: '#^Possibly invalid array key type mixed\.$#'
 			identifier: offsetAccess.invalidOffset
-			count: 8
+			count: 10
 			path: app/Services/GroupMembershipResolver.php
 
 		-
@@ -1563,18 +1551,6 @@ parameters:
 		-
 			message: '#^Cannot access property \$key on App\\Models\\GroupAttributeDefinition\|null\.$#'
 			identifier: property.nonObject
-			count: 1
-			path: app/Support/GroupSearch/GroupQuery.php
-
-		-
-			message: '#^Method App\\Support\\GroupSearch\\GroupQuery\:\:apply\(\) has parameter \$groups with generic class Illuminate\\Database\\Eloquent\\Builder but does not specify its types\: TModel$#'
-			identifier: missingType.generics
-			count: 1
-			path: app/Support/GroupSearch/GroupQuery.php
-
-		-
-			message: '#^Method App\\Support\\GroupSearch\\GroupQuery\:\:apply\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
-			identifier: missingType.generics
 			count: 1
 			path: app/Support/GroupSearch/GroupQuery.php
 

@@ -183,6 +183,21 @@ class GroupOverviewTest extends TestCase
             ->assertSeeInOrder(['Bravo team', 'Alpha team']);
     }
 
+    public function test_member_count_includes_member_groups(): void
+    {
+        $direct = $this->group('Alpha team');
+        $direct->members()->attach(User::factory()->count(2)->create()->pluck('id'), ['created_at' => now()]);
+        $nesting = $this->group('Bravo team');
+        $member = $this->group('Charlie crew');
+        $nesting->children()->attach($member->id);
+        $member->members()->attach(User::factory()->count(3)->create()->pluck('id'), ['created_at' => now()]);
+
+        $this->actingAs($this->adminUser())
+            ->get(route('groups.index', ['q' => 'team', 'sort' => 'members']))
+            ->assertOk()
+            ->assertSeeInOrder(['Bravo team', 'Alpha team']);
+    }
+
     public function test_suggests_terms_that_narrow_the_result(): void
     {
         $this->group('Norway training', tags: ['training', 'mentors'], attributes: ['area' => 'norway']);

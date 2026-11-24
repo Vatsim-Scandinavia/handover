@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Group;
 use App\Models\GroupAttributeDefinition;
 use App\Services\GroupManagerService;
+use App\Services\GroupMembershipResolver;
 use App\Support\EditMode;
 use App\Support\GroupSearch\GroupQuery;
 use Illuminate\Contracts\View\Factory;
@@ -20,7 +21,10 @@ use Illuminate\Validation\Rule;
 
 class GroupController extends Controller
 {
-    public function __construct(private readonly GroupManagerService $service) {}
+    public function __construct(
+        private readonly GroupManagerService $service,
+        private readonly GroupMembershipResolver $resolver,
+    ) {}
 
     /**
      * The overview lists every group the user may see, without pagination, so
@@ -42,11 +46,19 @@ class GroupController extends Controller
         $query = GroupQuery::parse(is_string($q) ? $q : '');
         $sort = $request->query('sort') === 'members' ? 'members' : 'name';
         $groups = $query->apply($visible)
-            ->withCount('members')
             ->with('tags', 'attributeValues.definition')
-            ->when($sort === 'members', fn ($q) => $q->orderByDesc('members_count'))
             ->orderBy('name')
             ->get();
+
+        // Counts include everyone in member groups, so they come from the resolver, not SQL.
+        $counts = $this->resolver->transitiveMemberCounts($groups);
+        foreach ($groups as $g) {
+            $g->setAttribute('members_count', $counts[$g->id]);
+        }
+        if ($sort === 'members') {
+            // Stable sort: ties stay in name order.
+            $groups = $groups->sortByDesc('members_count')->values();
+        }
 
         $definitions = GroupAttributeDefinition::orderBy('key')->get();
         $groupBy = $definitions->firstWhere('key', $request->query('group'));
@@ -110,7 +122,7 @@ class GroupController extends Controller
             abort(403);
         }
         $group->load('tags', 'attributeValues.definition', 'parents', 'children');
-        $group->loadCount('members');
+        $group->setAttribute('members_count', count($this->resolver->transitiveMembers($group)));
         $isAdmin = $request->attributes->get('is_group_admin');
         $grantingRules = $isAdmin ? [] : $this->service->grantingRulesFor($request->user(), $group);
         $editing = EditMode::isOn($request);

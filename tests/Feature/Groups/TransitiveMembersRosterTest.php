@@ -90,6 +90,26 @@ class TransitiveMembersRosterTest extends TestCase
         $this->assertContains($child->id, $sources);
     }
 
+    public function test_counts_each_member_once_per_group(): void
+    {
+        // Diamond: bottom nests into both left and right, both nest into top.
+        [$top, $left, $right, $bottom] = Group::factory()->count(4)->create()->all();
+        $this->nest($left, $top);
+        $this->nest($right, $top);
+        $this->nest($bottom, $left);
+        $this->nest($bottom, $right);
+
+        $shared = User::factory()->create();
+        $this->enrol($top, $shared);
+        $this->enrol($bottom, $shared);
+        $this->enrol($left, User::factory()->create());
+
+        $counts = resolve(GroupMembershipResolver::class)
+            ->transitiveMemberCounts([$top, $left, $right, $bottom]);
+
+        $this->assertSame([$top->id => 2, $left->id => 2, $right->id => 1, $bottom->id => 1], $counts);
+    }
+
     // ── Page ─────────────────────────────────────────────────────────────
 
     public function test_all_members_page_shows_direct_and_inherited_with_source(): void
