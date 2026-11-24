@@ -7,8 +7,9 @@
 <div class="card"@if($isAdmin) x-data="{ parentIsAdmin: false }"@endif>
     <x-page-header :title="'Members ('.count($memberSources).')'" :crumbs="[['Groups', route('groups.index')], [$group->name, route('groups.show', $group)]]" />
     <div class="card-body">
+        <section class="page-section">
         <h2 class="section-title">Add member</h2>
-        <form method="POST" action="{{ route('groups.members.store', $group) }}" class="row g-2 align-items-end mb-3">
+        <form method="POST" action="{{ route('groups.members.store', $group) }}" class="row g-2 align-items-end">
             @csrf
             <div class="col-md-6">
                 <label class="form-label" for="member-cid">VATSIM CID</label>
@@ -18,10 +19,11 @@
                 <button class="btn btn-primary w-100">Add member</button>
             </div>
         </form>
+        </section>
 
         {{-- ── Nesting, stored as child/parent edges. Side by side on wide
              screens, stacked on narrow ones. --}}
-        <hr>
+        <section class="page-section">
         <div class="row">
             <div class="col-md-6 mb-4 mb-md-0">
                 <h2 class="section-title">Member groups</h2>
@@ -97,8 +99,9 @@
                 @endif
             </div>
         </div>
-        <hr>
+        </section>
 
+        <section class="page-section">
         <h2 class="section-title">Find members</h2>
         <form method="GET" class="row g-2 align-items-end mb-3" role="search">
             <div class="col-md-6">
@@ -150,6 +153,7 @@
             </table>
         </div>
         <div class="mt-3">{{ $members->links('pagination::bootstrap-5') }}</div>
+        </section>
     </div>
 </div>
 @endsection
