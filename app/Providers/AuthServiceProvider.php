@@ -77,7 +77,7 @@ class AuthServiceProvider extends ServiceProvider
                 : null
         );
 
-        Gate::define('manage-oauth-clients', fn (User $user): bool => resolve(GroupManagerService::class)->isAdmin($user));
+        Gate::define('manage-oauth-clients', fn (User $user): bool => $this->app->make(GroupManagerService::class)->isAdmin($user));
 
         $this->registerPolicies();
     }
