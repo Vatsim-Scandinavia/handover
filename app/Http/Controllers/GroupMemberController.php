@@ -12,6 +12,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class GroupMemberController extends Controller
 {
@@ -58,17 +59,28 @@ class GroupMemberController extends Controller
         ])->all();
 
         $group->load('parents', 'children');
-        // Candidates: every other group (cycle/self attempts are rejected on submit).
-        $candidates = $isAdmin
-            ? Group::where('id', '!=', $group->id)->orderBy('name')->get(['id', 'name', 'is_admin_group'])
-            : collect();
+        // Picker options: every other group, with those already linked shown
+        // but not pickable. Cycles are rejected on submit.
+        $memberGroupOptions = [];
+        $memberOfOptions = [];
+        if ($isAdmin) {
+            $others = Group::where('id', '!=', $group->id)->orderBy('name')->get(['id', 'name', 'is_admin_group']);
+            $option = fn (Group $g, Collection $linked): array => [
+                'id' => $g->id,
+                'name' => $g->name,
+                'admin' => $g->is_admin_group,
+                'disabled' => $linked->contains('id', $g->id),
+            ];
+            $memberGroupOptions = $others->map(fn (Group $g): array => $option($g, $group->children))->all();
+            $memberOfOptions = $others->map(fn (Group $g): array => $option($g, $group->parents))->all();
+        }
 
-        return view('groups.members', ['group' => $group, 'members' => $members, 'search' => $search, 'memberSources' => $memberSources, 'isAdmin' => $isAdmin, 'candidates' => $candidates]);
+        return view('groups.members', ['group' => $group, 'members' => $members, 'search' => $search, 'memberSources' => $memberSources, 'isAdmin' => $isAdmin, 'memberGroupOptions' => $memberGroupOptions, 'memberOfOptions' => $memberOfOptions]);
     }
 
     /**
      * Up to ten users matching a name or CID, for the add-member picker.
-     * Direct members are flagged so the picker can show them as added.
+     * Direct members are disabled, so the picker shows them as added.
      */
     public function candidates(Request $request, Group $group): JsonResponse
     {
@@ -86,7 +98,8 @@ class GroupMemberController extends Controller
         return response()->json($users->map(fn (User $user): array => [
             'id' => $user->id,
             'name' => trim($user->first_name.' '.$user->last_name),
-            'member' => in_array($user->id, $memberIds, true),
+            'detail' => (string) $user->id,
+            'disabled' => in_array($user->id, $memberIds, true),
         ])->values());
     }
 

@@ -36,18 +36,26 @@ $admin-line: var(--color-gray-300);
     padding: 1.5rem 1rem 0;
 }
 
-// The add-member picker's matches, dropped below its input.
-.member-options {
+// A field that suggests matches as you type; see components/picker.blade.php.
+.picker { max-width: 36rem; }
+// One button width for every picker row, so stacked rows line up.
+.picker .btn { min-width: 8rem; }
+.picker-field { position: relative; flex-grow: 1; }
+.picker-options {
     position: absolute;
     z-index: 10;
-    left: calc(var(--bs-gutter-x) * .5);
-    right: calc(var(--bs-gutter-x) * .5);
+    top: calc(100% + 2px);
+    left: 0;
+    right: 0;
     max-height: 18rem;
     overflow-y: auto;
     box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .15);
     .list-group-item { cursor: pointer; }
-    .member-option-cid { opacity: .7; font-variant-numeric: tabular-nums; }
+    .list-group-item.disabled, .picker-empty { cursor: default; }
 }
+.picker-detail { margin-left: .375rem; opacity: .7; font-variant-numeric: tabular-nums; }
+.picker-note { margin-left: .375rem; font-size: .875em; }
+.picker-empty { color: $admin-muted; }
 
 .btn-close { border-radius: 0; }
 

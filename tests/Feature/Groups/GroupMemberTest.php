@@ -187,13 +187,13 @@ class GroupMemberTest extends TestCase
             ->getJson(route('groups.members.candidates', ['group' => $group, 'q' => 'ada']))
             ->assertOk()
             ->assertExactJson([
-                ['id' => $other->id, 'name' => 'Ada Byron', 'member' => false],
-                ['id' => $member->id, 'name' => 'Ada Lovelace', 'member' => true],
+                ['id' => $other->id, 'name' => 'Ada Byron', 'detail' => '7654321', 'disabled' => false],
+                ['id' => $member->id, 'name' => 'Ada Lovelace', 'detail' => '1234567', 'disabled' => true],
             ]);
 
         $this->actingAs($admin)
             ->getJson(route('groups.members.candidates', ['group' => $group, 'q' => '76543']))
-            ->assertExactJson([['id' => $other->id, 'name' => 'Ada Byron', 'member' => false]]);
+            ->assertExactJson([['id' => $other->id, 'name' => 'Ada Byron', 'detail' => '7654321', 'disabled' => false]]);
     }
 
     public function test_candidates_need_two_characters(): void

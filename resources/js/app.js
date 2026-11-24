@@ -4,6 +4,7 @@ import { createApp } from 'vue';
 import Clients from './components/passport/Clients.vue';
 import axios from 'axios';
 import { reportServerErrors } from './server-errors';
+import picker from './picker';
 
 window.axios = axios;
 window.bootstrap = bootstrap;
@@ -19,6 +20,7 @@ reportServerErrors(axios);
 // page's edit toggle). It only activates inside x-data scopes, so it
 // coexists with the Vue app mounted on #app below.
 window.Alpine = Alpine;
+Alpine.data('picker', picker);
 Alpine.start();
 
 
