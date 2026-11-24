@@ -11,6 +11,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserCollection extends JsonResource
 {
+    public function __construct(mixed $resource, private readonly GroupMembershipResolver $groups)
+    {
+        parent::__construct($resource);
+    }
+
     /**
      * Transform the resource into an array.
      *
@@ -89,7 +94,7 @@ class UserCollection extends JsonResource
             'groups' => $this->when(
                 $this->tokenCan('groups'),
                 function () {
-                    $map = resolve(GroupMembershipResolver::class)->effectiveMembership($this->resource);
+                    $map = $this->groups->effectiveMembership($this->resource);
                     if ($map === []) {
                         return [];
                     }
