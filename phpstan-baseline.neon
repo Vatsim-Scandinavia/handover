@@ -1521,13 +1521,13 @@ parameters:
 		-
 			message: '#^Parameter \#1 \$key of function array_key_exists expects int\|string, mixed given\.$#'
 			identifier: argument.type
-			count: 2
+			count: 1
 			path: app/Services/GroupMembershipResolver.php
 
 		-
 			message: '#^Possibly invalid array key type mixed\.$#'
 			identifier: offsetAccess.invalidOffset
-			count: 10
+			count: 7
 			path: app/Services/GroupMembershipResolver.php
 
 		-

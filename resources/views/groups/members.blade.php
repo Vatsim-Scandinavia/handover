@@ -3,8 +3,9 @@
 @section('content')
 {{-- Everyone who counts as a member: enrolled here, or in a member group.
      Only direct members can be removed here; others are managed in the group
-     they are enrolled in. Member groups and Member of are edited by admins. --}}
-<div class="card"@if($isAdmin) x-data="{ parentIsAdmin: false }"@endif>
+     they are enrolled in. Member groups are edited by admins; Member of is
+     on the group page. --}}
+<div class="card">
     <x-page-header :title="'Members ('.count($memberSources).')'" :crumbs="[['Groups', route('groups.index')], [$group->name, route('groups.show', $group)]]" />
     <div class="card-body">
         <section class="page-section">
@@ -18,74 +19,34 @@
         </form>
         </section>
 
-        {{-- ── Nesting, stored as child/parent edges. Side by side on wide
-             screens, stacked on narrow ones. --}}
         <section class="page-section">
-        <div class="row">
-            <div class="col-md-6 mb-4 mb-md-0">
-                <h2 class="section-title">Member groups</h2>
-                <p class="text-muted">Everyone in these groups also counts as a member of {{ $group->name }}.</p>
+        <h2 class="section-title">Member groups</h2>
+        <p class="text-muted">Everyone in these groups also counts as a member of {{ $group->name }}.</p>
 
-                @if($group->children->isNotEmpty())
-                <ul class="list-group mb-2">
-                    @foreach($group->children as $child)
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href="{{ route('groups.members.index', $child) }}" class="text-decoration-none">{{ $child->name }}</a>
-                        @if($isAdmin)
-                        <x-remove-button :action="route('groups.children.destroy', ['group' => $group, 'child' => $child->id])"
-                            :label="'Remove '.$child->name.' from '.$group->name" />
-                        @endif
-                    </li>
-                    @endforeach
-                </ul>
-                @else
-                <p class="text-muted">None.</p>
-                @endif
-
+        @if($group->children->isNotEmpty())
+        <ul class="list-group mb-2">
+            @foreach($group->children as $child)
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <a href="{{ route('groups.members.index', $child) }}" class="text-decoration-none">{{ $child->name }}</a>
                 @if($isAdmin)
-                <form method="POST" action="{{ route('groups.children.store', $group) }}">
-                    @csrf
-                    <x-picker id="member-group" name="child_id" label="Group to add as a member" placeholder="Find a group"
-                        button="Add group" :options="$memberGroupOptions" invalid-hint="Pick a group from the list." />
-                </form>
-                @error('child_id')<div class="text-danger mt-1" role="alert">{{ $message }}</div>@enderror
+                <x-remove-button :action="route('groups.children.destroy', ['group' => $group, 'child' => $child->id])"
+                    :label="'Remove '.$child->name.' from '.$group->name" />
                 @endif
-            </div>
+            </li>
+            @endforeach
+        </ul>
+        @else
+        <p class="text-muted">None.</p>
+        @endif
 
-            <div class="col-md-6">
-                <h2 class="section-title">Member of</h2>
-                <p class="text-muted">Members of {{ $group->name }} also count as members of these groups.</p>
-
-                @if($group->parents->isNotEmpty())
-                <ul class="list-group mb-2">
-                    @foreach($group->parents as $parent)
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href="{{ route('groups.members.index', $parent) }}" class="text-decoration-none">{{ $parent->name }}</a>
-                        @if($isAdmin)
-                        <x-remove-button :action="route('groups.parents.destroy', ['group' => $group, 'parent' => $parent->id])"
-                            :label="'Remove '.$group->name.' from '.$parent->name" />
-                        @endif
-                    </li>
-                    @endforeach
-                </ul>
-                @else
-                <p class="text-muted">None.</p>
-                @endif
-
-                @if($isAdmin)
-                <form method="POST" action="{{ route('groups.parents.store', $group) }}"
-                      x-on:picked="parentIsAdmin = $event.detail?.admin === true">
-                    @csrf
-                    <x-picker id="member-of" name="parent_id" label="Group to join" placeholder="Find a group"
-                        button="Add to group" :options="$memberOfOptions" invalid-hint="Pick a group from the list." />
-                </form>
-                <div x-show="parentIsAdmin" x-cloak class="alert alert-warning py-1 px-2 mt-2 mb-0" role="status">
-                    <i class="fa-solid fa-triangle-exclamation me-1" aria-hidden="true"></i>Membership of an admin group through another group <strong>does not grant admin</strong>. Admin access is assigned directly.
-                </div>
-                @error('parent_id')<div class="text-danger mt-1" role="alert">{{ $message }}</div>@enderror
-                @endif
-            </div>
-        </div>
+        @if($isAdmin)
+        <form method="POST" action="{{ route('groups.children.store', $group) }}">
+            @csrf
+            <x-picker id="member-group" name="child_id" label="Group to add as a member" placeholder="Find a group"
+                button="Add group" :options="$memberGroupOptions" invalid-hint="Pick a group from the list." />
+        </form>
+        @error('child_id')<div class="text-danger mt-1" role="alert">{{ $message }}</div>@enderror
+        @endif
         </section>
 
         <section class="page-section">

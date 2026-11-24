@@ -70,7 +70,8 @@ class GroupMembershipResolver
      */
     public function transitiveMembers(Group $group): array
     {
-        $closure = $this->downwardClosure($group->id, $this->childrenOf());
+        [, $childrenOf] = $this->edges();
+        $closure = $this->reach($group->id, $childrenOf);
 
         // One pass over the direct memberships of every group in the closure.
         $map = [];
@@ -92,11 +93,11 @@ class GroupMembershipResolver
      */
     public function transitiveMemberCounts(iterable $groups): array
     {
-        $childrenOf = $this->childrenOf();
+        [, $childrenOf] = $this->edges();
         $closures = [];
         $touched = [];
         foreach ($groups as $group) {
-            $closures[$group->id] = $this->downwardClosure($group->id, $childrenOf);
+            $closures[$group->id] = $this->reach($group->id, $childrenOf);
             $touched += array_fill_keys($closures[$group->id], true);
         }
 
@@ -120,40 +121,73 @@ class GroupMembershipResolver
         return $counts;
     }
 
-    /** @return array<array-key, list<mixed>> parent_id => [child_id, ...]. The whole (small) edge set. */
-    private function childrenOf(): array
+    /**
+     * The groups $group is a member of through its direct parents, and which
+     * direct parents lead to each. Direct parents are left out, even when
+     * another path also reaches them.
+     *
+     * @return array<string, list<string>> groupId => [directParentId, ...]
+     */
+    public function indirectMemberOf(Group $group): array
     {
-        $childrenOf = [];
-        foreach (DB::table('group_hierarchy')->get(['parent_id', 'child_id']) as $edge) {
-            $childrenOf[$edge->parent_id][] = $edge->child_id;
-        }
+        [$parentsOf] = $this->edges();
+        $direct = $parentsOf[$group->id] ?? [];
 
-        return $childrenOf;
+        // Walk up from each direct parent, so each ancestor records every
+        // direct parent it is reached through. The graph is small.
+        $map = [];
+        foreach ($direct as $parent) {
+            foreach (array_slice($this->reach($parent, $parentsOf), 1) as $up) {
+                $map[$up][] = $parent;
+            }
+        }
+        unset($map[$group->id]);
+
+        return array_diff_key($map, array_flip($direct));
     }
 
     /**
-     * A group and every group nested below it.
+     * The whole (small) edge set, both ways: [child_id => parent ids,
+     * parent_id => child ids].
      *
-     * @param  array<array-key, list<mixed>>  $childrenOf
-     * @return list<array-key>
+     * @return array{0: array<string, list<string>>, 1: array<string, list<string>>}
      */
-    private function downwardClosure(string $groupId, array $childrenOf): array
+    private function edges(): array
     {
-        // Downward BFS. The closure's keys double as the visited set, so a
-        // group reached by several paths (diamond) is enqueued once and any
-        // graph terminates.
-        $closure = [$groupId => true];
-        $queue = [$groupId];
+        $parentsOf = [];
+        $childrenOf = [];
+        foreach (DB::table('group_hierarchy')->get(['parent_id', 'child_id']) as $edge) {
+            if (is_string($edge->child_id) && is_string($edge->parent_id)) {
+                $parentsOf[$edge->child_id][] = $edge->parent_id;
+                $childrenOf[$edge->parent_id][] = $edge->child_id;
+            }
+        }
+
+        return [$parentsOf, $childrenOf];
+    }
+
+    /**
+     * $start and every group reachable from it along $next, $start first.
+     *
+     * @param  array<string, list<string>>  $next
+     * @return list<string>
+     */
+    private function reach(string $start, array $next): array
+    {
+        // BFS. The keys double as the visited set, so a group reached by
+        // several paths (diamond) is enqueued once and any graph terminates.
+        $seen = [$start => true];
+        $queue = [$start];
         while ($queue !== []) {
             $current = array_shift($queue);
-            foreach ($childrenOf[$current] ?? [] as $child) {
-                if (! array_key_exists($child, $closure)) {
-                    $closure[$child] = true;
-                    $queue[] = $child;
+            foreach ($next[$current] ?? [] as $neighbour) {
+                if (! array_key_exists($neighbour, $seen)) {
+                    $seen[$neighbour] = true;
+                    $queue[] = $neighbour;
                 }
             }
         }
 
-        return array_keys($closure);
+        return array_map(strval(...), array_keys($seen));
     }
 }

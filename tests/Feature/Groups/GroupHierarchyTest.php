@@ -147,31 +147,44 @@ class GroupHierarchyTest extends TestCase
         route('groups.edit', Group::factory()->create());
     }
 
-    public function test_members_page_lists_member_groups_and_member_of(): void
+    public function test_member_groups_are_on_the_members_page_and_member_of_on_the_group_page(): void
     {
         $group = Group::factory()->create(['name' => 'vACC Norway']);
         $parent = Group::factory()->create(['name' => 'EUR Region']);
         $child = Group::factory()->create(['name' => 'Norway Trainees']);
         DB::table('group_hierarchy')->insert(['parent_id' => $parent->id, 'child_id' => $group->id]);
         DB::table('group_hierarchy')->insert(['parent_id' => $group->id, 'child_id' => $child->id]);
+        $admin = $this->admin();
 
-        $this->actingAs($this->admin())
+        $this->actingAs($admin)
             ->get(route('groups.members.index', $group))
             ->assertOk()
-            ->assertSee('EUR Region')
-            ->assertSee('Norway Trainees');
+            ->assertSee('Norway Trainees')
+            ->assertDontSee(route('groups.parents.store', $group));
+
+        $this->actingAs($admin)
+            ->get(route('groups.show', $group))
+            ->assertOk()
+            ->assertSee('EUR Region');
     }
 
-    public function test_members_page_shows_member_of_control_and_admin_hint(): void
+    public function test_group_page_shows_indirect_member_of_without_a_remove_control(): void
     {
         $group = Group::factory()->create();
-        Group::factory()->admin()->create(['name' => 'System Administrators']);
+        $parent = Group::factory()->create(['name' => 'vACC Scandinavia']);
+        $top = Group::factory()->create(['name' => 'EUR Region']);
+        DB::table('group_hierarchy')->insert(['parent_id' => $parent->id, 'child_id' => $group->id]);
+        DB::table('group_hierarchy')->insert(['parent_id' => $top->id, 'child_id' => $parent->id]);
 
         $this->actingAs($this->admin())
-            ->get(route('groups.members.index', $group))
+            ->get(route('groups.show', $group))
             ->assertOk()
-            ->assertSee(route('groups.parents.store', $group))
-            ->assertSee('does not grant admin'); // hint text near admin-group options
+            ->assertViewHas('indirectMemberOf', fn (array $rows): bool => count($rows) === 1)
+            ->assertViewHas('indirectMemberOf.0.group.id', $top->id)
+            ->assertViewHas('indirectMemberOf.0.through', ['vACC Scandinavia'])
+            ->assertSee(route('groups.show', $top))
+            ->assertSee(route('groups.parents.destroy', ['group' => $group, 'parent' => $parent->id]))
+            ->assertDontSee(route('groups.parents.destroy', ['group' => $group, 'parent' => $top->id]));
     }
 
     public function test_admin_can_nest_a_child_group(): void
@@ -283,28 +296,37 @@ class GroupHierarchyTest extends TestCase
             ->assertSee(':disabled="!editing"', false);  // controls disabled until editing, not hidden
     }
 
-    public function test_admin_sees_nesting_controls_on_members_page(): void
+    public function test_admin_sees_member_of_controls_on_group_page(): void
     {
         $group = Group::factory()->create();
         Group::factory()->admin()->create(['name' => 'System Administrators']);
         $parent = Group::factory()->create();
-        $child = Group::factory()->create();
         DB::table('group_hierarchy')->insert(['parent_id' => $parent->id, 'child_id' => $group->id]);
+
+        $this->actingAs($this->admin())
+            ->get(route('groups.show', $group))
+            ->assertOk()
+            ->assertSee(route('groups.parents.store', $group))     // add control
+            ->assertSee(route('groups.parents.destroy', ['group' => $group, 'parent' => $parent->id]))   // per-row remove
+            ->assertSee('parentIsAdmin', false)          // warning shown reactively on picking an admin parent
+            ->assertViewHas('memberOfOptions', fn (array $options): bool => collect($options)->contains(
+                fn (array $o): bool => $o['admin'] === true && $o['disabled'] === false))  // admin groups flagged for the warning
+            ->assertViewHas('memberOfOptions', fn (array $options): bool => collect($options)->contains(
+                fn (array $o): bool => $o['id'] === $parent->id && $o['disabled'] === true));  // current links shown, not pickable
+    }
+
+    public function test_admin_sees_member_group_controls_on_members_page(): void
+    {
+        $group = Group::factory()->create();
+        $child = Group::factory()->create();
         DB::table('group_hierarchy')->insert(['parent_id' => $group->id, 'child_id' => $child->id]);
 
         $this->actingAs($this->admin())
             ->get(route('groups.members.index', $group))
             ->assertOk()
-            ->assertSee(route('groups.parents.store', $group))     // member-of add control
-            ->assertSee(route('groups.children.store', $group))    // member-group add control
-            ->assertSee(route('groups.parents.destroy', ['group' => $group, 'parent' => $parent->id]))   // per-row remove
+            ->assertSee(route('groups.children.store', $group))    // add control
             ->assertSee(route('groups.children.destroy', ['group' => $group, 'child' => $child->id]))
-            ->assertSee('parentIsAdmin', false)          // warning shown reactively on selecting an admin parent
-            ->assertDontSee('(admin group')              // no static suffix in the options
-            ->assertViewHas('memberOfOptions', fn (array $options): bool => collect($options)->contains(
-                fn (array $o): bool => $o['admin'] === true && $o['disabled'] === false))  // admin groups flagged for the warning
-            ->assertViewHas('memberOfOptions', fn (array $options): bool => collect($options)->contains(
-                fn (array $o): bool => $o['id'] === $parent->id && $o['disabled'] === true))  // current links shown, not pickable
+            ->assertViewMissing('memberOfOptions')
             ->assertViewHas('memberGroupOptions', fn (array $options): bool => collect($options)->contains(
                 fn (array $o): bool => $o['id'] === $child->id && $o['disabled'] === true));
     }
@@ -330,16 +352,16 @@ class GroupHierarchyTest extends TestCase
             ->assertSee('A read-only overview')  // overview renders
             ->assertDontSee('Save changes')      // no editing form
             ->assertDontSee('Delete group')      // no danger zone
-            ->assertDontSee('x-data="{ editing', false); // no Alpine edit toggle for managers
+            ->assertDontSee('x-data="{ editing', false) // no Alpine edit toggle for managers
+            ->assertSee($parent->name)           // member of renders read-only
+            ->assertDontSee(route('groups.parents.store', $group))
+            ->assertDontSee(route('groups.parents.destroy', ['group' => $group, 'parent' => $parent->id]));
 
         $this->actingAs($manager)
             ->get(route('groups.members.index', $group))
             ->assertOk()
-            ->assertSee($parent->name)           // nesting lists render read-only
-            ->assertSee($child->name)
-            ->assertDontSee(route('groups.parents.store', $group))
+            ->assertSee($child->name)            // member groups render read-only
             ->assertDontSee(route('groups.children.store', $group))
-            ->assertDontSee(route('groups.parents.destroy', ['group' => $group, 'parent' => $parent->id]))
             ->assertDontSee(route('groups.children.destroy', ['group' => $group, 'child' => $child->id]));
     }
 }

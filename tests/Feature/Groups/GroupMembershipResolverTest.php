@@ -122,4 +122,61 @@ class GroupMembershipResolverTest extends TestCase
         $ids = $this->resolver->effectiveGroupIds($user);
         $this->assertEqualsCanonicalizing([$child->id, $parent->id], $ids);
     }
+
+    public function test_indirect_member_of_walks_up_several_levels(): void
+    {
+        $group = Group::factory()->create();
+        $parent = Group::factory()->create();
+        $grandparent = Group::factory()->create();
+        $top = Group::factory()->create();
+        $this->nest($group, $parent);
+        $this->nest($parent, $grandparent);
+        $this->nest($grandparent, $top);
+
+        $this->assertSame(
+            [$grandparent->id => [$parent->id], $top->id => [$parent->id]],
+            $this->resolver->indirectMemberOf($group),
+        );
+    }
+
+    public function test_indirect_member_of_lists_every_direct_group_it_comes_through(): void
+    {
+        $group = Group::factory()->create();
+        $left = Group::factory()->create();
+        $right = Group::factory()->create();
+        $top = Group::factory()->create();
+        $this->nest($group, $left);
+        $this->nest($group, $right);
+        $this->nest($left, $top);
+        $this->nest($right, $top);
+
+        $indirect = $this->resolver->indirectMemberOf($group);
+
+        $this->assertSame([$top->id], array_keys($indirect));
+        $this->assertEqualsCanonicalizing([$left->id, $right->id], $indirect[$top->id]);
+    }
+
+    public function test_indirect_member_of_leaves_out_direct_groups(): void
+    {
+        $group = Group::factory()->create();
+        $parent = Group::factory()->create();
+        $top = Group::factory()->create();
+        $this->nest($group, $parent);
+        $this->nest($parent, $top);
+        $this->nest($group, $top); // also direct
+
+        $this->assertSame([], $this->resolver->indirectMemberOf($group));
+    }
+
+    public function test_indirect_member_of_terminates_on_injected_cycle(): void
+    {
+        $group = Group::factory()->create();
+        $a = Group::factory()->create();
+        $b = Group::factory()->create();
+        $this->nest($group, $a);
+        $this->nest($a, $b);
+        $this->nest($b, $a); // cycle, bypasses write-time guard
+
+        $this->assertSame([$b->id => [$a->id]], $this->resolver->indirectMemberOf($group));
+    }
 }

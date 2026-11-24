@@ -9,6 +9,7 @@ use App\User;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\RouteKey;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -79,6 +80,25 @@ class Group extends Model
     public function children(): BelongsToMany
     {
         return $this->belongsToMany(Group::class, 'group_hierarchy', 'parent_id', 'child_id');
+    }
+
+    /**
+     * Every other group as options for the nesting picker. Groups in
+     * $linked are already linked, so they show but cannot be picked.
+     * Cycles are rejected on submit, not here.
+     *
+     * @param  Collection<int, Group>  $linked
+     * @return array<int, array{id: string, name: string, admin: bool, disabled: bool}>
+     */
+    public function nestingOptions(Collection $linked): array
+    {
+        return self::whereKeyNot($this->id)->orderBy('name')->get(['id', 'name', 'is_admin_group'])
+            ->map(fn (Group $g): array => [
+                'id' => $g->id,
+                'name' => $g->name,
+                'admin' => $g->is_admin_group,
+                'disabled' => $linked->contains('id', $g->id),
+            ])->all();
     }
 
     // Rules FROM this group (what it manages)

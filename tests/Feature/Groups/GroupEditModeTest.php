@@ -57,4 +57,31 @@ class GroupEditModeTest extends TestCase
             ->assertSee('Group updated.')
             ->assertSee(self::EDITING, escape: false);
     }
+
+    public function test_adding_a_member_of_group_keeps_edit_mode(): void
+    {
+        $group = Group::factory()->create();
+        $parent = Group::factory()->create();
+
+        $this->actingAs($this->admin())
+            ->from(route('groups.show', $group))
+            ->followingRedirects()
+            ->post(route('groups.parents.store', $group), ['parent_id' => $parent->id])
+            ->assertOk()
+            ->assertSee(self::EDITING, escape: false);
+    }
+
+    public function test_removing_a_member_of_group_keeps_edit_mode(): void
+    {
+        $group = Group::factory()->create();
+        $parent = Group::factory()->create();
+        $group->parents()->attach($parent->id);
+
+        $this->actingAs($this->admin())
+            ->from(route('groups.show', $group))
+            ->followingRedirects()
+            ->delete(route('groups.parents.destroy', ['group' => $group, 'parent' => $parent->id]))
+            ->assertOk()
+            ->assertSee(self::EDITING, escape: false);
+    }
 }

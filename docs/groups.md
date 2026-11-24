@@ -21,9 +21,11 @@ A group can be a member of another group. When group **C** is a member of group
 **P** is a member of. A group can be a member of several groups. A change that
 would make a group a member of itself, directly or through other groups, is rejected.
 
-On a group's page, **Member groups** lists the groups that are members of it, and
-**Member of** lists the groups it is a member of. Internally these are child and
-parent edges in the `group_hierarchy` table.
+A group's members page lists its **Member groups**: the groups that are members
+of it. The group's own page lists **Member of**: the groups it is a member of,
+directly and through those groups. An indirect entry names the direct group it
+comes through. Internally these are child and parent edges in the
+`group_hierarchy` table.
 
 Inherited membership is reflected in two places:
 
@@ -36,7 +38,8 @@ Membership through another group deliberately does **not** grant admin: a user i
 member group of an admin group is not an administrator. Admin access is always a
 direct membership.
 
-System administrators edit member groups on a group's page.
+System administrators edit member groups on the members page, and Member of on
+the group page with the Edit toggle on. Only direct entries can be removed.
 
 ---
 

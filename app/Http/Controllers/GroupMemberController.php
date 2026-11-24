@@ -12,7 +12,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 
 class GroupMemberController extends Controller
 {
@@ -24,7 +23,7 @@ class GroupMemberController extends Controller
     /**
      * Everyone who counts as a member: enrolled in the group, or in a member
      * group (their members roll up here), with where each membership comes
-     * from. Also the group's member groups and the groups it is a member of.
+     * from. Also the group's member groups.
      */
     public function index(): Factory|View
     {
@@ -58,24 +57,10 @@ class GroupMemberController extends Controller
                 ->values()->all(),
         ])->all();
 
-        $group->load('parents', 'children');
-        // Picker options: every other group, with those already linked shown
-        // but not pickable. Cycles are rejected on submit.
-        $memberGroupOptions = [];
-        $memberOfOptions = [];
-        if ($isAdmin) {
-            $others = Group::where('id', '!=', $group->id)->orderBy('name')->get(['id', 'name', 'is_admin_group']);
-            $option = fn (Group $g, Collection $linked): array => [
-                'id' => $g->id,
-                'name' => $g->name,
-                'admin' => $g->is_admin_group,
-                'disabled' => $linked->contains('id', $g->id),
-            ];
-            $memberGroupOptions = $others->map(fn (Group $g): array => $option($g, $group->children))->all();
-            $memberOfOptions = $others->map(fn (Group $g): array => $option($g, $group->parents))->all();
-        }
+        $group->load('children');
+        $memberGroupOptions = $isAdmin ? $group->nestingOptions($group->children) : [];
 
-        return view('groups.members', ['group' => $group, 'members' => $members, 'search' => $search, 'memberSources' => $memberSources, 'isAdmin' => $isAdmin, 'memberGroupOptions' => $memberGroupOptions, 'memberOfOptions' => $memberOfOptions]);
+        return view('groups.members', ['group' => $group, 'members' => $members, 'search' => $search, 'memberSources' => $memberSources, 'isAdmin' => $isAdmin, 'memberGroupOptions' => $memberGroupOptions]);
     }
 
     /**
