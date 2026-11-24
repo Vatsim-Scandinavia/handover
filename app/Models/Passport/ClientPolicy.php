@@ -133,11 +133,11 @@ class ClientPolicy extends Model
      * Whether the user may sign in to the client: the client requires no
      * group, or the user's effective membership includes one it requires.
      */
-    public function admits(User $user): bool
+    public function admits(User $user, GroupMembershipResolver $groups): bool
     {
         $required = $this->requiredGroups()->pluck('groups.id')->all();
 
         return $required === []
-            || array_intersect($required, resolve(GroupMembershipResolver::class)->effectiveGroupIds($user)) !== [];
+            || array_intersect($required, $groups->effectiveGroupIds($user)) !== [];
     }
 }

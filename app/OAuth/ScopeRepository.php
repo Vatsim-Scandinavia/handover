@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\OAuth;
 
 use App\Models\Passport\ClientPolicy;
+use App\Services\GroupMembershipResolver;
 use App\User;
 use Laravel\Passport\Bridge\Scope;
 use Laravel\Passport\Bridge\ScopeRepository as PassportScopeRepository;
+use Laravel\Passport\ClientRepository;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
@@ -18,6 +20,13 @@ use League\OAuth2\Server\Exception\OAuthServerException;
  */
 class ScopeRepository extends PassportScopeRepository
 {
+    public function __construct(
+        ClientRepository $clients,
+        private readonly GroupMembershipResolver $groups,
+    ) {
+        parent::__construct($clients);
+    }
+
     public function finalizeScopes(
         array $scopes,
         string $grantType,
@@ -76,6 +85,6 @@ class ScopeRepository extends PassportScopeRepository
         $user = User::find($userIdentifier);
 
         // Every client has a policy. Fail closed if one is missing.
-        return $policy instanceof ClientPolicy && $user !== null && $policy->admits($user);
+        return $policy instanceof ClientPolicy && $user !== null && $policy->admits($user, $this->groups);
     }
 }

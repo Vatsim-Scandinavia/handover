@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\OAuth;
 
 use App\OAuth\ScopeRepository;
+use App\Services\GroupMembershipResolver;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -30,6 +31,7 @@ class AuthorizationController extends PassportAuthorizationController
         StatefulGuard $guard,
         ClientRepository $clients,
         private readonly ScopeRepository $scopes,
+        private readonly GroupMembershipResolver $groups,
     ) {
         parent::__construct($server, $guard, $clients);
     }
@@ -64,7 +66,7 @@ class AuthorizationController extends PassportAuthorizationController
         // Show the refusal here rather than redirect with access_denied, so
         // the member learns why and the relying party needs no error handling.
         // ScopeRepository::finalizeScopes checks both rules again at the token endpoint.
-        if (! $policy->admits($this->guard->user())) {
+        if (! $policy->admits($this->guard->user(), $this->groups)) {
             return response()->view('oauth.refused', ['client' => $client], 403);
         }
 
