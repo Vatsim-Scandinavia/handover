@@ -27,7 +27,6 @@ class GroupMemberController extends Controller
      */
     public function index(): Factory|View
     {
-        // No parameters: this overrides Controller::index(), the dashboard.
         $request = request();
         $slug = $request->route('group');
         $group = $slug instanceof Group ? $slug : Group::where('slug', $slug)->firstOrFail();

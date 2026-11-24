@@ -142,13 +142,13 @@ parameters:
 			message: '#^Parameter \#1 \$user of method App\\Services\\AuthorizedClients\:\:for\(\) expects App\\User, App\\User\|null given\.$#'
 			identifier: argument.type
 			count: 1
-			path: app/Http/Controllers/Controller.php
+			path: app/Http/Controllers/DashboardController.php
 
 		-
 			message: '#^Parameter \#1 \$user of method App\\Services\\GroupMembershipResolver\:\:effectiveMembership\(\) expects App\\User, App\\User\|null given\.$#'
 			identifier: argument.type
 			count: 1
-			path: app/Http/Controllers/Controller.php
+			path: app/Http/Controllers/DashboardController.php
 
 		-
 			message: '#^Dead catch \- Illuminate\\Database\\QueryException is never thrown in the try block\.$#'
