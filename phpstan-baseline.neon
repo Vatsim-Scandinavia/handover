@@ -181,13 +181,13 @@ parameters:
 			path: app/Http/Controllers/GroupAttributeDefinitionController.php
 
 		-
-			message: '#^Parameter \#1 \$attributes of method Illuminate\\Database\\Eloquent\\Model\:\:update\(\) expects array\<string, mixed\>, mixed given\.$#'
+			message: '#^Parameter \#1 \$attributes of method Illuminate\\Database\\Eloquent\\Builder\<App\\Models\\GroupAttributeDefinition\>\:\:create\(\) expects array\<string, mixed\>, mixed given\.$#'
 			identifier: argument.type
 			count: 1
 			path: app/Http/Controllers/GroupAttributeDefinitionController.php
 
 		-
-			message: '#^Parameter \#1 \$attributes of static method Illuminate\\Database\\Eloquent\\Builder\<App\\Models\\GroupAttributeDefinition\>\:\:create\(\) expects array\<string, mixed\>, mixed given\.$#'
+			message: '#^Parameter \#1 \$attributes of method Illuminate\\Database\\Eloquent\\Model\:\:update\(\) expects array\<string, mixed\>, mixed given\.$#'
 			identifier: argument.type
 			count: 1
 			path: app/Http/Controllers/GroupAttributeDefinitionController.php

@@ -19,7 +19,7 @@ class DeleteClient extends Command
     public function handle(): void
     {
         $clientId = $this->ask('Which client id do you want to revoke?');
-        $client = Client::find($clientId);
+        $client = Client::query()->find($clientId);
 
         if ($this->confirm('Are you sure you want to delete the client \''.$client->name.'\'?')) {
             $clientAccessTokens = $client->tokens;

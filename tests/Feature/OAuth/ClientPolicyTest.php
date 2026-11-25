@@ -28,7 +28,7 @@ class ClientPolicyTest extends TestCase
     {
         $client = $this->makeClient();
 
-        $policy = ClientPolicy::findOrFail($client->getKey());
+        $policy = ClientPolicy::query()->findOrFail($client->getKey());
         $this->assertTrue($policy->single_session);
         $this->assertSame([], $policy->requiredGroups->all());
     }

@@ -29,7 +29,7 @@ class GroupModelTest extends TestCase
     public function test_group_has_tags_relationship(): void
     {
         $group = Group::factory()->create();
-        GroupTag::create(['group_id' => $group->id, 'tag' => 'vacc']);
+        GroupTag::query()->create(['group_id' => $group->id, 'tag' => 'vacc']);
         $this->assertCount(1, $group->fresh()->tags);
         $this->assertEquals('vacc', $group->fresh()->tags->first()->tag);
     }
@@ -38,7 +38,7 @@ class GroupModelTest extends TestCase
     {
         $def = GroupAttributeDefinition::factory()->create(['key' => 'region']);
         $group = Group::factory()->create();
-        GroupAttributeValue::create([
+        GroupAttributeValue::query()->create([
             'group_id' => $group->id,
             'attribute_definition_id' => $def->id,
             'value' => 'EUR',

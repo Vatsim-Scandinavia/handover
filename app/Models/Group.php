@@ -61,7 +61,7 @@ class Group extends Model
      */
     public function requiringClients(): Builder
     {
-        return Client::whereHas('policy.requiredGroups', fn (Builder $query) => $query->whereKey($this->id));
+        return Client::query()->whereHas('policy.requiredGroups', fn (Builder $query) => $query->whereKey($this->id));
     }
 
     // Groups this group nests INTO (its parents). Roll-up flows toward these.
@@ -92,7 +92,7 @@ class Group extends Model
      */
     public function nestingOptions(Collection $linked): array
     {
-        return self::whereKeyNot($this->id)->orderBy('name')->get(['id', 'name', 'is_admin_group'])
+        return self::query()->whereKeyNot($this->id)->orderBy('name')->get(['id', 'name', 'is_admin_group'])
             ->map(fn (Group $g): array => [
                 'id' => $g->id,
                 'name' => $g->name,

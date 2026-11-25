@@ -24,9 +24,9 @@ class GroupManagerRuleController extends Controller
         $this->requireAdmin($request);
 
         match ($type) {
-            'group' => GroupManagerRuleByGroup::findOrFail($rule)->delete(),
-            'tag' => GroupManagerRuleByTag::findOrFail($rule)->delete(),
-            'attribute' => GroupManagerRuleByAttribute::findOrFail($rule)->delete(),
+            'group' => GroupManagerRuleByGroup::query()->findOrFail($rule)->delete(),
+            'tag' => GroupManagerRuleByTag::query()->findOrFail($rule)->delete(),
+            'attribute' => GroupManagerRuleByAttribute::query()->findOrFail($rule)->delete(),
             default => abort(404),
         };
 
@@ -61,11 +61,11 @@ class GroupManagerRuleController extends Controller
         $this->requireAdmin($request);
 
         $slug = $request->route('group');
-        $group = $slug instanceof Group ? $slug : Group::where('slug', $slug)->firstOrFail();
+        $group = $slug instanceof Group ? $slug : Group::query()->where('slug', $slug)->firstOrFail();
         $group->load('tags', 'attributeValues.definition', 'targetedByGroupRules.managerGroup');
 
-        $allGroups = Group::orderBy('name')->get();
-        $definitions = GroupAttributeDefinition::orderBy('key')->get();
+        $allGroups = Group::query()->orderBy('name')->get();
+        $definitions = GroupAttributeDefinition::query()->orderBy('key')->get();
 
         $tagRules = $group->tags->isEmpty()
             ? collect()
@@ -77,7 +77,7 @@ class GroupManagerRuleController extends Controller
             ->get()
             ->filter(fn ($r) => $group->attributeValues()
                 ->where('value', $r->target_attribute_value)
-                ->whereHas('definition', fn ($q) => $q->where('key', $r->target_attribute_key))
+                ->whereHas('definition', fn (Builder $q) => $q->where('key', $r->target_attribute_key))
                 ->exists()
             );
 
@@ -105,14 +105,14 @@ class GroupManagerRuleController extends Controller
         $this->requireAdmin($request);
 
         match ($type) {
-            'group' => GroupManagerRuleByGroup::where('id', $rule)
+            'group' => GroupManagerRuleByGroup::query()->where('id', $rule)
                 ->where('target_group_id', $group->id)
                 ->firstOrFail()
                 ->delete(),
-            'tag' => tap(GroupManagerRuleByTag::findOrFail($rule), function ($r) use ($group): void {
+            'tag' => tap(GroupManagerRuleByTag::query()->findOrFail($rule), function (GroupManagerRuleByTag $r) use ($group): void {
                 abort_unless($group->tags()->where('tag', $r->target_tag)->exists(), 404);
             })->delete(),
-            'attribute' => tap(GroupManagerRuleByAttribute::findOrFail($rule), function ($r) use ($group): void {
+            'attribute' => tap(GroupManagerRuleByAttribute::query()->findOrFail($rule), function (GroupManagerRuleByAttribute $r) use ($group): void {
                 abort_unless(
                     $group->attributeValues()
                         ->whereHas('definition', fn (Builder $q) => $q->where('key', $r->target_attribute_key))
@@ -134,7 +134,7 @@ class GroupManagerRuleController extends Controller
         $data = $request->validate([
             'manager_group_id' => ['required', 'uuid', 'exists:groups,id'],
         ]);
-        GroupManagerRuleByGroup::firstOrCreate([
+        GroupManagerRuleByGroup::query()->firstOrCreate([
             'manager_group_id' => $data['manager_group_id'],
             'target_group_id' => $group->id,
         ]);
@@ -146,7 +146,7 @@ class GroupManagerRuleController extends Controller
             'manager_group_id' => ['required', 'uuid', 'exists:groups,id'],
             'target_tag' => ['required', 'regex:/^[a-z0-9-]+$/', 'max:32'],
         ]);
-        GroupManagerRuleByTag::firstOrCreate([
+        GroupManagerRuleByTag::query()->firstOrCreate([
             'manager_group_id' => $data['manager_group_id'],
             'target_tag' => $data['target_tag'],
         ]);
@@ -159,7 +159,7 @@ class GroupManagerRuleController extends Controller
             'target_attribute_key' => ['required', 'exists:group_attribute_definitions,key'],
             'target_attribute_value' => ['required', 'string', 'max:255'],
         ]);
-        GroupManagerRuleByAttribute::firstOrCreate([
+        GroupManagerRuleByAttribute::query()->firstOrCreate([
             'manager_group_id' => $data['manager_group_id'],
             'target_attribute_key' => $data['target_attribute_key'],
             'target_attribute_value' => $data['target_attribute_value'],

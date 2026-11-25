@@ -52,7 +52,7 @@ class GroupManagerServiceTest extends TestCase
         $managerGroup = Group::factory()->create();
         $targetGroup = Group::factory()->create();
         $managerGroup->members()->attach($manager->id, ['created_at' => now()]);
-        GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::query()->create([
             'manager_group_id' => $managerGroup->id,
             'target_group_id' => $targetGroup->id,
         ]);
@@ -66,8 +66,8 @@ class GroupManagerServiceTest extends TestCase
         $managerGroup = Group::factory()->create();
         $targetGroup = Group::factory()->create();
         $managerGroup->members()->attach($manager->id, ['created_at' => now()]);
-        GroupTag::create(['group_id' => $targetGroup->id, 'tag' => 'vacc']);
-        GroupManagerRuleByTag::create([
+        GroupTag::query()->create(['group_id' => $targetGroup->id, 'tag' => 'vacc']);
+        GroupManagerRuleByTag::query()->create([
             'manager_group_id' => $managerGroup->id,
             'target_tag' => 'vacc',
         ]);
@@ -82,12 +82,12 @@ class GroupManagerServiceTest extends TestCase
         $targetGroup = Group::factory()->create();
         $def = GroupAttributeDefinition::factory()->create(['key' => 'region']);
         $managerGroup->members()->attach($manager->id, ['created_at' => now()]);
-        GroupAttributeValue::create([
+        GroupAttributeValue::query()->create([
             'group_id' => $targetGroup->id,
             'attribute_definition_id' => $def->id,
             'value' => 'EUR',
         ]);
-        GroupManagerRuleByAttribute::create([
+        GroupManagerRuleByAttribute::query()->create([
             'manager_group_id' => $managerGroup->id,
             'target_attribute_key' => 'region',
             'target_attribute_value' => 'EUR',
@@ -124,7 +124,7 @@ class GroupManagerServiceTest extends TestCase
         $managerGroup = Group::factory()->create();
         $targetGroup = Group::factory()->create();
         $managerGroup->members()->attach($manager->id, ['created_at' => now()]);
-        GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::query()->create([
             'manager_group_id' => $managerGroup->id,
             'target_group_id' => $targetGroup->id,
         ]);
@@ -145,7 +145,7 @@ class GroupManagerServiceTest extends TestCase
         $ids = $this->service->manageableGroupIds($manager);
         $this->assertEmpty($ids);
 
-        GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::query()->create([
             'manager_group_id' => $managerGroup->id,
             'target_group_id' => $targetGroup->id,
         ]);
@@ -167,7 +167,7 @@ class GroupManagerServiceTest extends TestCase
             'child_id' => $childGroup->id,
         ]);
         $childGroup->members()->attach($user->id, ['created_at' => now()]);
-        GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::query()->create([
             'manager_group_id' => $managerGroup->id, // rule attached to the PARENT
             'target_group_id' => $targetGroup->id,
         ]);
@@ -188,7 +188,7 @@ class GroupManagerServiceTest extends TestCase
             'child_id' => $childGroup->id,
         ]);
         $childGroup->members()->attach($user->id, ['created_at' => now()]);
-        GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::query()->create([
             'manager_group_id' => $managerGroup->id,
             'target_group_id' => $targetGroup->id,
         ]);
@@ -224,7 +224,7 @@ class GroupManagerServiceTest extends TestCase
         $child = Group::factory()->create();
         $managerGroup->members()->attach($manager->id, ['created_at' => now()]);
         DB::table('group_hierarchy')->insert(['parent_id' => $parent->id, 'child_id' => $child->id]);
-        GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::query()->create([
             'manager_group_id' => $managerGroup->id,
             'target_group_id' => $parent->id,
         ]);

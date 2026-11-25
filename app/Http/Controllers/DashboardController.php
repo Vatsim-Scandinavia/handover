@@ -26,7 +26,7 @@ class DashboardController extends Controller
 
         // Direct groups are roots; inherited ones nest under the group they came through.
         $map = $this->groups->effectiveMembership(Auth::user());
-        $groups = Group::whereIn('id', array_keys($map))->orderBy('name')->get();
+        $groups = Group::query()->whereIn('id', array_keys($map))->orderBy('name')->get();
         $children = $groups->groupBy(fn (Group $group) => $map[$group->id] ?? '');
         $directGroups = $children->pull('', collect());
 

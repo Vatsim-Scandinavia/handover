@@ -20,7 +20,7 @@ class AddGroupAdminCommandTest extends TestCase
         $this->artisan('groups:add-admin', ['cid' => 1234567])
             ->assertExitCode(0);
 
-        $group = Group::where('slug', 'system-administrators')->first();
+        $group = Group::query()->where('slug', 'system-administrators')->first();
         $this->assertNotNull($group);
         $this->assertTrue($group->is_admin_group);
         $this->assertTrue($group->members()->where('user_id', 1234567)->exists());
@@ -34,7 +34,7 @@ class AddGroupAdminCommandTest extends TestCase
         $this->artisan('groups:add-admin', ['cid' => 1234567])
             ->assertExitCode(0);
 
-        $this->assertEquals(1, Group::where('slug', 'system-administrators')->count());
+        $this->assertEquals(1, Group::query()->where('slug', 'system-administrators')->count());
     }
 
     public function test_is_idempotent_when_user_already_member(): void

@@ -38,7 +38,7 @@ class GroupManagerRuleTest extends TestCase
         $mg = Group::factory()->create();
         $tg = Group::factory()->create();
         $mg->members()->attach($manager->id, ['created_at' => now()]);
-        GroupManagerRuleByGroup::create(['manager_group_id' => $mg->id, 'target_group_id' => $tg->id]);
+        GroupManagerRuleByGroup::query()->create(['manager_group_id' => $mg->id, 'target_group_id' => $tg->id]);
 
         $this->actingAs($manager)->get(route('groups.rules.index', $tg))->assertForbidden();
     }
@@ -112,11 +112,11 @@ class GroupManagerRuleTest extends TestCase
 
     public function test_can_delete_group_type_rule(): void
     {
-        $rule = GroupManagerRuleByGroup::create([
+        $rule = GroupManagerRuleByGroup::query()->create([
             'manager_group_id' => Group::factory()->create()->id,
             'target_group_id' => Group::factory()->create()->id,
         ]);
-        $target = Group::find($rule->target_group_id);
+        $target = Group::query()->find($rule->target_group_id);
 
         $this->actingAs($this->adminUser())
             ->delete(route('groups.rules.destroy', [$target, 'group', $rule->id]))
@@ -130,7 +130,7 @@ class GroupManagerRuleTest extends TestCase
         $managerGroup = Group::factory()->create();
         $targetGroup = Group::factory()->create();
         $targetGroup->tags()->create(['tag' => 'vacc']);
-        $rule = GroupManagerRuleByTag::create([
+        $rule = GroupManagerRuleByTag::query()->create([
             'manager_group_id' => $managerGroup->id,
             'target_tag' => 'vacc',
         ]);
@@ -148,7 +148,7 @@ class GroupManagerRuleTest extends TestCase
         $targetGroup = Group::factory()->create();
         $def = GroupAttributeDefinition::factory()->create(['key' => 'region']);
         $targetGroup->attributeValues()->create(['attribute_definition_id' => $def->id, 'value' => 'EUR']);
-        $rule = GroupManagerRuleByAttribute::create([
+        $rule = GroupManagerRuleByAttribute::query()->create([
             'manager_group_id' => $managerGroup->id,
             'target_attribute_key' => 'region',
             'target_attribute_value' => 'EUR',
@@ -163,7 +163,7 @@ class GroupManagerRuleTest extends TestCase
 
     public function test_overview_can_delete_group_type_rule(): void
     {
-        $rule = GroupManagerRuleByGroup::create([
+        $rule = GroupManagerRuleByGroup::query()->create([
             'manager_group_id' => Group::factory()->create()->id,
             'target_group_id' => Group::factory()->create()->id,
         ]);
@@ -177,7 +177,7 @@ class GroupManagerRuleTest extends TestCase
 
     public function test_overview_can_delete_tag_type_rule(): void
     {
-        $rule = GroupManagerRuleByTag::create([
+        $rule = GroupManagerRuleByTag::query()->create([
             'manager_group_id' => Group::factory()->create()->id,
             'target_tag' => 'vacc',
         ]);
@@ -192,7 +192,7 @@ class GroupManagerRuleTest extends TestCase
     public function test_overview_can_delete_attribute_type_rule(): void
     {
         GroupAttributeDefinition::factory()->create(['key' => 'region']);
-        $rule = GroupManagerRuleByAttribute::create([
+        $rule = GroupManagerRuleByAttribute::query()->create([
             'manager_group_id' => Group::factory()->create()->id,
             'target_attribute_key' => 'region',
             'target_attribute_value' => 'EUR',
@@ -211,7 +211,7 @@ class GroupManagerRuleTest extends TestCase
         $mg = Group::factory()->create();
         $tg = Group::factory()->create();
         $mg->members()->attach($manager->id, ['created_at' => now()]);
-        $rule = GroupManagerRuleByGroup::create(['manager_group_id' => $mg->id, 'target_group_id' => $tg->id]);
+        $rule = GroupManagerRuleByGroup::query()->create(['manager_group_id' => $mg->id, 'target_group_id' => $tg->id]);
 
         $this->actingAs($manager)
             ->delete(route('groups.rules.overview.destroy', ['group', $rule->id]))->assertForbidden();
@@ -224,7 +224,7 @@ class GroupManagerRuleTest extends TestCase
         $managerGroup = Group::factory()->create();
         $targetGroup = Group::factory()->create();
         $targetGroup->tags()->create(['tag' => 'vacc']);
-        $rule = GroupManagerRuleByTag::create([
+        $rule = GroupManagerRuleByTag::query()->create([
             'manager_group_id' => $managerGroup->id,
             'target_tag' => 'unrelated-tag',
         ]);
@@ -247,7 +247,7 @@ class GroupManagerRuleTest extends TestCase
         $mg = Group::factory()->create();
         $tg = Group::factory()->create();
         $mg->members()->attach($manager->id, ['created_at' => now()]);
-        GroupManagerRuleByGroup::create(['manager_group_id' => $mg->id, 'target_group_id' => $tg->id]);
+        GroupManagerRuleByGroup::query()->create(['manager_group_id' => $mg->id, 'target_group_id' => $tg->id]);
 
         $this->actingAs($manager)
             ->get(route('groups.rules.overview'))->assertForbidden();
@@ -257,7 +257,7 @@ class GroupManagerRuleTest extends TestCase
     {
         $managerGroup = Group::factory()->create();
         $targetGroup = Group::factory()->create();
-        GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::query()->create([
             'manager_group_id' => $managerGroup->id,
             'target_group_id' => $targetGroup->id,
         ]);

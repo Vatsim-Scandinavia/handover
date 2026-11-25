@@ -174,7 +174,7 @@ class TransitiveMembersRosterTest extends TestCase
         $managerGroup = Group::factory()->create();
         $group = Group::factory()->create();
         $this->enrol($managerGroup, $manager);
-        GroupManagerRuleByGroup::create(['manager_group_id' => $managerGroup->id, 'target_group_id' => $group->id]);
+        GroupManagerRuleByGroup::query()->create(['manager_group_id' => $managerGroup->id, 'target_group_id' => $group->id]);
 
         $this->actingAs($manager)
             ->get(route('groups.members.index', $group))

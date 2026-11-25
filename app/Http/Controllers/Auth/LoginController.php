@@ -68,7 +68,7 @@ class LoginController extends Controller
             return to_route('landing')->withError('<b>Login denied.</b><br>Login was denied because your account is inactive.');
         }
 
-        $user = User::find($member->cid);
+        $user = User::query()->find($member->cid);
 
         if ($user && $user->banned) {
             return to_route('landing')->withError('<br>Login denied</br><br>User '.$user->id.' has been banned in '.Config::get('app.owner_short').' for the following reason: <i>'.$user->banned->reason.'</i><br><br>For inquires contact '.Config::get('app.owner_contact').'');
@@ -98,7 +98,7 @@ class LoginController extends Controller
 
     protected function completeLogin(Member $member, AccessToken $token): Redirector|RedirectResponse
     {
-        $user = User::firstOrNew(['id' => $member->cid])
+        $user = User::query()->firstOrNew(['id' => $member->cid])
             ->fillFromVatsim($member)
             ->fill(['accepted_privacy' => 1, 'last_login' => Carbon::now()]);
         $user->vatsim_token = $token;

@@ -34,7 +34,7 @@ class ScopeRepository extends PassportScopeRepository
         ?string $userIdentifier = null,
         ?string $authCodeId = null
     ): array {
-        $policy = ClientPolicy::find($clientEntity->getIdentifier());
+        $policy = ClientPolicy::query()->find($clientEntity->getIdentifier());
 
         // Tokens issued earlier are not revoked. They run out on their own.
         if ($userIdentifier !== null && ! $this->admits($policy, $userIdentifier)) {
@@ -82,7 +82,7 @@ class ScopeRepository extends PassportScopeRepository
 
     private function admits(?ClientPolicy $policy, string $userIdentifier): bool
     {
-        $user = User::find($userIdentifier);
+        $user = User::query()->find($userIdentifier);
 
         // Every client has a policy. Fail closed if one is missing.
         return $policy instanceof ClientPolicy && $user !== null && $policy->admits($user, $this->groups);

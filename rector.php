@@ -46,6 +46,7 @@ return RectorConfig::configure()
         LaravelSetList::LARAVEL_TYPE_DECLARATIONS,
         LaravelSetList::LARAVEL_TESTING,
         LaravelSetList::LARAVEL_FACADE_ALIASES_TO_FULL_NAMES,
+        LaravelSetList::LARAVEL_ELOQUENT_MAGIC_METHOD_TO_QUERY_BUILDER,
         // These change nothing today. They keep old helpers and string
         // container keys from coming back.
         LaravelSetList::LARAVEL_ARRAY_STR_FUNCTION_TO_STATIC_CALL,

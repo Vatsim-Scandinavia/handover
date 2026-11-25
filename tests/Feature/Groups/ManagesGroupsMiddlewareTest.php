@@ -46,7 +46,7 @@ class ManagesGroupsMiddlewareTest extends TestCase
         $managerGroup = Group::factory()->create();
         $targetGroup = Group::factory()->create();
         $managerGroup->members()->attach($manager->id, ['created_at' => now()]);
-        GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::query()->create([
             'manager_group_id' => $managerGroup->id,
             'target_group_id' => $targetGroup->id,
         ]);

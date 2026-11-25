@@ -48,7 +48,7 @@ class OAuthClientController extends Controller
             'grantTypes' => self::GRANT_TYPES,
             'defaultGrantTypes' => self::DEFAULT_GRANT_TYPES,
             'scopes' => collect(Passport::scopes())->mapWithKeys(fn (Scope $scope): array => [$scope->id => $scope->description]),
-            'groups' => Group::orderBy('name')->get(['id', 'name']),
+            'groups' => Group::query()->orderBy('name')->get(['id', 'name']),
         ]);
     }
 

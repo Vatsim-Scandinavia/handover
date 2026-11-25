@@ -29,7 +29,7 @@ class GroupMemberController extends Controller
     {
         $request = request();
         $slug = $request->route('group');
-        $group = $slug instanceof Group ? $slug : Group::where('slug', $slug)->firstOrFail();
+        $group = $slug instanceof Group ? $slug : Group::query()->where('slug', $slug)->firstOrFail();
 
         $this->requireAccess($request, $group);
         $isAdmin = (bool) $request->attributes->get('is_group_admin');
@@ -38,14 +38,14 @@ class GroupMemberController extends Controller
         $sourceMap = $this->resolver->transitiveMembers($group);
 
         $search = $request->string('search')->toString();
-        $query = User::whereIn('id', array_keys($sourceMap))->matching($search)->orderBy('first_name');
+        $query = User::query()->whereIn('id', array_keys($sourceMap))->matching($search)->orderBy('first_name');
 
         $members = $query->paginate(25)->withQueryString();
 
         // Names for the descendant groups a membership rolls up through.
         $viaIds = collect($sourceMap)->flatten()->unique()
             ->reject(fn ($id): bool => $id === $group->id)->values();
-        $viaNames = Group::whereIn('id', $viaIds)->pluck('name', 'id');
+        $viaNames = Group::query()->whereIn('id', $viaIds)->pluck('name', 'id');
 
         // userId => ['direct' => bool, 'via' => list<string names>]
         $memberSources = collect($sourceMap)->map(fn ($sources): array => [
@@ -97,7 +97,7 @@ class GroupMemberController extends Controller
 
         $request->validate(['cid' => ['required', 'integer']]);
 
-        $user = User::find($request->cid);
+        $user = User::query()->find($request->cid);
         if (! $user) {
             abort(404, "No user found with CID {$request->cid}.");
         }

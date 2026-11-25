@@ -58,7 +58,7 @@ class GroupManagerService
         }
 
         // Name lookup for the "inherited via X" suffix.
-        $viaNames = Group::whereIn('id', array_values(array_filter($membership, fn (?string $v): bool => $v !== null)))
+        $viaNames = Group::query()->whereIn('id', array_values(array_filter($membership, fn (?string $v): bool => $v !== null)))
             ->pluck('name', 'id');
         $inheritedSuffix = function (string $managerGroupId) use ($membership, $viaNames): string {
             $viaId = $membership[$managerGroupId] ?? null;
@@ -72,7 +72,7 @@ class GroupManagerService
         // functions capture outer variables by value — an arrow fn here would push
         // into a local copy of $rules and silently discard it (pre-existing latent
         // bug fixed while wiring in the inherited-via suffix).
-        GroupManagerRuleByGroup::whereIn('manager_group_id', $userGroupIds)
+        GroupManagerRuleByGroup::query()->whereIn('manager_group_id', $userGroupIds)
             ->where('target_group_id', $group->id)
             ->with('managerGroup')
             ->get()
@@ -82,7 +82,7 @@ class GroupManagerService
 
         $groupTags = $group->tags->pluck('tag')->toArray();
         if (! empty($groupTags)) {
-            GroupManagerRuleByTag::whereIn('manager_group_id', $userGroupIds)
+            GroupManagerRuleByTag::query()->whereIn('manager_group_id', $userGroupIds)
                 ->whereIn('target_tag', $groupTags)
                 ->with('managerGroup')
                 ->get()
@@ -96,7 +96,7 @@ class GroupManagerService
             $av->definition->key => $av->value,
         ])->all();
 
-        GroupManagerRuleByAttribute::whereIn('manager_group_id', $userGroupIds)
+        GroupManagerRuleByAttribute::query()->whereIn('manager_group_id', $userGroupIds)
             ->with('managerGroup')
             ->get()
             ->each(function ($r) use ($groupAttrPairs, &$rules, $inheritedSuffix): void {
@@ -115,18 +115,18 @@ class GroupManagerService
             return [];
         }
 
-        $byGroup = GroupManagerRuleByGroup::whereIn('manager_group_id', $userGroupIds)
+        $byGroup = GroupManagerRuleByGroup::query()->whereIn('manager_group_id', $userGroupIds)
             ->pluck('target_group_id')
             ->toArray();
 
-        $tags = GroupManagerRuleByTag::whereIn('manager_group_id', $userGroupIds)
+        $tags = GroupManagerRuleByTag::query()->whereIn('manager_group_id', $userGroupIds)
             ->pluck('target_tag')
             ->toArray();
-        $byTag = empty($tags) ? [] : Group::whereHas('tags', fn (Builder $q) => $q->whereIn('tag', $tags))
+        $byTag = empty($tags) ? [] : Group::query()->whereHas('tags', fn (Builder $q) => $q->whereIn('tag', $tags))
             ->pluck('id')
             ->toArray();
 
-        $attrRules = GroupManagerRuleByAttribute::whereIn('manager_group_id', $userGroupIds)->get();
+        $attrRules = GroupManagerRuleByAttribute::query()->whereIn('manager_group_id', $userGroupIds)->get();
         $byAttribute = [];
         if ($attrRules->isNotEmpty()) {
             $byAttribute = DB::table('group_attribute_values')

@@ -16,7 +16,7 @@ class RevokeOldTokens
      */
     public function handle(AccessTokenCreated $event): void
     {
-        $policy = ClientPolicy::find($event->clientId);
+        $policy = ClientPolicy::query()->find($event->clientId);
 
         // Every client has a policy. Fail closed if one is missing.
         if ($policy !== null && ! $policy->single_session) {

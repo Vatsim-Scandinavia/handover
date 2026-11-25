@@ -92,7 +92,7 @@ class Cors
 
     private function client(mixed $id): ?Client
     {
-        return is_string($id) ? Client::find($id) : null;
+        return is_string($id) ? Client::query()->find($id) : null;
     }
 
     private function allows(?Client $client, ?string $origin): bool

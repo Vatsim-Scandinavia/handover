@@ -37,7 +37,7 @@ class GroupAttributeDefinitionTest extends TestCase
         $managerGroup = Group::factory()->create();
         $targetGroup = Group::factory()->create();
         $managerGroup->members()->attach($user->id, ['created_at' => now()]);
-        GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::query()->create([
             'manager_group_id' => $managerGroup->id,
             'target_group_id' => $targetGroup->id,
         ]);
@@ -103,7 +103,7 @@ class GroupAttributeDefinitionTest extends TestCase
         $managerGroup = Group::factory()->create();
         $targetGroup = Group::factory()->create();
         $managerGroup->members()->attach($user->id, ['created_at' => now()]);
-        GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::query()->create([
             'manager_group_id' => $managerGroup->id,
             'target_group_id' => $targetGroup->id,
         ]);
@@ -120,7 +120,7 @@ class GroupAttributeDefinitionTest extends TestCase
         $admin = $this->adminUser();
         $def = GroupAttributeDefinition::factory()->create();
         $group = Group::factory()->create();
-        GroupAttributeValue::create([
+        GroupAttributeValue::query()->create([
             'group_id' => $group->id,
             'attribute_definition_id' => $def->id,
             'value' => 'test',

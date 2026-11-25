@@ -24,7 +24,7 @@ class GroupHierarchyController extends Controller
             'parent_id' => ['required', 'uuid', 'exists:groups,id'],
         ]);
         $parentId = $data['parent_id'];
-        $parent = Group::whereKey($parentId)->firstOrFail();
+        $parent = Group::query()->whereKey($parentId)->firstOrFail();
 
         if ($parentId === $group->id) {
             return back()->withErrors(['parent_id' => "{$group->name} cannot be a member of itself."]);
@@ -53,7 +53,7 @@ class GroupHierarchyController extends Controller
             ->where('child_id', $group->id)
             ->delete();
         $this->service->incrementCacheVersion();
-        $name = Group::find($parent)->name ?? 'the group';
+        $name = Group::query()->find($parent)->name ?? 'the group';
 
         return EditMode::keep(back()->with('success', "Removed {$group->name} from {$name}."));
     }
@@ -67,7 +67,7 @@ class GroupHierarchyController extends Controller
             'child_id' => ['required', 'uuid', 'exists:groups,id'],
         ]);
         $childId = $data['child_id'];
-        $child = Group::whereKey($childId)->firstOrFail();
+        $child = Group::query()->whereKey($childId)->firstOrFail();
 
         if ($childId === $group->id) {
             return back()->withErrors(['child_id' => "{$group->name} cannot be a member of itself."]);
@@ -97,7 +97,7 @@ class GroupHierarchyController extends Controller
             ->where('child_id', $child)
             ->delete();
         $this->service->incrementCacheVersion();
-        $name = Group::find($child)->name ?? 'the group';
+        $name = Group::query()->find($child)->name ?? 'the group';
 
         return back()->with('success', "Removed {$name} from {$group->name}.");
     }

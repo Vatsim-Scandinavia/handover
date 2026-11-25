@@ -17,7 +17,7 @@ class AddGroupAdmin extends Command
     public function handle(): int
     {
         $cid = (int) $this->argument('cid');
-        $user = User::find($cid);
+        $user = User::query()->find($cid);
 
         if (! $user) {
             $this->error("No user found with CID {$cid}.");
@@ -25,7 +25,7 @@ class AddGroupAdmin extends Command
             return self::FAILURE;
         }
 
-        $existing = Group::where('slug', 'system-administrators')->first();
+        $existing = Group::query()->where('slug', 'system-administrators')->first();
 
         if ($existing && ! $existing->is_admin_group) {
             $this->error("A group with slug 'system-administrators' already exists but is not an admin group. Resolve this manually.");
@@ -33,7 +33,7 @@ class AddGroupAdmin extends Command
             return self::FAILURE;
         }
 
-        $group = $existing ?? Group::create([
+        $group = $existing ?? Group::query()->create([
             'slug' => 'system-administrators',
             'name' => 'System Administrators',
             'is_admin_group' => true,

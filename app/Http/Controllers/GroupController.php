@@ -60,7 +60,7 @@ class GroupController extends Controller
             $groups = $groups->sortByDesc('members_count')->values();
         }
 
-        $definitions = GroupAttributeDefinition::orderBy('key')->get();
+        $definitions = GroupAttributeDefinition::query()->orderBy('key')->get();
         $groupBy = $definitions->firstWhere('key', $request->query('group'));
         $sections = $this->sections($groups, $groupBy);
         $suggestions = $query->suggestions($groups);
@@ -88,7 +88,7 @@ class GroupController extends Controller
     public function create(Request $request): Factory|View
     {
         $this->requireAdmin($request);
-        $definitions = GroupAttributeDefinition::orderBy('key')->get();
+        $definitions = GroupAttributeDefinition::query()->orderBy('key')->get();
 
         return view('groups.create', ['definitions' => $definitions]);
     }
@@ -99,7 +99,7 @@ class GroupController extends Controller
         $data = $this->validateGroup($request);
 
         $group = DB::transaction(function () use ($data) {
-            $g = Group::create([
+            $g = Group::query()->create([
                 'slug' => $data['slug'],
                 'name' => $data['name'],
                 'description' => $data['description'] ?? null,
@@ -130,7 +130,7 @@ class GroupController extends Controller
         // Groups this one is a member of through its direct parents, each
         // with the direct parents it comes through.
         $through = $this->resolver->indirectMemberOf($group);
-        $indirectMemberOf = Group::whereIn('id', array_keys($through))->orderBy('name')->get()
+        $indirectMemberOf = Group::query()->whereIn('id', array_keys($through))->orderBy('name')->get()
             ->map(fn (Group $g): array => [
                 'group' => $g,
                 'through' => $group->parents->whereIn('id', $through[$g->id])->pluck('name')->sort()->values()->all(),
@@ -139,7 +139,7 @@ class GroupController extends Controller
         $definitions = collect();
         $memberOfOptions = [];
         if ($isAdmin) {
-            $definitions = GroupAttributeDefinition::orderBy('key')->get();
+            $definitions = GroupAttributeDefinition::query()->orderBy('key')->get();
             $memberOfOptions = $group->nestingOptions($group->parents);
         }
 
@@ -155,7 +155,7 @@ class GroupController extends Controller
         $newIsAdmin = (bool) ($data['is_admin_group'] ?? false);
 
         if ($oldIsAdmin && ! $newIsAdmin) {
-            $hasOtherAdminGroup = Group::where('is_admin_group', true)->where('id', '!=', $group->id)->exists();
+            $hasOtherAdminGroup = Group::query()->where('is_admin_group', true)->where('id', '!=', $group->id)->exists();
             if (! $hasOtherAdminGroup) {
                 return back()->withErrors(['is_admin_group' => 'Cannot demote the only admin group.']);
             }

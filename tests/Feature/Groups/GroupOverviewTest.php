@@ -42,7 +42,7 @@ class GroupOverviewTest extends TestCase
             $group->tags()->create(['tag' => $tag]);
         }
         foreach ($attributes as $key => $value) {
-            $definition = GroupAttributeDefinition::firstOrCreate(['key' => $key], ['label' => ucfirst($key)]);
+            $definition = GroupAttributeDefinition::query()->firstOrCreate(['key' => $key], ['label' => ucfirst($key)]);
             $group->attributeValues()->create(['attribute_definition_id' => $definition->id, 'value' => $value]);
         }
 
@@ -148,7 +148,7 @@ class GroupOverviewTest extends TestCase
         $managers->members()->attach($user->id, ['created_at' => now()]);
         $target = $this->group('Norway training', tags: ['training']);
         $this->group('Denmark training', tags: ['training']);
-        GroupManagerRuleByGroup::create(['manager_group_id' => $managers->id, 'target_group_id' => $target->id]);
+        GroupManagerRuleByGroup::query()->create(['manager_group_id' => $managers->id, 'target_group_id' => $target->id]);
 
         $this->actingAs($user)
             ->get(route('groups.index', ['q' => 'tag:training training']))

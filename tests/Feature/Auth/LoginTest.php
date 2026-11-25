@@ -94,7 +94,7 @@ class LoginTest extends TestCase
 
         $this->post(route('dpp.accept'))->assertRedirect(route('landing'));
 
-        $user = User::findOrFail(1234567);
+        $user = User::query()->findOrFail(1234567);
         $this->assertAuthenticatedAs($user);
         $this->assertSame('vatsim-access', $user->access_token);
         $this->assertSame(1, (int) $user->accepted_privacy);

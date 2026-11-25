@@ -99,7 +99,7 @@ class UserCollection extends JsonResource
                         return [];
                     }
 
-                    return Group::whereIn('id', array_keys($map))
+                    return Group::query()->whereIn('id', array_keys($map))
                         ->with('tags', 'attributeValues.definition')
                         ->orderBy('name')
                         ->get()

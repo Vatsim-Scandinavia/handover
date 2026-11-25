@@ -15,7 +15,7 @@ class GroupAttributeDefinitionController extends Controller
     public function index(): Factory|View
     {
         $this->requireAdmin(request());
-        $definitions = GroupAttributeDefinition::orderBy('key')->get();
+        $definitions = GroupAttributeDefinition::query()->orderBy('key')->get();
 
         return view('groups.attributes', ['definitions' => $definitions]);
     }
@@ -27,7 +27,7 @@ class GroupAttributeDefinitionController extends Controller
             'key' => ['required', 'regex:/^[a-z0-9_-]+$/', 'max:32', 'unique:group_attribute_definitions,key'],
             'label' => ['required', 'string', 'max:255'],
         ]);
-        GroupAttributeDefinition::create($data);
+        GroupAttributeDefinition::query()->create($data);
 
         return to_route('groups.attributes.index')->with('success', 'Attribute definition created.');
     }

@@ -45,7 +45,7 @@ class GroupMemberTest extends TestCase
         $mg = Group::factory()->create();
         $tg = Group::factory()->create();
         $mg->members()->attach($manager->id, ['created_at' => now()]);
-        GroupManagerRuleByGroup::create(['manager_group_id' => $mg->id, 'target_group_id' => $tg->id]);
+        GroupManagerRuleByGroup::query()->create(['manager_group_id' => $mg->id, 'target_group_id' => $tg->id]);
 
         $this->actingAs($manager)->get(route('groups.members.index', $tg))->assertOk();
     }
@@ -57,7 +57,7 @@ class GroupMemberTest extends TestCase
         $managed = Group::factory()->create();
         $unmanaged = Group::factory()->create();
         $mg->members()->attach($manager->id, ['created_at' => now()]);
-        GroupManagerRuleByGroup::create(['manager_group_id' => $mg->id, 'target_group_id' => $managed->id]);
+        GroupManagerRuleByGroup::query()->create(['manager_group_id' => $mg->id, 'target_group_id' => $managed->id]);
 
         $this->actingAs($manager)->get(route('groups.members.index', $unmanaged))->assertForbidden();
     }

@@ -131,7 +131,7 @@ class GroupHierarchyTest extends TestCase
         $child = Group::factory()->create();
         $parent = Group::factory()->create();
         $managerGroup->members()->attach($manager->id, ['created_at' => now()]);
-        GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::query()->create([
             'manager_group_id' => $managerGroup->id,
             'target_group_id' => $child->id,
         ]);
@@ -246,7 +246,7 @@ class GroupHierarchyTest extends TestCase
         $group = Group::factory()->create();
         $child = Group::factory()->create();
         $managerGroup->members()->attach($manager->id, ['created_at' => now()]);
-        GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::query()->create([
             'manager_group_id' => $managerGroup->id,
             'target_group_id' => $group->id,
         ]);
@@ -263,7 +263,7 @@ class GroupHierarchyTest extends TestCase
         $group = Group::factory()->create();
         $child = Group::factory()->create();
         $managerGroup->members()->attach($manager->id, ['created_at' => now()]);
-        GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::query()->create([
             'manager_group_id' => $managerGroup->id,
             'target_group_id' => $group->id,
         ]);
@@ -341,7 +341,7 @@ class GroupHierarchyTest extends TestCase
         DB::table('group_hierarchy')->insert(['parent_id' => $parent->id, 'child_id' => $group->id]);
         DB::table('group_hierarchy')->insert(['parent_id' => $group->id, 'child_id' => $child->id]);
         $managerGroup->members()->attach($manager->id, ['created_at' => now()]);
-        GroupManagerRuleByGroup::create([
+        GroupManagerRuleByGroup::query()->create([
             'manager_group_id' => $managerGroup->id,
             'target_group_id' => $group->id,
         ]);

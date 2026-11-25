@@ -33,7 +33,7 @@ class IdTokenResponse extends BearerTokenResponse
             return [];
         }
 
-        $user = User::find($accessToken->getUserIdentifier());
+        $user = User::query()->find($accessToken->getUserIdentifier());
         if ($user === null) {
             return [];
         }

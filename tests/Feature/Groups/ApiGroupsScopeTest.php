@@ -45,9 +45,9 @@ class ApiGroupsScopeTest extends TestCase
         $user = User::factory()->create();
         $group = Group::factory()->create(['slug' => 'test-group']);
         $group->members()->attach($user->id, ['created_at' => now()]);
-        GroupTag::create(['group_id' => $group->id, 'tag' => 'vacc']);
+        GroupTag::query()->create(['group_id' => $group->id, 'tag' => 'vacc']);
         $def = GroupAttributeDefinition::factory()->create(['key' => 'region']);
-        GroupAttributeValue::create(['group_id' => $group->id, 'attribute_definition_id' => $def->id, 'value' => 'EUR']);
+        GroupAttributeValue::query()->create(['group_id' => $group->id, 'attribute_definition_id' => $def->id, 'value' => 'EUR']);
         Passport::actingAs($user, ['groups']);
 
         $response = $this->getJson('/api/user')->assertOk();

@@ -56,7 +56,7 @@ class AccessToken extends PassportAccessToken
             return null;
         }
 
-        $user = User::find($this->getUserIdentifier());
+        $user = User::query()->find($this->getUserIdentifier());
 
         return $user === null ? null : resolve(UserClaims::class)->groupIds($user);
     }

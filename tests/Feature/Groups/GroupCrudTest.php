@@ -45,7 +45,7 @@ class GroupCrudTest extends TestCase
         $tg = Group::factory()->create(['name' => 'Target Group']);
         Group::factory()->create(['name' => 'Other Group']);
         $mg->members()->attach($user->id, ['created_at' => now()]);
-        GroupManagerRuleByGroup::create(['manager_group_id' => $mg->id, 'target_group_id' => $tg->id]);
+        GroupManagerRuleByGroup::query()->create(['manager_group_id' => $mg->id, 'target_group_id' => $tg->id]);
 
         $this->actingAs($user)
             ->get(route('groups.index'))->assertOk()
@@ -131,7 +131,7 @@ class GroupCrudTest extends TestCase
         $mg = Group::factory()->create();
         $tg = Group::factory()->create(['name' => 'Target Group']);
         $mg->members()->attach($manager->id, ['created_at' => now()]);
-        GroupManagerRuleByGroup::create(['manager_group_id' => $mg->id, 'target_group_id' => $tg->id]);
+        GroupManagerRuleByGroup::query()->create(['manager_group_id' => $mg->id, 'target_group_id' => $tg->id]);
 
         $this->actingAs($manager)
             ->get(route('groups.show', $tg))->assertOk()
@@ -145,7 +145,7 @@ class GroupCrudTest extends TestCase
         $managed = Group::factory()->create();
         $unmanaged = Group::factory()->create();
         $mg->members()->attach($manager->id, ['created_at' => now()]);
-        GroupManagerRuleByGroup::create(['manager_group_id' => $mg->id, 'target_group_id' => $managed->id]);
+        GroupManagerRuleByGroup::query()->create(['manager_group_id' => $mg->id, 'target_group_id' => $managed->id]);
 
         $this->actingAs($manager)
             ->get(route('groups.show', $unmanaged))->assertForbidden();
@@ -161,7 +161,7 @@ class GroupCrudTest extends TestCase
                 'attributes' => [$def->id => 'EUR'],
             ]);
 
-        $group = Group::where('slug', 'test-group')->first();
+        $group = Group::query()->where('slug', 'test-group')->first();
         $this->assertNotNull($group);
         $this->assertDatabaseHas('group_attribute_values', [
             'group_id' => $group->id,

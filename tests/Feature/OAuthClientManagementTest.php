@@ -148,7 +148,7 @@ class OAuthClientManagementTest extends TestCase
         ])->assertOk()
             ->assertJsonPath('redirect_uris', $uris);
 
-        $this->assertSame($uris, Client::find($id)->redirect_uris);
+        $this->assertSame($uris, Client::query()->find($id)->redirect_uris);
     }
 
     public function test_admin_can_edit_a_legacy_client_with_an_integer_id(): void
