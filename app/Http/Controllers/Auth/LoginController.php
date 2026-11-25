@@ -15,10 +15,11 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
-use Session;
 
 class LoginController extends Controller
 {
@@ -70,7 +71,7 @@ class LoginController extends Controller
         $user = User::find($member->cid);
 
         if ($user && $user->banned) {
-            return to_route('landing')->withError('<br>Login denied</br><br>User '.$user->id.' has been banned in '.\Config::get('app.owner_short').' for the following reason: <i>'.$user->banned->reason.'</i><br><br>For inquires contact '.\Config::get('app.owner_contact').'');
+            return to_route('landing')->withError('<br>Login denied</br><br>User '.$user->id.' has been banned in '.Config::get('app.owner_short').' for the following reason: <i>'.$user->banned->reason.'</i><br><br>For inquires contact '.Config::get('app.owner_contact').'');
         }
 
         if ($user && $user->accepted_privacy) {

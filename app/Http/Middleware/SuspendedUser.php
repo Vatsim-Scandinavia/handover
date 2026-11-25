@@ -8,6 +8,7 @@ use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class SuspendedUser
 {
@@ -19,10 +20,10 @@ class SuspendedUser
      */
     public function handle(Request $request, Closure $next)
     {
-        if (\Auth::check()) {
-            $user = \Auth::user();
+        if (Auth::check()) {
+            $user = Auth::user();
             if ($user->rating === 0) {
-                \Auth::logout();
+                Auth::logout();
 
                 return redirect('/')->with('error', 'Your account has been suspended.');
             }

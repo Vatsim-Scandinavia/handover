@@ -11,6 +11,7 @@ use App\Models\GroupManagerRuleByGroup;
 use App\Models\GroupManagerRuleByTag;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class GroupManagerRuleTest extends TestCase
@@ -261,7 +262,7 @@ class GroupManagerRuleTest extends TestCase
             'target_group_id' => $targetGroup->id,
         ]);
 
-        \DB::table('groups')->where('id', $managerGroup->id)->delete();
+        DB::table('groups')->where('id', $managerGroup->id)->delete();
 
         $this->actingAs($this->adminUser())
             ->get(route('groups.rules.overview'))->assertOk();

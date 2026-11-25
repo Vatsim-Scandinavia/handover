@@ -10,6 +10,7 @@ use App\Http\Controllers\GroupMemberController;
 use App\Http\Controllers\OAuth\LogoutController;
 use App\Http\Controllers\OAuthClientController;
 use App\Http\Middleware\RedirectLogoutPostToGet;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------

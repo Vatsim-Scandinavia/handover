@@ -859,7 +859,7 @@ parameters:
 			path: app/Http/Middleware/RedirectLogoutPostToGet.php
 
 		-
-			message: '#^Cannot access property \$rating on Illuminate\\Contracts\\Auth\\Authenticatable\|null\.$#'
+			message: '#^Cannot access property \$rating on App\\User\|null\.$#'
 			identifier: property.nonObject
 			count: 1
 			path: app/Http/Middleware/SuspendedUser.php
