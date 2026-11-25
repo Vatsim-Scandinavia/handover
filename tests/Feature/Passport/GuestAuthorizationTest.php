@@ -42,6 +42,6 @@ class GuestAuthorizationTest extends TestCase
         // POST, since the landing page catches every GET.
         Route::post('/_test/unauthenticated', fn (): never => throw new AuthenticationException);
 
-        $this->post('/_test/unauthenticated')->assertStatus(401);
+        $this->post('/_test/unauthenticated')->assertUnauthorized();
     }
 }

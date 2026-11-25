@@ -22,8 +22,7 @@ class ApiGroupsScopeTest extends TestCase
         $user = User::factory()->create();
         Passport::actingAs($user, ['full_name']);
 
-        $this->getJson('/api/user')
-            ->assertStatus(200)
+        $this->getJson('/api/user')->assertOk()
             ->assertJsonMissingPath('data.groups');
     }
 
@@ -34,8 +33,7 @@ class ApiGroupsScopeTest extends TestCase
         $group->members()->attach($user->id, ['created_at' => now()]);
         Passport::actingAs($user, ['groups']);
 
-        $this->getJson('/api/user')
-            ->assertStatus(200)
+        $this->getJson('/api/user')->assertOk()
             ->assertJsonPath('data.groups.0.slug', 'vacc-norway')
             ->assertJsonPath('data.groups.0.name', 'vACC Norway')
             ->assertJsonPath('data.groups.0.direct', true)
@@ -52,7 +50,7 @@ class ApiGroupsScopeTest extends TestCase
         GroupAttributeValue::create(['group_id' => $group->id, 'attribute_definition_id' => $def->id, 'value' => 'EUR']);
         Passport::actingAs($user, ['groups']);
 
-        $response = $this->getJson('/api/user')->assertStatus(200);
+        $response = $this->getJson('/api/user')->assertOk();
         $groups = $response->json('data.groups');
         $this->assertEquals(['vacc'], $groups[0]['tags']);
         $this->assertEquals(['region' => 'EUR'], $groups[0]['attributes']);
@@ -63,8 +61,7 @@ class ApiGroupsScopeTest extends TestCase
         $user = User::factory()->create();
         Passport::actingAs($user, ['groups']);
 
-        $this->getJson('/api/user')
-            ->assertStatus(200)
+        $this->getJson('/api/user')->assertOk()
             ->assertJsonPath('data.groups', []);
     }
 }

@@ -56,15 +56,14 @@ class PublicClientManagementTest extends TestCase
     {
         $id = $this->createPublicClient()->json('client.id');
 
-        $this->postJson(route('admin.oauth-clients.secret', $id))->assertStatus(422);
+        $this->postJson(route('admin.oauth-clients.secret', $id))->assertUnprocessable();
 
         $this->assertNull(DB::table('oauth_clients')->where('id', $id)->value('secret'));
     }
 
     public function test_a_public_client_may_only_have_the_authorization_code_and_refresh_grants(): void
     {
-        $this->createPublicClient(['grant_types' => ['authorization_code', 'client_credentials']])
-            ->assertStatus(422)
+        $this->createPublicClient(['grant_types' => ['authorization_code', 'client_credentials']])->assertUnprocessable()
             ->assertJsonValidationErrors(['grant_types.1'])
             ->assertJsonMissingValidationErrors(['grant_types.0']);
 
@@ -72,8 +71,7 @@ class PublicClientManagementTest extends TestCase
             ->assertCreated()
             ->json('client.id');
 
-        $this->updateClient($id, ['grant_types' => ['refresh_token', 'client_credentials']])
-            ->assertStatus(422)
+        $this->updateClient($id, ['grant_types' => ['refresh_token', 'client_credentials']])->assertUnprocessable()
             ->assertJsonValidationErrors(['grant_types.1']);
     }
 
@@ -87,7 +85,7 @@ class PublicClientManagementTest extends TestCase
             'http://vcas-ok.test/callback',
             'http://127.0.0.2/callback',
             'com.example.app:/callback',
-        ]])->assertStatus(422)
+        ]])->assertUnprocessable()
             ->assertJsonValidationErrors(['redirect_uris.4', 'redirect_uris.5', 'redirect_uris.6'])
             ->assertJsonMissingValidationErrors(['redirect_uris.0', 'redirect_uris.1', 'redirect_uris.2', 'redirect_uris.3']);
     }
@@ -137,7 +135,7 @@ class PublicClientManagementTest extends TestCase
             'https://vcas-ok.test?',
             'https://user@vcas-ok.test',
             'https://vcas-ok.test#top',
-        ]])->assertStatus(422)
+        ]])->assertUnprocessable()
             ->assertJsonValidationErrors(array_map(fn (int $i): string => "allowed_origins.{$i}", range(2, 8)))
             ->assertJsonMissingValidationErrors(['allowed_origins.0', 'allowed_origins.1']);
     }
@@ -160,7 +158,7 @@ class PublicClientManagementTest extends TestCase
         $this->createPublicClient([
             'confidential' => true,
             'allowed_origins' => ['https://vcas-ok.test'],
-        ])->assertStatus(422)
+        ])->assertUnprocessable()
             ->assertJsonValidationErrors(['allowed_origins']);
 
         $this->createPublicClient(['confidential' => true])
@@ -172,8 +170,7 @@ class PublicClientManagementTest extends TestCase
     {
         $id = $this->createPublicClient()->json('client.id');
 
-        $this->updateClient($id, ['confidential' => true])
-            ->assertStatus(422)
+        $this->updateClient($id, ['confidential' => true])->assertUnprocessable()
             ->assertJsonValidationErrors(['confidential']);
 
         $this->assertNull(DB::table('oauth_clients')->where('id', $id)->value('secret'));
@@ -186,7 +183,7 @@ class PublicClientManagementTest extends TestCase
             'http://localhost:5173/logged-out',
             'http://vcas-ok.test/logged-out',
             'not-a-url',
-        ]])->assertStatus(422)
+        ]])->assertUnprocessable()
             ->assertJsonValidationErrors(['post_logout_redirect_uris.2', 'post_logout_redirect_uris.3'])
             ->assertJsonMissingValidationErrors(['post_logout_redirect_uris.0', 'post_logout_redirect_uris.1']);
     }

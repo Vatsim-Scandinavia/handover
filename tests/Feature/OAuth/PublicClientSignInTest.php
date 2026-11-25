@@ -28,7 +28,7 @@ class PublicClientSignInTest extends TestCase
     {
         $client = $this->makeClient(confidential: false);
 
-        $this->authorizeRequest(User::factory()->create(), $client)->assertStatus(400);
+        $this->authorizeRequest(User::factory()->create(), $client)->assertBadRequest();
     }
 
     public function test_a_public_client_cannot_use_the_plain_method(): void
@@ -38,10 +38,9 @@ class PublicClientSignInTest extends TestCase
         $this->authorizeRequest(User::factory()->create(), $client, [
             'code_challenge' => self::CODE_VERIFIER,
             'code_challenge_method' => 'plain',
-        ])->assertStatus(400);
+        ])->assertBadRequest();
 
-        $this->authorizeRequest(User::factory()->create(), $client, ['code_challenge' => self::CODE_VERIFIER])
-            ->assertStatus(400);
+        $this->authorizeRequest(User::factory()->create(), $client, ['code_challenge' => self::CODE_VERIFIER])->assertBadRequest();
     }
 
     public function test_a_public_client_must_send_the_code_verifier(): void
@@ -49,7 +48,7 @@ class PublicClientSignInTest extends TestCase
         $client = $this->makeClient(confidential: false);
         $code = $this->authorizeCode(User::factory()->create(), $client, self::PKCE);
 
-        $this->exchangeCode($client, $code)->assertStatus(400);
+        $this->exchangeCode($client, $code)->assertBadRequest();
     }
 
     public function test_a_public_client_refreshes_with_rotation_and_a_single_session(): void
@@ -67,13 +66,13 @@ class PublicClientSignInTest extends TestCase
         $this->assertNotSame($first['refresh_token'], $refreshed['refresh_token']);
         // The refresh starts a new 30-day window.
         $this->assertEqualsWithDelta(30 * 24 * 3600, $this->latestRefreshTokenLifetime(), 5);
-        $this->refresh($client, $first['refresh_token'])->assertStatus(400);
+        $this->refresh($client, $first['refresh_token'])->assertBadRequest();
 
         // A second sign-in ends the first session.
         $this->exchangeCode($client, $this->authorizeCode($user, $client, self::PKCE), [
             'code_verifier' => self::CODE_VERIFIER,
         ])->assertOk();
-        $this->refresh($client, $refreshed['refresh_token'])->assertStatus(400);
+        $this->refresh($client, $refreshed['refresh_token'])->assertBadRequest();
     }
 
     public function test_a_confidential_client_keeps_pkce_optional_and_may_use_plain(): void

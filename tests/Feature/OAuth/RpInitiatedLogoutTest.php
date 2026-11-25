@@ -205,7 +205,7 @@ class RpInitiatedLogoutTest extends TestCase
             'id_token_hint' => $this->hint(),
             'client_id' => $other->getKey(),
             'post_logout_redirect_uri' => self::LOGGED_OUT_URI,
-        ])->assertStatus(400)->assertSee('The logout request names two different services.');
+        ])->assertBadRequest()->assertSee('The logout request names two different services.');
 
         $this->assertAuthenticatedAs($this->user);
     }

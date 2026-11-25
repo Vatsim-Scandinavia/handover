@@ -39,15 +39,14 @@ class GroupManagerRuleTest extends TestCase
         $mg->members()->attach($manager->id, ['created_at' => now()]);
         GroupManagerRuleByGroup::create(['manager_group_id' => $mg->id, 'target_group_id' => $tg->id]);
 
-        $this->actingAs($manager)->get(route('groups.rules.index', $tg))->assertStatus(403);
+        $this->actingAs($manager)->get(route('groups.rules.index', $tg))->assertForbidden();
     }
 
     public function test_admin_can_view_rules_page(): void
     {
         $group = Group::factory()->create();
         $this->actingAs($this->adminUser())
-            ->get(route('groups.rules.index', $group))
-            ->assertStatus(200);
+            ->get(route('groups.rules.index', $group))->assertOk();
     }
 
     public function test_can_add_group_type_rule(): void
@@ -214,8 +213,7 @@ class GroupManagerRuleTest extends TestCase
         $rule = GroupManagerRuleByGroup::create(['manager_group_id' => $mg->id, 'target_group_id' => $tg->id]);
 
         $this->actingAs($manager)
-            ->delete(route('groups.rules.overview.destroy', ['group', $rule->id]))
-            ->assertStatus(403);
+            ->delete(route('groups.rules.overview.destroy', ['group', $rule->id]))->assertForbidden();
 
         $this->assertDatabaseHas('group_manager_rules_by_group', ['id' => $rule->id]);
     }
@@ -231,8 +229,7 @@ class GroupManagerRuleTest extends TestCase
         ]);
 
         $this->actingAs($this->adminUser())
-            ->delete(route('groups.rules.destroy', [$targetGroup, 'tag', $rule->id]))
-            ->assertStatus(404);
+            ->delete(route('groups.rules.destroy', [$targetGroup, 'tag', $rule->id]))->assertNotFound();
 
         $this->assertDatabaseHas('group_manager_rules_by_tag', ['id' => $rule->id]);
     }
@@ -240,8 +237,7 @@ class GroupManagerRuleTest extends TestCase
     public function test_admin_can_view_overview_page(): void
     {
         $this->actingAs($this->adminUser())
-            ->get(route('groups.rules.overview'))
-            ->assertStatus(200);
+            ->get(route('groups.rules.overview'))->assertOk();
     }
 
     public function test_non_admin_group_manager_cannot_view_overview_page(): void
@@ -253,8 +249,7 @@ class GroupManagerRuleTest extends TestCase
         GroupManagerRuleByGroup::create(['manager_group_id' => $mg->id, 'target_group_id' => $tg->id]);
 
         $this->actingAs($manager)
-            ->get(route('groups.rules.overview'))
-            ->assertStatus(403);
+            ->get(route('groups.rules.overview'))->assertForbidden();
     }
 
     public function test_overview_omits_rules_with_deleted_manager_group(): void
@@ -269,7 +264,6 @@ class GroupManagerRuleTest extends TestCase
         \DB::table('groups')->where('id', $managerGroup->id)->delete();
 
         $this->actingAs($this->adminUser())
-            ->get(route('groups.rules.overview'))
-            ->assertStatus(200);
+            ->get(route('groups.rules.overview'))->assertOk();
     }
 }

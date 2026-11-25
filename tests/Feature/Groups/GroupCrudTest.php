@@ -34,8 +34,7 @@ class GroupCrudTest extends TestCase
     {
         Group::factory()->create(['name' => 'vACC Norway']);
         $this->actingAs($this->adminUser())
-            ->get(route('groups.index'))
-            ->assertStatus(200)
+            ->get(route('groups.index'))->assertOk()
             ->assertSee('vACC Norway');
     }
 
@@ -49,8 +48,7 @@ class GroupCrudTest extends TestCase
         GroupManagerRuleByGroup::create(['manager_group_id' => $mg->id, 'target_group_id' => $tg->id]);
 
         $this->actingAs($user)
-            ->get(route('groups.index'))
-            ->assertStatus(200)
+            ->get(route('groups.index'))->assertOk()
             ->assertSee('Target Group')
             ->assertDontSee('Other Group')
             ->assertDontSee('Manager Group');
@@ -136,8 +134,7 @@ class GroupCrudTest extends TestCase
         GroupManagerRuleByGroup::create(['manager_group_id' => $mg->id, 'target_group_id' => $tg->id]);
 
         $this->actingAs($manager)
-            ->get(route('groups.show', $tg))
-            ->assertStatus(200)
+            ->get(route('groups.show', $tg))->assertOk()
             ->assertSee('Target Group');
     }
 
@@ -151,8 +148,7 @@ class GroupCrudTest extends TestCase
         GroupManagerRuleByGroup::create(['manager_group_id' => $mg->id, 'target_group_id' => $managed->id]);
 
         $this->actingAs($manager)
-            ->get(route('groups.show', $unmanaged))
-            ->assertStatus(403);
+            ->get(route('groups.show', $unmanaged))->assertForbidden();
     }
 
     public function test_attribute_values_are_saved_on_create(): void

@@ -42,15 +42,14 @@ class GroupAttributeDefinitionTest extends TestCase
             'target_group_id' => $targetGroup->id,
         ]);
 
-        $this->actingAs($user)->get(route('groups.attributes.index'))->assertStatus(403);
+        $this->actingAs($user)->get(route('groups.attributes.index'))->assertForbidden();
     }
 
     public function test_admin_can_list_attribute_definitions(): void
     {
         GroupAttributeDefinition::factory()->create(['key' => 'region', 'label' => 'Region']);
         $this->actingAs($this->adminUser())
-            ->get(route('groups.attributes.index'))
-            ->assertStatus(200)
+            ->get(route('groups.attributes.index'))->assertOk()
             ->assertSee('Region');
     }
 
@@ -111,8 +110,7 @@ class GroupAttributeDefinitionTest extends TestCase
 
         $def = GroupAttributeDefinition::factory()->create(['label' => 'Original']);
         $this->actingAs($user)
-            ->patch(route('groups.attributes.update', $def), ['label' => 'Changed'])
-            ->assertStatus(403);
+            ->patch(route('groups.attributes.update', $def), ['label' => 'Changed'])->assertForbidden();
 
         $this->assertDatabaseHas('group_attribute_definitions', ['id' => $def->id, 'label' => 'Original']);
     }

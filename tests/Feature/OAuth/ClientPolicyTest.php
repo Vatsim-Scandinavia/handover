@@ -136,7 +136,7 @@ class ClientPolicyTest extends TestCase
 
         $group->members()->detach($user->id);
 
-        $this->refresh($client, $tokens['refresh_token'])->assertStatus(400)
+        $this->refresh($client, $tokens['refresh_token'])->assertBadRequest()
             ->assertJsonPath('error', 'invalid_grant');
     }
 
@@ -153,7 +153,7 @@ class ClientPolicyTest extends TestCase
         $tokens = $this->signIn($user, $client);
         $child->parents()->detach($parent->id);
 
-        $this->refresh($client, $tokens['refresh_token'])->assertStatus(400)
+        $this->refresh($client, $tokens['refresh_token'])->assertBadRequest()
             ->assertJsonPath('error', 'invalid_grant');
     }
 

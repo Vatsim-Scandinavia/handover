@@ -41,7 +41,7 @@ class TokenLifetimeTest extends TestCase
         $first = $this->signIn($user, $client);
         $this->signIn($user, $client);
 
-        $this->refresh($client, $first['refresh_token'])->assertStatus(400)
+        $this->refresh($client, $first['refresh_token'])->assertBadRequest()
             ->assertJsonPath('error', 'invalid_grant');
     }
 
@@ -62,7 +62,7 @@ class TokenLifetimeTest extends TestCase
         $second = $this->refresh($client, $first['refresh_token'])->assertOk()->json();
 
         $this->assertNotSame($first['refresh_token'], $second['refresh_token']);
-        $this->refresh($client, $first['refresh_token'])->assertStatus(400);
+        $this->refresh($client, $first['refresh_token'])->assertBadRequest();
         // The window slides: the new token gets a full 30 days.
         $this->assertLiveRefreshTokenExpiresInThirtyDays();
     }

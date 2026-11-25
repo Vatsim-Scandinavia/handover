@@ -35,8 +35,7 @@ class GroupMemberTest extends TestCase
         $group->members()->attach($member->id, ['created_at' => now()]);
 
         $this->actingAs($this->adminUser())
-            ->get(route('groups.members.index', $group))
-            ->assertStatus(200)
+            ->get(route('groups.members.index', $group))->assertOk()
             ->assertSee('Alice');
     }
 
@@ -48,7 +47,7 @@ class GroupMemberTest extends TestCase
         $mg->members()->attach($manager->id, ['created_at' => now()]);
         GroupManagerRuleByGroup::create(['manager_group_id' => $mg->id, 'target_group_id' => $tg->id]);
 
-        $this->actingAs($manager)->get(route('groups.members.index', $tg))->assertStatus(200);
+        $this->actingAs($manager)->get(route('groups.members.index', $tg))->assertOk();
     }
 
     public function test_manager_cannot_view_unmanaged_group_members(): void
@@ -60,7 +59,7 @@ class GroupMemberTest extends TestCase
         $mg->members()->attach($manager->id, ['created_at' => now()]);
         GroupManagerRuleByGroup::create(['manager_group_id' => $mg->id, 'target_group_id' => $managed->id]);
 
-        $this->actingAs($manager)->get(route('groups.members.index', $unmanaged))->assertStatus(403);
+        $this->actingAs($manager)->get(route('groups.members.index', $unmanaged))->assertForbidden();
     }
 
     public function test_admin_can_add_member(): void
@@ -93,8 +92,7 @@ class GroupMemberTest extends TestCase
     {
         $group = Group::factory()->create();
         $this->actingAs($this->adminUser())
-            ->post(route('groups.members.store', $group), ['cid' => 9999999])
-            ->assertStatus(404);
+            ->post(route('groups.members.store', $group), ['cid' => 9999999])->assertNotFound();
     }
 
     public function test_admin_can_remove_member(): void

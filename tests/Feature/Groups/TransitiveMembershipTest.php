@@ -36,7 +36,7 @@ class TransitiveMembershipTest extends TestCase
         Passport::actingAs($user, ['groups']);
 
         $groups = $this->groupsBySlug(
-            $this->getJson('/api/user')->assertStatus(200)->json('data.groups')
+            $this->getJson('/api/user')->assertOk()->json('data.groups')
         );
 
         $this->assertTrue($groups['vacc-norway']['direct']);
@@ -54,7 +54,7 @@ class TransitiveMembershipTest extends TestCase
         Passport::actingAs($user, ['groups']);
 
         $groups = $this->groupsBySlug(
-            $this->getJson('/api/user')->assertStatus(200)->json('data.groups')
+            $this->getJson('/api/user')->assertOk()->json('data.groups')
         );
 
         $this->assertCount(2, $groups);               // appears once

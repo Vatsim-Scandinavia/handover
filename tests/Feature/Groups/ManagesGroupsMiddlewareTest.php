@@ -28,7 +28,7 @@ class ManagesGroupsMiddlewareTest extends TestCase
     public function test_user_with_no_access_gets_403(): void
     {
         $user = User::factory()->create();
-        $this->actingAs($user)->get('/groups')->assertStatus(403);
+        $this->actingAs($user)->get('/groups')->assertForbidden();
     }
 
     public function test_admin_user_can_access_groups(): void
@@ -37,7 +37,7 @@ class ManagesGroupsMiddlewareTest extends TestCase
         $adminGroup = Group::factory()->admin()->create();
         $adminGroup->members()->attach($user->id, ['created_at' => now()]);
 
-        $this->actingAs($user)->get('/groups')->assertStatus(200);
+        $this->actingAs($user)->get('/groups')->assertOk();
     }
 
     public function test_group_manager_can_access_groups_index(): void
@@ -51,6 +51,6 @@ class ManagesGroupsMiddlewareTest extends TestCase
             'target_group_id' => $targetGroup->id,
         ]);
 
-        $this->actingAs($manager)->get('/groups')->assertStatus(200);
+        $this->actingAs($manager)->get('/groups')->assertOk();
     }
 }

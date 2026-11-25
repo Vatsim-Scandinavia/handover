@@ -177,7 +177,7 @@ class OAuthClientManagementTest extends TestCase
             'redirect_uris' => ['https://bad.test/callback'],
             'allowed_scopes' => ['full_name'],
             'grant_types' => ['magic'],
-        ])->assertStatus(422)
+        ])->assertUnprocessable()
             ->assertJsonValidationErrors(['grant_types.0']);
     }
 
@@ -190,7 +190,7 @@ class OAuthClientManagementTest extends TestCase
             'redirect_uris' => ['https://new.test/callback'],
             'allowed_scopes' => ['full_name'],
             'grant_types' => ['authorization_code', 'implicit'],
-        ])->assertStatus(422)
+        ])->assertUnprocessable()
             ->assertJsonValidationErrors(['grant_types.1']);
 
         Client::factory()->create(['id' => '6', 'grant_types' => ['authorization_code', 'implicit', 'refresh_token']]);
@@ -199,7 +199,7 @@ class OAuthClientManagementTest extends TestCase
             'name' => 'Forum',
             'redirect_uris' => ['https://forum.test/callback'],
             'grant_types' => ['authorization_code', 'implicit', 'password'],
-        ])->assertStatus(422)
+        ])->assertUnprocessable()
             ->assertJsonValidationErrors(['grant_types.2'])
             ->assertJsonMissingValidationErrors(['grant_types.1']);
     }
@@ -237,12 +237,10 @@ class OAuthClientManagementTest extends TestCase
     {
         $this->actingAsAdmin();
 
-        $this->postJson(route('admin.oauth-clients.store'), ['name' => '', 'redirect_uris' => []])
-            ->assertStatus(422)
+        $this->postJson(route('admin.oauth-clients.store'), ['name' => '', 'redirect_uris' => []])->assertUnprocessable()
             ->assertJsonValidationErrors(['name', 'redirect_uris', 'allowed_scopes']);
 
-        $this->postJson(route('admin.oauth-clients.store'), ['name' => 'X', 'redirect_uris' => ['https://ok.test', 'not-a-url'], 'allowed_scopes' => ['email']])
-            ->assertStatus(422)
+        $this->postJson(route('admin.oauth-clients.store'), ['name' => 'X', 'redirect_uris' => ['https://ok.test', 'not-a-url'], 'allowed_scopes' => ['email']])->assertUnprocessable()
             ->assertJsonValidationErrors(['redirect_uris.1']);
     }
 
@@ -317,7 +315,7 @@ class OAuthClientManagementTest extends TestCase
             'name' => 'X',
             'redirect_uris' => ['https://x.test/callback'],
             'allowed_scopes' => [],
-        ])->assertStatus(422)
+        ])->assertUnprocessable()
             ->assertJsonValidationErrors(['allowed_scopes']);
 
         $this->putJson(route('admin.oauth-clients.update', $id), [
@@ -325,7 +323,7 @@ class OAuthClientManagementTest extends TestCase
             'redirect_uris' => ['https://x.test/callback'],
             'allowed_scopes' => ['email', 'magic'],
             'required_groups' => ['0190a2d4-0000-7000-8000-000000000000'],
-        ])->assertStatus(422)
+        ])->assertUnprocessable()
             ->assertJsonValidationErrors(['allowed_scopes.1', 'required_groups.0']);
     }
 
@@ -345,7 +343,7 @@ class OAuthClientManagementTest extends TestCase
             'name' => 'Forum',
             'redirect_uris' => ['https://forum.test/callback'],
             'post_logout_redirect_uris' => ['https://forum.test/', 'not-a-url', 'https://forum.test/'],
-        ])->assertStatus(422)
+        ])->assertUnprocessable()
             ->assertJsonValidationErrors(['post_logout_redirect_uris.1', 'post_logout_redirect_uris.2']);
 
         $this->putJson(route('admin.oauth-clients.update', $id), [
