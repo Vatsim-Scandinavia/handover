@@ -1,5 +1,30 @@
 # Changelog
 
+## [4.0.0-beta.8](https://github.com/Vatsim-Scandinavia/handover/compare/v4.0.0-beta.7...v4.0.0-beta.8) (2026-11-25)
+
+
+### Features
+
+* add group members by name as well as CID ([#257](https://github.com/Vatsim-Scandinavia/handover/issues/257)) ([41503c4](https://github.com/Vatsim-Scandinavia/handover/commit/41503c46daa67494ab1cae9977378c1d9999930c))
+* pick groups to nest the same way as members ([#258](https://github.com/Vatsim-Scandinavia/handover/issues/258)) ([a8628ce](https://github.com/Vatsim-Scandinavia/handover/commit/a8628cefb42ee206f55b930f852d7fb6c731a225))
+* show member of on the group page, with indirect groups ([#260](https://github.com/Vatsim-Scandinavia/handover/issues/260)) ([316e0ac](https://github.com/Vatsim-Scandinavia/handover/commit/316e0ac359c797c6e0fb07b2ea198c4ac2915197))
+
+
+### Bug Fixes
+
+* call nested groups member groups and member of ([#253](https://github.com/Vatsim-Scandinavia/handover/issues/253)) ([1d82ca5](https://github.com/Vatsim-Scandinavia/handover/commit/1d82ca5ff9c2e4d4b67cec50e60a87d8d800116a))
+* count members of member groups in group member counts ([#254](https://github.com/Vatsim-Scandinavia/handover/issues/254)) ([f8a48aa](https://github.com/Vatsim-Scandinavia/handover/commit/f8a48aa0ed41d9a1e569b4d365197e2d5bd7d97f))
+* give the members page sections more vertical room ([#256](https://github.com/Vatsim-Scandinavia/handover/issues/256)) ([8dc0bbc](https://github.com/Vatsim-Scandinavia/handover/commit/8dc0bbce8c5d06bd333f75a587bbc456aaf0084c))
+* keep VATSIM tokens when a refresh fails in transit ([#249](https://github.com/Vatsim-Scandinavia/handover/issues/249)) ([2abb583](https://github.com/Vatsim-Scandinavia/handover/commit/2abb58364c6297ae6c6d845626a4787fac7e4ab1))
+* keep wide tables from widening the page on phones ([#259](https://github.com/Vatsim-Scandinavia/handover/issues/259)) ([06cb708](https://github.com/Vatsim-Scandinavia/handover/commit/06cb70828750213a67afd2af243d729873d319fa))
+* manage member groups on one members page ([#255](https://github.com/Vatsim-Scandinavia/handover/issues/255)) ([d4040bd](https://github.com/Vatsim-Scandinavia/handover/commit/d4040bdf83e40a290b403101608fccd93d0102d4))
+* remove the broken VATSIM token accessor ([#244](https://github.com/Vatsim-Scandinavia/handover/issues/244)) ([c7aa3dc](https://github.com/Vatsim-Scandinavia/handover/commit/c7aa3dce986fff1a8100b6fb1df6c8135ced007d))
+
+
+### Miscellaneous Chores
+
+* **deps:** update mlocati/php-extension-installer docker tag to v2.13.3 ([#239](https://github.com/Vatsim-Scandinavia/handover/issues/239)) ([3919f9b](https://github.com/Vatsim-Scandinavia/handover/commit/3919f9bdcced9420ec1644129158e53bc5d5f5b0))
+
 ## [4.0.0-beta.7](https://github.com/Vatsim-Scandinavia/handover/compare/v4.0.0-beta.6...v4.0.0-beta.7) (2026-11-23)
 
 
